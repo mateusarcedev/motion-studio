@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.log
+out/previews/
+out/final/
+reviews/frames/
+training/
+.claude/settings.local.json
