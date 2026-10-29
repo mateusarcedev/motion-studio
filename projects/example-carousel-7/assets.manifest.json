@@ -1,0 +1,129 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/example-carousel-7",
+  "counts": {
+    "files": 18,
+    "png": 8,
+    "mp4": 0,
+    "html": 8
+  },
+  "renditions": [
+    "out/01.png",
+    "out/02.png",
+    "out/03.png",
+    "out/04.png",
+    "out/05.png",
+    "out/06.png",
+    "out/07.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "4f336dc4441c5681",
+      "bytes": 1102,
+      "role": "other"
+    },
+    {
+      "path": "caption.md",
+      "sha256": "9bc0353967e8c9a9",
+      "bytes": 310,
+      "role": "other"
+    },
+    {
+      "path": "out/01.png",
+      "sha256": "e2e68ee995d47855",
+      "bytes": 208866,
+      "role": "render"
+    },
+    {
+      "path": "out/02.png",
+      "sha256": "02210f120a3fda00",
+      "bytes": 114795,
+      "role": "render"
+    },
+    {
+      "path": "out/03.png",
+      "sha256": "345ff03d01052b79",
+      "bytes": 116208,
+      "role": "render"
+    },
+    {
+      "path": "out/04.png",
+      "sha256": "1494cb5aacee45d4",
+      "bytes": 101793,
+      "role": "render"
+    },
+    {
+      "path": "out/05.png",
+      "sha256": "b826beca6c4a681b",
+      "bytes": 151921,
+      "role": "render"
+    },
+    {
+      "path": "out/06.png",
+      "sha256": "bda6a1c950d87a42",
+      "bytes": 171417,
+      "role": "render"
+    },
+    {
+      "path": "out/07.png",
+      "sha256": "d9c5fc0eef6b4755",
+      "bytes": 166472,
+      "role": "render"
+    },
+    {
+      "path": "out/contact-sheet.html",
+      "sha256": "d702e001b7a16eb3",
+      "bytes": 1105,
+      "role": "render"
+    },
+    {
+      "path": "reviews/contact-sheet.png",
+      "sha256": "4c462cee3997efd8",
+      "bytes": 367921,
+      "role": "other"
+    },
+    {
+      "path": "slides/01.html",
+      "sha256": "d9d14cca000458e7",
+      "bytes": 1531,
+      "role": "source-html"
+    },
+    {
+      "path": "slides/02.html",
+      "sha256": "64cc64f598fbc1d8",
+      "bytes": 1272,
+      "role": "source-html"
+    },
+    {
+      "path": "slides/03.html",
+      "sha256": "a8d5a7ade5da431f",
+      "bytes": 1262,
+      "role": "source-html"
+    },
+    {
+      "path": "slides/04.html",
+      "sha256": "3529ebcb5206e9d2",
+      "bytes": 1237,
+      "role": "source-html"
+    },
+    {
+      "path": "slides/05.html",
+      "sha256": "34ff893d0362d529",
+      "bytes": 1160,
+      "role": "source-html"
+    },
+    {
+      "path": "slides/06.html",
+      "sha256": "7ee87714f6dfddf0",
+      "bytes": 1342,
+      "role": "source-html"
+    },
+    {
+      "path": "slides/07.html",
+      "sha256": "d453ec9fd8eb7935",
+      "bytes": 1445,
+      "role": "source-html"
+    }
+  ]
+}

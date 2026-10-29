@@ -1,0 +1,47 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/motion-landing",
+  "counts": {
+    "files": 5,
+    "png": 3,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/landing-desktop-fold.png",
+    "out/landing-desktop.png",
+    "out/landing-mobile.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "64aeb961ad2bc58a",
+      "bytes": 666,
+      "role": "other"
+    },
+    {
+      "path": "out/landing-desktop-fold.png",
+      "sha256": "5cfd137301582e12",
+      "bytes": 1572402,
+      "role": "render"
+    },
+    {
+      "path": "out/landing-desktop.png",
+      "sha256": "a7e405aaab15ccd2",
+      "bytes": 2262529,
+      "role": "render"
+    },
+    {
+      "path": "out/landing-mobile.png",
+      "sha256": "22e3a57e64338248",
+      "bytes": 2594547,
+      "role": "render"
+    },
+    {
+      "path": "slides/landing.html",
+      "sha256": "931294ff400493dc",
+      "bytes": 30934,
+      "role": "source-html"
+    }
+  ]
+}

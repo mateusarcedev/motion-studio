@@ -1,0 +1,355 @@
+schema_version: 1
+title: MOTION — Catálogo de 25 recursos externos
+date: '2026-10-28'
+policy:
+  source_of_truth: .agents/skills/
+  principles:
+  - A inclusão neste catálogo não significa instalação ou autorização de redistribuição.
+  - Auditar LICENSE, termos de uso, autoria, dependências e segurança antes de copiar ou executar.
+  - Preferir Playwright como navegador padrão se já existir no repositório; Puppeteer opcional.
+  - Separar renderização e bibliotecas por necessidade; não carregar dependências pesadas globalmente.
+  - Consultar 21st.dev por meios permitidos; nunca fazer scraping de marketplace não autorizado.
+  - Adaptar composições de formato na origem, e não por crop cego.
+  - Manter frame determinístico e seekable; review por stills/contact sheets.
+  review_states:
+  - candidato_nao_integrado
+  - verificado
+  - aprovado
+  - integrado
+  - bloqueado
+resources:
+- id: blender
+  name: Blender
+  url: https://github.com/blender/blender
+  source_url: https://github.com/blender/blender
+  group: 3d
+  role: Modelagem, rigs, cenas e render 3D
+  integration_mode: optional_local_tool
+  priority: high
+  license_note: GPL; avaliar distribuição e dependências externas
+  consumers:
+  - motion-director
+  - story-studio
+  status: candidato_nao_integrado
+- id: threejs
+  name: Three.js
+  url: https://github.com/mrdoob/three.js
+  source_url: https://github.com/mrdoob/three.js
+  group: 3d
+  role: Cenas 3D e câmeras em navegador
+  integration_mode: optional_runtime
+  priority: high
+  license_note: MIT; confirmar versão adotada
+  consumers:
+  - motion-director
+  - story-studio
+  - creative-core
+  status: candidato_nao_integrado
+- id: numpy
+  name: NumPy
+  url: https://github.com/numpy/numpy
+  source_url: https://github.com/numpy/numpy
+  group: numeric
+  role: Operações matriciais e dados por frame
+  integration_mode: optional_python
+  priority: on_demand
+  license_note: Licença BSD-3-Clause; conferir dependências
+  consumers:
+  - motion-director
+  status: candidato_nao_integrado
+- id: numba
+  name: Numba
+  url: https://github.com/numba/numba
+  source_url: https://github.com/numba/numba
+  group: numeric
+  role: Acelerar simulações numéricas
+  integration_mode: optional_python
+  priority: on_demand
+  license_note: Licença BSD; confirmar versão
+  consumers:
+  - motion-director
+  status: candidato_nao_integrado
+- id: gsap
+  name: GSAP
+  url: https://github.com/greensock/GSAP
+  source_url: https://github.com/greensock/GSAP
+  group: animation
+  role: Timelines UI e motion web
+  integration_mode: conditional_runtime
+  priority: high
+  license_note: Licença GreenSock no-charge; restrições para ferramentas visuais concorrentes de criação
+    de animações. Analisar caso de uso antes de integrar
+  consumers:
+  - motion-director
+  - story-studio
+  - feed-studio
+  status: candidato_nao_integrado
+- id: remotion
+  name: Remotion
+  url: https://github.com/remotion-dev/remotion
+  source_url: https://github.com/remotion-dev/remotion
+  group: video
+  role: Renderização de vídeo determinístico em React
+  integration_mode: existing_or_primary
+  priority: essential
+  license_note: Free License depende de elegibilidade; empresas e serviços de render podem exigir contrato.
+    Verificar termos atuais
+  consumers:
+  - motion-director
+  - story-studio
+  status: candidato_nao_integrado
+- id: puppeteer
+  name: Puppeteer
+  url: https://github.com/puppeteer/puppeteer
+  source_url: https://github.com/puppeteer/puppeteer
+  group: browser
+  role: Captura UI e render Chromium
+  integration_mode: optional_adapter
+  priority: medium
+  license_note: Apache-2.0; evitar duplicação com Playwright
+  consumers:
+  - carousel-studio
+  - feed-studio
+  - story-studio
+  status: candidato_nao_integrado
+- id: tonejs
+  name: Tone.js
+  url: https://github.com/Tonejs/Tone.js
+  source_url: https://github.com/Tonejs/Tone.js
+  group: audio
+  role: Síntese de som e cues na timeline
+  integration_mode: optional_runtime
+  priority: medium
+  license_note: MIT; validar assets sonoros externos
+  consumers:
+  - motion-director
+  - story-studio
+  status: candidato_nao_integrado
+- id: scipy
+  name: SciPy
+  url: https://github.com/scipy/scipy
+  source_url: https://github.com/scipy/scipy
+  group: audio
+  role: Filtros, análise e DSP
+  integration_mode: optional_python
+  priority: on_demand
+  license_note: BSD-3-Clause; confirmar dependências
+  consumers:
+  - motion-director
+  status: candidato_nao_integrado
+- id: pedalboard
+  name: Pedalboard
+  url: https://github.com/spotify/pedalboard
+  source_url: https://github.com/spotify/pedalboard
+  group: audio
+  role: Compressor, limiter e efeitos
+  integration_mode: isolated_optional_tool
+  priority: conditional
+  license_note: GPLv3 e dependências JUCE/VST; revisão de copyleft/distribuição obrigatória
+  consumers:
+  - motion-director
+  status: candidato_nao_integrado
+- id: pyloudnorm
+  name: pyloudnorm
+  url: https://github.com/csteinmetz1/pyloudnorm
+  source_url: https://github.com/csteinmetz1/pyloudnorm
+  group: audio
+  role: Medição/normalização loudness
+  integration_mode: optional_python
+  priority: high
+  license_note: Conferir LICENSE da versão integrada
+  consumers:
+  - motion-director
+  status: candidato_nao_integrado
+- id: faster_whisper
+  name: faster-whisper
+  url: https://github.com/SYSTRAN/faster-whisper
+  source_url: https://github.com/SYSTRAN/faster-whisper
+  group: caption
+  role: Transcrição e legendagem
+  integration_mode: optional_local_tool
+  priority: high
+  license_note: MIT; modelos e pesos têm termos próprios; verificar
+  consumers:
+  - motion-director
+  - story-studio
+  status: candidato_nao_integrado
+- id: opencv
+  name: OpenCV
+  url: https://github.com/opencv/opencv
+  source_url: https://github.com/opencv/opencv
+  group: qa
+  role: Detecção de frames anômalos e análise de vídeo
+  integration_mode: optional_python
+  priority: high
+  license_note: Apache-2.0 em versões atuais; verificar distribuição
+  consumers:
+  - motion-director
+  - creative-core
+  status: candidato_nao_integrado
+- id: pillow
+  name: Pillow
+  url: https://github.com/python-pillow/Pillow
+  source_url: https://github.com/python-pillow/Pillow
+  group: qa
+  role: Contact sheets, thumbnails e validação
+  integration_mode: optional_python
+  priority: high
+  license_note: HPND; confirmar versão
+  consumers:
+  - creative-core
+  - carousel-studio
+  - motion-director
+  status: candidato_nao_integrado
+- id: ffmpeg
+  name: FFmpeg
+  url: https://github.com/FFmpeg/FFmpeg
+  source_url: https://github.com/FFmpeg/FFmpeg
+  group: video
+  role: Codificação, áudio/vídeo e exportação
+  integration_mode: existing_or_primary
+  priority: essential
+  license_note: LGPL/GPL depende da build e bibliotecas habilitadas; documentar binário distribuído
+  consumers:
+  - motion-director
+  - story-studio
+  - creative-core
+  status: candidato_nao_integrado
+- id: reui
+  name: ReUI
+  url: https://reui.io
+  source_url: https://reui.io
+  group: design_library
+  role: Componentes de UI e referências de layout
+  integration_mode: approved_component_only
+  priority: medium
+  license_note: Componentes free MIT, outros recursos e templates premium com licenças diferentes
+  consumers:
+  - feed-studio
+  - carousel-studio
+  - creative-core
+  status: candidato_nao_integrado
+- id: 21st
+  name: 21st.dev
+  url: https://21st.dev
+  source_url: https://21st.dev
+  group: design_marketplace
+  role: Descoberta de componentes, shaders e temas
+  integration_mode: reference_manual_or_official_api
+  priority: high
+  license_note: Termos do marketplace restringem scraping e redistribuição de previews/metadados; verificar
+    licença individual de cada componente; geração IA paga
+  consumers:
+  - creative-core
+  - feed-studio
+  - motion-director
+  status: candidato_nao_integrado
+- id: spectrum_ui
+  name: Spectrum UI
+  url: https://ui.spectrumhq.in
+  source_url: https://github.com/arihantcodes/spectrum-ui
+  group: design_library
+  role: Blocos React e animação reutilizável
+  integration_mode: approved_component_only
+  priority: high
+  license_note: Componentes públicos Apache-2.0; verificar assets de terceiros
+  consumers:
+  - creative-core
+  - feed-studio
+  - carousel-studio
+  status: candidato_nao_integrado
+- id: reactdrops
+  name: ReactDrops
+  url: https://reactdrops.dev
+  source_url: https://reactdrops.dev
+  group: design_library
+  role: Componentes visuais React diferenciados
+  integration_mode: reference_only_by_default
+  priority: conditional
+  license_note: Licença proprietária source-available permite produtos finais, proíbe redistribuir como
+    UI kit/registry/template sem permissão
+  consumers:
+  - creative-core
+  - feed-studio
+  status: candidato_nao_integrado
+- id: bencho
+  name: Bencho
+  url: https://bencho.dev
+  source_url: https://bencho.dev
+  group: motion_reference
+  role: Microinterações e física UI
+  integration_mode: reference_or_verified_copy
+  priority: medium
+  license_note: Fontes secundárias indicam MIT para blocos; verificar licença de cada componente na origem
+  consumers:
+  - creative-core
+  - motion-director
+  status: candidato_nao_integrado
+- id: transitions_dev
+  name: Transitions.dev
+  url: https://transitions.dev
+  source_url: https://github.com/Jakubantalik/transitions.dev
+  group: motion_reference
+  role: Transições CSS, motion tokens e Skill
+  integration_mode: free_skill_or_reference
+  priority: high
+  license_note: Free e Pro têm termos e acesso diferentes; revisar licenças antes de distribuir código
+  consumers:
+  - creative-core
+  - motion-director
+  - story-studio
+  status: candidato_nao_integrado
+- id: feralui
+  name: FeralUI
+  url: https://feralui.dev
+  source_url: https://feralui.dev
+  group: motion_reference
+  role: Experimentos com física, interações e composição
+  integration_mode: reference_only_by_default
+  priority: medium
+  license_note: Licença global não confirmada; analisar licença individual antes de copiar
+  consumers:
+  - creative-core
+  - motion-director
+  - story-studio
+  status: candidato_nao_integrado
+- id: kinetics
+  name: Kinetics
+  url: https://kinetics.colorion.co
+  source_url: https://github.com/ckissi/kinetics
+  group: motion_reference
+  role: Microanimações spring e CSS
+  integration_mode: reference_only_by_default
+  priority: high
+  license_note: Licença do repositório específico não confirmada; não copiar automaticamente
+  consumers:
+  - creative-core
+  - motion-director
+  status: candidato_nao_integrado
+- id: 8bitcn
+  name: 8bitcn/ui
+  url: https://www.8bitcn.com
+  source_url: https://github.com/TheOrcDev/8bitcn-ui
+  group: design_library
+  role: Componentes visuais retrô 8-bit
+  integration_mode: approved_component_only
+  priority: low
+  license_note: MIT; preservar avisos
+  consumers:
+  - feed-studio
+  - creative-core
+  status: candidato_nao_integrado
+- id: evilcharts
+  name: EvilCharts
+  url: https://evilcharts.com
+  source_url: https://github.com/legions-developer/evilcharts
+  group: charts
+  role: Gráficos e visualizações animadas React
+  integration_mode: approved_component_only
+  priority: medium
+  license_note: MIT no repositório público; verificar versão e dependências
+  consumers:
+  - feed-studio
+  - carousel-studio
+  - motion-director
+  status: candidato_nao_integrado

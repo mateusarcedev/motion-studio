@@ -1,0 +1,14 @@
+{
+  "name": "playwright-core",
+  "version": "1.64.1",
+  "private": true,
+  "description": "Dependência de execução do MOTION: motor de captura estática (Chromium). Não é componente UI nem skill — é runtime de renderização.",
+  "type": "module",
+  "scripts": {
+    "render": "node creative-core/renderers/render_static.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.64.1",
+    "three": "^0.165.0"
+  }
+}

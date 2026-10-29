@@ -1,0 +1,31 @@
+{
+  "$comment": "Presets do MOTION creative-core. Dimensões NÃO são regras permanentes: ajuste conforme a plataforma exigir. Cada preset pode declarar type (static|motion), size [w,h], scale (deviceScaleFactor), safe-zones (% das bordas onde não colocar conteúdo essencial).",
+  "feed-vertical": {
+    "type": "static",
+    "size": [1080, 1350],
+    "scale": 2,
+    "safe-zones": { "top": 4, "bottom": 4, "left": 6, "right": 6 }
+  },
+  "feed-square": {
+    "type": "static",
+    "size": [1080, 1080],
+    "scale": 2,
+    "safe-zones": { "top": 4, "bottom": 4, "left": 6, "right": 6 }
+  },
+  "story": {
+    "type": "static",
+    "size": [1080, 1920],
+    "scale": 2,
+    "safe-zones": { "top": 22, "bottom": 16, "left": 7, "right": 7, "$comment": "story: UI do Instagram (avatar/username em cima, CTA/resposta embaixo) — header e footer seguros ampliam o topo e base" }
+  },
+  "video-horizontal": {
+    "type": "motion",
+    "size": [1920, 1080],
+    "fps": 30
+  },
+  "video-vertical": {
+    "type": "motion",
+    "size": [1080, 1920],
+    "fps": 30
+  }
+}

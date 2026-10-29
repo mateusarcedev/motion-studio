@@ -6,3 +6,15 @@ out/final/
 reviews/frames/
 training/
 .claude/settings.local.json
+
+# Windows download metadata
+*:Zone.Identifier
+
+# local test harness artifacts
+projects/*/web/test-app/vite.log
+projects/*/web/test-app/vite.pid
+
+# regenerable render intermediates
+projects/*/frames/
+projects/*/frames-debug/
+projects/*/frames-full/

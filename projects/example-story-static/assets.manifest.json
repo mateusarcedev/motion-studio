@@ -1,0 +1,33 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/example-story-static",
+  "counts": {
+    "files": 3,
+    "png": 1,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/01.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "d6146583f9714e86",
+      "bytes": 258,
+      "role": "other"
+    },
+    {
+      "path": "out/01.png",
+      "sha256": "71741af15f1ccce1",
+      "bytes": 210336,
+      "role": "render"
+    },
+    {
+      "path": "stories/01.html",
+      "sha256": "6959a359caafa5f1",
+      "bytes": 1574,
+      "role": "source-html"
+    }
+  ]
+}

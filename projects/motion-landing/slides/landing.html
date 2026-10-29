@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOTION — AI Creative Studio</title>
+<meta name="description" content="Estúdio criativo multiformato operado por IA. Vídeo, carrosséis, stories, posts, shorts — determinístico, editável, reproduzível.">
+
+<style>
+:root {
+  --bg:#0a0a0c; --bg-elev:#111114; --fg:#f2f2ee; --muted:#8a8a94; --acc:#d5a94e;
+  --acc-dim:#b8943e; --rose:#f38fa8; --blue:#62c8ea; --navy:#173c5b;
+  --card:#15151a; --border:#2a2a32; --focus:#d5a94e;
+  --radius:14px; --radius-sm:8px; --space:clamp(24px, 4vw, 64px);
+  --container:min(1200px, 92vw);
+  --font-sans:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif:Georgia, "Times New Roman", serif;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--fg); font-family:var(--font-sans);
+  line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+a { color:inherit; text-decoration:none; }
+img, video { max-width:100%; height:auto; display:block; }
+:focus-visible { outline:2px solid var(--focus); outline-offset:2px; border-radius:4px; }
+
+/* Layout */
+.container { width:var(--container); margin:0 auto; padding:0 24px; }
+.section { padding:var(--space) 0; }
+
+/* Typography */
+h1, h2, h3 { font-family:var(--font-serif); font-weight:400; line-height:1.1; }
+h1 { font-size:clamp(48px, 7vw, 96px); letter-spacing:-0.02em; }
+h2 { font-size:clamp(36px, 5vw, 64px); letter-spacing:-0.01em; }
+h3 { font-size:clamp(22px, 2.5vw, 28px); }
+.eyebrow { font-size:14px; letter-spacing:.24em; text-transform:uppercase; font-weight:700; color:var(--acc); }
+.lead { font-size:clamp(18px, 2.2vw, 24px); color:var(--muted); max-width:60ch; }
+p { color:var(--muted); max-width:65ch; }
+.small { font-size:14px; color:var(--muted); }
+strong { color:var(--fg); }
+.accent { color:var(--acc); }
+.rose { color:var(--rose); }
+.blue { color:var(--blue); }
+
+/* Header */
+header { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,12,0.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+header .container { display:flex; align-items:center; justify-content:space-between; height:64px; }
+.logo { font-family:var(--font-serif); font-size:22px; font-weight:400; display:flex; align-items:center; gap:10px; }
+.logo-mark { width:32px; height:32px; background:linear-gradient(135deg,var(--acc),var(--acc-dim)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:var(--bg); }
+nav { display:flex; gap:32px; align-items:center; }
+nav a { font-size:14px; color:var(--muted); transition:color .2s; }
+nav a:hover { color:var(--fg); }
+.cta-btn { background:var(--acc); color:var(--bg); font-weight:700; padding:10px 24px; border-radius:999px; font-size:14px; transition:background .2s, transform .1s; border:none; cursor:pointer; }
+.cta-btn:hover { background:var(--acc-dim); transform:translateY(-1px); }
+.cta-btn:active { transform:translateY(0); }
+.cta-btn.ghost { background:transparent; color:var(--fg); border:1px solid var(--border); }
+.cta-btn.ghost:hover { border-color:var(--acc); color:var(--acc); }
+
+/* Hero */
+.hero { min-height:100vh; display:flex; align-items:center; padding-top:64px; position:relative; overflow:hidden; }
+.hero::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 20%, rgba(213,169,78,0.08) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, rgba(98,200,234,0.06) 0%, transparent 50%); pointer-events:none; }
+.hero .container { display:grid; grid-template-columns:1.1fr .9fr; gap:64px; align-items:center; position:relative; z-index:1; }
+.hero-content { display:flex; flex-direction:column; gap:24px; }
+.hero h1 span { font-style:italic; color:var(--rose); }
+.hero-actions { display:flex; gap:16px; flex-wrap:wrap; margin-top:8px; }
+.hero-stats { display:flex; gap:48px; flex-wrap:wrap; margin-top:24px; padding-top:24px; border-top:1px solid var(--border); }
+.stat { display:flex; flex-direction:column; gap:4px; }
+.stat-value { font-family:var(--font-serif); font-size:40px; font-weight:400; color:var(--fg); }
+.stat-label { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; }
+.hero-visual { position:relative; aspect-ratio:16/10; border-radius:var(--radius); background:var(--bg-elev); border:1px solid var(--border); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.hero-visual::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(213,169,78,0.03) 0%, transparent 50%); }
+.hero-visual-inner { width:90%; height:70%; background:linear-gradient(180deg, var(--navy) 0%, var(--bg) 100%); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:24px; position:relative; }
+.frame-mock { width:100%; height:100%; background:var(--bg); border-radius:6px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-serif); font-size:18px; color:var(--muted); }
+.play-indicator { width:64px; height:64px; border-radius:50%; background:var(--acc); display:flex; align-items:center; justify-content:center; color:var(--bg); animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(213,169,78,0.4); } 50% { box-shadow:0 0 0 16px rgba(213,169,78,0); } }
+
+/* Sections */
+.section-header { text-align:center; max-width:700px; margin:0 auto 48px; }
+.section-header .eyebrow { display:inline-block; margin-bottom:12px; }
+.section-header h2 { margin-bottom:16px; }
+.section-header .lead { margin:0 auto; }
+
+/* Capabilities Grid */
+.capabilities { background:var(--bg-elev); }
+.cap-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px; }
+.cap-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:32px; display:flex; flex-direction:column; gap:16px; transition:border-color .2s, transform .2s; }
+.cap-card:hover { border-color:var(--acc); transform:translateY(-2px); }
+.cap-icon { width:48px; height:48px; border-radius:12px; background:linear-gradient(135deg,var(--acc),var(--acc-dim)); display:flex; align-items:center; justify-content:center; font-size:22px; }
+.cap-card h3 { font-size:20px; }
+.cap-card p { flex:1; }
+.cap-card .cap-link { display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:var(--acc); margin-top:auto; }
+.cap-card .cap-link::after { content:"→"; transition:transform .2s; }
+.cap-card:hover .cap-link::after { transform:translateX(4px); }
+
+/* Pipeline */
+.pipeline-steps { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:24px; position:relative; }
+.pipeline-steps::before { content:""; position:absolute; top:28px; left:10%; right:10%; height:2px; background:linear-gradient(90deg, transparent, var(--border), transparent); z-index:0; }
+.step { position:relative; z-index:1; text-align:center; padding:24px 16px; }
+.step-num { width:56px; height:56px; border-radius:50%; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-family:var(--font-serif); font-size:24px; font-weight:400; color:var(--acc); transition:border-color .2s; }
+.step:hover .step-num { border-color:var(--acc); }
+.step h3 { margin-bottom:8px; }
+.step p { font-size:14px; margin:0 auto; max-width:220px; }
+
+/* Gallery */
+.gallery { background:var(--bg-elev); }
+.gallery-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px; }
+.gallery-item { position:relative; aspect-ratio:16/9; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); background:var(--card); }
+.gallery-thumb { width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
+.gallery-item:hover .gallery-thumb { transform:scale(1.05); }
+.gallery-overlay { position:absolute; inset:0; background:linear-gradient(180deg, transparent 50%, rgba(10,10,12,0.95) 100%); display:flex; flex-direction:column; justify-content:flex-end; padding:24px; opacity:0; transition:opacity .3s; }
+.gallery-item:hover .gallery-overlay { opacity:1; }
+.gallery-overlay h3 { font-size:18px; margin-bottom:4px; }
+.gallery-overlay .tags { display:flex; gap:8px; flex-wrap:wrap; }
+.tag { font-size:11px; background:rgba(255,255,255,0.1); border:1px solid var(--border); padding:4px 10px; border-radius:999px; color:var(--muted); }
+
+/* Stack */
+.stack-categories { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px; }
+.stack-cat { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+.stack-cat h3 { display:flex; align-items:center; gap:10px; margin-bottom:16px; font-size:18px; }
+.stack-cat h3::before { content:""; width:8px; height:8px; border-radius:2px; background:var(--acc); }
+.stack-tags { display:flex; flex-wrap:wrap; gap:8px; }
+.stack-tag { font-size:13px; background:var(--bg); border:1px solid var(--border); padding:6px 12px; border-radius:6px; color:var(--muted); transition:border-color .2s, color .2s; }
+.stack-tag:hover { border-color:var(--acc); color:var(--acc); }
+
+/* CTA Section */
+.cta-section { text-align:center; background:linear-gradient(180deg, transparent, var(--bg-elev)); position:relative; }
+.cta-section::before { content:""; position:absolute; top:0; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse, rgba(213,169,78,0.08), transparent); pointer-events:none; }
+.cta-section h2 { margin-bottom:16px; }
+.cta-section .lead { margin:0 auto 32px; }
+.cta-actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+/* Footer */
+footer { background:var(--bg-elev); border-top:1px solid var(--border); padding:48px 0 24px; }
+.footer-grid { display:grid; grid-template-columns:2fr repeat(3, 1fr); gap:48px; margin-bottom:48px; }
+.footer-brand .logo { margin-bottom:16px; }
+.footer-brand p { font-size:14px; max-width:280px; }
+.footer-col h4 { font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:16px; font-weight:700; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-col a { font-size:14px; color:var(--muted); transition:color .2s; }
+.footer-col a:hover { color:var(--acc); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; padding-top:24px; border-top:1px solid var(--border); flex-wrap:wrap; gap:16px; }
+.footer-bottom p { font-size:13px; margin:0; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero .container { grid-template-columns:1fr; text-align:center; }
+  .hero-visual { order:-1; max-width:480px; margin:0 auto; }
+  .hero-stats { justify-content:center; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 600px) {
+  nav { display:none; }
+  .footer-grid { grid-template-columns:1fr; }
+  .hero-stats { gap:24px; }
+  .stat-value { font-size:32px; }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  html { scroll-behavior:auto; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a href="#" class="logo" aria-label="MOTION Home">
+      <span class="logo-mark">M</span>
+      <span>MOTION</span>
+    </a>
+    <nav aria-label="Navegação principal">
+      <a href="#capabilities">Capacidades</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#gallery">Galeria</a>
+      <a href="#stack">Stack</a>
+    </nav>
+    <a href="#contact" class="cta-btn">Começar projeto</a>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <div class="hero-content">
+        <span class="eyebrow">AI Creative Studio</span>
+        <h1 id="hero-title">MOTION.<br>Onde código<br>encontra <span>cinema.</span></h1>
+        <p class="lead">Estúdio multiformato operado por agentes. Vídeo, carrosséis, stories, posts e shorts — frame-determinístico, editável, auditável.</p>
+        <div class="hero-actions">
+          <a href="#capabilities" class="cta-btn">Ver capacidades</a>
+          <a href="#gallery" class="cta-btn ghost">Ver galeria</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">7</span>
+            <span class="stat-label">Produções validadas</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">5</span>
+            <span class="stat-label">Formatos nativos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">47+</span>
+            <span class="stat-label">Skills integradas</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Dependências globais</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-visual-inner">
+          <div class="frame-mock">composition.html → frame.js → render_frames.mjs → assemble_video.py → MP4</div>
+          <div class="play-indicator" style="font-size:24px;">▶</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section id="capabilities" class="section" aria-labelledby="cap-title">
+    <div class="container">
+      <header class="section-header">
+        <span class="eyebrow">O que o MOTION produz</span>
+        <h2 id="cap-title">Cinco formatos.<br>Um pipeline.</h2>
+        <p class="lead">Cada formato segue o mesmo rigor: brief → direção → composição → render → crítico → entrega.</p>
+      </header>
+      <div class="cap-grid">
+        <article class="cap-card">
+          <div class="cap-icon" aria-hidden="true">▶</div>
+          <h3>Vídeo & Motion</h3>
+          <p>Teasers, promos, filmes explicativos. 16:9, 1:1, 9:16. Pipeline de 8 estágios com stills, contact sheet, crítico independente e até 2 rodadas de reparo.</p>
+          <a href="#gallery" class="cap-link">Ver exemplos</a>
+        </article>
+        <article class="cap-card">
+          <div class="cap-icon" aria-hidden="true">◐</div>
+          <h3>Carrosséis</h3>
+          <p>HTML/CSS → PNG 2160×2700 nativo. Storytelling slide-a-slide, variações, comparação lado-a-lado, ZIP com fontes editáveis. Preset feed-vertical, square, story.</p>
+          <a href="#gallery" class="cap-link">Ver exemplos</a>
+        </article>
+        <article class="cap-card">
+          <div class="cap-icon" aria-hidden="true">📱</div>
+          <h3>Stories</h3>
+          <p>Estáticos (PNG 2160×3840) e animados (MP4 1080×1920). Safe zones 22%/16%/7%, sequências narrativas, reflow real por proporção.</p>
+          <a href="#gallery" class="cap-link">Ver exemplos</a>
+        </article>
+        <article class="cap-card">
+          <div class="cap-icon" aria-hidden="true">📄</div>
+          <h3>Posts de Feed</h3>
+          <p>Cards promocionais, tipográficos, editoriais, infográficos, ad art. 1080×1350, 1080×1080, 1080×1920 — recomposição real, nunca crop.</p>
+          <a href="#gallery" class="cap-link">Ver exemplos</a>
+        </article>
+        <article class="cap-card">
+          <div class="cap-icon" aria-hidden="true">⚡</div>
+          <h3>Shorts Narrados</h3>
+          <p>Frame-driven via creative-core. TTS opt-in (Chatterbox), legenda por palavra, trilha licenciada, contact sheet gate, MP4 + SRT + ZIP. Fallback textual documentado.</p>
+          <a href="#gallery" class="cap-link">Ver exemplos</a>
+        </article>
+        <article class="cap-card">
+          <div class="cap-icon" aria-hidden="true">🎯</div>
+          <h3>Campanhas Multiformato</h3>
+          <p>Um brief → vídeo + carrossel + stories + posts. studio-director despacha, creative-core garante consistência visual, galeria registra tudo.</p>
+          <a href="#gallery" class="cap-link">Ver exemplos</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline -->
+  <section id="pipeline" class="section" aria-labelledby="pipe-title">
+    <div class="container">
+      <header class="section-header">
+        <span class="eyebrow">Como funciona</span>
+        <h2 id="pipe-title">Pipeline de<br>produção auditável</h2>
+        <p class="lead">Oito estágios para vídeo, oito para estáticos. Gates humanos no brief e na direção. Crítico com contexto novo. Máximo 2 rodadas por defeito.</p>
+      </header>
+      <div class="pipeline-steps">
+        <article class="step">
+          <div class="step-num">1</div>
+          <h3>Briefing</h3>
+          <p>Objetivo, público, duração, formatos, estilo, som, material. Gera <code>BRIEF.md</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">2</div>
+          <h3>Direção de Arte</h3>
+          <p>Tipografia, cor, composição, movimento, textura + lista de "evitar". Gera <code>STYLE.md</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">3</div>
+          <h3>Storyboard / Roteiro</h3>
+          <p>Cena a cena (vídeo) ou tabela slide/beat (estáticos). Timestamps + números de frame.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">4</div>
+          <h3>Composição</h3>
+          <p>Código frame-driven (Remotion/HTML) ou slides HTML/CSS. Determinístico por seed/frame.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">5</div>
+          <h3>Render</h3>
+          <p>Stills de beats → contact sheet → render completo. Playwright/Chromium ou FFmpeg CFR.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">6</div>
+          <h3>Crítico</h3>
+          <p>Contexto novo. Apenas renders + brief. Defeitos com frame/timestamp, evidência, menor correção.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">7</div>
+          <h3>Reparo</h3>
+          <p>Patch local no código. Re-render frames afetados. Máx. 2 rodadas/defeito.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">8</div>
+          <h3>Delivery</h3>
+          <p>MP4s multi-formato, PNGs, fontes editáveis, manifest SHA-256, ZIP, galeria, memória visual.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="section gallery" aria-labelledby="gal-title">
+    <div class="container">
+      <header class="section-header">
+        <span class="eyebrow">Produções validadas</span>
+        <h2 id="gal-title">Galeria de<br>peças reais</h2>
+        <p class="lead">Todas renderizadas pelo MOTION. Clique para ver detalhes na galeria completa.</p>
+      </header>
+      <div class="gallery-grid">
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3ECarrossel Nova Identidade%3C/text%3E%3C/svg%3E" alt="Carousel Nova Identidade - 3 slides feed-vertical" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Carrossel Nova Identidade</h3>
+            <div class="tags"><span class="tag">Carousel</span><span class="tag">3 slides</span><span class="tag">Feed-vertical</span><span class="tag">R1 corrigido</span></div>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3ECarrossel 7 Slides%3C/text%3E%3C/svg%3E" alt="Exemplo Carrossel 7 Slides" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Exemplo: Carrossel 7 Slides</h3>
+            <div class="tags"><span class="tag">Carousel</span><span class="tag">7 slides</span><span class="tag">Feed-vertical</span></div>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3EPost Reflow 4 Proporções%3C/text%3E%3C/svg%3E" alt="Post Reflow 4 Proporções" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Post Reflow — 4 Proporções</h3>
+            <div class="tags"><span class="tag">Post</span><span class="tag">16:9</span><span class="tag">1:1</span><span class="tag">9:16</span><span class="tag">4:5</span></div>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3EStory Estático%3C/text%3E%3C/svg%3E" alt="Story Estático" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Story Estático</h3>
+            <div class="tags"><span class="tag">Story</span><span class="tag">2160×3840</span><span class="tag">Safe zones</span></div>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3ETeaser 150 Frames%3C/text%3E%3C/svg%3E" alt="Teaser 5s 16:9" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Teaser — 150 frames / 5s</h3>
+            <div class="tags"><span class="tag">Video</span><span class="tag">1920×1080</span><span class="tag">CFR 30fps</span><span class="tag">Áudio AAC</span></div>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3EStory Animado 120 Frames%3C/text%3E%3C/svg%3E" alt="Story Animado 4s 9:16" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Story Animado — 120 frames / 4s</h3>
+            <div class="tags"><span class="tag">Video</span><span class="tag">1080×1920</span><span class="tag">Frame-driven</span></div>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <img class="gallery-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect fill='%2315151a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%238a8a94' font-family='system-ui' font-size='24'%3EShort Original 600 Frames%3C/text%3E%3C/svg%3E" alt="Short Original 20s 9:16" loading="lazy">
+          <div class="gallery-overlay">
+            <h3>Short Original — 600 frames / 20s</h3>
+            <div class="tags"><span class="tag">Short</span><span class="tag">Fallback textual</span><span class="tag">SRT por beat</span></div>
+          </div>
+        </article>
+      </div>
+      <div style="text-align:center; margin-top:32px;">
+        <a href="creative-core/gallery/index.html" class="cta-btn" target="_blank">Abrir galeria interativa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section id="stack" class="section" aria-labelledby="stack-title">
+    <div class="container">
+      <header class="section-header">
+        <span class="eyebrow">Fundação técnica</span>
+        <h2 id="stack-title">Stack zero-bloat.<br>Só o necessário.</h2>
+        <p class="lead">Nenhuma dependência global. Playwright/Chromium/FFmpeg/Node/Python stdlib. Tudo versionado, auditável, removível.</p>
+      </header>
+      <div class="stack-categories">
+        <article class="stack-cat">
+          <h3>Renderização</h3>
+          <div class="stack-tags">
+            <span class="stack-tag">Playwright 1.64</span>
+            <span class="stack-tag">Chromium 1248</span>
+            <span class="stack-tag">FFmpeg 8.0</span>
+            <span class="stack-tag">Node 24</span>
+            <span class="stack-tag">Python 3.14 stdlib</span>
+          </div>
+        </article>
+        <article class="stack-cat">
+          <h3>Motores Opcionais</h3>
+          <div class="stack-tags">
+            <span class="stack-tag">Remotion (sob demanda)</span>
+            <span class="stack-tag">Three.js</span>
+            <span class="stack-tag">Anime.js</span>
+            <span class="stack-tag">GSAP (restrito)</span>
+            <span class="stack-tag">Chatterbox TTS (opt-in)</span>
+          </div>
+        </article>
+        <article class="stack-cat">
+          <h3>Qualidade & QA</h3>
+          <div class="stack-tags">
+            <span class="stack-tag">Contact Sheet</span>
+            <span class="stack-tag">Overflow Check</span>
+            <span class="stack-tag">Font Validation</span>
+            <span class="stack-tag">SHA-256 Manifest</span>
+            <span class="stack-tag">Crítico Independente</span>
+          </div>
+        </article>
+        <article class="stack-cat">
+          <h3>Identidade & Memória</h3>
+          <div class="stack-tags">
+            <span class="stack-tag">Brands/</span>
+            <span class="stack-tag">Tokens JSON</span>
+            <span class="stack-tag">Approved/ Memory</span>
+            <span class="stack-tag">Gallery JSON</span>
+            <span class="stack-tag">Presets Config</span>
+          </div>
+        </article>
+        <article class="stack-cat">
+          <h3>Agentes Compatíveis</h3>
+          <div class="stack-tags">
+            <span class="stack-tag">Claude Code</span>
+            <span class="stack-tag">OpenCode</span>
+            <span class="stack-tag">Codex CLI</span>
+            <span class="stack-tag">Gemini CLI</span>
+            <span class="stack-tag">Agent Skills (fonte .agents/skills/)</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="section cta-section" aria-labelledby="cta-title">
+    <div class="container">
+      <span class="eyebrow">Pronto para produzir</span>
+      <h2 id="cta-title">Seu próximo projeto<br>começa com um brief.</h2>
+      <p class="lead">Vídeo, carrossel, stories, posts, shorts ou campanha completa. O studio-director despacha, o creative-core garante qualidade, a galeria memoriza.</p>
+      <div class="cta-actions">
+        <a href="#" class="cta-btn">Iniciar briefing</a>
+        <a href="#gallery" class="cta-btn ghost">Ver mais trabalhos</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" aria-label="MOTION Home">
+          <span class="logo-mark">M</span>
+          <span>MOTION</span>
+        </a>
+        <p>Estúdio criativo multiformato operado por IA. Determinístico, editável, reproduzível para sempre.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Formatos</h4>
+        <ul>
+          <li><a href="#capabilities">Vídeo & Motion</a></li>
+          <li><a href="#capabilities">Carrosséis</a></li>
+          <li><a href="#capabilities">Stories</a></li>
+          <li><a href="#capabilities">Posts de Feed</a></li>
+          <li><a href="#capabilities">Shorts Narrados</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Pipeline</h4>
+        <ul>
+          <li><a href="#pipeline">Briefing → Direção</a></li>
+          <li><a href="#pipeline">Storyboard → Composição</a></li>
+          <li><a href="#pipeline">Render → Crítico</a></li>
+          <li><a href="#pipeline">Reparo → Delivery</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="#gallery">Galeria</a></li>
+          <li><a href="#stack">Stack Técnico</a></li>
+          <li><a href="#">INTEGRATIONS.md</a></li>
+          <li><a href="#">CLAUDE.md</a></li>
+          <li><a href="#">pipeline.md</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>MOTION AI Creative Studio — Código próprio, zero dependências globais, auditável.</      </p>
+      <p class="small">Commit base: 03662be · 25 alterações uncommitted · Missão 04 concluída</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Smooth scroll polyfill para browsers antigos
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id === '#') return;
+    const target = document.querySelector(id);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.focus({ preventScroll: true });
+    }
+  });
+});
+
+// Header shadow on scroll
+const header = document.querySelector('header');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y > 20) header.style.boxShadow = '0 4px 24px rgba(0,0,0,0.3)';
+  else header.style.boxShadow = 'none';
+  lastScroll = y;
+}, { passive: true });
+
+// IntersectionObserver para animações sutis de entrada
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.cap-card, .step, .gallery-item, .stack-cat').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+}
+</script>
+</body>
+</html>

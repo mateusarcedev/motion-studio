@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Aurora Watch — 3D Composition</title>
+<style>
+:root{--bg:#0a0a0c;--fg:#f2f2ee;--acc:#d5a94e}
+*{margin:0;box-sizing:border-box}
+body{width:1920px;height:1080px;background:var(--bg);overflow:hidden;font-family:system-ui,sans-serif;color:var(--fg)}
+#canvas{width:100%;height:100%;display:block}
+.hud{position:absolute;top:24px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:10}
+.brand{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:.02em}
+.brand span{color:var(--acc)}
+.stats{font-size:12px;color:#888;font-family:monospace;text-align:right}
+</style>
+</head><body>
+<canvas id="canvas"></canvas>
+<div class="hud">
+  <div class="brand">AURORA <span>WATCH</span></div>
+  <div class="stats" id="stats">frame: 0 / 450<br>t: 0.00s</div>
+</div>
+
+<script type="module">
+import createMotionDriver from '/creative-core/design-system/frame.js';
+import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.165.0/examples/jsm/controls/OrbitControls.js';
+import { GLTFExporter } from 'https://unpkg.com/three@0.165.0/examples/jsm/exporters/GLTFExporter.js';
+
+// ============ DRIVER ============
+const M_EL = document.documentElement;
+const canvas = document.getElementById('canvas');
+const statsEl = document.getElementById('stats');
+
+// ============ THREE SETUP ============
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setSize(1920, 1080);
+renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0c);
+
+// Camera
+const camera = new THREE.PerspectiveCamera(45, 1920/1080, 0.01, 10);
+camera.position.set(0, 0.05, 0.4);
+
+// Controls (for web preview, disabled during video render)
+let controls;
+if (!window.__MOTION_DRIVEN__) {
+  controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.3;
+  controls.minDistance = 0.15;
+  controls.maxDistance = 1.0;
+  controls.target.set(0, 0.02, 0);
+}
+
+// ============ MATERIALS (Procedural) ============
+const metalMat = (color, roughness, metalness) => new THREE.MeshStandardMaterial({
+  color: new THREE.Color(color), roughness, metalness
+});
+
+const materials = {
+  case: metalMat(0xb8b8c0, 0.35, 1.0),
+  bezel: metalMat(0xc8c8d0, 0.15, 1.0),
+  crystal: new THREE.MeshPhysicalMaterial({
+    color: 0xffffff, roughness: 0.02, metalness: 0.0,
+    transmission: 0.98, thickness: 0.002, clearcoat: 1.0, clearcoatRoughness: 0.0
+  }),
+  dial: metalMat(0x0a0a0c, 0.85, 0.0),
+  hands: metalMat(0xd5a94e, 0.2, 1.0),
+  crown: metalMat(0xb0b0b8, 0.3, 1.0),
+  strap: new THREE.MeshStandardMaterial({
+    color: 0x1a1a1a, roughness: 0.9, metalness: 0.0
+  }),
+  gold: metalMat(0xd5a94e, 0.2, 1.0),
+};
+
+// ============ WATCH BUILDER (Procedural) ============
+const watchGroup = new THREE.Group();
+watchGroup.name = 'AuroraWatch';
+scene.add(watchGroup);
+
+const mm = 0.001; // 1 unit = 1 meter
+
+// Dimensions (meters)
+const D = {
+  caseDia: 42 * mm, caseThick: 11 * mm,
+  bezelDia: 40 * mm, bezelThick: 2.5 * mm,
+  crystalDia: 36 * mm, crystalThick: 2 * mm,
+  dialDia: 34 * mm, dialThick: 1 * mm,
+  crownDia: 5 * mm, crownLen: 8 * mm,
+  strapW: 22 * mm, strapThick: 3 * mm, strapLen: 120 * mm,
+  handSecLen: 14 * mm, handMinLen: 11 * mm, handHourLen: 8 * mm,
+  handW: 1.2 * mm,
+};
+
+// Case
+const caseGeo = new THREE.CylinderGeometry(D.caseDia/2, D.caseDia/2, D.caseThick, 64);
+const caseMesh = new THREE.Mesh(caseGeo, materials.case);
+caseMesh.castShadow = true; caseMesh.receiveShadow = true;
+watchGroup.add(caseMesh);
+
+// Bevel edges (top/bottom rings)
+const bevelGeo = new THREE.TorusGeometry(D.caseDia/2, 0.8*mm, 16, 64);
+const bevelMat = materials.bezel;
+const topBevel = new THREE.Mesh(bevelGeo, bevelMat);
+topBevel.rotation.x = Math.PI/2;
+topBevel.position.y = D.caseThick/2;
+watchGroup.add(topBevel);
+const botBevel = topBevel.clone();
+botBevel.position.y = -D.caseThick/2;
+watchGroup.add(botBevel);
+
+// Bezel
+const bezelGeo = new THREE.CylinderGeometry(D.bezelDia/2, D.bezelDia/2, D.bezelThick, 64);
+const bezelMesh = new THREE.Mesh(bezelGeo, materials.bezel);
+bezelMesh.position.y = D.caseThick/2 + D.bezelThick/2;
+bezelMesh.castShadow = true;
+watchGroup.add(bezelMesh);
+
+// Crystal
+const crystalGeo = new THREE.CylinderGeometry(D.crystalDia/2, D.crystalDia/2, D.crystalThick, 64);
+const crystalMesh = new THREE.Mesh(crystalGeo, materials.crystal);
+crystalMesh.position.y = D.caseThick/2 + D.bezelThick + D.crystalThick/2;
+crystalMesh.castShadow = true; crystalMesh.receiveShadow = true;
+watchGroup.add(crystalMesh);
+
+// Dial
+const dialGeo = new THREE.CylinderGeometry(D.dialDia/2, D.dialDia/2, D.dialThick, 64);
+const dialMesh = new THREE.Mesh(dialGeo, materials.dial);
+dialMesh.position.y = D.caseThick/2 + D.bezelThick + D.crystalThick + D.dialThick/2;
+dialMesh.receiveShadow = true;
+watchGroup.add(dialMesh);
+
+// Indices (12 applied circles)
+const indexMat = materials.gold;
+const indexGeo = new THREE.CylinderGeometry(0.8*mm, 0.8*mm, 0.5*mm, 16);
+for (let i = 0; i < 12; i++) {
+  const angle = (i / 12) * Math.PI * 2;
+  const r = D.dialDia/2 * 0.78;
+  const index = new THREE.Mesh(indexGeo, indexMat);
+  index.position.set(Math.sin(angle)*r, D.caseThick/2 + D.bezelThick + D.crystalThick + D.dialThick, Math.cos(angle)*r);
+  index.rotation.x = -Math.PI/2;
+  watchGroup.add(index);
+}
+
+// Hands
+const handGeo = (len, w) => {
+  const shape = new THREE.Shape();
+  shape.moveTo(-w/2, 0);
+  shape.lineTo(w/2, 0);
+  shape.lineTo(w/2, -len*0.9);
+  shape.lineTo(0, -len);
+  shape.lineTo(-w/2, -len*0.9);
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.4*mm, bevelEnabled: false });
+  geo.translate(0, 0, -0.2*mm);
+  return geo;
+};
+
+const secondHand = new THREE.Mesh(handGeo(D.handSecLen, D.handW), materials.hands);
+secondHand.position.y = D.caseThick/2 + D.bezelThick + D.crystalThick + D.dialThick + 0.2*mm;
+secondHand.rotation.z = Math.PI; // start at 12
+watchGroup.add(secondHand);
+
+const minuteHand = new THREE.Mesh(handGeo(D.handMinLen, D.handW*1.2), materials.hands);
+minuteHand.position.y = secondHand.position.y;
+minuteHand.rotation.z = Math.PI;
+watchGroup.add(minuteHand);
+
+const hourHand = new THREE.Mesh(handGeo(D.handHourLen, D.handW*1.5), materials.hands);
+hourHand.position.y = secondHand.position.y;
+hourHand.rotation.z = Math.PI;
+watchGroup.add(hourHand);
+
+// Center pin
+const pinGeo = new THREE.CylinderGeometry(1*mm, 1.2*mm, 1.5*mm, 16);
+const pinMesh = new THREE.Mesh(pinGeo, materials.gold);
+pinMesh.position.y = secondHand.position.y - 0.1*mm;
+watchGroup.add(pinMesh);
+
+// Crown
+const crownGeo = new THREE.CylinderGeometry(D.crownDia/2, D.crownDia/2, D.crownLen, 16);
+const crownMesh = new THREE.Mesh(crownGeo, materials.crown);
+crownMesh.position.set(D.caseDia/2 + D.crownLen/2, 0, 0);
+crownMesh.rotation.z = -Math.PI/2;
+crownMesh.castShadow = true;
+watchGroup.add(crownMesh);
+
+// Crown knurling (rings)
+for (let i = 0; i < 6; i++) {
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(D.crownDia/2, 0.15*mm, 8, 32),
+    materials.crown
+  );
+  ring.rotation.x = Math.PI/2;
+  ring.position.set(D.caseDia/2 + D.crownLen/2 - i*1.3*mm, 0, 0);
+  watchGroup.add(ring);
+}
+
+// Strap (two halves with geometry)
+const strapGeo = new THREE.BoxGeometry(D.strapLen, D.strapW, D.strapThick, 4, 4, 2);
+const topStrap = new THREE.Mesh(strapGeo, materials.strap);
+topStrap.position.set(0, -D.caseThick/2 - D.strapThick/2, -D.caseDia/2 - D.strapW/2);
+topStrap.rotation.x = -Math.PI/2;
+watchGroup.add(topStrap);
+
+const botStrap = topStrap.clone();
+botStrap.position.z = D.caseDia/2 + D.strapW/2;
+watchGroup.add(botStrap);
+
+// Strap stitching (lines)
+const stitchMat = new THREE.LineBasicMaterial({ color: 0x333333, transparent: true, opacity: 0.6 });
+for (let i = 0; i < 10; i++) {
+  const z = -D.caseDia/2 - D.strapW/2 + (i/9)*D.strapW;
+  const geo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-D.strapLen/2, -D.caseThick/2 - D.strapThick/2 + 0.0001, z),
+    new THREE.Vector3(D.strapLen/2, -D.caseThick/2 - D.strapThick/2 + 0.0001, z)
+  ]);
+  watchGroup.add(new THREE.Line(geo, stitchMat));
+  const geo2 = geo.clone(); geo2.translate(0, 0, D.caseDia + D.strapW);
+  watchGroup.add(new THREE.Line(geo2, stitchMat));
+}
+
+// ============ LIGHTING ============
+// HDRI-like environment (procedural)
+const pmremGenerator = new THREE.PMREMGenerator(renderer);
+pmremGenerator.compileEquirectangularShader();
+
+// Simple HDRI simulation: gradient sky + ground
+const envGeo = new THREE.SphereGeometry(10, 32, 16);
+const envMat = new THREE.MeshBasicMaterial({
+  side: THREE.BackSide,
+  map: (() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024; canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createLinearGradient(0, 0, 0, 512);
+    grad.addColorStop(0, '#1a1a2e');
+    grad.addColorStop(0.3, '#0f0f1a');
+    grad.addColorStop(0.7, '#080810');
+    grad.addColorStop(1, '#030305');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,1024,512);
+    // Sun highlight
+    ctx.beginPath(); ctx.arc(800, 150, 120, 0, Math.PI*2);
+    const sunGrad = ctx.createRadialGradient(800,150,0, 800,150,120);
+    sunGrad.addColorStop(0, 'rgba(255,240,200,0.6)');
+    sunGrad.addColorStop(1, 'rgba(255,220,150,0)');
+    ctx.fillStyle = sunGrad; ctx.fill();
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.mapping = THREE.EquirectangularReflectionMapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  })(),
+  side: THREE.BackSide
+});
+const envMesh = new THREE.Mesh(envGeo, envMat);
+scene.add(envMesh);
+
+// Key Light
+const keyLight = new THREE.RectAreaLight(0xffeedd, 8, 1.5, 1.5);
+keyLight.position.set(0.5, 0.3, 0.5);
+keyLight.lookAt(0, 0.02, 0);
+scene.add(keyLight);
+
+// Fill Light
+const fillLight = new THREE.RectAreaLight(0xbbccff, 3, 1, 1);
+fillLight.position.set(-0.4, 0.15, 0.3);
+fillLight.lookAt(0, 0.02, 0);
+scene.add(fillLight);
+
+// Rim Light
+const rimLight = new THREE.SpotLight(0xffffff, 150, 2, Math.PI/6, 0.5, 1);
+rimLight.position.set(0, 0.2, -0.5);
+rimLight.target.position.set(0, 0.02, 0);
+scene.add(rimLight); scene.add(rimLight.target);
+
+// Ambient
+scene.add(new THREE.AmbientLight(0x222233, 0.5));
+
+// Ground plane (shadow catcher)
+const groundGeo = new THREE.PlaneGeometry(2, 2);
+const groundMat = new THREE.ShadowMaterial({ opacity: 0.15 });
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI/2;
+ground.position.y = -D.caseThick/2 - 0.001;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// ============ HOTSPOTS (Web only) ============
+const hotspots = [
+  { name: 'Case', position: new THREE.Vector3(0, 0.02, 0.03), info: 'Case: Titanium Grade 5, brushed' },
+  { name: 'Bezel', position: new THREE.Vector3(0, 0.035, 0.025), info: 'Bezel: Polished ceramic' },
+  { name: 'Crystal', position: new THREE.Vector3(0, 0.045, 0.015), info: 'Sapphire crystal, AR coating' },
+  { name: 'Crown', position: new THREE.Vector3(0.022, 0, 0), info: 'Crown: Titanium, knurled' },
+  { name: 'Strap', position: new THREE.Vector3(0, -0.03, -0.03), info: 'Strap: Italian leather' },
+];
+const hotspotEls = [];
+
+if (!window.__MOTION_DRIVEN__) {
+  hotspots.forEach((hs, i) => {
+    const el = document.createElement('div');
+    el.className = 'hotspot';
+    el.innerHTML = `<div class="ring"></div><div class="label">${hs.name}</div><div class="info">${hs.info}</div>`;
+    el.style.cssText = `
+      position:absolute; pointer-events:none; transform:translate(-50%,-50%);
+      width:48px;height:48px;display:flex;flex-direction:column;align-items:center;gap:4px;
+    `;
+    const style = document.createElement('style');
+    style.textContent = `
+      .hotspot .ring{width:24px;height:24px;border:2px solid var(--acc);border-radius:50%;
+        animation:pulse 2s ease-in-out infinite;box-shadow:0 0 8px var(--acc);}
+      .hotspot .label{font-size:10px;font-weight:700;color:var(--acc);white-space:nowrap;}
+      .hotspot .info{font-size:9px;color:#aaa;white-space:nowrap;opacity:0;transition:opacity .2s;
+        background:rgba(10,10,12,0.9);padding:2px 6px;border-radius:4px;border:1px solid #333;}
+      .hotspot:hover .info{opacity:1;}
+      @keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:0.5;}}
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(el);
+    hotspotEls.push({ el, pos: hs.position });
+  });
+}
+
+// Expose key objects for frame-driven rendering
+window.watchGroup = watchGroup;
+window.secondHand = secondHand;
+window.minuteHand = minuteHand;
+window.hourHand = hourHand;
+window.crownMesh = crownMesh;
+window.camera = camera;
+window.renderer = renderer;
+window.statsEl = statsEl;
+
+// Expose key objects for frame-driven rendering
+window.watchGroup = watchGroup;
+window.secondHand = secondHand;
+window.minuteHand = minuteHand;
+window.hourHand = hourHand;
+window.crownMesh = crownMesh;
+window.camera = camera;
+window.renderer = renderer;
+window.statsEl = statsEl;
+
+console.log('Composition loaded, watchGroup exposed:', !!window.watchGroup);
+
+// Signal that composition is ready
+window.__COMPOSITION_READY__ = true;
+
+// ============ FRAME-DRIVEN RENDER (sync, called by renderer) ============
+function renderFrame(M) {
+  console.log('renderFrame called:', M.frame, 't=', (M.frame/30).toFixed(3));
+  const d = createMotionDriver(M);
+  
+  // Hero orbit (0-180 frames: -15° to +15° Y rotation)
+  const w1 = d.window010(0, 6); // 0-6s
+  watchGroup.rotation.y = THREE.MathUtils.lerp(-0.26, 0.26, d.ease.outCubic(w1.in));
+  
+  // Macro dolly (120-240 frames)
+  const w2 = d.window010(4, 4); // 4-8s
+  camera.position.z = THREE.MathUtils.lerp(0.4, 0.25, d.ease.outCubic(w2.in));
+  camera.position.y = THREE.MathUtils.lerp(0.05, 0.02, d.ease.outCubic(w2.in));
+  
+  // Hands (deterministic by time)
+  const t_sec = d.t;
+  secondHand.rotation.z = Math.PI - t_sec * 2 * Math.PI; // 1 rev/sec
+  minuteHand.rotation.z = Math.PI - t_sec * 2 * Math.PI / 60;
+  hourHand.rotation.z = Math.PI - t_sec * 2 * Math.PI / 720;
+  
+  // Crown turn (60-90 frames = 2-3s)
+  const w3 = d.window010(2, 1); // 2-3s
+  crownMesh.rotation.x = THREE.MathUtils.lerp(0, -0.52, d.ease.outCubic(w3.in));
+  
+  // Update HUD
+  statsEl.textContent = `frame: ${M.frame} / ${M.totalFrames}\nt: ${d.t.toFixed(2)}s`;
+  
+  // Hotspot projection (web only)
+  if (!window.__MOTION_DRIVEN__ && hotspotEls.length) {
+    hotspotEls.forEach(({ el, pos }) => {
+      const v = pos.clone().project(camera);
+      const x = (v.x * 0.5 + 0.5) * window.innerWidth;
+      const y = (-v.y * 0.5 + 0.5) * window.innerHeight;
+      el.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
+    });
+  }
+  
+  // Render synchronously
+  renderer.render(scene, camera);
+}
+
+// Hook for renderer (called by render_frames.mjs via page.evaluate)
+window.__onFrame__ = function(M) {
+  renderFrame(M);
+};
+
+function onResize() {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', onResize);
+
+// ============ DRIVER INJECTION ============
+function injectDriver(M) {
+  window.__MOTION__ = M;
+  window.__MOTION__.fps = M.fps ?? 30;
+  window.__MOTION__.progress = (M.frame != null && M.totalFrames) ? M.frame / M.totalFrames : null;
+  window.__MOTION_DRIVEN__ = true;
+  driver = createMotionDriver(M);
+  statsEl.textContent = `frame: ${M.frame} / ${M.totalFrames}\nt: ${driver.t.toFixed(2)}s`;
+  
+  // Force initial render with driver state
+  animate();
+}
+
+// Listen for driver injection from renderer
+window.addEventListener('motion:inject', (e) => {
+  injectDriver(e.detail);
+});
+
+// Listen for frame-driven render event from renderer
+window.addEventListener('motion:frame', (e) => {
+  if (e.detail && !driver) {
+    injectDriver(e.detail);
+  }
+});
+
+// Export GLTF button (web only)
+if (!window.__MOTION_DRIVEN__) {
+  const btn = document.createElement('button');
+  btn.textContent = 'Export GLB';
+  btn.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:100;padding:12px 24px;background:var(--acc);color:#000;border:none;border-radius:8px;font-weight:700;cursor:pointer;';
+  btn.onclick = async () => {
+    const exporter = new GLTFExporter();
+    exporter.parse(watchGroup, (gltf) => {
+      const blob = new Blob([JSON.stringify(gltf)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'aurora-watch.glb'; a.click();
+      URL.revokeObjectURL(url);
+    }, { binary: false });
+  };
+  document.body.appendChild(btn);
+}
+
+// Web preview auto-start (only when NOT frame-driven)
+if (!window.__MOTION_DRIVEN__) {
+  driver = createMotionDriver({ frame: 0, fps: 30, totalFrames: 450, seed: 42, vars: {} });
+  animate();
+}
+
+console.log('Aurora Watch composition ready. WebGL:', renderer.getContext().getParameter(renderer.getContext().VERSION));
+</script>
+</body></html>

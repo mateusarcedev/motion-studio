@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOTION — Estúdio criativo open source com IA</title>
+<meta name="description" content="Estúdio criativo multiformato open source, operado por agentes: vídeo, carrosséis, stories, posts e shorts em código — determinístico, editável, auditável.">
+<link rel="canonical" href="https://motion.mateusarce.dev/">
+<link rel="alternate" hreflang="pt-BR" href="https://motion.mateusarce.dev/">
+<link rel="alternate" hreflang="en" href="https://motion.mateusarce.dev/en/">
+<link rel="alternate" hreflang="x-default" href="https://motion.mateusarce.dev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MOTION">
+<meta property="og:title" content="MOTION — Estúdio criativo open source com IA">
+<meta property="og:description" content="Estúdio criativo multiformato open source, operado por agentes: vídeo, carrosséis, stories, posts e shorts em código — determinístico, editável, auditável.">
+<meta property="og:url" content="https://motion.mateusarce.dev/">
+<meta property="og:image" content="https://motion.mateusarce.dev/assets/og-pt.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MOTION — Estúdio criativo open source com IA">
+<meta name="twitter:description" content="Estúdio criativo multiformato open source, operado por agentes: vídeo, carrosséis, stories, posts e shorts em código — determinístico, editável, auditável.">
+<meta name="twitter:image" content="https://motion.mateusarce.dev/assets/og-pt.png">
+<meta name="theme-color" content="#0e0e0e">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/Geist.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/fonts/GeistMono.woff" as="font" type="font/woff" crossorigin>
+<style>
+@font-face{font-family:"Geist";src:url("/fonts/Geist.woff") format("woff");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url("/fonts/GeistMono.woff") format("woff");font-weight:100 900;font-display:swap}
+
+/* tokens: mateusarce.dev design system */
+:root{
+  --bg:#0e0e0e; --bg-soft:#151515; --surface:#1a1a1a; --surface-2:#222; --line:#232323; --line-soft:#1c1c1c;
+  --fg:#f4f4f4; --fg-dim:#a8a8a8; --fg-faint:#909090;
+  --mint:#15F5BA; --mint-dim:rgba(21,245,186,.10); --mint-edge:rgba(21,245,186,.28);
+  --pink:#E96479; --pink-dim:rgba(233,100,121,.10);
+  --mono:"Geist Mono",ui-monospace,"JetBrains Mono","SF Mono",Menlo,monospace;
+  --sans:"Geist",ui-sans-serif,-apple-system,system-ui,sans-serif;
+  --maxw:1180px; --gut:28px; --radius-sm:6px; --radius:10px; --radius-lg:14px;
+}
+[data-theme="light"]{
+  --bg:#f5f3ee; --bg-soft:#efece5; --surface:#ffffff; --surface-2:#ecebe5; --line:#d8d4ca; --line-soft:#e3dfd4;
+  --fg:#1a1a17; --fg-dim:#5a5a52; --fg-faint:#5a5852;
+  --mint:#076b39; --mint-dim:rgba(7,107,57,.10); --mint-edge:rgba(7,107,57,.28);
+  --pink:#a02f69; --pink-dim:rgba(160,47,105,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--fg);font-family:var(--mono);font-size:15px;font-weight:450;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;min-height:100vh;overflow-x:hidden;transition:background .25s ease,color .25s ease}
+::selection{background:var(--mint);color:var(--bg)}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:4px}
+html[lang="pt-BR"] [lang="en"],html[lang="en"] [lang="pt-BR"]{display:none!important}
+
+.page{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+section{padding:72px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+h1,h2,h3{font-family:var(--sans);font-weight:600;letter-spacing:-.03em;line-height:1.05}
+h1{font-size:clamp(42px,6.4vw,84px);letter-spacing:-.04em;line-height:1}
+h2{font-size:clamp(30px,4vw,48px)}
+h3{font-size:19px;letter-spacing:-.015em;line-height:1.25}
+em{font-style:normal;color:var(--mint)}
+p{color:var(--fg-dim)}
+.lead{font-size:16px;max-width:56ch;color:var(--fg-dim)}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px) saturate(120%);-webkit-backdrop-filter:blur(8px) saturate(120%);border-bottom:1px solid var(--line-soft)}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:14px var(--gut);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.02em}
+.brand strong{color:var(--fg);font-weight:600}
+.brand .sep{color:var(--fg-faint)} .brand .dim{color:var(--fg-dim)}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+.tools{display:flex;align-items:center;gap:14px}
+.tnav{display:flex;gap:22px;font-size:12px;color:var(--fg-dim)}
+.tnav a:hover{color:var(--fg)}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;height:28px;font-size:12px;letter-spacing:.04em}
+.seg button{padding:0 9px;color:var(--fg-dim);transition:color .15s,background .15s}
+.seg button:hover{color:var(--fg)}
+.seg a{display:flex;align-items:center;padding:0 9px;color:var(--fg-dim);transition:color .15s,background .15s}
+.seg a:hover{color:var(--fg)}
+.seg a[aria-current="true"]{color:var(--bg);background:var(--mint);font-weight:600}
+.seg button[aria-pressed="true"]{color:var(--bg);background:var(--mint);font-weight:600}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:var(--radius-sm);font:600 13px/1 var(--mono);letter-spacing:.01em;border:1px solid var(--line);color:var(--fg-dim);transition:filter .15s,border-color .15s,color .15s,transform .15s}
+.btn:hover{border-color:var(--mint-edge);color:var(--fg)}
+.btn.primary{background:var(--mint);border-color:var(--mint);color:var(--bg)}
+.btn.primary:hover{filter:brightness(1.1);color:var(--bg)}
+.btn.sm{height:30px;padding:0 12px;font-size:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* hero */
+.hero{padding-top:56px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mint);margin-bottom:22px}
+.hero h1{margin-bottom:24px}
+.hero .lead{margin-bottom:32px}
+.console{overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(180deg,var(--surface),var(--bg));box-shadow:0 20px 60px rgba(0,0,0,.24)}
+[data-theme="light"] .console{box-shadow:0 20px 50px rgba(26,26,23,.12)}
+.console-top{height:38px;padding:0 14px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;border-bottom:1px solid var(--line-soft);background:color-mix(in srgb,var(--surface-2) 84%,transparent)}
+.lights{display:flex;gap:6px}
+.lights span{width:7px;height:7px;border-radius:50%;background:var(--fg-faint)}
+.lights span:nth-child(2){background:var(--pink);opacity:.75}
+.lights span:nth-child(3){background:var(--mint);opacity:.82}
+.c-path{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--fg-faint);font-size:12px;letter-spacing:.03em}
+.c-live{display:inline-flex;align-items:center;gap:6px;color:var(--fg-dim);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.c-live i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 9px var(--mint)}
+.vid{aspect-ratio:9/16;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#000}
+.vid video{width:100%;height:100%;object-fit:cover}
+
+/* editor (nle) */
+.nle-main{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:16px 16px 12px}
+.nle-side{display:flex;flex-direction:column;min-width:0}
+.tc{font:600 24px/1 var(--mono);letter-spacing:.02em;color:var(--mint);font-variant-numeric:tabular-nums}
+.tc-sub{font-size:12px;color:var(--fg-faint);margin:6px 0 14px}
+.scenes{list-style:none;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.scenes li{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:3px 8px;border-radius:var(--radius-sm);color:var(--fg-faint);border:1px solid transparent}
+.scenes li.on{color:var(--fg);background:var(--mint-dim);border-color:var(--mint-edge)}
+.scenes li span:last-child{font-variant-numeric:tabular-nums}
+.tl{position:relative;border-top:1px solid var(--line-soft);padding:10px 28px 14px 70px;background:color-mix(in srgb,var(--bg) 60%,transparent);cursor:pointer;touch-action:none}
+.tl-ruler{position:relative;height:16px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.tl-ruler span{position:absolute;bottom:0;transform:translateX(-50%);font-size:11px;color:var(--fg-faint);padding-bottom:2px}
+.tl-ruler span::after{content:"";position:absolute;left:50%;bottom:-1px;width:1px;height:4px;background:var(--line)}
+.tl-row{display:flex;align-items:center;height:26px;margin-bottom:4px;position:relative}
+.tl-name{position:absolute;left:-54px;width:48px;font-size:11px;color:var(--fg-faint);text-align:right}
+.tl-track{position:relative;flex:1;height:100%;border-radius:var(--radius-sm);background:var(--bg-soft)}
+.clip{position:absolute;top:2px;bottom:2px;border-radius:4px;font-size:11px;line-height:20px;padding:0 6px;overflow:hidden;white-space:nowrap;color:var(--bg);background:var(--mint);border:1px solid color-mix(in srgb,var(--bg) 40%,transparent);font-weight:600}
+.clip.alt{background:color-mix(in srgb,var(--mint) 72%,var(--bg))}
+.clip.txt{background:var(--pink)}
+.clip.aud{background:var(--surface-2);color:var(--fg-dim);border-color:var(--line);display:flex;align-items:center;gap:1px;padding:0 3px}
+.clip.aud b{flex:1;background:var(--fg-faint);min-width:1px;border-radius:1px;opacity:.7}
+.tl-head{position:absolute;top:10px;bottom:14px;left:70px;width:0;pointer-events:none}
+.tl-head i{position:absolute;left:0;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--pink)}
+.tl-head i::before{content:"";position:absolute;top:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--pink);border-bottom:0}
+@media (max-width:620px){.nle-main{grid-template-columns:110px 1fr}.tc{font-size:18px}.scenes li:nth-child(n+5){display:none}}
+.cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cred{gap:8px}
+.cred .who{font:600 15px/1.2 var(--sans);letter-spacing:-.01em}
+.cred .repo{font-size:12px;color:var(--mint);word-break:break-all}
+.cred .repo:hover{text-decoration:underline}
+.cred .lic{font-size:12px;color:var(--fg-faint)}
+.cred .chips{margin-top:2px}
+.cred .chip{font-size:12px;padding:4px 8px}
+@media (max-width:980px){.cred-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.cred-grid{grid-template-columns:1fr}}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:var(--radius);margin-top:56px;background:var(--surface)}
+.fact{padding:20px 22px;border-right:1px solid var(--line)}
+.fact:last-child{border-right:0}
+.fact b{display:block;font:600 34px/1 var(--sans);letter-spacing:-.04em;color:var(--fg);margin-bottom:6px}
+.fact span{font-size:13px;color:var(--fg-dim)}
+
+/* section head (design system) */
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:36px}
+.sec-num{font-size:12px;color:var(--mint);letter-spacing:.18em;font-weight:600}
+.sec-title{font:600 13px/1 var(--mono);color:var(--fg);letter-spacing:.18em;text-transform:uppercase}
+.sec-rule{flex:1;height:1px;background:var(--line);align-self:center}
+.sec-count{font-size:12px;color:var(--fg-faint);letter-spacing:.1em}
+.intro{max-width:760px;margin-bottom:44px}
+.intro h2{margin-bottom:16px}
+
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:all .18s ease;color:var(--fg)}
+.card:hover{border-color:var(--mint-edge);transform:translateY(-2px);box-shadow:0 8px 24px -12px var(--mint-edge)}
+.card.featured{border-color:var(--mint-edge);background:linear-gradient(180deg,var(--mint-dim),transparent 60%),var(--surface)}
+.card p{font-size:14px;line-height:1.6}
+.card .spec{margin-top:auto;padding-top:12px;font-size:12px;color:var(--mint);letter-spacing:.02em}
+
+/* pipeline */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px}
+.step .k{font-size:12px;color:var(--mint);letter-spacing:.18em;font-weight:600}
+.step p{font-size:14px;line-height:1.55}
+.gate{align-self:flex-start;margin-top:auto;padding:5px 10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--pink);background:var(--pink-dim);border:1px solid color-mix(in srgb,var(--pink) 35%,transparent);border-radius:var(--radius-sm)}
+
+/* work */
+.work{display:grid;grid-template-columns:repeat(12,1fr);gap:24px 16px;align-items:start}
+.tile img{width:100%;border:1px solid var(--line);border-radius:var(--radius)}
+.tile figcaption{padding-top:12px;font-size:13px;color:var(--fg-dim)}
+.tile figcaption b{display:block;font:600 15px/1.25 var(--sans);letter-spacing:-.01em;color:var(--fg);margin-bottom:2px}
+.t-wide{grid-column:span 8} .t-tall{grid-column:span 4} .t-a,.t-b,.t-c{grid-column:span 4}
+.note{margin-top:28px;font-size:12px;color:var(--fg-faint)}
+
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stack h3{font:600 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;padding:6px 11px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius-sm);font-size:12px;color:var(--fg);transition:transform .18s,border-color .18s}
+.chip:hover{transform:translateY(-1px);border-color:var(--mint-edge)}
+
+/* cta */
+.cta .box{border:1px solid var(--mint-edge);border-radius:var(--radius-lg);padding:clamp(28px,5vw,56px);background:linear-gradient(180deg,var(--mint-dim),transparent 70%),var(--surface)}
+.cta h2{font-size:clamp(34px,5.4vw,64px);letter-spacing:-.04em;max-width:16ch;margin:0 0 16px}
+.cta .lead{margin-bottom:28px}
+
+footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--fg-faint);border-top:1px solid var(--line-soft)}
+
+@media (prefers-reduced-motion:no-preference){
+  .rv{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+}
+@media (prefers-reduced-motion:reduce){.brand-dot{animation:none}}
+
+@media (max-width:980px){
+  .tnav{display:none}
+  .hero-grid{grid-template-columns:1fr}
+  .grid3,.stack,.steps{grid-template-columns:1fr 1fr}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .t-wide{grid-column:span 12} .t-tall,.t-a,.t-b,.t-c{grid-column:span 6}
+}
+@media (max-width:620px){
+  :root{--gut:20px}
+  section{padding:56px 0}
+  .grid3,.stack,.steps{grid-template-columns:1fr}
+  .t-tall,.t-a,.t-b,.t-c{grid-column:span 12}
+  .brand .dim,.brand .sep{display:none}
+    .topbar .btn{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand" aria-label="MOTION"><span class="brand-dot"></span><strong>motion</strong><span class="sep">/</span><span class="dim">ai creative studio</span></a>
+    <div class="tools">
+      <nav class="tnav" aria-label="Principal">
+        <a href="#formats"><span lang="pt-BR">formatos</span></a>
+        <a href="#pipeline">pipeline</a>
+        <a href="#work"><span lang="pt-BR">trabalhos</span></a>
+        <a href="#stack">stack</a>
+      </nav>
+      <div class="seg" role="group" aria-label="Tema">
+        <button type="button" data-set-theme="dark" aria-pressed="true">dark</button>
+        <button type="button" data-set-theme="light" aria-pressed="false">light</button>
+      </div>
+      <div class="seg" role="group" aria-label="Idioma">
+        <a href="/" hreflang="pt-BR" data-l="pt-BR">PT</a>
+        <a href="/en/" hreflang="en" data-l="en">EN</a>
+      </div>
+      <a href="https://github.com/mateusarcedev/motion-studio" class="btn primary sm" rel="noopener"><span lang="pt-BR">github ↗</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="page" id="top">
+
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="tag"><span class="brand-dot"></span>open source · frame-driven</span>
+      <h1>
+        <span lang="pt-BR">Código que vira <em>cinema.</em></span>
+        
+      </h1>
+      <p class="lead">
+        <span lang="pt-BR">Um estúdio criativo open source, operado por agentes. Nasceu para suprir as minhas próprias necessidades — vídeo, carrosséis, stories, posts e shorts — em cima de skills da comunidade. Cada frame vem de código: reproduzível, editável e auditável.</span>
+        
+      </p>
+      <div class="actions">
+        <a href="https://github.com/mateusarcedev/motion-studio" class="btn primary" rel="noopener"><span lang="pt-BR">ver no github ↗</span></a>
+        <a href="#pipeline" class="btn"><span lang="pt-BR">como funciona</span></a>
+      </div>
+    </div>
+    <div class="console nle rv" id="nle" role="group" aria-label="Editor de vídeo MOTION">
+      <div class="console-top">
+        <div class="lights"><span></span><span></span><span></span></div>
+        <div class="c-path">mini-festa-da-rose.mp4 · 9:16 · 30 fps</div>
+        <div class="c-live"><i></i>timeline</div>
+      </div>
+      <div class="nle-main">
+        <div class="vid">
+          <video id="heroVideo" src="/assets/hero.mp4" poster="/assets/hero-poster.jpg" muted loop playsinline preload="metadata" aria-label="Short vertical de 15s renderizado pelo MOTION"></video>
+        </div>
+        <div class="nle-side">
+          <div class="tc" id="tc" aria-live="off">00:00:00:00</div>
+          <div class="tc-sub">/ 00:00:15:00</div>
+          <ul class="scenes" id="scenes"></ul>
+        </div>
+      </div>
+      <div class="tl" id="tl">
+        <div class="tl-ruler" id="ruler"></div>
+        <div class="tl-row"><span class="tl-name"><span lang="pt-BR">cenas</span></span><div class="tl-track" id="trScenes"></div></div>
+        <div class="tl-row"><span class="tl-name"><span lang="pt-BR">texto</span></span><div class="tl-track" id="trText"></div></div>
+        <div class="tl-row"><span class="tl-name"><span lang="pt-BR">música</span></span><div class="tl-track" id="trAudio"></div></div>
+        <div class="tl-head" id="head"><i></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="facts rv">
+    <div class="fact"><b>5</b><span lang="pt-BR">formatos nativos</span></div>
+    <div class="fact"><b>8</b><span lang="pt-BR">etapas de pipeline</span></div>
+    <div class="fact"><b>2</b><span lang="pt-BR">rodadas de reparo, no máx.</span></div>
+    <div class="fact"><b>0</b><span lang="pt-BR">frames aleatórios</span></div>
+  </div>
+</section>
+
+<section id="formats">
+  <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title"><span lang="pt-BR">formatos</span></h2><span class="sec-rule"></span><span class="sec-count">06</span></div>
+  <div class="intro rv">
+    <h2><span lang="pt-BR">Cinco formatos. Um só rigor.</span></h2>
+    <p class="lead"><span lang="pt-BR">Briefing, direção, composição, render e crítico independente — o mesmo processo para qualquer entrega.</span></p>
+  </div>
+  <div class="grid3">
+    <article class="card featured rv">
+      <h3><span lang="pt-BR">Vídeo &amp; motion</span></h3>
+      <p><span lang="pt-BR">Teasers, promos e filmes explicativos, pensados em 16:9, 1:1 e 9:16 — cada proporção com a própria composição.</span></p>
+      <div class="spec">MP4 · 30 fps CFR</div>
+    </article>
+    <article class="card rv">
+      <h3><span lang="pt-BR">Carrosséis</span></h3>
+      <p><span lang="pt-BR">Narrativa slide a slide em HTML/CSS, com variações, comparação lado a lado e ZIP com a fonte editável.</span></p>
+      <div class="spec">PNG 2160×2700</div>
+    </article>
+    <article class="card rv">
+      <h3>Stories</h3>
+      <p><span lang="pt-BR">Estáticos e animados, com zonas seguras respeitadas e sequências narrativas que recompõem de verdade por proporção.</span></p>
+      <div class="spec">PNG 2160×3840 · MP4 1080×1920</div>
+    </article>
+    <article class="card rv">
+      <h3><span lang="pt-BR">Posts de feed</span></h3>
+      <p><span lang="pt-BR">Cards promocionais, tipográficos, editoriais e infográficos. Recomposição real em cada proporção — nunca um crop.</span></p>
+      <div class="spec">1:1 · 4:5 · 9:16 · 16:9</div>
+    </article>
+    <article class="card rv">
+      <h3><span lang="pt-BR">Shorts narrados</span></h3>
+      <p><span lang="pt-BR">Ilustração, narração opcional e legenda palavra por palavra, tudo sincronizado na mesma grade de tempo.</span></p>
+      <div class="spec">MP4 + SRT/ASS + ZIP</div>
+    </article>
+    <article class="card rv">
+      <h3><span lang="pt-BR">Campanhas</span></h3>
+      <p><span lang="pt-BR">Um briefing, todos os formatos. O diretor despacha, a identidade da marca garante a consistência e a galeria guarda a memória visual.</span></p>
+      <div class="spec">video + carousel + stories + feed</div>
+    </article>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">pipeline</h2><span class="sec-rule"></span><span class="sec-count">08</span></div>
+  <div class="intro rv">
+    <h2><span lang="pt-BR">Um pipeline que se deixa auditar.</span></h2>
+    <p class="lead"><span lang="pt-BR">Nada de código antes do storyboard. Você aprova o briefing e a direção de arte. O crítico nunca é o mesmo contexto que criou a peça.</span></p>
+  </div>
+  <div class="steps">
+    <div class="step rv"><span class="k">01</span><h3><span lang="pt-BR">Briefing</span></h3><p><span lang="pt-BR">Mensagem, público, duração, formatos e história.</span></p><span class="gate"><span lang="pt-BR">você aprova</span></span></div>
+    <div class="step rv"><span class="k">02</span><h3><span lang="pt-BR">Direção de arte</span></h3><p><span lang="pt-BR">Tipografia, cor, composição, movimento — e uma lista explícita do que evitar.</span></p><span class="gate"><span lang="pt-BR">você aprova</span></span></div>
+    <div class="step rv"><span class="k">03</span><h3>Storyboard</h3><p><span lang="pt-BR">Cena a cena, com tempos e números de frame.</span></p></div>
+    <div class="step rv"><span class="k">04</span><h3><span lang="pt-BR">Composição</span></h3><p><span lang="pt-BR">Código dirigido por frame ou slide em HTML/CSS. Zero aleatoriedade.</span></p></div>
+    <div class="step rv"><span class="k">05</span><h3>Render</h3><p><span lang="pt-BR">Stills primeiro e contact sheet; render completo só depois.</span></p></div>
+    <div class="step rv"><span class="k">06</span><h3><span lang="pt-BR">Crítico</span></h3><p><span lang="pt-BR">Contexto novo, avalia só o render. Defeitos com frame e evidência.</span></p><span class="gate"><span lang="pt-BR">aprovação</span></span></div>
+    <div class="step rv"><span class="k">07</span><h3><span lang="pt-BR">Reparo</span></h3><p><span lang="pt-BR">Menor correção possível, só nos frames afetados. Máximo de 2 rodadas por defeito.</span></p></div>
+    <div class="step rv"><span class="k">08</span><h3><span lang="pt-BR">Entrega</span></h3><p><span lang="pt-BR">Arquivos finais, pôsteres, contact sheets e o código-fonte que re-renderiza tudo.</span></p></div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title"><span lang="pt-BR">trabalhos</span></h2><span class="sec-rule"></span><span class="sec-count">05</span></div>
+  <div class="intro rv">
+    <h2><span lang="pt-BR">Renders reais, não maquetes.</span></h2>
+  </div>
+  <div class="work">
+    <figure class="tile t-wide rv"><img src="/assets/post-16x9.jpg" alt="Post de feed recomposto em 16:9"><figcaption><b><span lang="pt-BR">Post em 4 proporções</span></b><span>16:9 · 4:5 · 1:1 · 9:16 — <span lang="pt-BR">recomposição, não crop</span></span></figcaption></figure>
+    <figure class="tile t-tall rv"><img src="/assets/story-01.jpg" alt="Story estático 9:16"><figcaption><b><span lang="pt-BR">Story estático</span></b><span>PNG 2160×3840</span></figcaption></figure>
+    <figure class="tile t-a rv"><img src="/assets/carousel-01.jpg" alt="Slide 1 do carrossel"><figcaption><b><span lang="pt-BR">Carrossel · 7 slides</span></b><span>PNG 2160×2700</span></figcaption></figure>
+    <figure class="tile t-b rv"><img src="/assets/carousel-04.jpg" alt="Slide 4 do carrossel"><figcaption><b><span lang="pt-BR">Mesmo sistema, outro ritmo</span></b><span>04 / 07</span></figcaption></figure>
+    <figure class="tile t-c rv"><img src="/assets/post-4x5.jpg" alt="Post de feed 4:5"><figcaption><b>Feed 4:5</b><span><span lang="pt-BR">hierarquia própria</span></span></figcaption></figure>
+  </div>
+  <p class="note"><span lang="pt-BR">Produções de exemplo do estúdio (Mini Festa da Rose), renderizadas pelo próprio pipeline.</span></p>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title"><span lang="pt-BR">princípios</span></h2><span class="sec-rule"></span><span class="sec-count">03</span></div>
+  <div class="grid3">
+    <div class="card rv"><h3><span lang="pt-BR">Frame N é sempre igual</span></h3><p><span lang="pt-BR">Tudo é guiado por número de frame ou tempo determinístico. Sem relógio, sem aleatório: o filme se reproduz bit a bit.</span></p></div>
+    <div class="card rv"><h3><span lang="pt-BR">Nada de UI inventada</span></h3><p><span lang="pt-BR">Só assets aprovados do produto. Se falta uma tela essencial, o estúdio pede — não desenha uma falsa.</span></p></div>
+    <div class="card rv"><h3><span lang="pt-BR">Movimento com propósito</span></h3><p><span lang="pt-BR">Se a animação não comunica nada, é decoração — e sai. A história precisa ficar legível em 4 stills.</span></p></div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">stack</h2><span class="sec-rule"></span><span class="sec-count">04</span></div>
+  <div class="intro rv">
+    <h2><span lang="pt-BR">Só o necessário.</span></h2>
+    <p class="lead"><span lang="pt-BR">Motores via linha de comando, independentes de agente. Qualquer um deles roda sem o outro.</span></p>
+  </div>
+  <div class="stack">
+    <div class="card rv"><h3><span lang="pt-BR">renderização</span></h3><div class="chips"><span class="chip">Playwright</span><span class="chip">Chromium</span><span class="chip">FFmpeg</span><span class="chip">Node</span><span class="chip">Python</span></div></div>
+    <div class="card rv"><h3><span lang="pt-BR">motores opcionais</span></h3><div class="chips"><span class="chip">Remotion</span><span class="chip">Three.js</span><span class="chip">GSAP</span><span class="chip">TTS (opt-in)</span></div></div>
+    <div class="card rv"><h3><span lang="pt-BR">qualidade</span></h3><div class="chips"><span class="chip">contact sheet</span><span class="chip">overflow check</span><span class="chip">font check</span><span class="chip">SHA-256</span></div></div>
+    <div class="card rv"><h3><span lang="pt-BR">marca &amp; memória</span></h3><div class="chips"><span class="chip">tokens.json</span><span class="chip">approved/</span><span class="chip">presets.json</span><span class="chip">gallery</span></div></div>
+  </div>
+</section>
+
+<section id="credits">
+  <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title"><span lang="pt-BR">créditos</span></h2><span class="sec-rule"></span><span class="sec-count">12</span></div>
+  <div class="intro rv">
+    <h2><span lang="pt-BR">Feito sobre o trabalho de quem compartilha.</span></h2>
+    <p class="lead"><span lang="pt-BR">O MOTION junta as minhas skills com skills abertas da comunidade. Cada autor abaixo é dono do que criou, com link para o repositório original.</span></p>
+  </div>
+  <div class="cred-grid">
+    <div class="card cred featured rv"><span class="who">mateusarcedev</span><a class="repo" href="https://github.com/mateusarcedev/motion-studio" rel="noopener">github.com/mateusarcedev/motion-studio ↗</a><span class="lic">skills do próprio MOTION</span><div class="chips"><span class="chip">motion-director</span><span class="chip">studio-director</span><span class="chip">carousel-studio</span><span class="chip">story-studio</span><span class="chip">feed-studio</span><span class="chip">shorts-director</span><span class="chip">3d-scene-director</span></div></div>
+    <div class="card cred rv"><span class="who">Emil Kowalski</span><a class="repo" href="https://github.com/emilkowalski/skills" rel="noopener">github.com/emilkowalski/skills ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">animate</span><span class="chip">animation-performance</span><span class="chip">animation-vocabulary</span><span class="chip">apple-design</span><span class="chip">emil-design-eng</span><span class="chip">find-animation-opportunities</span><span class="chip">improve-animations</span><span class="chip">prototype</span><span class="chip">review-animations</span></div></div>
+    <div class="card cred rv"><span class="who">HeyGen</span><a class="repo" href="https://github.com/heygen-com/hyperframes" rel="noopener">github.com/heygen-com/hyperframes ↗</a><span class="lic">Apache-2.0</span><div class="chips"><span class="chip">hyperframes</span><span class="chip">hyperframes-cli</span><span class="chip">hyperframes-registry</span><span class="chip">media-use</span></div></div>
+    <div class="card cred rv"><span class="who">Remotion</span><a class="repo" href="https://github.com/remotion-dev/skills" rel="noopener">github.com/remotion-dev/skills ↗</a><div class="chips"><span class="chip">remotion-best-practices</span><span class="chip">remotion-create</span><span class="chip">remotion-render</span><span class="chip">remotion-studio</span><span class="chip">remotion-captions</span><span class="chip">remotion-docs</span><span class="chip">+6</span></div></div>
+    <div class="card cred rv"><span class="who">Matt Pocock</span><a class="repo" href="https://github.com/mattpocock/skills" rel="noopener">github.com/mattpocock/skills ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">tdd</span><span class="chip">triage</span><span class="chip">to-spec</span><span class="chip">implement</span><span class="chip">handoff</span><span class="chip">grill-me</span><span class="chip">+31</span></div></div>
+    <div class="card cred rv"><span class="who">lemomo-ai</span><a class="repo" href="https://github.com/lemomo-ai/lemo-opuscar" rel="noopener">github.com/lemomo-ai/lemo-opuscar ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">lemo-opuscar</span></div></div>
+    <div class="card cred rv"><span class="who">Vincentwei1021</span><a class="repo" href="https://github.com/Vincentwei1021/video-shotcraft" rel="noopener">github.com/Vincentwei1021/video-shotcraft ↗</a><span class="lic">Apache-2.0</span><div class="chips"><span class="chip">video-shotcraft</span></div></div>
+    <div class="card cred rv"><span class="who">cathrynlavery</span><a class="repo" href="https://github.com/cathrynlavery/diagram-design" rel="noopener">github.com/cathrynlavery/diagram-design ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">diagram-design</span></div></div>
+    <div class="card cred rv"><span class="who">wheresryan22</span><a class="repo" href="https://github.com/wheresryan22/anatomy" rel="noopener">github.com/wheresryan22/anatomy ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">anatomy</span></div></div>
+    <div class="card cred rv"><span class="who">latent-spaces</span><a class="repo" href="https://github.com/latent-spaces/brag" rel="noopener">github.com/latent-spaces/brag ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">brag</span></div></div>
+    <div class="card cred rv"><span class="who">heliocosta-dev</span><a class="repo" href="https://github.com/heliocosta-dev/revenue-centric-design" rel="noopener">github.com/heliocosta-dev/revenue-centric-design ↗</a><div class="chips"><span class="chip">revenue-centric-design</span></div></div>
+    <div class="card cred rv"><span class="who">motores de render</span><span class="lic">Chromium · Node</span><div class="chips"><a class="chip" href="https://github.com/microsoft/playwright" rel="noopener">Playwright · Apache-2.0 ↗</a><a class="chip" href="https://ffmpeg.org" rel="noopener">FFmpeg ↗</a></div></div>
+  </div>
+  <p class="note"><span lang="pt-BR">Há outras skills instaladas cuja origem ainda não documentei. Vou completar esta lista. Licenças conforme o repositório de cada autor.</span></p>
+</section>
+
+<section id="contact" class="cta">
+  <div class="box rv">
+    <span class="tag"><span class="brand-dot"></span><span lang="pt-BR">código aberto</span></span>
+    <h2><span lang="pt-BR">Feito para mim. Aberto para você.</span></h2>
+    <p class="lead"><span lang="pt-BR">Use, adapte e melhore. O repositório tem o pipeline, as skills próprias e o manual de operação do estúdio.</span></p>
+    <div class="actions">
+      <a href="https://github.com/mateusarcedev/motion-studio" class="btn primary" rel="noopener"><span lang="pt-BR">ver no github ↗</span></a>
+      <a href="#credits" class="btn"><span lang="pt-BR">ver créditos</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>motion — ai creative studio</span>
+  <span><a href="https://github.com/mateusarcedev/motion-studio" rel="noopener" style="color:var(--mint)">github.com/mateusarcedev/motion-studio ↗</a></span>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement, TK="motion-theme";
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function put(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function setTheme(t){
+    root.dataset.theme=t;
+    document.querySelectorAll("[data-set-theme]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.setTheme===t))});
+    put(TK,t);
+  }
+  var qt=new URLSearchParams(location.search).get("theme");
+  setTheme((qt==="light"||qt==="dark")?qt:get(TK)||"dark");
+  document.querySelectorAll("[data-set-theme]").forEach(function(b){b.addEventListener("click",function(){setTheme(b.dataset.setTheme)})});
+  document.querySelectorAll(".seg a[data-l]").forEach(function(a){a.setAttribute("aria-current",String(a.dataset.l===root.lang))});
+
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var io="IntersectionObserver" in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.1}):null;
+  document.querySelectorAll(".rv").forEach(function(el){io?io.observe(el):el.classList.add("in")});
+
+  var v=document.getElementById("heroVideo");
+  if(v){
+    if(reduce){v.controls=true}
+    else{
+      var p=v.play(); if(p&&p.catch)p.catch(function(){v.controls=true});
+      document.addEventListener("visibilitychange",function(){document.hidden?v.pause():v.play().catch(function(){})});
+    }
+  }
+})();
+
+  (function(){
+    var v=document.getElementById("heroVideo"), tl=document.getElementById("tl"); if(!v||!tl)return;
+    var D=15, B=[0,1.7,4.7,7.3,8.7,10.1,11.55,14.33,15], sc=B.slice(0,-1).map(function(a,i){return {s:a,e:B[i+1],i:i}});
+    function pct(x){return (x/D*100)+"%"}
+    function mk(c,l,a,b,cls){var e=document.createElement("div");e.className="clip "+cls;e.style.left=pct(a);e.style.width=pct(b-a);e.textContent=l;c.appendChild(e);return e}
+    var rul=document.getElementById("ruler"); for(var k=0;k<=15;k+=3){var m=document.createElement("span");m.style.left=pct(k);m.textContent=k+"s";rul.appendChild(m)}
+    var trS=document.getElementById("trScenes"), list=document.getElementById("scenes");
+    sc.forEach(function(c){mk(trS,String(c.i+1).padStart(2,"0"),c.s,c.e,c.i%2?"alt":"");
+      var li=document.createElement("li"); li.innerHTML="<span>"+"S"+String(c.i+1).padStart(2,"0")+"</span><span>"+(c.e-c.s).toFixed(1)+"s</span>"; list.appendChild(li)});
+    var trT=document.getElementById("trText"); mk(trT,"Aa",sc[0].s,sc[0].e,"txt"); mk(trT,"Aa",sc[7].s,D,"txt");
+    var trA=document.getElementById("trAudio"), au=mk(trA,"",0,D,"aud"); var W=[15,32,38,37,46,93,69,49,36,70,86,70,51,34,86,78,57,40,42,93,80,53,37,66,87,64,46,33,83,80,57,41,37,93,72,52,37,61,89,65,47,33,81,81,58,42,34,92,80,58,39,57,90,66,48,35,76,83,60,43,32,91,75,54,39,51,92,68,49,35,73,85,61,44,32,88,77,54,40,46,100,71,50,36,69,87,62,45,32,86,78,56,40,42,93,78,57,38,66,88,63,46,33,83,80,57,41,36,93,72,64,40,61,89,65,47,34,80,81,59,42,33,97,74,52,38,56,91,66,48,34,77,83,60,43,31,91,75,54,39,51,92,67,49,32,57,52,26,12,3]; W.forEach(function(w){var b=document.createElement("b");b.style.height=Math.max(6,w)+"%";au.appendChild(b)})
+    var head=document.getElementById("head"), tc=document.getElementById("tc"), lis=list.children, last=-1;
+    function fmt(x){var f=Math.floor(x*30),s=Math.floor(f/30),ff=f%30;return "00:00:"+String(s).padStart(2,"0")+":"+String(ff).padStart(2,"0")}
+    function track(){return trS.getBoundingClientRect()}
+    function render(){
+      var x=Math.min(v.currentTime||0,D), r=track(), base=tl.getBoundingClientRect();
+      head.style.left=(r.left-base.left+r.width*x/D)+"px"; tc.textContent=fmt(x);
+      var cur=0; sc.forEach(function(c,i){if(x>=c.s)cur=i}); if(cur!==last){if(last>=0)lis[last].classList.remove("on"); lis[cur].classList.add("on"); last=cur}
+    }
+    (function loop(){render(); requestAnimationFrame(loop)})();
+    function seek(e){var r=track(); var f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)); v.currentTime=f*D*0.999}
+    var drag=false; tl.addEventListener("pointerdown",function(e){drag=true;tl.setPointerCapture(e.pointerId);seek(e)});
+    tl.addEventListener("pointermove",function(e){if(drag)seek(e)}); tl.addEventListener("pointerup",function(){drag=false});
+  })();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

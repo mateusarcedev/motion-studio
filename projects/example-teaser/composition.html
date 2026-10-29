@@ -1,0 +1,64 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+:root{--rose:#F38FA8;--blue:#62C8EA;--navy:#173C5B;--cream:#FFF9F6;--gold:#D5A94E}
+*{margin:0;box-sizing:border-box}
+body{width:1920px;height:1080px;background:var(--navy);color:var(--cream);font-family:Geist,system-ui,sans-serif;overflow:hidden;position:relative}
+.orb{position:absolute;width:620px;height:620px;border-radius:50%;background:var(--rose);opacity:.16;top:-220px;right:180px}
+.orb2{position:absolute;width:420px;height:420px;border-radius:50%;background:var(--blue);opacity:.18;bottom:-160px;left:120px}
+.wrap{position:relative;height:100%;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;padding:0 140px}
+.k{font-size:30px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:22px}
+h1{font-family:'Instrument Serif',serif;font-size:126px;line-height:1.04;font-weight:400}
+h1 em{font-style:italic;color:var(--rose)}
+.sub{font-size:38px;opacity:0;margin-top:26px}
+.items{font-size:40px;line-height:2.1;opacity:.92}
+.cta{display:inline-block;background:var(--cream);color:var(--navy);font-size:40px;font-weight:700;padding:30px 64px;border-radius:999px;margin-top:40px}
+</style>
+<script type="module">
+import createMotionDriver from '/creative-core/design-system/frame.js';
+const el = (s) => document.querySelector(s);
+const st = (node, css) => Object.assign(node.style, css);
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  // cena 1 · 0.2s→1.2s headline sobe e assenta (outCubic)
+  const h = d.window010(0.2, 0.9);
+  st(el('#headline'), { transform:`translateY(${(1-h.in)*60}px)`, opacity:h.in });
+  // kicker 0.3s fade
+  const k = d.window010(0.3, 0.6);
+  st(el('.k'), { opacity:k.in });
+  // sub 1.1→1.7 fade+rise
+  const s = d.window010(1.1, 0.6);
+  st(el('.sub'), { opacity:.85*s.in, transform:`translateY(${(1-s.in)*40}px)` });
+  // bar dourado 1.7→2.3 scaleX
+  const b = d.window010(1.7, 0.6);
+  st(el('#bar'), { transform:`scaleX(${b.in})`, transformOrigin:'left' });
+  // itens 2.3→4.0 stagger
+  ['#i1','#i2','#i3'].forEach((q,i)=>{
+    const w = d.window010(2.3+i*0.5, 0.5);
+    st(el(q), { opacity:w.in, transform:`translateX(${(1-w.in)*50}px)` });
+  });
+  // CTA 4.1 pop outBack
+  const c = d.window010(4.1, 0.7);
+  st(el('#cta'), { transform:`scale(${0.6+0.4*d.ease.outBack(c.in)})`, opacity:c.in });
+  // orbe respira sutil (posição puro frame, seed-determinístico)
+  const wob = Math.sin(d.t*2)*6;
+  st(el('.orb'), { transform:`translate(${wob}px,0)` });
+  st(el('.orb2'), { transform:`translate(0,${-wob}px)` });
+};
+if (!window.__MOTION_DRIVEN__) {
+  window.__onFrame__({ frame:0, fps:30, totalFrames:150, seed:1 });
+}
+</script></head><body>
+<div class="orb" data-bleed></div><div class="orb2" data-bleed></div>
+<div class="wrap">
+<div><div class="k">Mini Festa da Rose</div>
+<h1 id="headline">Pequenos detalhes,<br><em>grandes momentos.</em></h1>
+<p class="sub">Festas pequenas com cuidado de família.</p>
+<div id="bar" style="width:72px;height:7px;background:var(--gold);border-radius:4px;margin-top:34px"></div>
+</div>
+<div class="items">
+<div id="i1">✓ decoração feita à mão</div>
+<div id="i2">✓ docinhos selecionados</div>
+<div id="i3">✓ tudo aprovado por você</div>
+<div id="cta" class="cta">Reserve · WhatsApp</div>
+</div>
+</div></body></html>

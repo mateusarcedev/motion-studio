@@ -39,19 +39,48 @@ em `brand/voice.md` — escrito à mão pelo dono do estúdio._
 - Random jumps between unrelated compositions (continuity rule: a scene's end state is the next
   scene's start state)
 
+## Multiformat studio (v2)
+
+The studio now produces beyond video: **carousels, stories (static/animated), feed posts and
+campaign art**, through the same departments, independent critic and repair policy. Additions:
+
+- **Routing:** `studio-director` is the front door; it dispatches to **motion-director**
+  (video — v1 pipeline untouched) or **carousel-studio / story-studio / feed-studio** (static).
+- **Agent-agnostic engines:** renderer (`creative-core/renderers/render_static.mjs`, Playwright +
+  Chromium), validator (`validate_static.py`), exporter (`zip_export.py`) and gallery
+  (`build_gallery.py`) run via CLI and belong to no agent.
+- **Brand system:** `creative-core/brands/<slug>/` (PROFILE.md + tokens.json + assets/ +
+  approved/). Visual memory: consult `approved/` before creating; every approved piece feeds the
+  brand's `approved/`. Brands are isolated; `brand/voice.md` remains the studio's default voice.
+- **Dimensional presets:** `creative-core/presets.json` — platform sizes are configurable,
+  never hardcoded inside skill instructions.
+- **Recomposition ≠ crop:** every aspect ratio gets its own hierarchy.
+- **Honest editability:** only claim "editable" when the source (HTML/code) ships with the export.
+- **Code-driven determinism (video/animated):** frame N reproduces bit-for-bit. Use
+  `render_frames.mjs` (batch, one browser) + `assemble_video.py` ( CFR 30fps, audio aligned to
+  the same time grid, t=0 = frame 0) + `design-system/frame.js` (pure per-frame state — never
+  `Math.random()`/CSS keyframes in video). Seed and frame count go in the BRIEF.
+- **Gates:** before any full render, produce beat stills and a contact sheet
+  (`build_contact_sheet.py`) for the Critic — FFmpeg/Chromium finishing is **not** QA.
+  Defect-free stills ≠ approved; approval is human/Critic sign-off.
+- **Integrations:** nothing enters without a record in `creative-core/INTEGRATIONS.md`; untested
+  agent compatibility is not compatibility (`creative-core/COMPATIBILITY.md`). License states
+  (gratuito ≠ open source ≠ source available) live there with evidence; SBOM in
+  `creative-core/THIRD_PARTY.md`.
+
 ## Departmental contracts
 
 | Department | Produces | Approval gate |
 |---|---|---|
 | **Director** | BRIEF.md — message, audience, duration, formats, story | User approval BEFORE code |
 | **Art Director** | STYLE.md — typography, color, composition, motion, texture, and an explicit "avoid" list | User approval |
-| **Animator** | Source code — deterministic, frame-driven, editable parameters | — |
-| **Render Engineer** | Stills, previews, final exports; runtime checks (fonts, assets, fps, resolution) | — |
+| **Animator / Composer** | Source code — deterministic, frame-driven (video) or slide documents (static) | — |
+| **Render Engineer** | Stills/previews first, then final exports; runtime QA (fonts, assets, fps, overflow) | — |
 | **Critic** | reviews/findings.md — evidence-based defects with exact frames | Sign-off before delivery |
 
-The Critic must not be the same context that animated the film: it reviews the render artifact
-(contact sheet + moving preview), not the Animator's description. In Claude Code / OpenCode use a
-subagent or fresh context for the review when available.
+The Critic must not be the same context that animated/composed the piece: it reviews the render
+artifact (contact sheet + moving preview), not the producer's description. Use a subagent or
+fresh context when available.
 
 ## Repair policy
 

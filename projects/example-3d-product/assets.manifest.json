@@ -1,0 +1,130 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/example-3d-product",
+  "counts": {
+    "files": 19,
+    "png": 11,
+    "mp4": 2,
+    "html": 2
+  },
+  "renditions": [
+    "out/3d-test.mp4",
+    "out/test-3d.mp4"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "b76818a652f44cb8",
+      "bytes": 823,
+      "role": "other"
+    },
+    {
+      "path": "SCENE_SPEC.md",
+      "sha256": "f4770edfa189844a",
+      "bytes": 5362,
+      "role": "other"
+    },
+    {
+      "path": "SHOTLIST.md",
+      "sha256": "b1fecf01cf330441",
+      "bytes": 1496,
+      "role": "other"
+    },
+    {
+      "path": "composition.html",
+      "sha256": "164aa3d7b6d452d7",
+      "bytes": 16732,
+      "role": "other"
+    },
+    {
+      "path": "frames/0000.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0001.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0002.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0003.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0004.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0005.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0006.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0007.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0008.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/0009.png",
+      "sha256": "db0000c2524e4492",
+      "bytes": 17370,
+      "role": "still"
+    },
+    {
+      "path": "frames/contact-sheet.html",
+      "sha256": "16534522cd4a817c",
+      "bytes": 888,
+      "role": "still"
+    },
+    {
+      "path": "out/3d-test.mp4",
+      "sha256": "b745f5510a80bb9d",
+      "bytes": 7018,
+      "role": "render"
+    },
+    {
+      "path": "out/test-3d.mp4",
+      "sha256": "b745f5510a80bb9d",
+      "bytes": 7018,
+      "role": "render"
+    },
+    {
+      "path": "reviews/contact-sheet.png",
+      "sha256": "24f0250dbbef0d65",
+      "bytes": 75861,
+      "role": "other"
+    },
+    {
+      "path": "web/AuroraHero.jsx",
+      "sha256": "e1556ce14b0f08e3",
+      "bytes": 5139,
+      "role": "other"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+:root{--rose:#F38FA8;--blue:#62C8EA;--navy:#173C5B;--cream:#FFF9F6;--gold:#D5A94E}
+*{margin:0;box-sizing:border-box}
+body{width:1080px;height:1920px;background:var(--cream);color:var(--navy);font-family:Geist,system-ui,sans-serif;overflow:hidden;position:relative}
+.deco{position:absolute;border-radius:50%;opacity:.16}
+.d1{width:800px;height:800px;background:var(--rose);bottom:-300px;left:-260px}
+.d2{width:520px;height:520px;background:var(--blue);top:-200px;right:-160px}
+.wrap{position:absolute;inset:22% 7% 16% 7%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px;text-align:center}
+.k{font-size:28px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);font-weight:700;opacity:0;transform:translateY(30px)}
+h1{font-family:'Instrument Serif',serif;font-size:120px;line-height:1.06;font-weight:400;opacity:0;transform:translateY(40px)}
+h1 em{font-style:italic;color:var(--rose)}
+.sub{font-size:38px;opacity:0;transform:translateY(30px);max-width:760px;line-height:1.5}
+.cta{background:var(--navy);color:var(--cream);font-size:40px;font-weight:700;padding:28px 56px;border-radius:999px;opacity:0;transform:scale(0.6)}
+</style>
+<script type="module">
+import createMotionDriver from '/creative-core/design-system/frame.js';
+const el = (s) => document.querySelector(s);
+const st = (n, css) => Object.assign(n.style, css);
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  const w1 = d.window010(0.0, 0.8, 0.4, 2.8);
+  st(el('.k'), { opacity:w1.in, transform:`translateY(${30*(1-w1.in)}px)` });
+  const w1h = d.window010(0.4, 1.0, 0.4, 2.2);
+  st(el('h1'), { opacity:w1h.in, transform:`translateY(${40*(1-w1h.in)}px)` });
+  const w2 = d.window010(4.0, 0.8, 0.4, 3.8);
+  st(el('.sub'), { opacity:w2.in, transform:`translateY(${30*(1-w2.in)}px)` });
+  const w4 = d.window010(14.0, 0.7);
+  st(el('#cta'), { opacity:w4.in, transform:`scale(${0.6+0.4*d.ease.outBack(w4.in)})` });
+  if (!window.__MOTION_DRIVEN__) { window.__onFrame__({ frame:0, fps:30, totalFrames:600, seed:42 }); }
+};
+if (!window.__MOTION_DRIVEN__) { window.__onFrame__({ frame:0, fps:30, totalFrames:600, seed:42 }); }
+</script></head><body>
+<div class="deco d1" data-bleed></div><div class="deco d2" data-bleed></div>
+<div class="wrap"><div class="k">Mini Festa da Rose</div>
+<h1>Pequenos detalhes,<br><em>grandes momentos.</em></h1>
+<p class="sub">A Mini Festa da Rose cuida de cada peça — decoração, docinhos e a mesa toda montada à mão.</p>
+<div class="cta" id="cta">Reserve · WhatsApp</div>
+</div>
+</body></html>

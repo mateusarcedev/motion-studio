@@ -1,0 +1,178 @@
+# Catálogo incremental. Não substitui o catálogo existente.
+version: 1
+items:
+  - id: motionsites-web-builder
+    url: "https://github.com/Motionsites-AI/claude-skill"
+    category: skill
+    decision: adapt_mit_only
+    notes: "MIT no code, examples/media proprietários"
+  - id: shorts-animator
+    url: "https://www.tobiadonadon.com/projects/construct/material/skills/shorts-animator"
+    category: external_skill
+    decision: license_pending
+    notes: "Download por email; sem auditoria do ZIP"
+  - id: animejs
+    url: "https://github.com/juliangarnier/anime"
+    category: animation
+    decision: candidate
+    notes: "on-demand"
+  - id: react-spring
+    url: "https://github.com/pmndrs/react-spring"
+    category: animation
+    decision: candidate
+    notes: "on-demand"
+  - id: pixijs
+    url: "https://github.com/pixijs/pixijs"
+    category: renderer2d
+    decision: candidate
+    notes: "on-demand"
+  - id: p5js
+    url: "https://github.com/processing/p5.js"
+    category: generative2d
+    decision: candidate
+    notes: "LGPL-2.1: verificar obrigações"
+  - id: paperjs
+    url: "https://github.com/paperjs/paper.js"
+    category: vector
+    decision: candidate
+    notes: "MIT"
+  - id: matterjs
+    url: "https://github.com/liabru/matter-js"
+    category: physics2d
+    decision: candidate
+    notes: "on-demand"
+  - id: rapier
+    url: "https://github.com/dimforge/rapier"
+    category: physics3d
+    decision: candidate
+    notes: "Apache-2.0"
+  - id: ogl
+    url: "https://github.com/oframe/ogl"
+    category: webgl
+    decision: license_pending
+    notes: "repo metadata sem SPDX; verificar LICENSE"
+  - id: tsparticles
+    url: "https://github.com/tsparticles/tsparticles"
+    category: particles
+    decision: candidate
+    notes: "on-demand"
+  - id: gltf-transform
+    url: "https://github.com/donmccurdy/glTF-Transform"
+    category: assets3d
+    decision: candidate
+    notes: "on-demand"
+  - id: gl-transitions
+    url: "https://github.com/gl-transitions/gl-transitions"
+    category: transitions
+    decision: candidate
+    notes: "licença por shader"
+  - id: obs-studio
+    url: "https://github.com/obsproject/obs-studio"
+    category: capture_app
+    decision: external_tool
+    notes: "não é renderer principal"
+  - id: chatterbox
+    url: "https://github.com/resemble-ai/chatterbox"
+    category: tts
+    decision: conditional
+    notes: "verificar peso/model card; pt-BR"
+  - id: opencut
+    url: "https://github.com/OpenCut-app/OpenCut"
+    category: editor
+    decision: watch
+    notes: "reescrita; API/MCP/headless futuros"
+  - id: motion-canvas
+    url: "https://github.com/motion-canvas/motion-canvas"
+    category: animation
+    decision: candidate
+    notes: "adicional sugerido"
+  - id: motion-dev
+    url: "https://github.com/motiondivision/motion"
+    category: animation
+    decision: candidate
+    notes: "adicional sugerido"
+  - id: manim
+    url: "https://github.com/ManimCommunity/manim"
+    category: technical-animation
+    decision: candidate
+    notes: "adicional sugerido"
+  - id: lottie-web
+    url: "https://github.com/airbnb/lottie-web"
+    category: vector-animation
+    decision: candidate
+    notes: "adicional sugerido"
+  - id: dotlottie-web
+    url: "https://github.com/LottieFiles/dotlottie-web"
+    category: vector-animation
+    decision: candidate
+    notes: "adicional sugerido"
+  - id: inspora-design
+    url: "https://inspora.design"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: iter0-com
+    url: "https://iter0.com"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: backgrounds-supply
+    url: "https://backgrounds.supply"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: v0-app
+    url: "https://v0.app/templates"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: beui-dev
+    url: "https://beui.dev"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: mobbin-com
+    url: "https://mobbin.com"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: navbar-gallery
+    url: "https://navbar.gallery"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: 60fps-design
+    url: "https://60fps.design"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: motionin-design
+    url: "https://motionin.design"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: land-book-com
+    url: "https://land-book.com"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: landdding-com
+    url: "https://landdding.com"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: fontshare-com
+    url: "https://fontshare.com"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: remove-bg
+    url: "https://remove.bg"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"
+  - id: wedoflow-com
+    url: "https://wedoflow.com"
+    category: reference_source
+    decision: reference_only
+    notes: "sem coleta automatizada; verificar licenças dos itens"

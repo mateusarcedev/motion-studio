@@ -1,0 +1,280 @@
+{
+  "$schema": "registro da galeria persistente — cada peça aprovada entra aqui",
+  "items": [
+    {
+      "id": "example-3d-product",
+      "title": "Aurora Watch — 3D Product (Procedural)",
+      "format": "3D product → web hero + video (16:9/9:16/1:1)",
+      "brand": "motion",
+      "date": "2026-10-29",
+      "status": "draft",
+      "brief": "../../projects/example-3d-product/BRIEF.md",
+      "source": "../../projects/example-3d-product/",
+      "caption": "Produto 3D procedural: hero web interativo + vídeo multi-formato",
+      "slides": [
+        {
+          "n": "beat",
+          "thumb": "../../projects/example-3d-product/reviews/contact-sheet.png"
+        },
+        {
+          "n": "frame 0",
+          "thumb": "../../projects/example-3d-product/frames/0000.png"
+        },
+        {
+          "n": "frame 9",
+          "thumb": "../../projects/example-3d-product/frames/0009.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "entrega-v1.zip",
+          "path": "../../projects/example-3d-product/entrega-v1.zip"
+        },
+        {
+          "name": "3d-test.mp4",
+          "path": "../../projects/example-3d-product/out/test-3d.mp4"
+        }
+      ]
+    },
+    {
+      "id": "motion-landing",
+      "title": "MOTION AI Creative Studio — Landing Page",
+      "format": "landing page (desktop 3840×2160 fold + mobile 2160×full)",
+      "brand": "motion",
+      "date": "2026-10-29",
+      "status": "draft",
+      "brief": "../../projects/motion-landing/BRIEF.md",
+      "source": "../../projects/motion-landing/slides/",
+      "caption": "Landing page do próprio estúdio MOTION, renderizada pela própria infraestrutura.",
+      "slides": [
+        {
+          "n": "desktop-fold",
+          "thumb": "../../projects/motion-landing/out/landing-desktop-fold.png"
+        },
+        {
+          "n": "desktop-full",
+          "thumb": "../../projects/motion-landing/out/landing-desktop.png"
+        },
+        {
+          "n": "mobile-full",
+          "thumb": "../../projects/motion-landing/out/landing-mobile.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "entrega-v1.zip",
+          "path": "../../projects/motion-landing/entrega-v1.zip"
+        }
+      ]
+    },
+    {
+      "id": "carousel-nova-identidade",
+      "title": "Pequenos detalhes, momentos grandes",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-28",
+      "format": "carousel/feed-vertical (1080×1350 @2x)",
+      "status": "draft",
+      "tags": [
+        "carousel",
+        "mascote-brand",
+        "validation-run"
+      ],
+      "brief": "../../projects/carousel-nova-identidade/BRIEF.md",
+      "source": "../../projects/carousel-nova-identidade/slides/",
+      "caption": "../../projects/carousel-nova-identidade/caption.md",
+      "slides": [
+        {
+          "n": 1,
+          "thumb": "../../projects/carousel-nova-identidade/out/01.png"
+        },
+        {
+          "n": 2,
+          "thumb": "../../projects/carousel-nova-identidade/out/02.png"
+        },
+        {
+          "n": 3,
+          "thumb": "../../projects/carousel-nova-identidade/out/03.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "entrega-v1.zip",
+          "path": "../../projects/carousel-nova-identidade/entrega-v1.zip"
+        }
+      ]
+    },
+    {
+      "id": "example-carousel-7",
+      "title": "Exemplo: carrossel 7 slides",
+      "kind": "carousel",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-28",
+      "status": "draft",
+      "priority": "integration-test (produto 9)",
+      "brief": "../../projects/example-carousel-7/BRIEF.md",
+      "source": "../../projects/example-carousel-7/",
+      "caption": "../../projects/example-carousel-7/caption.md",
+      "slides": [
+        {
+          "n": 1,
+          "thumb": "../../projects/example-carousel-7/out/01.png"
+        },
+        {
+          "n": 2,
+          "thumb": "../../projects/example-carousel-7/out/02.png"
+        },
+        {
+          "n": 3,
+          "thumb": "../../projects/example-carousel-7/out/03.png"
+        },
+        {
+          "n": 4,
+          "thumb": "../../projects/example-carousel-7/out/04.png"
+        },
+        {
+          "n": 5,
+          "thumb": "../../projects/example-carousel-7/out/05.png"
+        },
+        {
+          "n": 6,
+          "thumb": "../../projects/example-carousel-7/out/06.png"
+        },
+        {
+          "n": 7,
+          "thumb": "../../projects/example-carousel-7/out/07.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "entrega-v1.zip",
+          "path": "../../projects/example-carousel-7/entrega-v1.zip"
+        }
+      ]
+    },
+    {
+      "id": "example-post-reflow",
+      "title": "Exemplo: post 4 proporções (reflow)",
+      "kind": "post",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-28",
+      "status": "draft",
+      "priority": "integration-test (produto 9)",
+      "brief": "../../projects/example-post-reflow/BRIEF.md",
+      "source": "../../projects/example-post-reflow/",
+      "caption": "../../projects/example-post-reflow/caption.md",
+      "slides": [
+        {
+          "n": "16:9",
+          "thumb": "../../projects/example-post-reflow/out/reconf-16x9.png"
+        },
+        {
+          "n": "1:1",
+          "thumb": "../../projects/example-post-reflow/out/reconf-1x1.png"
+        },
+        {
+          "n": "9:16",
+          "thumb": "../../projects/example-post-reflow/out/reconf-9x16.png"
+        },
+        {
+          "n": "4:5",
+          "thumb": "../../projects/example-post-reflow/out/reconf-4x5.png"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": "example-story-static",
+      "title": "Exemplo: story estático",
+      "kind": "story",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-28",
+      "status": "draft",
+      "priority": "integration-test (produto 9)",
+      "brief": "../../projects/example-story-static/BRIEF.md",
+      "source": "../../projects/example-story-static/",
+      "caption": "../../projects/example-story-static/caption.md",
+      "slides": [
+        {
+          "n": 1,
+          "thumb": "../../projects/example-story-static/out/01.png"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": "example-teaser",
+      "title": "Exemplo: teaser frame-driven (5s 16:9 + áudio)",
+      "kind": "motion",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-28",
+      "status": "draft",
+      "priority": "integration-test (produto 9)",
+      "brief": "../../projects/example-teaser/BRIEF.md",
+      "source": "../../projects/example-teaser/",
+      "caption": "../../projects/example-teaser/caption.md",
+      "slides": [
+        {
+          "n": "beat",
+          "thumb": "../../projects/example-teaser/reviews/contact-sheet.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "teaser-v1.mp4",
+          "path": "../../projects/example-teaser/out/teaser-v1.mp4"
+        }
+      ]
+    },
+    {
+      "id": "example-story-animated",
+      "title": "Exemplo: story animado frame-driven (4s 9:16)",
+      "kind": "motion",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-28",
+      "status": "draft",
+      "priority": "integration-test (produto 9)",
+      "brief": "../../projects/example-story-animated/BRIEF.md",
+      "source": "../../projects/example-story-animated/",
+      "caption": "../../projects/example-story-animated/caption.md",
+      "slides": [
+        {
+          "n": "beat",
+          "thumb": "../../projects/example-story-animated/reviews/contact-sheet.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "story-v1.mp4",
+          "path": "../../projects/example-story-animated/out/story-v1.mp4"
+        }
+      ]
+    },
+    {
+      "id": "example-short-original",
+      "title": "Short Original - Pequenos detalhes (20s, 9:16)",
+      "format": "short narrado (fallback textual)",
+      "brand": "mini-festa-da-rose",
+      "date": "2026-10-29",
+      "status": "draft",
+      "brief": "../../projects/example-short-original/BRIEF.md",
+      "source": "../../projects/example-short-original/",
+      "caption": "../../projects/example-short-original/caption.srt",
+      "slides": [
+        {
+          "n": "beat",
+          "thumb": "../../projects/example-short-original/reviews/contact-sheet.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "short-v1.mp4",
+          "path": "../../projects/example-short-original/out/short-v1.mp4"
+        },
+        {
+          "name": "entrega-v1.zip",
+          "path": "../../projects/example-short-original/entrega-v1.zip"
+        }
+      ]
+    }
+  ]
+}

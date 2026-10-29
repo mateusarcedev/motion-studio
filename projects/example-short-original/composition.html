@@ -1,0 +1,67 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+:root{--rose:#F38FA8;--blue:#62C8EA;--navy:#173C5B;--cream:#FFF9F6;--gold:#D5A94E}
+*{margin:0;box-sizing:border-box}
+body{width:1080px;height:1920px;background:var(--cream);color:var(--navy);font-family:Geist,system-ui,sans-serif;overflow:hidden;position:relative}
+.deco{position:absolute;border-radius:50%;opacity:.16}
+.d1{width:720px;height:720px;background:var(--rose);top:-280px;left:-240px}
+.d2{width:480px;height:480px;background:var(--blue);bottom:-200px;right:-160px}
+.wrap{position:absolute;inset:22% 7% 16% 7%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px;text-align:center}
+.k{font-size:28px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);font-weight:700;opacity:0;transform:translateY(30px)}
+h1{font-family:'Instrument Serif',serif;font-size:110px;line-height:1.08;font-weight:400;opacity:0;transform:translateY(40px)}
+h1 em{font-style:italic;color:var(--rose)}
+.sub{font-size:38px;line-height:1.5;opacity:0;transform:translateY(30px);max-width:760px}
+.icon{font-size:80px;opacity:0;transform:translateY(50px)}
+.cta{background:var(--navy);color:var(--cream);font-size:40px;font-weight:700;padding:28px 56px;border-radius:999px;opacity:0;transform:scale(0.6)}
+.brand{font-size:28px;opacity:0;color:var(--navy)}
+.goldbar{width:80px;height:6px;background:var(--gold);border-radius:3px;opacity:0;transform:scaleX(0);transform-origin:left}
+</style>
+<script type="module">
+import createMotionDriver from '/creative-core/design-system/frame.js';
+const el = (s) => document.querySelector(s);
+const st = (n, css) => Object.assign(n.style, css);
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  // beat 01: 0.0–4.0s — kicker + headline
+  const w1 = d.window010(0.0, 0.8, 0.4, 2.8);
+  st(el('.k'), { opacity:w1.in, transform:`translateY(${30*(1-w1.in)}px)` });
+  const w1h = d.window010(0.4, 1.0, 0.4, 2.2);
+  st(el('h1'), { opacity:w1h.in, transform:`translateY(${40*(1-w1h.in)}px)` });
+  // beat 02: 4.0–9.0s — sub + gold bar
+  const w2 = d.window010(4.0, 0.8, 0.4, 3.8);
+  st(el('.sub'), { opacity:w2.in, transform:`translateY(${30*(1-w2.in)}px)` });
+  const w2b = d.window010(5.0, 0.6, 0.2, 3.2);
+  st(el('#bar'), { opacity:w2b.in, transform:`scaleX(${w2b.in})` });
+  // beat 03: 9.0–14.0s — 3 icons stagger
+  ['#i1','#i2','#i3'].forEach((q,i)=>{
+    const wi = d.window010(9.0+i*0.6, 0.7, 0.3, 4.0-i*0.6);
+    st(el(q), { opacity:wi.in, transform:`translateY(${50*(1-wi.in)}px)` });
+  });
+  // beat 04: 14.0–18.0s — CTA pop
+  const w4 = d.window010(14.0, 0.7);
+  st(el('#cta'), { opacity:w4.in, transform:`scale(${0.6+0.4*d.ease.outBack(w4.in)})` });
+  // beat 05: 18.0–20.0s — brand fade
+  const w5 = d.window010(18.0, 1.0);
+  st(el('.brand'), { opacity:w5.in });
+  // decos respiram
+  const b = Math.sin(d.t*1.5)*4;
+  st(el('.d1'), { transform:`translate(${b}px,0)` });
+  st(el('.d2'), { transform:`translate(0,${-b}px)` });
+};
+if (!window.__MOTION_DRIVEN__) {
+  window.__onFrame__({ frame:0, fps:30, totalFrames:600, seed:42 });
+}
+</script></head><body>
+<div class="deco d1" data-bleed></div><div class="deco d2" data-bleed></div>
+<div class="wrap">
+  <div class="k">Mini Festa da Rose</div>
+  <h1>Pequenos detalhes,<br><em>grandes momentos.</em></h1>
+  <div id="bar" class="goldbar"></div>
+  <p class="sub">A Mini Festa da Rose cuida de cada peça — decoração, docinhos e a mesa toda montada à mão.</p>
+  <div class="icon" id="i1">🎈</div>
+  <div class="icon" id="i2">🍰</div>
+  <div class="icon" id="i3">🍽️</div>
+  <div class="cta" id="cta">Reserve · WhatsApp</div>
+  <div class="brand">Mini Festa da Rose · agenda aberta</div>
+</div>
+</body></html>

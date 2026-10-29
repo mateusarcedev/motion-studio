@@ -1,0 +1,95 @@
+{
+  "url": "http://localhost:5199",
+  "results": [
+    {
+      "viewport": "mobile-s",
+      "size": "360x740",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": [
+          {
+            "w": 980,
+            "h": 2014,
+            "blank": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "size": "390x844",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": [
+          {
+            "w": 980,
+            "h": 2120,
+            "blank": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "size": "768x1024",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": [
+          {
+            "w": 980,
+            "h": 1306,
+            "blank": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "size": "1280x800",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": [
+          {
+            "w": 1280,
+            "h": 800,
+            "blank": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "wide",
+      "size": "1920x1080",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": [
+          {
+            "w": 1920,
+            "h": 1080,
+            "blank": false
+          }
+        ]
+      }
+    }
+  ]
+}

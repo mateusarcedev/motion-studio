@@ -1,0 +1,45 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+:root{--rose:#F38FA8;--blue:#62C8EA;--navy:#173C5B;--cream:#FFF9F6;--gold:#D5A94E}
+*{margin:0;box-sizing:border-box}
+body{width:1080px;height:1920px;background:var(--cream);color:var(--navy);font-family:Geist,system-ui,sans-serif;overflow:hidden;position:relative}
+blob{}
+.blob{position:absolute;width:760px;height:760px;border-radius:50%;background:var(--blue);opacity:.16;top:-280px;left:-200px}
+.blob2{position:absolute;width:420px;height:420px;border-radius:50%;background:var(--rose);opacity:.2;bottom:-160px;right:-130px}
+.wrap{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 100px 420px}
+.k{font-size:30px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-bottom:24px}
+h1{font-family:'Instrument Serif',serif;font-size:150px;line-height:1.05;font-weight:400}
+h1 em{font-style:italic;color:var(--rose)}
+.chip{position:absolute;top:560px;left:100px;background:var(--rose);color:var(--navy);font-size:44px;font-weight:700;padding:24px 50px;border-radius:999px}
+.cta{margin-top:40px;background:var(--navy);color:var(--cream);font-size:44px;font-weight:700;padding:30px 60px;border-radius:999px;align-self:flex-start}
+</style>
+<script type="module">
+import createMotionDriver from '/creative-core/design-system/frame.js';
+const el = (s) => document.querySelector(s);
+const st = (node, css) => Object.assign(node.style, css);
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  const w1 = d.window010(0.15, 0.7);
+  st(el('#headline'), { opacity:w1.in, transform:`translateY(${(1-w1.in)*80}px)` });
+  const w2 = d.window010(0.9, 0.5);
+  st(el('.k'), { opacity:w2.in });
+  // chip #2: carimbo outBack p/ "à mão"
+  const w3 = d.window010(1.6, 0.45);
+  st(el('#chip'), { transform:`scale(${0.4+0.6*d.ease.outBack(w3.in)}) rotate(${(1-w3.in)*-6}deg)`, opacity:w3.in });
+  const w4 = d.window010(2.4, 0.7);
+  st(el('#cta'), { opacity:w4.in, transform:`translateY(${(1-w4.in)*60}px)` });
+  const w5 = d.window010(3.1, 0.6);
+  st(el('#sub'), { opacity:.85*w5.in });
+};
+if (!window.__MOTION_DRIVEN__) {
+  window.__onFrame__({ frame:0, fps:30, totalFrames:120, seed:1 });
+}
+</script></head><body>
+<div class="blob" data-bleed></div><div class="blob2" data-bleed></div>
+<div class="wrap">
+<div class="k">Como funciona</div>
+<h1 id="headline">Sua festa,<br>sem estresse.</h1>
+<div id="chip" class="chip">100% à mão</div>
+<div id="cta" class="cta">Reserve · WhatsApp</div>
+<p id="sub" style="font-size:40px;opacity:0">agenda de novembro aberta</p>
+</div></body></html>
