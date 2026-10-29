@@ -30,6 +30,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/fonts/Geist.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/GeistMono.woff" as="font" type="font/woff" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <style>
 @font-face{font-family:"Geist";src:url("/fonts/Geist.woff") format("woff");font-weight:100 900;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("/fonts/GeistMono.woff") format("woff");font-weight:100 900;font-display:swap}
@@ -204,12 +205,47 @@ p{color:var(--fg-dim)}
 
 footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--fg-faint);border-top:1px solid var(--line-soft)}
 
-@media (prefers-reduced-motion:no-preference){
-  .rv{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
-  .rv.in{opacity:1;transform:none}
-}
-@media (prefers-reduced-motion:reduce){.brand-dot{animation:none}}
+/* hero headline lines */
+.hero h1 .ln{display:block}
 
+/* motion — transform/opacity/clip-path only; gated on JS so content never hides without it */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;background:var(--mint);transform:scaleX(0);transform-origin:0 50%;pointer-events:none}
+.tnav a{position:relative;transition:color .15s}
+.tnav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--mint);transform:scaleX(0);transform-origin:0 50%;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.tnav a.on{color:var(--fg)}
+.tnav a.on::after{transform:scaleX(1)}
+.rail{position:relative;height:2px;margin:-8px 0 20px;background:var(--line-soft);border-radius:2px;overflow:hidden}
+.rail i{position:absolute;inset:0;background:var(--mint);transform:scaleX(0);transform-origin:0 50%}
+@media (prefers-reduced-motion:no-preference){
+  .js .rv{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.2,.7,.2,1) var(--d,0s),transform .6s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+  .js .rv.in{opacity:1;transform:none}
+  /* hero headline: line mask reveal on load */
+  .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+  .hero h1 .ln>i{display:block;font-style:normal;transform:translateY(105%);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(.08s + var(--l,0)*.12s)}
+  @keyframes rise{to{transform:none}}
+  .hero .tag,.hero .lead,.hero .actions{animation:fadeup .7s cubic-bezier(.2,.7,.2,1) both}
+  .hero .tag{animation-delay:0s}
+  .hero .lead{animation-delay:.3s}
+  .hero .actions{animation-delay:.42s}
+  @keyframes fadeup{from{opacity:0;transform:translateY(10px)}}
+  /* pipeline: step lights up as it enters */
+  .js .step{transition:border-color .5s ease var(--d,0s),opacity .6s cubic-bezier(.2,.7,.2,1) var(--d,0s),transform .6s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+  .js .step.in{border-color:var(--mint-edge)}
+  /* work tiles: image unmask */
+  .js .tile img{clip-path:inset(0 0 100% 0 round 10px);transition:clip-path .9s cubic-bezier(.2,.7,.2,1) calc(var(--d,0s) + .1s)}
+  .js .tile.in img{clip-path:inset(0 0 0 0 round 10px)}
+}
+@media (prefers-reduced-motion:reduce){.brand-dot{animation:none}.progress,.rail{display:none}}
+
+/* touch targets >=44px on coarse pointers */
+@media (pointer:coarse){
+  .btn,.btn.sm{height:44px}
+  .seg{height:auto}
+  .seg button,.seg a{min-width:44px;min-height:44px;justify-content:center}
+  .brand{min-height:44px}
+  .cred .repo,.chip[href],footer a{display:inline-flex;align-items:center;min-height:44px}
+  footer a{padding:0 4px}
+}
 @media (max-width:980px){
   .tnav{display:none}
   .hero-grid{grid-template-columns:1fr}
@@ -231,6 +267,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </head>
 <body>
 
+<div class="progress" id="progress" aria-hidden="true"></div>
 <header class="topbar">
   <div class="topbar-inner">
     <a href="#top" class="brand" aria-label="MOTION"><span class="brand-dot"></span><strong>motion</strong><span class="sep">/</span><span class="dim">ai creative studio</span></a>
@@ -262,7 +299,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
       <span class="tag"><span class="brand-dot"></span>open source · frame-driven</span>
       <h1>
         
-        <span lang="en">Code that becomes <em>cinema.</em></span>
+        <span lang="en" class="ln" style="--l:0"><i>Code that</i></span><span lang="en" class="ln" style="--l:1"><i>becomes <em>cinema.</em></i></span>
       </h1>
       <p class="lead">
         
@@ -352,6 +389,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
     <h2><span lang="en">A pipeline that lets you audit it.</span></h2>
     <p class="lead"><span lang="en">No code before the storyboard. You approve the brief and the art direction. The critic is never the same context that made the piece.</span></p>
   </div>
+  <div class="rail" id="rail" aria-hidden="true"><i></i></div>
   <div class="steps">
     <div class="step rv"><span class="k">01</span><h3><span lang="en">Brief</span></h3><p><span lang="en">Message, audience, duration, formats and story.</span></p><span class="gate"><span lang="en">you approve</span></span></div>
     <div class="step rv"><span class="k">02</span><h3><span lang="en">Art direction</span></h3><p><span lang="en">Typography, color, composition, motion — and an explicit list of what to avoid.</span></p><span class="gate"><span lang="en">you approve</span></span></div>
@@ -496,6 +534,38 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
     function seek(e){var r=track(); var f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)); v.currentTime=f*D*0.999}
     var drag=false; tl.addEventListener("pointerdown",function(e){drag=true;tl.setPointerCapture(e.pointerId);seek(e)});
     tl.addEventListener("pointermove",function(e){if(drag)seek(e)}); tl.addEventListener("pointerup",function(){drag=false});
+  })();
+
+  /* motion layer */
+  (function(){
+    var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // stagger: delay by index among siblings that reveal together
+    document.querySelectorAll(".steps,.grid3,.stack,.work,.facts,.cred-grid").forEach(function(g){
+      g.querySelectorAll(":scope > .rv").forEach(function(el,i){el.style.setProperty("--d",(Math.min(i,7)*0.06)+"s")});
+    });
+    if(reduce)return;
+    var bar=document.getElementById("progress"), rail=document.getElementById("rail"), steps=document.querySelector(".steps");
+    var links=[].slice.call(document.querySelectorAll(".tnav a")), secs=links.map(function(a){return document.querySelector(a.getAttribute("href"))});
+    var tick=false;
+    function clamp(x){return Math.max(0,Math.min(1,x))}
+    function frame(){
+      tick=false;
+      var h=document.documentElement.scrollHeight-innerHeight;
+      bar.style.transform="scaleX("+(h>0?clamp(scrollY/h):0)+")";
+      if(rail&&steps){var r=steps.getBoundingClientRect(); rail.firstElementChild.style.transform="scaleX("+clamp((innerHeight*0.8-r.top)/(r.height+innerHeight*0.4))+")"}
+      var cur=-1; secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<innerHeight*0.4)cur=i});
+      links.forEach(function(a,i){a.classList.toggle("on",i===cur)});
+    }
+    function req(){if(!tick){tick=true;requestAnimationFrame(frame)}}
+    addEventListener("scroll",req,{passive:true}); addEventListener("resize",req); frame();
+    // count-up on facts (eased, final value always the DOM value)
+    var cio=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return; cio.unobserve(e.target);
+      var b=e.target, to=parseInt(b.textContent,10); if(!(to>0))return;
+      var t0=performance.now(), dur=900;
+      (function step(t){var k=clamp((t-t0)/dur), v=Math.round(to*(1-Math.pow(1-k,3))); b.textContent=v; if(k<1)requestAnimationFrame(step)})(t0);
+    })},{threshold:.6});
+    document.querySelectorAll(".fact b").forEach(function(b){cio.observe(b)});
   })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>

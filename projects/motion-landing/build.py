@@ -86,7 +86,7 @@ def build(lang):
     drop = "en" if lang == "pt-BR" else "pt-BR"
     cred, n = credits_html(lang)
     s = s.replace("{{CREDITS}}", cred).replace("{{NCRED}}", f"{n:02d}")
-    s = re.sub(rf'<span lang="{drop}">.*?</span>', "", s, flags=re.S)
+    s = re.sub(rf'<span lang="{drop}"[^>]*>.*?</span>', "", s, flags=re.S)
     s = re.sub(r"@@(.*?)::(.*?)@@", lambda m: m.group(1 if lang == "pt-BR" else 2), s)
     s = s.replace("{{HEAD}}", head(lang)).replace("{{LANG}}", lang).replace("{{GH}}", GH).replace("{{WAVE}}", WAVE)
     assert "{{" not in s and "@@" not in s

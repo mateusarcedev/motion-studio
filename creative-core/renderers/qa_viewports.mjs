@@ -2,7 +2,7 @@
 /**
  * QA multi-viewport (web-director gate). Agent-agnostic CLI.
  *
- *   node creative-core/renderers/qa_viewports.mjs <url> <outdir> [--wait=ms] [--canvas=selector]
+ *   node creative-core/renderers/qa_viewports.mjs <url> <outdir> [--wait=ms] [--canvas=selector] [--ignore=substr,...]
  *
  * Per viewport: full-page + fold screenshots, console/page errors, failed requests,
  * horizontal overflow, small touch targets (mobile), font readiness, WebGL canvas non-empty.
@@ -30,6 +30,9 @@ if (!url || !outdir) {
 }
 const waitMs = Number(opt.wait ?? 4000)
 const canvasSel = opt.canvas ?? "canvas"
+// --ignore=substr1,substr2 : URLs of host-only resources (e.g. _vercel/insights) not counted as failures
+const ignore = (opt.ignore ?? "").split(",").filter(Boolean)
+const ignored = (u) => ignore.some((i) => u.includes(i))
 
 async function checkPage(page) {
   return page.evaluate(async (canvasSel) => {
@@ -76,12 +79,18 @@ for (const vp of VIEWPORTS) {
   })
   const page = await ctx.newPage()
   const errors = [], failed = []
-  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()) })
+  page.on("console", (m) => { if (m.type() === "error" && !/status of (4|5)\d\d/.test(m.text())) errors.push(m.text()) })
   page.on("pageerror", (e) => errors.push("pageerror: " + e.message))
-  page.on("response", (r) => { if (r.status() >= 400) failed.push(`${r.status()} ${r.url()}`) })
-  page.on("requestfailed", (r) => failed.push(`FAILED ${r.url()}`))
+  page.on("response", (r) => { if (r.status() >= 400 && !ignored(r.url())) failed.push(`${r.status()} ${r.url()}`) })
+  page.on("requestfailed", (r) => { if (!ignored(r.url())) failed.push(`FAILED ${r.url()}`) })
   await page.goto(url, { waitUntil: "load" })
   await page.waitForTimeout(waitMs)
+  // scroll through so scroll-triggered reveals fire before full-page capture
+  await page.evaluate(async () => {
+    const step = Math.max(200, innerHeight * 0.6)
+    for (let y = 0; y < document.documentElement.scrollHeight; y += step) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 300)) }
+    scrollTo(0, 0); await new Promise((r) => setTimeout(r, 900))
+  })
   const m = await checkPage(page)
   await page.screenshot({ path: path.join(outdir, `${vp.name}-fold.png`) })
   await page.screenshot({ path: path.join(outdir, `${vp.name}-full.png`), fullPage: true })

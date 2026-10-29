@@ -1,0 +1,123 @@
+{
+  "url": "http://localhost:5301",
+  "results": [
+    {
+      "viewport": "mobile-s",
+      "size": "360x740",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": []
+      }
+    },
+    {
+      "viewport": "mobile",
+      "size": "390x844",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": []
+      }
+    },
+    {
+      "viewport": "tablet",
+      "size": "768x1024",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [],
+        "canvases": []
+      }
+    },
+    {
+      "viewport": "desktop",
+      "size": "1280x800",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [
+          "a 239x21",
+          "a 61x20",
+          "a 62x20",
+          "a 68x20",
+          "a 35x20",
+          "button 46x26",
+          "button 56x26",
+          "a 34x26",
+          "a 33x26",
+          "a 85x30",
+          "a 159x42",
+          "a 143x42",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x40",
+          "a 201x30",
+          "a 78x30",
+          "a 159x42",
+          "a 135x42",
+          "a 299x14"
+        ],
+        "canvases": []
+      }
+    },
+    {
+      "viewport": "wide",
+      "size": "1920x1080",
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "overflowX": 0,
+        "fonts": [],
+        "small": [
+          "a 239x21",
+          "a 61x20",
+          "a 62x20",
+          "a 68x20",
+          "a 35x20",
+          "button 46x26",
+          "button 56x26",
+          "a 34x26",
+          "a 33x26",
+          "a 85x30",
+          "a 159x42",
+          "a 143x42",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x20",
+          "a 322x40",
+          "a 201x30",
+          "a 78x30",
+          "a 159x42",
+          "a 135x42",
+          "a 299x14"
+        ],
+        "canvases": []
+      }
+    }
+  ]
+}
