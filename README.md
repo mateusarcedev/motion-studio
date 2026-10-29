@@ -2,13 +2,13 @@
 
 # 🎬 motion
 
-**Um estúdio de motion design profissional — construído com Agent Skills.**
-**A professional AI motion design studio — built out of Agent Skills.**
+**Um estúdio criativo multiformato profissional — construído com Agent Skills.**
+**A professional AI multiformat creative studio — built out of Agent Skills.**
 
-Confie o briefing. O estúdio escolhe o produtor certo, produz, renderiza e entrega o MP4.
-You bring the intent. The studio picks the right producer, crafts the film, renders and ships the MP4.
+Confie o briefing. O estúdio escolhe o produtor certo, produz, renderiza e entrega — MP4, carrossel, stories ou post.
+You bring the intent. The studio picks the right producer, crafts the piece, renders and ships it — MP4, carousel, stories or post.
 
-`20+ Agent Skills · Claude Code · OpenCode · Codex · Copilot · Gemini · qualquer agente compatível`
+`45+ Agent Skills · Claude Code · OpenCode · Codex · Copilot · Gemini · qualquer agente compatível`
 
 </div>
 
@@ -18,13 +18,15 @@ You bring the intent. The studio picks the right producer, crafts the film, rend
 
 ### O que é isto?
 
-`motion` é um **estúdio de motion design operado por agentes de IA**. Ele transforma qualquer pedido de vídeo
-("quero um promo do meu produto", "faz um teaser vertical de 30s") em um filme renderizado em MP4, através de
-um **diretor** que entrevista você, decide **quem produz** entre um time de skills especializadas, e entrega
+`motion` é um **estúdio criativo multiformato operado por agentes de IA** — vídeo, carrosséis,
+stories, posts de feed e artes de campanha. Ele transforma qualquer pedido ("quero um promo do meu
+produto", "transforma esse artigo num carrossel") em material renderizado, através de um **diretor**
+que entrevista você, decide **quem produz** entre um time de skills especializadas, e entrega
 com QA assistido.
 
-Não é um gerador de vídeo genérico. Cada quadro é escrito em código (HTML/Remotion/canvas/render engines),
-com música roteirizada, timing no beat e narração opcional — determinístico, editável e re-renderizável para sempre.
+Nada é um gerador genérico. Cada quadro é escrito em código (HTML/CSS/Remotion/canvas/render
+engines), determinístico, editável e re-renderizável para sempre — o mesmo rigor do cinema para
+todo formato.
 
 ### Como funciona
 
@@ -57,7 +59,44 @@ com música roteirizada, timing no beat e narração opcional — determinístic
 
 O estúdio aprende: erro que se repete vira regra no `CLAUDE.md` — o próximo filme herda a correção.
 
+### Studio multiformato (v2)
+
+Além de vídeo, o estúdio produz **carrosséis, stories, posts de feed e artes de campanha** —
+mesmo padrão de departamentos, crítica independente e política de reparo:
+
+```
+"Transforme este lançamento em carrossel + stories + post"
+        │
+        ▼
+🚪 studio-director — despacha o formato (porta de entrada do estúdio)
+        ├─ vídeo / motion          ──► motion-director (pipeline v1, intocado)
+        ├─ carrossel de slides     ──► carousel-studio (HTML/CSS → PNG 2160×2700)
+        ├─ stories (est./animado)  ──► story-studio (safe zones 1080×1920; animado via Remotion)
+        └─ post de feed / arte     ──► feed-studio (1 peça ou variações)
+
+        Fundação compartilhada ── creative-core/
+        ├─ render_static.mjs     Playwright + Chromium (deviceScaleFactor 2, nunca upscale)
+        ├─ validate_static.py    dimensões, overflow, escala nativa
+        ├─ zip_export.py         entrega empacotada (fonte editável incluída)
+        ├─ build_gallery.py      galeria persistente: slider, comparação lado a lado, download
+        └─ brands/<slug>/        PROFILE.md + tokens.json + approved/ (memória visual)
+```
+
+Regras do lado estático: presets dimensionais em `creative-core/presets.json` (configuráveis,
+nunca hardcode) · memória visual por marca (consulte `approved/` antes de criar) ·
+recomposição ≠ crop · editabilidade só com o fonte HTML na entrega ·
+integrações só entram com registro em `creative-core/INTEGRATIONS.md`.
+
 ### O elenco (skills instaladas)
+
+**🚪 Roteamento multiformato (v2)**
+
+| Skill | Origem | O que faz |
+|---|---|---|
+| `studio-director` | *este repo (autoral)* | Porta de entrada: identifica o formato e despacha para o estúdio certo |
+| `carousel-studio` | *este repo (autoral)* | Carrosséis em código: HTML/CSS → PNG de alta resolução, versões, legenda, ZIP, galeria |
+| `story-studio` | *este repo (autoral)* | Stories estáticos e animados com zonas seguras e sequências |
+| `feed-studio` | *este repo (autoral)* | Posts de feed, cards, tipográficos, infográficos e artes de campanha |
 
 **🎥 Produção de vídeo**
 
@@ -104,9 +143,14 @@ O estúdio aprende: erro que se repete vira regra no `CLAUDE.md` — o próximo 
 "Quero um vídeo do meu produto"        # abre o briefing
 "Faça um teaser vertical de 30s com narração em pt-br"
 "Preciso de um promo no estilo Swiss motion graphics"
+"Transforme esse artigo num carrossel de 7 slides"      # carousel-studio
+"Crie 5 stories para o lançamento do produto"           # story-studio
+"Crie 3 variações de post na identidade da marca"       # feed-studio
+"Vídeo de lançamento + adapta pra stories e carrossel"  # campanha multiformato
 ```
 
-Sem comando decorado: o `motion-director` dispara quando você pede um vídeo ou motion design.
+Sem comando decorado: o `studio-director` dispara quando você pede qualquer entrega —
+vídeo/motion roteia para o `motion-director`; carrossel, stories e post seguem a pista estática.
 Se você já sabe o estilo/ferramenta, cite-o — e a rota pula a decisão.
 (Você ainda pode chamar individualmente: `/brag`, `/motion-director`, `use hyperframes…`.)
 
@@ -129,13 +173,25 @@ motion/
 ├── CLAUDE.md                              # 📕 manual de operações: 10 regras, restrições criativas,
 │                                          #   política de reparo, entrega multi-formato, memória
 ├── README.md
+├── pipeline.md                            # contratos de handoff: pista audiovisual + pista estática
 ├── .agents/skills/                        # fonte das skills (formato Agent Skills / skills.sh)
 ├── .claude/skills/                        # symlinks → descoberta pelo Claude Code
 ├── .opencode/skills/                      # symlinks → descoberta nativa do OpenCode
 │
+├── creative-core/                         # ⚙️ fundação compartilhada (agnóstica de agente)
+│   ├── presets.json                       #   dimensões por plataforma (configuráveis)
+│   ├── renderers/render_static.mjs        #   HTML/CSS → PNG via Playwright + Chromium
+│   ├── quality/validate_static.py         #   dimensões, overflow, escala nativa
+│   ├── exporters/zip_export.py            #   entrega empacotada
+│   ├── gallery/                           #   galeria persistente (index.html + registry)
+│   ├── brands/<slug>/                     #   marcas: PROFILE + tokens + approved/ (memória)
+│   ├── INTEGRATIONS.md                    #   catálogo de integrações (nada entra sem registro)
+│   └── COMPATIBILITY.md                   #   status honesto por agente
+│
+├── projects/<peca>/                       # produções estáticas (brief, estilo, slides/, out/)
 ├── public/{logos,screenshots,fonts,audio} # assets aprovados (somente reais, nunca fake)
 ├── references/                            # referências visuais (filmes, stills)
-├── src/{compositions,components,animation}# código do renderer
+├── src/{compositions,components,animation}# código do renderer audiovisual
 ├── reviews/{frames,contact-sheets,findings.md} # trabalho do Crítico
 ├── out/{previews,final}                   # saída de render
 ├── BRIEF.md · STYLE.md · STORYBOARD.md    # artefatos do pipeline (por produção)
@@ -150,7 +206,8 @@ O estúdio é uma curadoria — todo o mérito da expertise pertence aos autores
 **Vincent Wei** (video-shotcraft) · **latent-spaces** (brag) · **Cathryn Lavery** (diagram-design) ·
 **Ryan** (anatomy) · **nextlevelbuilder** (ui-ux-pro-max) · **Richard @richardrx** via heliocosta-dev (RCD) ·
 **Matt Pocock** (grill-me) · **Impeccable**.
-O `motion-director` (a cola que orquestra tudo) é o único membro autoral deste repo.
+O `motion-director` e a camada multiformato v2 (`studio-director`, `carousel-studio`,
+`story-studio`, `feed-studio`, `creative-core`) são os membros autorais deste repo.
 
 ---
 
@@ -158,12 +215,13 @@ O `motion-director` (a cola que orquestra tudo) é o único membro autoral deste
 
 ### What is this?
 
-`motion` is an **AI-operated motion design studio**. Any video request ("make a promo for my product",
-"a 30s vertical teaser") becomes a rendered MP4 through a **director** that interviews you, decides
-**who produces** the film from its roster of specialist skills, and ships it with frame-level QA.
+`motion` is an **AI-operated multiformat creative studio** — video, carousels, stories, feed posts
+and campaign art. Any request ("make a promo for my product", "turn this article into a carousel")
+becomes rendered output through a **director** that interviews you, decides **who produces** the
+piece from its roster of specialist skills, and ships it with QA.
 
-Not a generic video generator. Every frame is written in code (HTML/Remotion/canvas/render engines),
-with scripted music, beat-locked timing and optional narration — deterministic, editable, re-renderable forever.
+Not a generic generator. Every frame is written in code (HTML/CSS/Remotion/canvas/render engines),
+deterministic, editable and re-renderable forever — the same cinematic rigor applied to every format.
 
 ### How it works
 
@@ -196,7 +254,44 @@ with scripted music, beat-locked timing and optional narration — deterministic
 
 The studio learns: a repeated mistake becomes a rule in `CLAUDE.md` — the next film inherits the fix.
 
+### Multiformat studio (v2)
+
+Beyond video, the studio produces **carousels, stories, feed posts and campaign art** —
+same departments, independent critic, repair policy:
+
+```
+"Turn this launch into carousel + stories + post"
+        │
+        ▼
+🚪 studio-director — dispatches the format (front door of the studio)
+        ├─ video / motion          ──► motion-director (v1 pipeline, untouched)
+        ├─ slide carousel          ──► carousel-studio (HTML/CSS → PNG 2160×2700)
+        ├─ stories (static/anim.)  ──► story-studio (safe zones 1080×1920; animated via Remotion)
+        └─ feed post / ad art      ──► feed-studio (single piece or variations)
+
+        Shared foundation ── creative-core/
+        ├─ render_static.mjs     Playwright + Chromium (deviceScaleFactor 2, never upscale)
+        ├─ validate_static.py    dimensions, overflow, native scale
+        ├─ zip_export.py         packaged delivery (editable source included)
+        ├─ build_gallery.py      persistent gallery: slider, side-by-side compare, download
+        └─ brands/<slug>/        PROFILE.md + tokens.json + approved/ (visual memory)
+```
+
+Static-track rules: platform sizes live in `creative-core/presets.json` (configurable, never
+hardcoded) · visual memory per brand (consult `approved/` before creating) ·
+recomposition ≠ crop · editability only when the HTML source ships with the export ·
+integrations enter only with a record in `creative-core/INTEGRATIONS.md`.
+
 ### The roster (installed skills)
+
+**🚪 Multiformat routing (v2)**
+
+| Skill | Source | What it does |
+|---|---|---|
+| `studio-director` | *this repo (original)* | Front door: identifies the deliverable format and dispatches to the right studio |
+| `carousel-studio` | *this repo (original)* | Code-based carousels: HTML/CSS → hi-res PNG, versioning, captions, ZIP, gallery |
+| `story-studio` | *this repo (original)* | Static and animated stories with safe zones and sequences |
+| `feed-studio` | *this repo (original)* | Feed posts, cards, typographic posts, infographics, campaign art |
 
 **🎥 Video production**
 
@@ -243,9 +338,14 @@ The studio learns: a repeated mistake becomes a rule in `CLAUDE.md` — the next
 "I want a video of my product"                    # opens the briefing
 "Make a 30s vertical teaser with pt-br narration"
 "I need a promo in Swiss motion graphics style"
+"Turn this article into a 7-slide carousel"       # carousel-studio
+"Create 5 stories for the product launch"         # story-studio
+"Create 3 post variations in the brand identity"  # feed-studio
+"Launch video + adapt it into stories and a carousel"  # multiformat campaign
 ```
 
-No command to memorize: `motion-director` triggers whenever you ask for a video or motion design.
+No command to memorize: `studio-director` triggers whenever you ask for any deliverable —
+video/motion routes to `motion-director`; carousels, stories and posts follow the static track.
 Already know the style or tool? Name it — routing skips the decision.
 (You can still invoke skills directly: `/brag`, `/motion-director`, `use hyperframes…`.)
 
@@ -268,13 +368,25 @@ motion/
 ├── CLAUDE.md                              # 📕 operating manual: 10 rules, creative restrictions,
 │                                          #   repair policy, multi-format delivery, studio memory
 ├── README.md
+├── pipeline.md                            # handoff contracts: audiovisual track + static track
 ├── .agents/skills/                        # skill source of truth (Agent Skills / skills.sh format)
 ├── .claude/skills/                        # symlinks → Claude Code discovery
 ├── .opencode/skills/                      # symlinks → native OpenCode discovery
 │
+├── creative-core/                         # ⚙️ shared foundation (agent-agnostic)
+│   ├── presets.json                       #   per-platform dimensions (configurable)
+│   ├── renderers/render_static.mjs        #   HTML/CSS → PNG via Playwright + Chromium
+│   ├── quality/validate_static.py         #   dimensions, overflow, native scale
+│   ├── exporters/zip_export.py            #   packaged delivery
+│   ├── gallery/                           #   persistent gallery (index.html + registry)
+│   ├── brands/<slug>/                     #   brands: PROFILE + tokens + approved/ (memory)
+│   ├── INTEGRATIONS.md                    #   integration catalog (nothing enters unregistered)
+│   └── COMPATIBILITY.md                   #   honest per-agent status
+│
+├── projects/<piece>/                      # static productions (brief, style, slides/, out/)
 ├── public/{logos,screenshots,fonts,audio} # approved assets (real ones only, never faked)
 ├── references/                            # visual references (films, stills)
-├── src/{compositions,components,animation}# renderer source
+├── src/{compositions,components,animation}# audiovisual renderer source
 ├── reviews/{frames,contact-sheets,findings.md} # the Critic's workspace
 ├── out/{previews,final}                   # render output
 ├── BRIEF.md · STYLE.md · STORYBOARD.md    # pipeline artifacts (per production)
@@ -289,4 +401,5 @@ The studio is a curation — all domain expertise belongs to the skill authors:
 **Vincent Wei** (video-shotcraft) · **latent-spaces** (brag) · **Cathryn Lavery** (diagram-design) ·
 **Ryan** (anatomy) · **nextlevelbuilder** (ui-ux-pro-max) · **Richard @richardrx** via heliocosta-dev (RCD) ·
 **Matt Pocock** (grill-me) · **Impeccable**.
-`motion-director` (the glue that orchestrates all of it) is this repo's only original piece.
+The v2 multiformat layer (`studio-director`, `carousel-studio`, `story-studio`, `feed-studio`,
+`creative-core`) is original to this repo, alongside `motion-director`.
