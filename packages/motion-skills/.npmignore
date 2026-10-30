@@ -1,0 +1,22 @@
+# Dev & VCS
+.git/
+.github/
+**/node_modules/**
+
+# Media files
+**/*.mp3
+**/*.wav
+**/*.mp4
+**/*.mov
+**/*.pdf
+**/*.zip
+
+# Precompiled platform binaries
+**/bin/linux*
+**/bin/darwin*
+**/bin/win*
+**/scripts/bin/**
+
+# Heavy demos / workbench build caches
+**/workbench/dist/**
+**/workbench/node_modules/**

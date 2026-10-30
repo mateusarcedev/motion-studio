@@ -45,11 +45,29 @@ if (!input || !output) {
 
 // ---- resolve chromium (cache do playwright, env, ou padrões do sistema) ----
 async function resolveChrome() {
-  const candidates = [
-    process.env.CHROME_PATH,
-    `${process.env.HOME}/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome`,
-  ].filter(Boolean);
-  for (const c of candidates) { try { await stat(c); return c; } catch {} }
+  if (process.env.CHROME_PATH) {
+    try { await stat(process.env.CHROME_PATH); return process.env.CHROME_PATH; } catch {}
+  }
+  try {
+    const pw = await import("playwright-core");
+    const execPath = pw.chromium.executablePath();
+    if (execPath) {
+      try { await stat(execPath); return execPath; } catch {}
+    }
+  } catch {}
+  const cacheBase = `${process.env.HOME}/.cache/ms-playwright`;
+  try {
+    const entries = await (await import("node:fs/promises")).readdir(cacheBase);
+    for (const ent of entries) {
+      if (ent.startsWith("chromium-")) {
+        const candidate = path.join(cacheBase, ent, "chrome-linux64", "chrome");
+        try { await stat(candidate); return candidate; } catch {}
+      }
+    }
+  } catch {}
+  for (const sys of ["/usr/bin/google-chrome", "/usr/bin/chromium-browser", "/usr/bin/chromium"]) {
+    try { await stat(sys); return sys; } catch {}
+  }
   return null;
 }
 

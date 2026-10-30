@@ -9,7 +9,7 @@
  * Writes <outdir>/report.json and report.md. Exit code 1 if any check fails.
  */
 import { chromium } from "playwright-core"
-import { mkdir, writeFile } from "node:fs/promises"
+import { mkdir, writeFile, stat } from "node:fs/promises"
 import path from "node:path"
 
 export const VIEWPORTS = [
@@ -28,11 +28,43 @@ if (!url || !outdir) {
   console.error("usage: qa_viewports.mjs <url> <outdir> [--wait=ms] [--canvas=selector]")
   process.exit(2)
 }
+const targetUrl = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")
+  ? url
+  : `file://${path.resolve(url)}`
+
 const waitMs = Number(opt.wait ?? 4000)
 const canvasSel = opt.canvas ?? "canvas"
 // --ignore=substr1,substr2 : URLs of host-only resources (e.g. _vercel/insights) not counted as failures
 const ignore = (opt.ignore ?? "").split(",").filter(Boolean)
 const ignored = (u) => ignore.some((i) => u.includes(i))
+
+async function resolveChrome() {
+  if (process.env.CHROME_PATH) {
+    try { await stat(process.env.CHROME_PATH); return process.env.CHROME_PATH; } catch {}
+  }
+  try {
+    const pw = await import("playwright-core");
+    const ep = pw.chromium.executablePath();
+    if (ep) {
+      try { await stat(ep); return ep; } catch {}
+    }
+  } catch {}
+  const cacheBase = `${process.env.HOME}/.cache/ms-playwright`;
+  try {
+    const { readdir } = await import("node:fs/promises");
+    const entries = await readdir(cacheBase);
+    for (const ent of entries) {
+      if (ent.startsWith("chromium-")) {
+        const candidate = path.join(cacheBase, ent, "chrome-linux64", "chrome");
+        try { await stat(candidate); return candidate; } catch {}
+      }
+    }
+  } catch {}
+  for (const sys of ["/usr/bin/google-chrome", "/usr/bin/chromium-browser", "/usr/bin/chromium"]) {
+    try { await stat(sys); return sys; } catch {}
+  }
+  return undefined;
+}
 
 async function checkPage(page) {
   return page.evaluate(async (canvasSel) => {
@@ -68,7 +100,11 @@ async function checkPage(page) {
   }, canvasSel)
 }
 
-const browser = await chromium.launch({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] })
+const executablePath = await resolveChrome()
+const browser = await chromium.launch({
+  executablePath,
+  args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
+})
 await mkdir(outdir, { recursive: true })
 const results = []
 
@@ -83,7 +119,7 @@ for (const vp of VIEWPORTS) {
   page.on("pageerror", (e) => errors.push("pageerror: " + e.message))
   page.on("response", (r) => { if (r.status() >= 400 && !ignored(r.url())) failed.push(`${r.status()} ${r.url()}`) })
   page.on("requestfailed", (r) => { if (!ignored(r.url())) failed.push(`FAILED ${r.url()}`) })
-  await page.goto(url, { waitUntil: "load" })
+  await page.goto(targetUrl, { waitUntil: "load" })
   await page.waitForTimeout(waitMs)
   // scroll through so scroll-triggered reveals fire before full-page capture
   await page.evaluate(async () => {

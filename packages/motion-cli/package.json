@@ -1,0 +1,28 @@
+{
+  "name": "motion-cli",
+  "version": "1.0.0-rc.1",
+  "description": "CLI unificada de execução e gerenciamento do MOTION Studio",
+  "type": "module",
+  "bin": {
+    "motion": "./bin/motion.mjs"
+  },
+  "files": [
+    "bin/**/*",
+    "lib/**/*",
+    "README.md"
+  ],
+  "dependencies": {
+    "motion-core": "1.0.0-rc.1",
+    "motion-studio-skills": "1.0.0-rc.1",
+    "playwright-core": "^1.64.1"
+  },
+  "keywords": [
+    "motion",
+    "cli",
+    "creative-studio",
+    "multiformat",
+    "deterministic-video"
+  ],
+  "author": "MOTION Studio",
+  "license": "Apache-2.0"
+}

@@ -13,8 +13,16 @@ training/
 # local test harness artifacts
 projects/*/web/test-app/vite.log
 projects/*/web/test-app/vite.pid
+projects/*/web/test-app/dist/
+projects/*/web/dist/
 
 # regenerable render intermediates
 projects/*/frames/
 projects/*/frames-debug/
 projects/*/frames-full/
+
+# Test artifacts
+tests/tmp/
+
+# Distribution packages
+dist/packages/*.tgz

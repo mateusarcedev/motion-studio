@@ -1,0 +1,23 @@
+{
+  "name": "motion-studio-skills",
+  "version": "1.0.0-rc.1",
+  "description": "Catálogo e instalador de habilidades de agentes para o MOTION Studio",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./skills/*": "./skills/*"
+  },
+  "keywords": [
+    "motion",
+    "agent-skills",
+    "motion-director",
+    "studio-director",
+    "web-director",
+    "claude",
+    "opencode",
+    "antigravity"
+  ],
+  "author": "MOTION Studio",
+  "license": "Apache-2.0"
+}

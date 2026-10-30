@@ -2,6 +2,45 @@
   "$schema": "registro da galeria persistente — cada peça aprovada entra aqui",
   "items": [
     {
+      "id": "aurora-landing",
+      "title": "Aurora Watch Landing Page",
+      "format": "web landing page (responsive)",
+      "brand": "aurora",
+      "date": "2026-10-30",
+      "status": "draft",
+      "brief": "../../projects/aurora-landing/BRIEF.md",
+      "source": "../../projects/aurora-landing/web/",
+      "caption": "Landing page cinematografica com hero 3D interativo (R3F), specs, story, CTA.",
+      "slides": [
+        {
+          "n": "hero",
+          "thumb": "../../projects/aurora-landing/web/public/images/hero-poster.webp"
+        },
+        {
+          "n": "specs",
+          "thumb": "../../projects/aurora-landing/web/public/images/specs.webp"
+        },
+        {
+          "n": "story",
+          "thumb": "../../projects/aurora-landing/web/public/images/story.webp"
+        },
+        {
+          "n": "cta",
+          "thumb": "../../projects/aurora-landing/web/public/images/cta.webp"
+        }
+      ],
+      "files": [
+        {
+          "name": "build",
+          "path": "../../projects/aurora-landing/web/dist/"
+        },
+        {
+          "name": "source",
+          "path": "../../projects/aurora-landing/web/"
+        }
+      ]
+    },
+    {
       "id": "example-3d-product",
       "title": "Aurora Watch — 3D Product (Procedural)",
       "format": "3D product → web hero + video (16:9/9:16/1:1)",

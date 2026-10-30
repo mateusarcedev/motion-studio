@@ -1,0 +1,146 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8">
+<title>MOTION — Galeria de Peças</title>
+<style>
+:root { --bg:#0f1014; --panel:#17181d; --ink:#f2f2ee; --muted:#9a9aa4; --acc:#d5a94e; }
+body { background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,sans-serif; margin:0 auto; max-width:1200px; padding:24px; }
+header.top h1 { font-size:1.4rem; } header.top p { color:var(--muted); }
+.card { background:var(--panel); border-radius:14px; padding:18px; margin:22px 0; }
+.card h2 { margin:0; font-size:1.1rem; } .meta { color:var(--muted); }
+.status { font-weight:700; } .status.approved { color:#7bd88f; } .status.draft { color:var(--acc); }
+.tag { border:1px solid #33343c; border-radius:999px; padding:1px 10px; font-size:.75rem; margin-right:6px; color:var(--muted); display:inline-block; }
+.strip { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; padding:10px 0; }
+.strip figure { scroll-snap-align:start; margin:0; flex:0 0 auto; width:270px; }
+.strip img { width:100%; border-radius:8px; display:block; background:#000; }
+figcaption { color:var(--muted); font-size:.8rem; text-align:center; padding:4px 0; }
+.caption { color:var(--muted); } .files { list-style:none; padding:0; }
+.files a { color:var(--acc); text-decoration:none; }
+.compare { position:fixed; inset:auto 0 0 0; background:var(--panel); border-top:1px solid #33343c; padding:12px; display:none; gap:16px; align-items:center; }
+.compare.on { display:flex; }
+.compare select { background:#000; color:var(--ink); border:1px solid #33343c; border-radius:8px; padding:6px; max-width:260px; }
+#cmp { display:flex; gap:10px; overflow-x:auto; }
+#cmp img { height:240px; border-radius:8px; }
+label { color:var(--muted); font-size:.8rem; }
+.empty { color:var(--muted); }
+</style>
+<header class="top"><h1>🎬 Galeria MOTION</h1><p>9 peças registradas · comparação e download</p></header>
+<main>
+<article class="card" id="p0" data-i="0">
+  <header><h2>Aurora Watch — 3D Product (Procedural)</h2>
+    <div class="meta">motion · 2026-10-29 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-3d-product/reviews/contact-sheet.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure><figure><img loading="lazy" src="../../projects/example-3d-product/frames/0000.png" alt="Slide 2"><figcaption>Slide 2</figcaption></figure><figure><img loading="lazy" src="../../projects/example-3d-product/frames/0009.png" alt="Slide 3"><figcaption>Slide 3</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> Produto 3D procedural: hero web interativo + vídeo multi-formato</p>
+  <ul class="files"><li><a href="../../projects/example-3d-product/entrega-v1.zip" download>⬇ entrega-v1.zip</a></li><li><a href="../../projects/example-3d-product/out/test-3d.mp4" download>⬇ 3d-test.mp4</a></li></ul>
+</article>
+<article class="card" id="p1" data-i="1">
+  <header><h2>MOTION AI Creative Studio — Landing Page</h2>
+    <div class="meta">motion · 2026-10-29 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/motion-landing/out/landing-desktop-fold.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure><figure><img loading="lazy" src="../../projects/motion-landing/out/landing-desktop.png" alt="Slide 2"><figcaption>Slide 2</figcaption></figure><figure><img loading="lazy" src="../../projects/motion-landing/out/landing-mobile.png" alt="Slide 3"><figcaption>Slide 3</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> Landing page do próprio estúdio MOTION, renderizada pela própria infraestrutura.</p>
+  <ul class="files"><li><a href="../../projects/motion-landing/entrega-v1.zip" download>⬇ entrega-v1.zip</a></li></ul>
+</article>
+<article class="card" id="p2" data-i="2">
+  <header><h2>Pequenos detalhes, momentos grandes</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-28 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"><span class="tag">carousel</span><span class="tag">mascote-brand</span><span class="tag">validation-run</span></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/carousel-nova-identidade/out/01.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure><figure><img loading="lazy" src="../../projects/carousel-nova-identidade/out/02.png" alt="Slide 2"><figcaption>Slide 2</figcaption></figure><figure><img loading="lazy" src="../../projects/carousel-nova-identidade/out/03.png" alt="Slide 3"><figcaption>Slide 3</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> <a href="../../projects/carousel-nova-identidade/caption.md">../../projects/carousel-nova-identidade/caption.md</a><br><em style="white-space:pre-line"># Legenda
+
+Pequenos detalhes, momentos grandes 🎈
+
+Na Mini Festa da Rose, cada celebração é pensada à mão: decoração, docinhos, aquele cuidado que só a família entende. Você sonha, a Rose planeja, o dia acontece.
+
+✨ Conta o sonho
+🎨 Planeja com a Rose
+🎉 Acontece
+
+📲 Agenda de novembro aberta — chama no WhatsApp!
+
+#miniFestaDaRose #festainfantil #decoracao #pequenosdetalhes</em></p>
+  <ul class="files"><li><a href="../../projects/carousel-nova-identidade/entrega-v1.zip" download>⬇ entrega-v1.zip</a></li></ul>
+</article>
+<article class="card" id="p3" data-i="3">
+  <header><h2>Exemplo: carrossel 7 slides</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-28 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-carousel-7/out/01.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure><figure><img loading="lazy" src="../../projects/example-carousel-7/out/02.png" alt="Slide 2"><figcaption>Slide 2</figcaption></figure><figure><img loading="lazy" src="../../projects/example-carousel-7/out/03.png" alt="Slide 3"><figcaption>Slide 3</figcaption></figure><figure><img loading="lazy" src="../../projects/example-carousel-7/out/04.png" alt="Slide 4"><figcaption>Slide 4</figcaption></figure><figure><img loading="lazy" src="../../projects/example-carousel-7/out/05.png" alt="Slide 5"><figcaption>Slide 5</figcaption></figure><figure><img loading="lazy" src="../../projects/example-carousel-7/out/06.png" alt="Slide 6"><figcaption>Slide 6</figcaption></figure><figure><img loading="lazy" src="../../projects/example-carousel-7/out/07.png" alt="Slide 7"><figcaption>Slide 7</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> <a href="../../projects/example-carousel-7/caption.md">../../projects/example-carousel-7/caption.md</a><br><em style="white-space:pre-line"># Legenda
+
+Sua festa, do jeitinho que você sonhou 🎈
+
+Conta o sonho → planeja com a Rose → e no grande dia, só viver. Cada peça feita à mão, cada detalhe aprovado por você.
+
+📲 Agenda de novembro aberta — chama no WhatsApp!
+
+#miniFestaDaRose #festainfantil #decoracaodefestas #pequenosdetalhes</em></p>
+  <ul class="files"><li><a href="../../projects/example-carousel-7/entrega-v1.zip" download>⬇ entrega-v1.zip</a></li></ul>
+</article>
+<article class="card" id="p4" data-i="4">
+  <header><h2>Exemplo: post 4 proporções (reflow)</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-28 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-post-reflow/out/reconf-16x9.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure><figure><img loading="lazy" src="../../projects/example-post-reflow/out/reconf-1x1.png" alt="Slide 2"><figcaption>Slide 2</figcaption></figure><figure><img loading="lazy" src="../../projects/example-post-reflow/out/reconf-9x16.png" alt="Slide 3"><figcaption>Slide 3</figcaption></figure><figure><img loading="lazy" src="../../projects/example-post-reflow/out/reconf-4x5.png" alt="Slide 4"><figcaption>Slide 4</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> ../../projects/example-post-reflow/caption.md</p>
+  <ul class="files"><li>sem arquivos</li></ul>
+</article>
+<article class="card" id="p5" data-i="5">
+  <header><h2>Exemplo: story estático</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-28 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-story-static/out/01.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> ../../projects/example-story-static/caption.md</p>
+  <ul class="files"><li>sem arquivos</li></ul>
+</article>
+<article class="card" id="p6" data-i="6">
+  <header><h2>Exemplo: teaser frame-driven (5s 16:9 + áudio)</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-28 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-teaser/reviews/contact-sheet.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> <a href="../../projects/example-teaser/caption.md">../../projects/example-teaser/caption.md</a><br><em style="white-space:pre-line">Pequenos detalhes, grandes momentos 🎈 Reserve sua festa em novembro — WhatsApp.</em></p>
+  <ul class="files"><li><a href="../../projects/example-teaser/out/teaser-v1.mp4" download>⬇ teaser-v1.mp4</a></li></ul>
+</article>
+<article class="card" id="p7" data-i="7">
+  <header><h2>Exemplo: story animado frame-driven (4s 9:16)</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-28 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-story-animated/reviews/contact-sheet.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> <a href="../../projects/example-story-animated/caption.md">../../projects/example-story-animated/caption.md</a><br><em style="white-space:pre-line">Quando é da Rose, o dia fica leve: decoração à mão, docinhos e tudo aprovado por você.
+Reserve sua data no WhatsApp 💬</em></p>
+  <ul class="files"><li><a href="../../projects/example-story-animated/out/story-v1.mp4" download>⬇ story-v1.mp4</a></li></ul>
+</article>
+<article class="card" id="p8" data-i="8">
+  <header><h2>Short Original - Pequenos detalhes (20s, 9:16)</h2>
+    <div class="meta">mini-festa-da-rose · 2026-10-29 ·
+      <span class="status draft">draft</span></div>
+    <div class="tags"></div></header>
+  <div class="strip"><figure><img loading="lazy" src="../../projects/example-short-original/reviews/contact-sheet.png" alt="Slide 1"><figcaption>Slide 1</figcaption></figure></div>
+  <p class="caption"><strong>Legenda:</strong> ../../projects/example-short-original/caption.srt</p>
+  <ul class="files"><li><a href="../../projects/example-short-original/out/short-v1.mp4" download>⬇ short-v1.mp4</a></li><li><a href="../../projects/example-short-original/entrega-v1.zip" download>⬇ entrega-v1.zip</a></li></ul>
+</article></main>
+<div class="compare" id="bar">
+  <strong>⚖️ Comparar:</strong>
+  <label>Peça A <select id="selA" onchange="draw()"></select></label>
+  <label>Peça B <select id="selB" onchange="draw()"></select></label>
+  <div id="cmp"></div>
+</div>
+<script>
+const D = [{"i": 0, "title": "Aurora Watch — 3D Product (Procedural)", "slides": ["../../projects/example-3d-product/reviews/contact-sheet.png", "../../projects/example-3d-product/frames/0000.png", "../../projects/example-3d-product/frames/0009.png"]}, {"i": 1, "title": "MOTION AI Creative Studio — Landing Page", "slides": ["../../projects/motion-landing/out/landing-desktop-fold.png", "../../projects/motion-landing/out/landing-desktop.png", "../../projects/motion-landing/out/landing-mobile.png"]}, {"i": 2, "title": "Pequenos detalhes, momentos grandes", "slides": ["../../projects/carousel-nova-identidade/out/01.png", "../../projects/carousel-nova-identidade/out/02.png", "../../projects/carousel-nova-identidade/out/03.png"]}, {"i": 3, "title": "Exemplo: carrossel 7 slides", "slides": ["../../projects/example-carousel-7/out/01.png", "../../projects/example-carousel-7/out/02.png", "../../projects/example-carousel-7/out/03.png", "../../projects/example-carousel-7/out/04.png", "../../projects/example-carousel-7/out/05.png", "../../projects/example-carousel-7/out/06.png", "../../projects/example-carousel-7/out/07.png"]}, {"i": 4, "title": "Exemplo: post 4 proporções (reflow)", "slides": ["../../projects/example-post-reflow/out/reconf-16x9.png", "../../projects/example-post-reflow/out/reconf-1x1.png", "../../projects/example-post-reflow/out/reconf-9x16.png", "../../projects/example-post-reflow/out/reconf-4x5.png"]}, {"i": 5, "title": "Exemplo: story estático", "slides": ["../../projects/example-story-static/out/01.png"]}, {"i": 6, "title": "Exemplo: teaser frame-driven (5s 16:9 + áudio)", "slides": ["../../projects/example-teaser/reviews/contact-sheet.png"]}, {"i": 7, "title": "Exemplo: story animado frame-driven (4s 9:16)", "slides": ["../../projects/example-story-animated/reviews/contact-sheet.png"]}, {"i": 8, "title": "Short Original - Pequenos detalhes (20s, 9:16)", "slides": ["../../projects/example-short-original/reviews/contact-sheet.png"]}];
+const bar = document.getElementById('bar'), cmp = document.getElementById('cmp');
+const opts = D.map(p => `<option value="${p.i}">${p.title}</option>`).join('');
+selA.innerHTML = opts; selB.innerHTML = opts;
+if (D.length > 1) { selA.value = '0'; selB.value = '1'; bar.classList.add('on'); draw(); }
+function draw() {
+  const a = D[+selA.value], b = D[+selB.value];
+  cmp.innerHTML = [...(a?.slides||[]).map(s=>['A',s]), ...(b?.slides||[]).map(s=>['B',s])]
+    .map(([g,s]) => `<figure style="margin:0"><img src="${s}"><figcaption>${g} · ${s.split('/').pop()}</figcaption></figure>`).join('');
+}
+</script></html>

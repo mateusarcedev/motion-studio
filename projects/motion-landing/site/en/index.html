@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MOTION — Open-source AI creative studio</title>
-<meta name="description" content="Open-source multiformat creative studio operated by agents: video, carousels, stories, posts and shorts as code — deterministic, editable, auditable.">
+<title>MOTION — Open-source agent-powered creative development framework</title>
+<meta name="description" content="Open-source creative development framework: build cinematic websites, 3D experiences, motion graphics, videos, and social content from code.">
 <link rel="canonical" href="https://motion.mateusarce.dev/en/">
 <link rel="alternate" hreflang="pt-BR" href="https://motion.mateusarce.dev/">
 <link rel="alternate" hreflang="en" href="https://motion.mateusarce.dev/en/">
 <link rel="alternate" hreflang="x-default" href="https://motion.mateusarce.dev/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MOTION">
-<meta property="og:title" content="MOTION — Open-source AI creative studio">
-<meta property="og:description" content="Open-source multiformat creative studio operated by agents: video, carousels, stories, posts and shorts as code — deterministic, editable, auditable.">
+<meta property="og:title" content="MOTION — Open-source agent-powered creative development framework">
+<meta property="og:description" content="Open-source creative development framework: build cinematic websites, 3D experiences, motion graphics, videos, and social content from code.">
 <meta property="og:url" content="https://motion.mateusarce.dev/en/">
 <meta property="og:image" content="https://motion.mateusarce.dev/assets/og-en.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MOTION — Open-source AI creative studio">
-<meta name="twitter:description" content="Open-source multiformat creative studio operated by agents: video, carousels, stories, posts and shorts as code — deterministic, editable, auditable.">
+<meta name="twitter:title" content="MOTION — Open-source agent-powered creative development framework">
+<meta name="twitter:description" content="Open-source creative development framework: build cinematic websites, 3D experiences, motion graphics, videos, and social content from code.">
 <meta name="twitter:image" content="https://motion.mateusarce.dev/assets/og-en.png">
 <meta name="theme-color" content="#0e0e0e">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -30,7 +30,15 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/fonts/Geist.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/GeistMono.woff" as="font" type="font/woff" crossorigin>
-<script>document.documentElement.classList.add("js")</script>
+<script>
+(function(){
+  try{
+    var t=new URLSearchParams(location.search).get("theme")||localStorage.getItem("motion-theme");
+    if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}
+  }catch(e){}
+  document.documentElement.classList.add("js");
+})();
+</script>
 <style>
 @font-face{font-family:"Geist";src:url("/fonts/Geist.woff") format("woff");font-weight:100 900;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("/fonts/GeistMono.woff") format("woff");font-weight:100 900;font-display:swap}
@@ -83,13 +91,25 @@ p{color:var(--fg-dim)}
 .tools{display:flex;align-items:center;gap:14px}
 .tnav{display:flex;gap:22px;font-size:12px;color:var(--fg-dim)}
 .tnav a:hover{color:var(--fg)}
-.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;height:28px;font-size:12px;letter-spacing:.04em}
-.seg button{padding:0 9px;color:var(--fg-dim);transition:color .15s,background .15s}
-.seg button:hover{color:var(--fg)}
-.seg a{display:flex;align-items:center;padding:0 9px;color:var(--fg-dim);transition:color .15s,background .15s}
-.seg a:hover{color:var(--fg)}
-.seg a[aria-current="true"]{color:var(--bg);background:var(--mint);font-weight:600}
-.seg button[aria-pressed="true"]{color:var(--bg);background:var(--mint);font-weight:600}
+.header-ctrls{display:flex;align-items:center;gap:8px}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--line);color:var(--fg-dim);cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .1s;position:relative}
+.icon-btn:hover{border-color:var(--mint-edge);color:var(--fg);background:var(--surface-2)}
+.icon-btn:active{transform:scale(.95)}
+.icon-btn svg{width:18px;height:18px;stroke-width:2;display:block}
+[data-theme="dark"] .theme-toggle .icon-moon{display:none}
+[data-theme="dark"] .theme-toggle .icon-sun{display:block;color:var(--mint)}
+[data-theme="light"] .theme-toggle .icon-sun{display:none}
+[data-theme="light"] .theme-toggle .icon-moon{display:block;color:var(--fg)}
+
+.lang-dropdown{position:relative}
+.lang-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:190px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 14px 34px rgba(0,0,0,.36);padding:6px;display:flex;flex-direction:column;gap:3px;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+[data-theme="light"] .lang-menu{box-shadow:0 12px 28px rgba(0,0,0,.10)}
+.lang-menu[hidden]{display:none}
+.lang-option{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:var(--radius-sm);font:500 13px/1.2 var(--sans);color:var(--fg-dim);text-decoration:none;transition:background .15s,color .15s;min-height:36px}
+.lang-option:hover,.lang-option:focus-visible{background:var(--surface-2);color:var(--fg)}
+.lang-option[aria-current="true"]{color:var(--mint);font-weight:600;background:var(--mint-dim)}
+.lang-option .lang-check{opacity:0;color:var(--mint);transition:opacity .15s}
+.lang-option[aria-current="true"] .lang-check{opacity:1}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:var(--radius-sm);font:600 13px/1 var(--mono);letter-spacing:.01em;border:1px solid var(--line);color:var(--fg-dim);transition:filter .15s,border-color .15s,color .15s,transform .15s}
@@ -143,14 +163,27 @@ p{color:var(--fg-dim)}
 .tl-head i{position:absolute;left:0;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--pink)}
 .tl-head i::before{content:"";position:absolute;top:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--pink);border-bottom:0}
 @media (max-width:620px){.nle-main{grid-template-columns:110px 1fr}.tc{font-size:18px}.scenes li:nth-child(n+5){display:none}}
-.cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.cred{gap:8px}
-.cred .who{font:600 15px/1.2 var(--sans);letter-spacing:-.01em}
-.cred .repo{font-size:12px;color:var(--mint);word-break:break-all}
-.cred .repo:hover{text-decoration:underline}
-.cred .lic{font-size:12px;color:var(--fg-faint)}
-.cred .chips{margin-top:2px}
-.cred .chip{font-size:12px;padding:4px 8px}
+.cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cred-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;gap:14px;transition:border-color .15s}
+.cred-card:hover{border-color:var(--mint-edge)}
+.cred-card.featured{border-color:var(--mint-edge);background:linear-gradient(180deg,var(--mint-dim),transparent 60%),var(--surface)}
+.cred-header{display:flex;align-items:center;gap:14px}
+.cred-avatar-wrap{position:relative;width:50px;height:50px;min-width:50px;border-radius:50%;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);display:flex;align-items:center;justify-content:center}
+.cred-avatar{width:100%;height:100%;object-fit:cover;display:block}
+.cred-fallback{display:none;width:100%;height:100%;align-items:center;justify-content:center;font:700 15px/1 var(--mono);color:var(--mint);background:var(--surface-2)}
+.cred-meta{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.cred-owner-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cred-who{font:600 15px/1.2 var(--sans);letter-spacing:-.01em;color:var(--fg)}
+.cred-type-badge{font:500 10px/1 var(--mono);padding:3px 6px;border-radius:4px;background:var(--bg-soft);color:var(--fg-dim);border:1px solid var(--line);text-transform:uppercase;letter-spacing:.04em}
+.cred-type-badge.native{background:rgba(16,185,129,.12);color:var(--mint);border-color:var(--mint-edge)}
+.cred-type-badge.engine{background:rgba(59,130,246,.12);color:#60a5fa;border-color:rgba(59,130,246,.3)}
+.cred-sub-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cred-repo{font-size:12px;color:var(--mint);word-break:break-all;text-decoration:none}
+.cred-repo:hover{text-decoration:underline}
+.cred-lic{font:500 11px/1 var(--mono);color:var(--fg-faint);background:var(--surface-2);padding:2px 6px;border-radius:3px}
+.cred-desc{font-size:13px;line-height:1.5;color:var(--fg-dim);margin:0}
+.cred-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.cred-chips .chip{font-size:11px;padding:3px 7px}
 @media (max-width:980px){.cred-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:620px){.cred-grid{grid-template-columns:1fr}}
 .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:var(--radius);margin-top:56px;background:var(--surface)}
@@ -200,7 +233,8 @@ p{color:var(--fg-dim)}
 
 /* cta */
 .cta .box{border:1px solid var(--mint-edge);border-radius:var(--radius-lg);padding:clamp(28px,5vw,56px);background:linear-gradient(180deg,var(--mint-dim),transparent 70%),var(--surface)}
-.cta h2{font-size:clamp(34px,5.4vw,64px);letter-spacing:-.04em;max-width:16ch;margin:0 0 16px}
+.cta h2{font-size:clamp(32px,5.2vw,60px);letter-spacing:-.04em;max-width:20ch;margin:0 0 18px;line-height:1.15}
+.cta-ln{display:inline-block}
 .cta .lead{margin-bottom:28px}
 
 footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--fg-faint);border-top:1px solid var(--line-soft)}
@@ -240,10 +274,10 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 /* touch targets >=44px on coarse pointers */
 @media (pointer:coarse){
   .btn,.btn.sm{height:44px}
-  .seg{height:auto}
-  .seg button,.seg a{min-width:44px;min-height:44px;justify-content:center}
+  .icon-btn{width:44px;height:44px}
+  .lang-option{min-height:44px;padding:12px 14px}
   .brand{min-height:44px}
-  .cred .repo,.chip[href],footer a{display:inline-flex;align-items:center;min-height:44px}
+  .cred-repo,.cred .repo,.chip[href],footer a{display:inline-flex;align-items:center;min-height:44px}
   footer a{padding:0 4px}
 }
 @media (max-width:980px){
@@ -270,21 +304,36 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 <div class="progress" id="progress" aria-hidden="true"></div>
 <header class="topbar">
   <div class="topbar-inner">
-    <a href="#top" class="brand" aria-label="MOTION"><span class="brand-dot"></span><strong>motion</strong><span class="sep">/</span><span class="dim">ai creative studio</span></a>
+    <a href="#top" class="brand" aria-label="MOTION"><span class="brand-dot"></span><strong>motion</strong><span class="sep">/</span><span class="dim">open-source creative framework</span></a>
     <div class="tools">
       <nav class="tnav" aria-label="Main">
+        <a href="#quickstart"><span lang="en">install</span></a>
         <a href="#formats"><span lang="en">formats</span></a>
         <a href="#pipeline">pipeline</a>
-        <a href="#work"><span lang="en">work</span></a>
+        <a href="#work"><span lang="en">examples</span></a>
         <a href="#stack">stack</a>
+        <a href="#credits"><span lang="en">ecosystem</span></a>
       </nav>
-      <div class="seg" role="group" aria-label="Theme">
-        <button type="button" data-set-theme="dark" aria-pressed="true">dark</button>
-        <button type="button" data-set-theme="light" aria-pressed="false">light</button>
-      </div>
-      <div class="seg" role="group" aria-label="Language">
-        <a href="/" hreflang="pt-BR" data-l="pt-BR">PT</a>
-        <a href="/en/" hreflang="en" data-l="en">EN</a>
+      <div class="header-ctrls">
+        <button type="button" class="icon-btn theme-toggle" id="themeToggle" aria-label="Switch to light theme" title="Switch to light theme">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button type="button" class="icon-btn lang-trigger" id="langTrigger" aria-label="Select language" title="Select language" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
+            <svg class="icon-globe" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          </button>
+          <div class="lang-menu" id="langMenu" role="menu" aria-label="Language options" hidden>
+            <a href="/" hreflang="pt-BR" class="lang-option" role="menuitem" data-lang="pt-BR" aria-current="false">
+              <span class="lang-label">Português (Brasil)</span>
+              <svg class="lang-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </a>
+            <a href="/en/" hreflang="en" class="lang-option" role="menuitem" data-lang="en" aria-current="false">
+              <span class="lang-label">English</span>
+              <svg class="lang-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </a>
+          </div>
+        </div>
       </div>
       <a href="https://github.com/mateusarcedev/motion-studio" class="btn primary sm" rel="noopener"><span lang="en">github ↗</span></a>
     </div>
@@ -296,18 +345,19 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 <section class="hero">
   <div class="hero-grid">
     <div>
-      <span class="tag"><span class="brand-dot"></span>open source · frame-driven</span>
+      <span class="tag"><span class="brand-dot"></span>open source · agent-powered framework</span>
       <h1>
         
-        <span lang="en" class="ln" style="--l:0"><i>Code that</i></span><span lang="en" class="ln" style="--l:1"><i>becomes <em>cinema.</em></i></span>
+        <span lang="en" class="ln" style="--l:0"><i>Open-source code</i></span><span lang="en" class="ln" style="--l:1"><i>that becomes <em>cinema.</em></i></span>
       </h1>
       <p class="lead">
         
-        <span lang="en">An open-source creative studio, operated by agents. Built to cover my own needs — video, carousels, stories, posts and shorts — on top of community skills. Every frame comes from code: reproducible, editable and auditable.</span>
+        <span lang="en">An <strong>open-source creative development framework</strong> and agent skills ecosystem. Build cinematic websites, 3D experiences, motion graphics, videos, and social content from code. Install locally, run with your preferred agent, and contribute back.</span>
       </p>
       <div class="actions">
         <a href="https://github.com/mateusarcedev/motion-studio" class="btn primary" rel="noopener"><span lang="en">view on github ↗</span></a>
-        <a href="#pipeline" class="btn"><span lang="en">how it works</span></a>
+        <a href="#quickstart" class="btn"><span lang="en">install</span></a>
+        <a href="#credits" class="btn"><span lang="en">explore skills</span></a>
       </div>
     </div>
     <div class="console nle rv" id="nle" role="group" aria-label="MOTION video editor">
@@ -343,8 +393,28 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
   </div>
 </section>
 
+<section id="quickstart">
+  <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title"><span lang="en">quick install</span></h2><span class="sec-rule"></span><span class="sec-count">CLI</span></div>
+  <div class="intro rv">
+    <h2><span lang="en">Install, run, study and adapt.</span></h2>
+    <p class="lead"><span lang="en">No subscriptions, pricing plans or commercial lock-in. Modular open-source npm packages to run inside your projects or with AI agents.</span></p>
+  </div>
+  <div class="card rv" style="font-family:var(--mono);padding:24px;background:var(--surface);border-radius:var(--radius);overflow-x:auto;border:1px solid var(--line);">
+    <div style="color:var(--mint);font-size:11px;margin-bottom:12px;padding:6px 10px;background:rgba(16,185,129,0.08);border:1px solid var(--mint-edge);border-radius:4px;display:inline-block;">
+      
+      <span lang="en">ℹ️ NPM packages in Release Candidate (v1.0.0-rc.1) — direct public installation available upon official registry publication.</span>
+    </div>
+    <div style="color:var(--fg-dim);font-size:12px;margin-bottom:8px;"># 1. Install open packages (publicly available upon npm release)</div>
+    <div style="color:var(--mint);font-size:14px;line-height:1.6;">npm install -D motion-cli motion-core motion-studio-skills</div>
+    <div style="color:var(--fg-dim);font-size:12px;margin:14px 0 8px;"># 2. Initialize studio with selective skill profile (core, web, motion, social, 3d, all)</div>
+    <div style="color:var(--mint);font-size:14px;line-height:1.6;">npx motion init --brand="MinhaMarca" --profile=core</div>
+    <div style="color:var(--fg-dim);font-size:12px;margin:14px 0 8px;"># 3. Environment diagnosis and real code-driven deliverable scaffolding</div>
+    <div style="color:var(--mint);font-size:14px;line-height:1.6;">npx motion doctor &amp;&amp; npx motion create carousel post-lancamento</div>
+  </div>
+</section>
+
 <section id="formats">
-  <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title"><span lang="en">formats</span></h2><span class="sec-rule"></span><span class="sec-count">06</span></div>
+  <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title"><span lang="en">formats</span></h2><span class="sec-rule"></span><span class="sec-count">06</span></div>
   <div class="intro rv">
     <h2><span lang="en">Five formats. One standard.</span></h2>
     <p class="lead"><span lang="en">Brief, direction, composition, render and an independent critic — the same process for every deliverable.</span></p>
@@ -384,7 +454,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="pipeline">
-  <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">pipeline</h2><span class="sec-rule"></span><span class="sec-count">08</span></div>
+  <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">pipeline</h2><span class="sec-rule"></span><span class="sec-count">08</span></div>
   <div class="intro rv">
     <h2><span lang="en">A pipeline that lets you audit it.</span></h2>
     <p class="lead"><span lang="en">No code before the storyboard. You approve the brief and the art direction. The critic is never the same context that made the piece.</span></p>
@@ -403,7 +473,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="work">
-  <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title"><span lang="en">work</span></h2><span class="sec-rule"></span><span class="sec-count">05</span></div>
+  <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title"><span lang="en">examples</span></h2><span class="sec-rule"></span><span class="sec-count">05</span></div>
   <div class="intro rv">
     <h2><span lang="en">Real renders, not mockups.</span></h2>
   </div>
@@ -414,11 +484,11 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
     <figure class="tile t-b rv"><img src="/assets/carousel-04.jpg" alt="Carousel slide 4"><figcaption><b><span lang="en">Same system, new rhythm</span></b><span>04 / 07</span></figcaption></figure>
     <figure class="tile t-c rv"><img src="/assets/post-4x5.jpg" alt="4:5 feed post"><figcaption><b>Feed 4:5</b><span><span lang="en">its own hierarchy</span></span></figcaption></figure>
   </div>
-  <p class="note"><span lang="en">Sample productions from the studio (Mini Festa da Rose), rendered by the pipeline itself.</span></p>
+  <p class="note"><span lang="en">Sample productions generated by MOTION's deterministic open-source pipeline.</span></p>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title"><span lang="en">principles</span></h2><span class="sec-rule"></span><span class="sec-count">03</span></div>
+  <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title"><span lang="en">principles</span></h2><span class="sec-rule"></span><span class="sec-count">03</span></div>
   <div class="grid3">
     <div class="card rv"><h3><span lang="en">Frame N never changes</span></h3><p><span lang="en">Everything is driven by frame number or deterministic time. No wall clock, no randomness: the film reproduces bit for bit.</span></p></div>
     <div class="card rv"><h3><span lang="en">No invented UI</span></h3><p><span lang="en">Only approved product assets. If an essential screen is missing, the studio asks for it — it never draws a fake.</span></p></div>
@@ -427,7 +497,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="stack">
-  <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">stack</h2><span class="sec-rule"></span><span class="sec-count">04</span></div>
+  <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title">stack</h2><span class="sec-rule"></span><span class="sec-count">04</span></div>
   <div class="intro rv">
     <h2><span lang="en">Only what's needed.</span></h2>
     <p class="lead"><span lang="en">Command-line engines, agent-agnostic. Each one runs without the others.</span></p>
@@ -441,36 +511,310 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="credits">
-  <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title"><span lang="en">credits</span></h2><span class="sec-rule"></span><span class="sec-count">12</span></div>
+  <div class="sec-head"><span class="sec-num">07</span><h2 class="sec-title"><span lang="en">open source ecosystem</span></h2><span class="sec-rule"></span><span class="sec-count">14</span></div>
   <div class="intro rv">
-    <h2><span lang="en">Built on the work of people who share.</span></h2>
-    <p class="lead"><span lang="en">MOTION combines my own skills with open community skills. Each author below owns what they made, with a link to the original repository.</span></p>
+    <h2><span lang="en">A living open-source library.</span></h2>
+    <p class="lead"><span lang="en">MOTION orchestrates native capabilities and open-source repositories from exceptional community creators. Each card below shows the owner avatar, GitHub repository, license, and transparent provenance of every integrated capability.</span></p>
   </div>
   <div class="cred-grid">
-    <div class="card cred featured rv"><span class="who">mateusarcedev</span><a class="repo" href="https://github.com/mateusarcedev/motion-studio" rel="noopener">github.com/mateusarcedev/motion-studio ↗</a><span class="lic">MOTION's own skills</span><div class="chips"><span class="chip">motion-director</span><span class="chip">studio-director</span><span class="chip">carousel-studio</span><span class="chip">story-studio</span><span class="chip">feed-studio</span><span class="chip">shorts-director</span><span class="chip">3d-scene-director</span></div></div>
-    <div class="card cred rv"><span class="who">Emil Kowalski</span><a class="repo" href="https://github.com/emilkowalski/skills" rel="noopener">github.com/emilkowalski/skills ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">animate</span><span class="chip">animation-performance</span><span class="chip">animation-vocabulary</span><span class="chip">apple-design</span><span class="chip">emil-design-eng</span><span class="chip">find-animation-opportunities</span><span class="chip">improve-animations</span><span class="chip">prototype</span><span class="chip">review-animations</span></div></div>
-    <div class="card cred rv"><span class="who">HeyGen</span><a class="repo" href="https://github.com/heygen-com/hyperframes" rel="noopener">github.com/heygen-com/hyperframes ↗</a><span class="lic">Apache-2.0</span><div class="chips"><span class="chip">hyperframes</span><span class="chip">hyperframes-cli</span><span class="chip">hyperframes-registry</span><span class="chip">media-use</span></div></div>
-    <div class="card cred rv"><span class="who">Remotion</span><a class="repo" href="https://github.com/remotion-dev/skills" rel="noopener">github.com/remotion-dev/skills ↗</a><div class="chips"><span class="chip">remotion-best-practices</span><span class="chip">remotion-create</span><span class="chip">remotion-render</span><span class="chip">remotion-studio</span><span class="chip">remotion-captions</span><span class="chip">remotion-docs</span><span class="chip">+6</span></div></div>
-    <div class="card cred rv"><span class="who">Matt Pocock</span><a class="repo" href="https://github.com/mattpocock/skills" rel="noopener">github.com/mattpocock/skills ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">tdd</span><span class="chip">triage</span><span class="chip">to-spec</span><span class="chip">implement</span><span class="chip">handoff</span><span class="chip">grill-me</span><span class="chip">+31</span></div></div>
-    <div class="card cred rv"><span class="who">lemomo-ai</span><a class="repo" href="https://github.com/lemomo-ai/lemo-opuscar" rel="noopener">github.com/lemomo-ai/lemo-opuscar ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">lemo-opuscar</span></div></div>
-    <div class="card cred rv"><span class="who">Vincentwei1021</span><a class="repo" href="https://github.com/Vincentwei1021/video-shotcraft" rel="noopener">github.com/Vincentwei1021/video-shotcraft ↗</a><span class="lic">Apache-2.0</span><div class="chips"><span class="chip">video-shotcraft</span></div></div>
-    <div class="card cred rv"><span class="who">cathrynlavery</span><a class="repo" href="https://github.com/cathrynlavery/diagram-design" rel="noopener">github.com/cathrynlavery/diagram-design ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">diagram-design</span></div></div>
-    <div class="card cred rv"><span class="who">wheresryan22</span><a class="repo" href="https://github.com/wheresryan22/anatomy" rel="noopener">github.com/wheresryan22/anatomy ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">anatomy</span></div></div>
-    <div class="card cred rv"><span class="who">latent-spaces</span><a class="repo" href="https://github.com/latent-spaces/brag" rel="noopener">github.com/latent-spaces/brag ↗</a><span class="lic">MIT</span><div class="chips"><span class="chip">brag</span></div></div>
-    <div class="card cred rv"><span class="who">heliocosta-dev</span><a class="repo" href="https://github.com/heliocosta-dev/revenue-centric-design" rel="noopener">github.com/heliocosta-dev/revenue-centric-design ↗</a><div class="chips"><span class="chip">revenue-centric-design</span></div></div>
-    <div class="card cred rv"><span class="who">render engines</span><span class="lic">Chromium · Node</span><div class="chips"><a class="chip" href="https://github.com/microsoft/playwright" rel="noopener">Playwright · Apache-2.0 ↗</a><a class="chip" href="https://ffmpeg.org" rel="noopener">FFmpeg ↗</a></div></div>
+    <article class="card cred-card featured rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/mateusarcedev.png?size=96" alt="Avatar de mateusarcedev" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">MA</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">mateusarcedev</span>
+            <span class="cred-type-badge native">Native MOTION Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/mateusarcedev/motion-studio" target="_blank" rel="noopener">github.com/mateusarcedev/motion-studio ↗</a>
+            <span class="cred-lic">Apache-2.0</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Studio directors, deterministic rendering engines, and multiformat creative orchestration.</p>
+      <div class="cred-chips"><span class="chip">motion-director</span><span class="chip">studio-director</span><span class="chip">web-director</span><span class="chip">carousel-studio</span><span class="chip">story-studio</span><span class="chip">feed-studio</span><span class="chip">shorts-director</span><span class="chip">3d-scene-director</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/emilkowalski.png?size=96" alt="Avatar de Emil Kowalski" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">EK</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Emil Kowalski</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/emilkowalski/skills" target="_blank" rel="noopener">github.com/emilkowalski/skills ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Design engineering, spring physics, easing curves, interruptible transitions, and motion vocabulary.</p>
+      <div class="cred-chips"><span class="chip">animate</span><span class="chip">animation-performance</span><span class="chip">animation-vocabulary</span><span class="chip">apple-design</span><span class="chip">emil-design-eng</span><span class="chip">find-animation-opportunities</span><span class="chip">improve-animations</span><span class="chip">prototype</span><span class="chip">review-animations</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/heygen-com.png?size=96" alt="Avatar de HeyGen" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">HG</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">HeyGen</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">github.com/heygen-com/hyperframes ↗</a>
+            <span class="cred-lic">Apache-2.0</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">HTML-to-video render engine, ~450 cinematic block catalog, and audio mixing pipeline.</p>
+      <div class="cred-chips"><span class="chip">hyperframes</span><span class="chip">hyperframes-cli</span><span class="chip">hyperframes-registry</span><span class="chip">media-use</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/remotion-dev.png?size=96" alt="Avatar de Remotion" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">RD</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Remotion</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/remotion-dev/skills" target="_blank" rel="noopener">github.com/remotion-dev/skills ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Official React programmatic video practices: timing, captions, render, and maps.</p>
+      <div class="cred-chips"><span class="chip">remotion-best-practices</span><span class="chip">remotion-captions</span><span class="chip">remotion-create</span><span class="chip">remotion-docs</span><span class="chip">remotion-interactivity</span><span class="chip">remotion-render</span><span class="chip">remotion-studio</span><span class="chip">+5</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/Vincentwei1021.png?size=96" alt="Avatar de Vincent Wei" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">VW</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Vincent Wei</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/Vincentwei1021/video-shotcraft" target="_blank" rel="noopener">github.com/Vincentwei1021/video-shotcraft ↗</a>
+            <span class="cred-lic">Apache-2.0</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">2.5D cinematic shot recipes, beat-synced cuts, and real product screen capture.</p>
+      <div class="cred-chips"><span class="chip">video-shotcraft</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/lemomo-ai.png?size=96" alt="Avatar de LemoLab" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">LM</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">LemoLab</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/lemomo-ai/lemo-opuscar" target="_blank" rel="noopener">github.com/lemomo-ai/lemo-opuscar ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">59 code-driven film styles (ukiyo-e, watercolor, data storytelling).</p>
+      <div class="cred-chips"><span class="chip">lemo-opuscar</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/nextlevelbuilder.png?size=96" alt="Avatar de NextLevelBuilder" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">NL</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">NextLevelBuilder</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank" rel="noopener">github.com/nextlevelbuilder/ui-ux-pro-max-skill ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">UI/UX design intelligence: 79 styles, 192 contrast palettes, and design tokens.</p>
+      <div class="cred-chips"><span class="chip">ui-ux-pro-max</span><span class="chip">brand</span><span class="chip">design</span><span class="chip">design-system</span><span class="chip">banner-design</span><span class="chip">slides</span><span class="chip">ui-styling</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/wheresryan22.png?size=96" alt="Avatar de Ryan" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">WR</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Ryan</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/wheresryan22/anatomy" target="_blank" rel="noopener">github.com/wheresryan22/anatomy ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Crafted isometric SVG/WebGL technical figures with physical shaders and calm motion.</p>
+      <div class="cred-chips"><span class="chip">anatomy</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/cathrynlavery.png?size=96" alt="Avatar de Cathryn Lavery" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">CL</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Cathryn Lavery</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/cathrynlavery/diagram-design" target="_blank" rel="noopener">github.com/cathrynlavery/diagram-design ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">45 editorial diagram styles in HTML/SVG (architecture, sequence, flowcharts).</p>
+      <div class="cred-chips"><span class="chip">diagram-design</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/latent-spaces.png?size=96" alt="Avatar de Latent Spaces" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">LS</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Latent Spaces</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/latent-spaces/brag" target="_blank" rel="noopener">github.com/latent-spaces/brag ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Short launch films generated directly from analyzing project code.</p>
+      <div class="cred-chips"><span class="chip">brag</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/heliocosta-dev.png?size=96" alt="Avatar de Hélio Costa" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">HC</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Hélio Costa</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/heliocosta-dev/revenue-centric-design" target="_blank" rel="noopener">github.com/heliocosta-dev/revenue-centric-design ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Playbook of UX and behavioral psychology principles for digital interfaces.</p>
+      <div class="cred-chips"><span class="chip">revenue-centric-design</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/mattpocock.png?size=96" alt="Avatar de Matt Pocock" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">MP</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Matt Pocock</span>
+            <span class="cred-type-badge community">Community Skill</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/mattpocock/skills" target="_blank" rel="noopener">github.com/mattpocock/skills ↗</a>
+            <span class="cred-lic">MIT</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Technical interview and relentless briefing refinement for scope alignment.</p>
+      <div class="cred-chips"><span class="chip">grill-me</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/microsoft.png?size=96" alt="Avatar de Playwright" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">MS</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Playwright</span>
+            <span class="cred-type-badge engine">Core Render Engine</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/microsoft/playwright" target="_blank" rel="noopener">github.com/microsoft/playwright ↗</a>
+            <span class="cred-lic">Apache-2.0</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Headless browser automation for frame capture, 2x static render, and 5-viewport QA.</p>
+      <div class="cred-chips"><span class="chip">render_static</span><span class="chip">render_frames</span><span class="chip">qa_viewports</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
+          <img src="https://github.com/FFmpeg.png?size=96" alt="Avatar de FFmpeg" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">FF</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">FFmpeg</span>
+            <span class="cred-type-badge engine">Core Render Engine</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/FFmpeg/FFmpeg" target="_blank" rel="noopener">github.com/FFmpeg/FFmpeg ↗</a>
+            <span class="cred-lic">LGPL-2.1+</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Deterministic CFR 30fps video encoding, audio multiplexing, and transcoding.</p>
+      <div class="cred-chips"><span class="chip">assemble_video</span></div>
+    </article>
   </div>
-  <p class="note"><span lang="en">Other installed skills have an origin I haven't documented yet. I'll complete this list. Licenses are those of each author's repository.</span></p>
+  <p class="note"><span lang="en">All integrated skills and libraries respect their upstream licenses (MIT, Apache-2.0, LGPL). MOTION Studio is 100% open source under Apache-2.0.</span></p>
 </section>
 
 <section id="contact" class="cta">
   <div class="box rv">
     <span class="tag"><span class="brand-dot"></span><span lang="en">open source</span></span>
-    <h2><span lang="en">Made for me. Open for you.</span></h2>
-    <p class="lead"><span lang="en">Use it, adapt it, improve it. The repository has the pipeline, the studio's own skills and its operating manual.</span></p>
+    <h2>
+      <span class="cta-ln">The code is open.</span> <span class="cta-ln">The creation is yours.</span>
+    </h2>
+    <p class="lead">
+      
+      <span lang="en">Explore, adapt, and contribute. MOTION brings together Agent Skills, rendering engines, and creative workflows to build websites, 3D experiences, videos, and digital content from code.</span>
+    </p>
     <div class="actions">
       <a href="https://github.com/mateusarcedev/motion-studio" class="btn primary" rel="noopener"><span lang="en">view on github ↗</span></a>
-      <a href="#credits" class="btn"><span lang="en">see credits</span></a>
+      <a href="https://github.com/mateusarcedev/motion-studio/tree/main/docs" class="btn" rel="noopener"><span lang="en">read the docs ↗</span></a>
+      <a href="#credits" class="btn"><span lang="en">explore ecosystem</span></a>
     </div>
   </div>
 </section>
@@ -478,7 +822,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </main>
 
 <footer>
-  <span>motion — ai creative studio</span>
+  <span>motion — open-source creative development framework (apache-2.0)</span>
   <span><a href="https://github.com/mateusarcedev/motion-studio" rel="noopener" style="color:var(--mint)">github.com/mateusarcedev/motion-studio ↗</a></span>
 </footer>
 
@@ -487,15 +831,100 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
   var root=document.documentElement, TK="motion-theme";
   function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
   function put(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-  function setTheme(t){
+
+  /* Theme control with sun/moon */
+  var themeToggle=document.getElementById("themeToggle");
+  function applyTheme(t){
     root.dataset.theme=t;
-    document.querySelectorAll("[data-set-theme]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.setTheme===t))});
     put(TK,t);
+    var isDark=(t==="dark");
+    var isPT=(root.lang!=="en");
+    var label=isDark
+      ?(isPT?"Ativar tema claro":"Switch to light theme")
+      :(isPT?"Ativar tema escuro":"Switch to dark theme");
+    if(themeToggle){
+      themeToggle.setAttribute("aria-label",label);
+      themeToggle.setAttribute("title",label);
+    }
   }
   var qt=new URLSearchParams(location.search).get("theme");
-  setTheme((qt==="light"||qt==="dark")?qt:get(TK)||"dark");
-  document.querySelectorAll("[data-set-theme]").forEach(function(b){b.addEventListener("click",function(){setTheme(b.dataset.setTheme)})});
-  document.querySelectorAll(".seg a[data-l]").forEach(function(a){a.setAttribute("aria-current",String(a.dataset.l===root.lang))});
+  var saved=get(TK);
+  var initTheme=(qt==="light"||qt==="dark")?qt:(saved==="light"?"light":"dark");
+  applyTheme(initTheme);
+  if(themeToggle){
+    themeToggle.addEventListener("click",function(){
+      var next=(root.dataset.theme==="dark")?"light":"dark";
+      applyTheme(next);
+    });
+  }
+
+  /* Language dropdown control */
+  var langDropdown=document.getElementById("langDropdown");
+  var langTrigger=document.getElementById("langTrigger");
+  var langMenu=document.getElementById("langMenu");
+  var langOptions=langMenu?Array.from(langMenu.querySelectorAll(".lang-option")):[],
+  curLang=root.lang||"pt-BR";
+
+  function updateLangUrls(){
+    var h=location.hash||"";
+    langOptions.forEach(function(opt){
+      var isCur=(opt.dataset.lang===curLang);
+      opt.setAttribute("aria-current",String(isCur));
+      var base=(opt.dataset.lang==="en")?"/en/":"/";
+      opt.href=base+h;
+    });
+  }
+  updateLangUrls();
+  window.addEventListener("hashchange",updateLangUrls);
+
+  function openMenu(){
+    if(!langMenu)return;
+    langMenu.removeAttribute("hidden");
+    langTrigger.setAttribute("aria-expanded","true");
+    var active=langMenu.querySelector('.lang-option[aria-current="true"]')||langOptions[0];
+    if(active)active.focus();
+  }
+  function closeMenu(){
+    if(!langMenu)return;
+    langMenu.setAttribute("hidden","");
+    langTrigger.setAttribute("aria-expanded","false");
+  }
+
+  if(langTrigger&&langMenu){
+    langTrigger.addEventListener("click",function(e){
+      e.stopPropagation();
+      var isHidden=langMenu.hasAttribute("hidden");
+      if(isHidden){openMenu()}else{closeMenu()}
+    });
+
+    langDropdown.addEventListener("keydown",function(e){
+      if(e.key==="Escape"){
+        e.preventDefault();
+        closeMenu();
+        langTrigger.focus();
+      }else if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+        e.preventDefault();
+        if(langMenu.hasAttribute("hidden")){
+          openMenu();
+        }else{
+          var idx=langOptions.indexOf(document.activeElement);
+          if(e.key==="ArrowDown"){
+            var next=(idx+1)%langOptions.length;
+            langOptions[next].focus();
+          }else{
+            var prev=(idx-1+langOptions.length)%langOptions.length;
+            langOptions[prev].focus();
+          }
+        }
+      }
+    });
+
+    document.addEventListener("click",function(e){
+      if(!langDropdown.contains(e.target)){
+        closeMenu();
+      }
+    });
+  }
 
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   var io="IntersectionObserver" in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.1}):null;

@@ -1,13 +1,22 @@
 {
-  "name": "playwright-core",
-  "version": "1.64.1",
+  "name": "motion-studio-monorepo",
+  "version": "1.0.0-rc.1",
   "private": true,
-  "description": "Dependência de execução do MOTION: motor de captura estática (Chromium). Não é componente UI nem skill — é runtime de renderização.",
+  "description": "MOTION Studio — Estúdio criativo multiformato dirigido por código e operado por IA.",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "render": "node creative-core/renderers/render_static.mjs"
+    "render": "node creative-core/renderers/render_static.mjs",
+    "test": "node --test tests/**/*.test.mjs",
+    "pack:all": "node scripts/pack-all.mjs",
+    "cli": "node packages/motion-cli/bin/motion.mjs"
   },
   "dependencies": {
+    "motion-cli": "file:packages/motion-cli",
+    "motion-core": "file:packages/motion-core",
+    "motion-studio-skills": "file:packages/motion-skills",
     "playwright-core": "^1.64.1",
     "three": "^0.165.0"
   }

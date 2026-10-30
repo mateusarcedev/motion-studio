@@ -1,0 +1,40 @@
+{
+  "name": "motion-core",
+  "version": "1.0.0-rc.1",
+  "description": "Engines de produção, QA determinístico e exportação do MOTION Studio",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./frame": "./design-system/frame.js",
+    "./presets": "./presets.json",
+    "./renderers/render_static.mjs": "./renderers/render_static.mjs",
+    "./renderers/render_frames.mjs": "./renderers/render_frames.mjs",
+    "./renderers/assemble_video.py": "./renderers/assemble_video.py",
+    "./renderers/qa_viewports.mjs": "./renderers/qa_viewports.mjs"
+  },
+  "files": [
+    "index.js",
+    "renderers/**/*",
+    "quality/**/*",
+    "exporters/**/*",
+    "design-system/**/*",
+    "gallery/**/*",
+    "presets.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "playwright-core": "^1.64.1",
+    "three": "^0.165.0"
+  },
+  "keywords": [
+    "motion",
+    "creative-core",
+    "deterministic-video",
+    "playwright",
+    "ffmpeg",
+    "multiformat"
+  ],
+  "author": "MOTION Studio",
+  "license": "Apache-2.0"
+}
