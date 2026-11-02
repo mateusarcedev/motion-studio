@@ -247,11 +247,109 @@ p{color:var(--fg-dim)}
   .work-spotlight{grid-template-columns:1fr}
   .spotlight-media{height:240px}
 }
-.work{display:grid;grid-template-columns:repeat(12,1fr);gap:24px 16px;align-items:start}
-.tile img{width:100%;border:1px solid var(--line);border-radius:var(--radius)}
-.tile figcaption{padding-top:12px;font-size:13px;color:var(--fg-dim)}
-.tile figcaption b{display:block;font:600 15px/1.25 var(--sans);letter-spacing:-.01em;color:var(--fg);margin-bottom:2px}
-.t-wide{grid-column:span 8} .t-tall{grid-column:span 4} .t-a,.t-b,.t-c{grid-column:span 4}
+.intro-sub{font-size:15px;line-height:1.6;color:var(--fg-dim);margin-top:-6px}
+
+/* creation gallery & filters */
+.gallery-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.gfilter-btn{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:20px;font:500 12.5px/1 var(--mono);letter-spacing:.02em;background:var(--surface);border:1px solid var(--line);color:var(--fg-dim);cursor:pointer;transition:all .18s ease}
+.gfilter-btn:hover{border-color:var(--mint-edge);color:var(--fg);background:var(--surface-2)}
+.gfilter-btn.active{background:var(--mint-dim);border-color:var(--mint);color:var(--mint);font-weight:600;box-shadow:0 0 12px -2px var(--mint-dim)}
+.gfilter-btn:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+/* gallery grid & cards */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;align-items:stretch;margin-bottom:24px}
+@media (max-width:768px){
+  .gallery-grid{grid-template-columns:1fr;gap:20px}
+}
+.gallery-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;position:relative;transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease}
+.gallery-card:hover{border-color:var(--mint-edge);transform:translateY(-2px);box-shadow:0 14px 34px -12px var(--mint-edge)}
+.gallery-card:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.gallery-card.is-hidden{display:none!important}
+
+/* card header */
+.gcard-header{padding:16px 20px 14px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--line-soft);background:color-mix(in srgb,var(--surface-2) 40%,var(--surface))}
+.gcard-meta-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.gcard-cat{font:600 10.5px/1 var(--mono);color:var(--mint);letter-spacing:.08em;text-transform:uppercase}
+.gcard-format-pill{font:500 10.5px/1 var(--mono);color:var(--fg-faint);background:var(--bg-soft);border:1px solid var(--line);padding:3px 7px;border-radius:var(--radius-sm);letter-spacing:.04em}
+.gcard-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.gcard-title{font:600 15px/1.3 var(--sans);color:var(--fg);margin:0;letter-spacing:-.01em}
+.gcard-counter{font:600 11.5px/1 var(--mono);color:var(--fg-dim);background:var(--bg-soft);border:1px solid var(--line);padding:3px 8px;border-radius:var(--radius-sm);flex-shrink:0}
+
+/* card viewport & aspect ratios */
+.gcard-viewport-wrap{position:relative;width:100%;background:#06080c;overflow:hidden}
+[data-theme="light"] .gcard-viewport-wrap{background:#e8e5dc}
+.gcard-viewport-wrap.ratio-4-5{aspect-ratio:4/5}
+.gcard-viewport-wrap.ratio-1-1{aspect-ratio:1/1}
+.gcard-viewport-wrap.ratio-9-16{aspect-ratio:9/16}
+.gcard-viewport-wrap.ratio-16-9{aspect-ratio:16/9}
+
+.gcard-viewport{position:absolute;inset:0;overflow:hidden;touch-action:pan-y}
+.gcard-track{display:flex;width:100%;height:100%;will-change:transform;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+
+/* card slide */
+.gcard-slide{flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.slide-zoom-btn{width:100%;height:100%;padding:0;margin:0;border:none;background:transparent;cursor:zoom-in;position:relative;display:flex;align-items:center;justify-content:center}
+.slide-zoom-btn:focus-visible{outline:2px inset var(--mint)}
+.slide-img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block}
+.zoom-indicator{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(14,14,14,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:var(--fg);opacity:0;transition:opacity .2s ease;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+[data-theme="light"] .zoom-indicator{background:rgba(255,255,255,.88);border-color:rgba(0,0,0,.15);color:#1a1a17}
+.slide-zoom-btn:hover .zoom-indicator,.slide-zoom-btn:focus-visible .zoom-indicator{opacity:1}
+
+/* card navigation arrows */
+.gcard-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(14,14,14,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;z-index:4;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+[data-theme="light"] .gcard-nav{background:rgba(255,255,255,.88);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.gcard-nav.prev{left:10px}
+.gcard-nav.next{right:10px}
+.gcard-nav:hover:not(:disabled){background:var(--surface);border-color:var(--mint);color:var(--mint);transform:translateY(-50%) scale(1.08)}
+.gcard-nav:disabled{opacity:0;pointer-events:none}
+@media (pointer:coarse){
+  .gcard-nav{width:44px;height:44px}
+}
+
+/* card dots */
+.gcard-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:6px;z-index:4;pointer-events:auto}
+.gcard-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.32);border:none;padding:0;cursor:pointer;transition:all .25s ease}
+[data-theme="light"] .gcard-dot{background:rgba(0,0,0,.25)}
+.gcard-dot.active{width:18px;border-radius:3px;background:var(--mint);box-shadow:0 0 6px var(--mint)}
+
+/* card footer */
+.gcard-footer{padding:14px 20px 18px;display:flex;flex-direction:column;gap:10px;margin-top:auto;border-top:1px solid var(--line-soft)}
+.gcard-desc{font-size:13px;line-height:1.55;color:var(--fg-dim);margin:0}
+.gcard-link{display:inline-flex;align-items:center;gap:4px;font:600 12.5px/1 var(--sans);color:var(--mint);text-decoration:none;transition:color .15s}
+.gcard-link:hover{text-decoration:underline}
+
+/* lightbox modal */
+.gallery-lightbox{position:fixed;inset:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;margin:0;padding:0;border:none;background:transparent;z-index:2000;display:none;align-items:center;justify-content:center}
+.gallery-lightbox[open]{display:flex}
+.lightbox-backdrop{position:fixed;inset:0;background:rgba(6,8,12,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:1}
+[data-theme="light"] .lightbox-backdrop{background:rgba(240,238,232,.95)}
+.lightbox-dialog-pane{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;max-width:1400px;margin:0 auto;padding:20px 24px}
+.lightbox-topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line-soft);gap:16px}
+.lightbox-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+.lightbox-title{font:600 15px/1.3 var(--sans);color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lightbox-caption{font:400 12.5px/1.4 var(--mono);color:var(--fg-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lightbox-actions{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.lightbox-counter{font:600 12.5px/1 var(--mono);color:var(--mint);background:var(--mint-dim);border:1px solid var(--mint-edge);padding:4px 9px;border-radius:var(--radius-sm)}
+.lightbox-close{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s ease}
+.lightbox-close:hover{border-color:var(--mint);color:var(--mint);transform:scale(1.06)}
+.lightbox-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:space-between;position:relative;padding:16px 0;gap:14px}
+.lightbox-img-wrap{flex:1;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lightbox-img{max-width:100%;max-height:calc(100vh - 130px);object-fit:contain;border-radius:var(--radius);box-shadow:0 24px 60px rgba(0,0,0,.65)}
+.lightbox-nav{width:46px;height:46px;border-radius:50%;background:rgba(14,14,14,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;flex-shrink:0}
+[data-theme="light"] .lightbox-nav{background:rgba(255,255,255,.9)}
+.lightbox-nav:hover:not(:disabled){border-color:var(--mint);color:var(--mint);transform:scale(1.08)}
+.lightbox-nav:disabled{opacity:.2;pointer-events:none}
+@media (max-width:768px){
+  .lightbox-dialog-pane{padding:12px 14px}
+  .lightbox-stage{gap:8px}
+  .lightbox-nav{width:40px;height:40px}
+  .lightbox-title{font-size:13.5px}
+  .lightbox-caption{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  .gcard-track{transition:none!important}
+  .gallery-card,.gcard-nav,.gcard-dot,.lightbox-nav,.lightbox-close{transition:none!important}
+}
 .note{margin-top:28px;font-size:12px;color:var(--fg-faint)}
 
 /* stack */
@@ -340,7 +438,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
         <a href="#quickstart"><span lang="en">install</span></a>
         <a href="#formats"><span lang="en">formats</span></a>
         <a href="#pipeline">pipeline</a>
-        <a href="#work"><span lang="en">work</span></a>
+        <a href="#work"><span lang="en">gallery</span></a>
         <a href="#stack">stack</a>
         <a href="#credits"><span lang="en">ecosystem</span></a>
       </nav>
@@ -503,9 +601,10 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="work">
-  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title"><span lang="en">work &amp; examples</span></span><span class="sec-rule"></span><span class="sec-count">07</span></div>
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title"><span lang="en">creation gallery</span></span><span class="sec-rule"></span><span class="sec-count">09</span></div>
   <div class="intro rv">
-    <h2><span lang="en">Real renders, not mockups.</span></h2>
+    <h2><span lang="en">Creation Gallery</span></h2>
+    <p class="intro-sub"><span lang="en">Explore videos, carousels, artwork, and interactive experiences made with MOTION Studio.</span></p>
   </div>
 
   <!-- TRAVESSIA Featured Showcase -->
@@ -594,15 +693,482 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
     </div>
   </article>
 
-  <div class="work">
-    <figure class="tile t-wide rv"><img src="/assets/post-16x9.jpg" alt="Feed post recomposed in 16:9"><figcaption><b><span lang="en">Post in 4 ratios</span></b><span>16:9 · 4:5 · 1:1 · 9:16 — <span lang="en">recomposition, not crop</span></span></figcaption></figure>
-    <figure class="tile t-tall rv"><img src="/assets/story-01.jpg" alt="Static 9:16 story"><figcaption><b><span lang="en">Static story</span></b><span>PNG 2160×3840</span></figcaption></figure>
-    <figure class="tile t-a rv"><img src="/assets/carousel-01.jpg" alt="Carousel slide 1"><figcaption><b><span lang="en">Carousel · 7 slides</span></b><span>PNG 2160×2700</span></figcaption></figure>
-    <figure class="tile t-b rv"><img src="/assets/carousel-04.jpg" alt="Carousel slide 4"><figcaption><b><span lang="en">Same system, new rhythm</span></b><span>04 / 07</span></figcaption></figure>
-    <figure class="tile t-c rv"><img src="/assets/post-4x5.jpg" alt="4:5 feed post"><figcaption><b>Feed 4:5</b><span><span lang="en">its own hierarchy</span></span></figcaption></figure>
+  <!-- Filters Bar -->
+  <div class="gallery-filters rv" role="tablist" aria-label="Filter productions by category">
+    <button type="button" class="gfilter-btn active" data-filter="all" role="tab" aria-selected="true">
+      <span lang="en">All</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="carousels" role="tab" aria-selected="false">
+      <span lang="en">Carousels</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="3d-web" role="tab" aria-selected="false">
+      <span>3D &amp; Web</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="motion" role="tab" aria-selected="false">
+      <span>Motion</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="posts" role="tab" aria-selected="false">
+      <span lang="en">Posts &amp; Stories</span>
+    </button>
   </div>
-  <p class="note"><span lang="en">Sample productions generated by MOTION's deterministic open-source pipeline.</span></p>
+
+  <div class="gallery-grid" id="creationGallery">
+    <article class="gallery-card rv" data-category="carousels 3d-web" data-prod-id="travessia-carousel" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: TRAVESSIA — Social Carousel">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Carousel / 3D Web</span>
+      <span class="gcard-format-pill">4:5 · 5 SLIDES</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">TRAVESSIA — Social Carousel</h3>
+      <span class="gcard-counter" aria-live="polite">1 / 5</span>
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-4-5">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 5" data-col-id="travessia-carousel" data-slide-idx="0" data-src="/assets/carga-01/carousel-01.png" data-caption="Slide 01 / 05 — The Port and Arrival" data-alt="TRAVESSIA carousel slide 01: The Port">
+    <img src="/assets/carga-01/carousel-01.png" alt="TRAVESSIA carousel slide 01: The Port" width="1080" height="1350" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="1">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 2 of 5" data-col-id="travessia-carousel" data-slide-idx="1" data-src="/assets/carga-01/carousel-02.png" data-caption="Slide 02 / 05 — The Container TRV-01-A" data-alt="TRAVESSIA carousel slide 02: The Container">
+    <img src="/assets/carga-01/carousel-02.png" alt="TRAVESSIA carousel slide 02: The Container" width="1080" height="1350" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="2">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 3 of 5" data-col-id="travessia-carousel" data-slide-idx="2" data-src="/assets/carga-01/carousel-03.png" data-caption="Slide 03 / 05 — Port Movement" data-alt="TRAVESSIA carousel slide 03: Port Movement">
+    <img src="/assets/carga-01/carousel-03.png" alt="TRAVESSIA carousel slide 03: Port Movement" width="1080" height="1350" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="3">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 4 of 5" data-col-id="travessia-carousel" data-slide-idx="3" data-src="/assets/carga-01/carousel-04.png" data-caption="Slide 04 / 05 — The Road and Transit" data-alt="TRAVESSIA carousel slide 04: The Road">
+    <img src="/assets/carga-01/carousel-04.png" alt="TRAVESSIA carousel slide 04: The Road" width="1080" height="1350" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="4">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 5 of 5" data-col-id="travessia-carousel" data-slide-idx="4" data-src="/assets/carga-01/carousel-05.png" data-caption="Slide 05 / 05 — Destination and Delivery" data-alt="TRAVESSIA carousel slide 05: Destination">
+    <img src="/assets/carga-01/carousel-05.png" alt="TRAVESSIA carousel slide 05: Destination" width="1080" height="1350" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      <button type="button" class="gcard-nav prev" aria-label="Previous image" disabled>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button type="button" class="gcard-nav next" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+      <div class="gcard-dots" role="tablist" aria-label="Slide indicators"><button type="button" class="gcard-dot active" role="tab" aria-selected="true" aria-label="Slide 1 of 5" data-slide-idx="0"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 2 of 5" data-slide-idx="1"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 3 of 5" data-slide-idx="2"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 4 of 5" data-slide-idx="3"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 5 of 5" data-slide-idx="4"></button></div>
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">Visual narrative in 5 vertical slides following the container route under industrial lighting.</p>
+    <a href="/en/projects/travessia/" class="gcard-link">Explore case ↗</a>
+  </div>
+</article>
+<article class="gallery-card rv" data-category="carousels" data-prod-id="design-system-carousel" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: Visual Identity — Design System">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Carousel / Design System</span>
+      <span class="gcard-format-pill">4:5 · 7 SLIDES</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">Visual Identity — Design System</h3>
+      <span class="gcard-counter" aria-live="polite">1 / 7</span>
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-4-5">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 7" data-col-id="design-system-carousel" data-slide-idx="0" data-src="/assets/carousel-7/01.png" data-caption="Slide 01 / 07 — Identity Cover" data-alt="Visual Identity slide 01: Cover">
+    <img src="/assets/carousel-7/01.png" alt="Visual Identity slide 01: Cover" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="1">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 2 of 7" data-col-id="design-system-carousel" data-slide-idx="1" data-src="/assets/carousel-7/02.png" data-caption="Slide 02 / 07 — Core Principles" data-alt="Visual Identity slide 02: Principles">
+    <img src="/assets/carousel-7/02.png" alt="Visual Identity slide 02: Principles" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="2">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 3 of 7" data-col-id="design-system-carousel" data-slide-idx="2" data-src="/assets/carousel-7/03.png" data-caption="Slide 03 / 07 — Typography &amp; Scale" data-alt="Visual Identity slide 03: Typography">
+    <img src="/assets/carousel-7/03.png" alt="Visual Identity slide 03: Typography" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="3">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 4 of 7" data-col-id="design-system-carousel" data-slide-idx="3" data-src="/assets/carousel-7/04.png" data-caption="Slide 04 / 07 — Same System, New Rhythm" data-alt="Visual Identity slide 04: Rhythm">
+    <img src="/assets/carousel-7/04.png" alt="Visual Identity slide 04: Rhythm" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="4">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 5 of 7" data-col-id="design-system-carousel" data-slide-idx="4" data-src="/assets/carousel-7/05.png" data-caption="Slide 05 / 07 — Palette &amp; Contrast" data-alt="Visual Identity slide 05: Palette">
+    <img src="/assets/carousel-7/05.png" alt="Visual Identity slide 05: Palette" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="5">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 6 of 7" data-col-id="design-system-carousel" data-slide-idx="5" data-src="/assets/carousel-7/06.png" data-caption="Slide 06 / 07 — Graphic Elements" data-alt="Visual Identity slide 06: Elements">
+    <img src="/assets/carousel-7/06.png" alt="Visual Identity slide 06: Elements" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="6">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 7 of 7" data-col-id="design-system-carousel" data-slide-idx="6" data-src="/assets/carousel-7/07.png" data-caption="Slide 07 / 07 — System Closing" data-alt="Visual Identity slide 07: Closing">
+    <img src="/assets/carousel-7/07.png" alt="Visual Identity slide 07: Closing" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      <button type="button" class="gcard-nav prev" aria-label="Previous image" disabled>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button type="button" class="gcard-nav next" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+      <div class="gcard-dots" role="tablist" aria-label="Slide indicators"><button type="button" class="gcard-dot active" role="tab" aria-selected="true" aria-label="Slide 1 of 7" data-slide-idx="0"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 2 of 7" data-slide-idx="1"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 3 of 7" data-slide-idx="2"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 4 of 7" data-slide-idx="3"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 5 of 7" data-slide-idx="4"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 6 of 7" data-slide-idx="5"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 7 of 7" data-slide-idx="6"></button></div>
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">Complete editorial slide deck with semantic tokens, Geist typography, and visual hierarchy.</p>
+    
+  </div>
+</article>
+<article class="gallery-card rv" data-category="carousels" data-prod-id="brand-details-carousel" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: Small Details — Brand Identity">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Carousel / Brand Story</span>
+      <span class="gcard-format-pill">4:5 · 3 SLIDES</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">Small Details — Brand Identity</h3>
+      <span class="gcard-counter" aria-live="polite">1 / 3</span>
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-4-5">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 3" data-col-id="brand-details-carousel" data-slide-idx="0" data-src="/assets/nova-identidade/01.png" data-caption="Slide 01 / 03 — Editorial Opening" data-alt="Small Details slide 01: Opening">
+    <img src="/assets/nova-identidade/01.png" alt="Small Details slide 01: Opening" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="1">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 2 of 3" data-col-id="brand-details-carousel" data-slide-idx="1" data-src="/assets/nova-identidade/02.png" data-caption="Slide 02 / 03 — Composition Details" data-alt="Small Details slide 02: Details">
+    <img src="/assets/nova-identidade/02.png" alt="Small Details slide 02: Details" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="2">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 3 of 3" data-col-id="brand-details-carousel" data-slide-idx="2" data-src="/assets/nova-identidade/03.png" data-caption="Slide 03 / 03 — Brand Conclusion" data-alt="Small Details slide 03: Conclusion">
+    <img src="/assets/nova-identidade/03.png" alt="Small Details slide 03: Conclusion" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      <button type="button" class="gcard-nav prev" aria-label="Previous image" disabled>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button type="button" class="gcard-nav next" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+      <div class="gcard-dots" role="tablist" aria-label="Slide indicators"><button type="button" class="gcard-dot active" role="tab" aria-selected="true" aria-label="Slide 1 of 3" data-slide-idx="0"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 2 of 3" data-slide-idx="1"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 3 of 3" data-slide-idx="2"></button></div>
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">3-slide composition exploring visual rhythm, contrasts, and editorial design.</p>
+    
+  </div>
+</article>
+<article class="gallery-card rv" data-category="posts" data-prod-id="post-reflow-multiratio" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: Post in 4 Ratios — Responsive Reflow">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Posts &amp; Feed / Multi-Ratio</span>
+      <span class="gcard-format-pill">4 RATIOS · REFLOW</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">Post in 4 Ratios — Responsive Reflow</h3>
+      <span class="gcard-counter" aria-live="polite">1 / 4</span>
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-1-1">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 4" data-col-id="post-reflow-multiratio" data-slide-idx="0" data-src="/assets/post-reflow/reconf-16x9.png" data-caption="Ratio 16:9 — Landscape (YouTube / Web)" data-alt="Post reflow 16:9 landscape">
+    <img src="/assets/post-reflow/reconf-16x9.png" alt="Post reflow 16:9 landscape" width="3840" height="2160" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="1">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 2 of 4" data-col-id="post-reflow-multiratio" data-slide-idx="1" data-src="/assets/post-reflow/reconf-4x5.png" data-caption="Ratio 4:5 — Portrait (Instagram Feed)" data-alt="Post reflow 4:5 portrait">
+    <img src="/assets/post-reflow/reconf-4x5.png" alt="Post reflow 4:5 portrait" width="2160" height="2700" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="2">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 3 of 4" data-col-id="post-reflow-multiratio" data-slide-idx="2" data-src="/assets/post-reflow/reconf-1x1.png" data-caption="Ratio 1:1 — Square (Classic Feed)" data-alt="Post reflow 1:1 square">
+    <img src="/assets/post-reflow/reconf-1x1.png" alt="Post reflow 1:1 square" width="2160" height="2160" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="3">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 4 of 4" data-col-id="post-reflow-multiratio" data-slide-idx="3" data-src="/assets/post-reflow/reconf-9x16.png" data-caption="Ratio 9:16 — Vertical (Stories &amp; Reels)" data-alt="Post reflow 9:16 vertical">
+    <img src="/assets/post-reflow/reconf-9x16.png" alt="Post reflow 9:16 vertical" width="2160" height="3840" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      <button type="button" class="gcard-nav prev" aria-label="Previous image" disabled>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button type="button" class="gcard-nav next" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+      <div class="gcard-dots" role="tablist" aria-label="Slide indicators"><button type="button" class="gcard-dot active" role="tab" aria-selected="true" aria-label="Slide 1 of 4" data-slide-idx="0"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 2 of 4" data-slide-idx="1"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 3 of 4" data-slide-idx="2"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 4 of 4" data-slide-idx="3"></button></div>
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">Same graphic system recomposed for 16:9, 4:5, 1:1, and 9:16 without destructive cropping.</p>
+    
+  </div>
+</article>
+<article class="gallery-card rv" data-category="motion" data-prod-id="state-machines-acts" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: State Machines — 7 Narrative Acts">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Motion Graphics / Explainer Acts</span>
+      <span class="gcard-format-pill">9:16 · 7 ACTS</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">State Machines — 7 Narrative Acts</h3>
+      <span class="gcard-counter" aria-live="polite">1 / 7</span>
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-9-16">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 7" data-col-id="state-machines-acts" data-slide-idx="0" data-src="/assets/state-machines/act-01-sopa-booleanos.png" data-caption="Act 01 / 07 — Boolean Soup" data-alt="State Machines Act 01: Boolean Soup">
+    <img src="/assets/state-machines/act-01-sopa-booleanos.png" alt="State Machines Act 01: Boolean Soup" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="1">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 2 of 7" data-col-id="state-machines-acts" data-slide-idx="1" data-src="/assets/state-machines/act-02-estados-finitos.png" data-caption="Act 02 / 07 — Finite States" data-alt="State Machines Act 02: Finite States">
+    <img src="/assets/state-machines/act-02-estados-finitos.png" alt="State Machines Act 02: Finite States" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="2">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 3 of 7" data-col-id="state-machines-acts" data-slide-idx="2" data-src="/assets/state-machines/act-03-a-transicao.png" data-caption="Act 03 / 07 — The Causal Transition" data-alt="State Machines Act 03: The Transition">
+    <img src="/assets/state-machines/act-03-a-transicao.png" alt="State Machines Act 03: The Transition" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="3">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 4 of 7" data-col-id="state-machines-acts" data-slide-idx="3" data-src="/assets/state-machines/act-04-guardas-logicas.png" data-caption="Act 04 / 07 — Logical Guards" data-alt="State Machines Act 04: Logical Guards">
+    <img src="/assets/state-machines/act-04-guardas-logicas.png" alt="State Machines Act 04: Logical Guards" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="4">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 5 of 7" data-col-id="state-machines-acts" data-slide-idx="4" data-src="/assets/state-machines/act-05-evento-invalido.png" data-caption="Act 05 / 07 — Illegal Event Deflected" data-alt="State Machines Act 05: Illegal Event">
+    <img src="/assets/state-machines/act-05-evento-invalido.png" alt="State Machines Act 05: Illegal Event" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="5">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 6 of 7" data-col-id="state-machines-acts" data-slide-idx="5" data-src="/assets/state-machines/act-06-ciclo-completo.png" data-caption="Act 06 / 07 — Full Cycle (Retry &amp; Success)" data-alt="State Machines Act 06: Full Cycle">
+    <img src="/assets/state-machines/act-06-ciclo-completo.png" alt="State Machines Act 06: Full Cycle" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="6">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 7 of 7" data-col-id="state-machines-acts" data-slide-idx="6" data-src="/assets/state-machines/act-07-sintese-fsm.png" data-caption="Act 07 / 07 — FSM Synthesis &amp; Convergence" data-alt="State Machines Act 07: Synthesis">
+    <img src="/assets/state-machines/act-07-sintese-fsm.png" alt="State Machines Act 07: Synthesis" width="1080" height="1920" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      <button type="button" class="gcard-nav prev" aria-label="Previous image" disabled>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button type="button" class="gcard-nav next" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+      <div class="gcard-dots" role="tablist" aria-label="Slide indicators"><button type="button" class="gcard-dot active" role="tab" aria-selected="true" aria-label="Slide 1 of 7" data-slide-idx="0"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 2 of 7" data-slide-idx="1"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 3 of 7" data-slide-idx="2"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 4 of 7" data-slide-idx="3"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 5 of 7" data-slide-idx="4"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 6 of 7" data-slide-idx="5"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 7 of 7" data-slide-idx="6"></button></div>
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">Visual sequence of the 7 conceptual acts of the programmatic explainer film.</p>
+    <a href="/en/projects/state-machines/" class="gcard-link">Explore case ↗</a>
+  </div>
+</article>
+<article class="gallery-card rv" data-category="motion" data-prod-id="teaser-frames" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: Cinematic Teaser — Keyframes">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Motion Graphics / 16:9 Teaser</span>
+      <span class="gcard-format-pill">16:9 · 2 FRAMES</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">Cinematic Teaser — Keyframes</h3>
+      <span class="gcard-counter" aria-live="polite">1 / 2</span>
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-16-9">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 2" data-col-id="teaser-frames" data-slide-idx="0" data-src="/assets/teaser/teaser-121.jpg" data-caption="Frame 121 — Kinetic Typography in Motion" data-alt="Cinematic teaser frame 121">
+    <img src="/assets/teaser/teaser-121.jpg" alt="Cinematic teaser frame 121" width="1400" height="788" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div><div class="gcard-slide" data-slide-index="1">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 2 of 2" data-col-id="teaser-frames" data-slide-idx="1" data-src="/assets/teaser/contact-sheet.png" data-caption="Contact Sheet — Complete Timeline Sequence" data-alt="Cinematic teaser contact sheet">
+    <img src="/assets/teaser/contact-sheet.png" alt="Cinematic teaser contact sheet" width="2600" height="1460" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      <button type="button" class="gcard-nav prev" aria-label="Previous image" disabled>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button type="button" class="gcard-nav next" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+      <div class="gcard-dots" role="tablist" aria-label="Slide indicators"><button type="button" class="gcard-dot active" role="tab" aria-selected="true" aria-label="Slide 1 of 2" data-slide-idx="0"></button><button type="button" class="gcard-dot" role="tab" aria-selected="false" aria-label="Slide 2 of 2" data-slide-idx="1"></button></div>
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">Frames and contact sheet of frame-by-frame 30 FPS CFR animation with audio.</p>
+    
+  </div>
+</article>
+<article class="gallery-card rv" data-category="posts" data-prod-id="story-safe-zones" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Production: Vertical Story — Safe Zones">
+  <div class="gcard-header">
+    <div class="gcard-meta-row">
+      <span class="gcard-cat">Posts &amp; Stories / 9:16</span>
+      <span class="gcard-format-pill">9:16 · STATIC STORY</span>
+    </div>
+    <div class="gcard-title-row">
+      <h3 class="gcard-title">Vertical Story — Safe Zones</h3>
+      
+    </div>
+  </div>
+
+  <div class="gcard-viewport-wrap ratio-9-16">
+    <div class="gcard-viewport" aria-live="polite">
+      <div class="gcard-track">
+        <div class="gcard-slide active" data-slide-index="0">
+  <button type="button" class="slide-zoom-btn" aria-label="Enlarge image 1 of 1" data-col-id="story-safe-zones" data-slide-idx="0" data-src="/assets/story-01.jpg" data-caption="Static Story 9:16 — Calibrated Safe Zones" data-alt="Vertical story 9:16">
+    <img src="/assets/story-01.jpg" alt="Vertical story 9:16" width="700" height="1244" loading="lazy" class="slide-img">
+    <span class="zoom-indicator" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+    </span>
+  </button>
+</div>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div class="gcard-footer">
+    <p class="gcard-desc">Vertical 2160×3840 artwork calibrated for Instagram and WhatsApp UI safe zones.</p>
+    
+  </div>
+</article>
+  </div>
+
+  <p class="note rv"><span lang="en">Sample productions generated by MOTION's deterministic open-source pipeline. Click any image to view in high resolution.</span></p>
 </section>
+
+<!-- Modal de visualização ampliada (Lightbox) -->
+<dialog id="galleryLightbox" class="gallery-lightbox" aria-label="Enlarged production view">
+  <div class="lightbox-backdrop" data-action="close"></div>
+  <div class="lightbox-dialog-pane" role="document">
+    <div class="lightbox-topbar">
+      <div class="lightbox-info">
+        <span class="lightbox-title" id="lightboxTitle"></span>
+        <span class="lightbox-caption" id="lightboxCaption"></span>
+      </div>
+      <div class="lightbox-actions">
+        <span class="lightbox-counter" id="lightboxCounter" aria-live="polite">1 / 5</span>
+        <button type="button" class="lightbox-close" id="lightboxClose" data-action="close" aria-label="Close view (Esc)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+    <div class="lightbox-stage">
+      <button type="button" class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous slide (Left arrow)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="lightbox-img-wrap">
+        <img id="lightboxImg" src="" alt="" class="lightbox-img">
+      </div>
+      <button type="button" class="lightbox-nav next" id="lightboxNext" aria-label="Next slide (Right arrow)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </div>
+</dialog>
 
 <section>
   <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title"><span lang="en">principles</span></h2><span class="sec-rule"></span><span class="sec-count">03</span></div>
@@ -1105,7 +1671,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
   (function(){
     var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
     // stagger: delay by index among siblings that reveal together
-    document.querySelectorAll(".steps,.grid3,.stack,.work,.facts,.cred-grid").forEach(function(g){
+    document.querySelectorAll(".steps,.grid3,.stack,.gallery-grid,.facts,.cred-grid").forEach(function(g){
       g.querySelectorAll(":scope > .rv").forEach(function(el,i){el.style.setProperty("--d",(Math.min(i,7)*0.06)+"s")});
     });
     if(reduce)return;
@@ -1131,6 +1697,270 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
       (function step(t){var k=clamp((t-t0)/dur), v=Math.round(to*(1-Math.pow(1-k,3))); b.textContent=v; if(k<1)requestAnimationFrame(step)})(t0);
     })},{threshold:.6});
     document.querySelectorAll(".fact b").forEach(function(b){cio.observe(b)});
+  })();
+
+  /* Creation Gallery: Carousel, Filters, Lightbox */
+  (function(){
+    var gallery = document.getElementById("creationGallery");
+    if (!gallery) return;
+
+    var cards = Array.from(gallery.querySelectorAll(".gallery-card"));
+    var filterBtns = Array.from(document.querySelectorAll(".gfilter-btn"));
+    var lightbox = document.getElementById("galleryLightbox");
+    var lightboxImg = document.getElementById("lightboxImg");
+    var lightboxTitle = document.getElementById("lightboxTitle");
+    var lightboxCaption = document.getElementById("lightboxCaption");
+    var lightboxCounter = document.getElementById("lightboxCounter");
+    var lightboxPrev = document.getElementById("lightboxPrev");
+    var lightboxNext = document.getElementById("lightboxNext");
+    var lightboxClose = document.getElementById("lightboxClose");
+    var activeModalSlides = [];
+    var activeModalIdx = 0;
+    var lastActiveTrigger = null;
+
+    // 1. CAROUSEL CONTROLLER FOR EACH CARD
+    cards.forEach(function(card){
+      var track = card.querySelector(".gcard-track");
+      var slides = Array.from(card.querySelectorAll(".gcard-slide"));
+      var dots = Array.from(card.querySelectorAll(".gcard-dot"));
+      var prevBtn = card.querySelector(".gcard-nav.prev");
+      var nextBtn = card.querySelector(".gcard-nav.next");
+      var counter = card.querySelector(".gcard-counter");
+      var total = slides.length;
+      var curIdx = 0;
+
+      if (total <= 1) return; // single slide cards have no navigation controls
+
+      function updateSlide(newIdx){
+        if (newIdx < 0) newIdx = 0;
+        if (newIdx >= total) newIdx = total - 1;
+        curIdx = newIdx;
+        track.style.transform = "translateX(-" + (curIdx * 100) + "%)";
+        slides.forEach(function(s, i){
+          s.classList.toggle("active", i === curIdx);
+        });
+        dots.forEach(function(d, i){
+          d.classList.toggle("active", i === curIdx);
+          d.setAttribute("aria-selected", String(i === curIdx));
+        });
+        if (counter) {
+          counter.textContent = (curIdx + 1) + " / " + total;
+        }
+        if (prevBtn) prevBtn.disabled = (curIdx === 0);
+        if (nextBtn) nextBtn.disabled = (curIdx === total - 1);
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener("click", function(e){
+          e.stopPropagation();
+          updateSlide(curIdx - 1);
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function(e){
+          e.stopPropagation();
+          updateSlide(curIdx + 1);
+        });
+      }
+
+      dots.forEach(function(dot){
+        dot.addEventListener("click", function(e){
+          e.stopPropagation();
+          var idx = parseInt(dot.getAttribute("data-slide-idx"), 10);
+          if (!isNaN(idx)) updateSlide(idx);
+        });
+      });
+
+      // Keyboard navigation when card or any inner element has focus
+      card.addEventListener("keydown", function(e){
+        // Don't intercept if lightbox is open
+        if (lightbox && lightbox.open) return;
+        if (e.key === "ArrowLeft") {
+          if (curIdx > 0) {
+            e.preventDefault();
+            updateSlide(curIdx - 1);
+          }
+        } else if (e.key === "ArrowRight") {
+          if (curIdx < total - 1) {
+            e.preventDefault();
+            updateSlide(curIdx + 1);
+          }
+        }
+      });
+
+      // Touch swipe support
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var touchDeltaX = 0;
+      var touchDeltaY = 0;
+      var viewport = card.querySelector(".gcard-viewport");
+
+      if (viewport) {
+        viewport.addEventListener("touchstart", function(e){
+          if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchDeltaX = 0;
+            touchDeltaY = 0;
+          }
+        }, {passive: true});
+
+        viewport.addEventListener("touchmove", function(e){
+          if (e.touches.length === 1) {
+            touchDeltaX = e.touches[0].clientX - touchStartX;
+            touchDeltaY = e.touches[0].clientY - touchStartY;
+          }
+        }, {passive: true});
+
+        viewport.addEventListener("touchend", function(){
+          // Only trigger if horizontal swipe is clearly dominant
+          if (Math.abs(touchDeltaX) > 40 && Math.abs(touchDeltaX) > Math.abs(touchDeltaY) * 1.5) {
+            if (touchDeltaX < 0) {
+              updateSlide(curIdx + 1);
+            } else {
+              updateSlide(curIdx - 1);
+            }
+          }
+        });
+      }
+    });
+
+    // 2. CATEGORY FILTERS
+    filterBtns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var filter = btn.getAttribute("data-filter");
+        filterBtns.forEach(function(b){
+          var isSel = (b === btn);
+          b.classList.toggle("active", isSel);
+          b.setAttribute("aria-selected", String(isSel));
+        });
+
+        cards.forEach(function(card){
+          var cats = card.getAttribute("data-category") || "";
+          var match = (filter === "all") || (cats.indexOf(filter) !== -1);
+          card.classList.toggle("is-hidden", !match);
+        });
+      });
+    });
+
+    // 3. LIGHTBOX MODAL
+    function openLightbox(card, slideIdx, triggerEl){
+      lastActiveTrigger = triggerEl || null;
+      var titleEl = card.querySelector(".gcard-title");
+      var title = titleEl ? titleEl.textContent.trim() : "";
+      var zoomBtns = Array.from(card.querySelectorAll(".slide-zoom-btn"));
+
+      activeModalSlides = zoomBtns.map(function(b){
+        return {
+          src: b.getAttribute("data-src") || "",
+          caption: b.getAttribute("data-caption") || "",
+          alt: b.getAttribute("data-alt") || "",
+          title: title
+        };
+      });
+
+      activeModalIdx = slideIdx;
+      renderLightboxSlide(activeModalIdx);
+
+      if (lightbox) {
+        document.body.style.overflow = "hidden";
+        if (typeof lightbox.showModal === "function") {
+          try {
+            lightbox.showModal();
+          } catch(e) {
+            lightbox.setAttribute("open", "");
+          }
+        } else {
+          lightbox.setAttribute("open", "");
+        }
+        if (lightboxClose) lightboxClose.focus();
+      }
+    }
+
+    function renderLightboxSlide(idx){
+      if (!activeModalSlides.length) return;
+      if (idx < 0) idx = 0;
+      if (idx >= activeModalSlides.length) idx = activeModalSlides.length - 1;
+      activeModalIdx = idx;
+
+      var cur = activeModalSlides[activeModalIdx];
+      if (lightboxImg) {
+        lightboxImg.src = cur.src;
+        lightboxImg.alt = cur.alt;
+      }
+      if (lightboxTitle) lightboxTitle.textContent = cur.title;
+      if (lightboxCaption) lightboxCaption.textContent = cur.caption;
+      if (lightboxCounter) {
+        lightboxCounter.textContent = (activeModalIdx + 1) + " / " + activeModalSlides.length;
+      }
+      if (lightboxPrev) lightboxPrev.disabled = (activeModalIdx === 0);
+      if (lightboxNext) lightboxNext.disabled = (activeModalIdx === activeModalSlides.length - 1);
+    }
+
+    function closeLightbox(){
+      if (!lightbox) return;
+      document.body.style.overflow = "";
+      if (typeof lightbox.close === "function") {
+        try { lightbox.close(); } catch(e){}
+      }
+      lightbox.removeAttribute("open");
+      if (lastActiveTrigger && typeof lastActiveTrigger.focus === "function") {
+        lastActiveTrigger.focus();
+      }
+    }
+
+    // Attach click listeners to all slide-zoom-btn
+    cards.forEach(function(card){
+      var zoomBtns = card.querySelectorAll(".slide-zoom-btn");
+      zoomBtns.forEach(function(btn){
+        btn.addEventListener("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var idx = parseInt(btn.getAttribute("data-slide-idx"), 10) || 0;
+          openLightbox(card, idx, btn);
+        });
+      });
+    });
+
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener("click", function(e){
+        e.stopPropagation();
+        renderLightboxSlide(activeModalIdx - 1);
+      });
+    }
+
+    if (lightboxNext) {
+      lightboxNext.addEventListener("click", function(e){
+        e.stopPropagation();
+        renderLightboxSlide(activeModalIdx + 1);
+      });
+    }
+
+    if (lightbox) {
+      lightbox.addEventListener("click", function(e){
+        if (e.target.hasAttribute("data-action") && e.target.getAttribute("data-action") === "close") {
+          closeLightbox();
+        }
+      });
+
+      lightbox.addEventListener("keydown", function(e){
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeLightbox();
+        } else if (e.key === "ArrowLeft") {
+          if (activeModalIdx > 0) {
+            e.preventDefault();
+            renderLightboxSlide(activeModalIdx - 1);
+          }
+        } else if (e.key === "ArrowRight") {
+          if (activeModalIdx < activeModalSlides.length - 1) {
+            e.preventDefault();
+            renderLightboxSlide(activeModalIdx + 1);
+          }
+        }
+      });
+    }
   })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>

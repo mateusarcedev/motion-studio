@@ -33,3 +33,7 @@ dist/packages/*.tgz
 # Heavy delivery archives (>100MB)
 projects/*/*.zip
 
+# Python cache
+__pycache__/
+*.pyc
+

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Gera site/index.html (pt-BR) e site/en/index.html (en) a partir de page.template.html com foco 100% open-source e avatares do GitHub."""
 import re, pathlib, html
+from gallery_data import render_gallery_html
 
 ROOT = pathlib.Path(__file__).parent
 SITE = ROOT / "site"
@@ -279,7 +280,9 @@ def build(lang):
     s = (ROOT / "page.template.html").read_text()
     drop = "en" if lang == "pt-BR" else "pt-BR"
     cred, n = credits_html(lang)
+    gallery = render_gallery_html(lang)
     s = s.replace("{{CREDITS}}", cred).replace("{{NCRED}}", f"{n:02d}")
+    s = s.replace("{{GALLERY}}", gallery)
     s = re.sub(rf'<span lang="{drop}"[^>]*>.*?</span>', "", s, flags=re.S)
     s = re.sub(r"@@(.*?)::(.*?)@@", lambda m: m.group(1 if lang == "pt-BR" else 2), s)
     s = s.replace("{{HEAD}}", head(lang)).replace("{{LANG}}", lang).replace("{{GH}}", GH).replace("{{WAVE}}", WAVE)

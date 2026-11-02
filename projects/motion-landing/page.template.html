@@ -221,11 +221,109 @@ p{color:var(--fg-dim)}
   .work-spotlight{grid-template-columns:1fr}
   .spotlight-media{height:240px}
 }
-.work{display:grid;grid-template-columns:repeat(12,1fr);gap:24px 16px;align-items:start}
-.tile img{width:100%;border:1px solid var(--line);border-radius:var(--radius)}
-.tile figcaption{padding-top:12px;font-size:13px;color:var(--fg-dim)}
-.tile figcaption b{display:block;font:600 15px/1.25 var(--sans);letter-spacing:-.01em;color:var(--fg);margin-bottom:2px}
-.t-wide{grid-column:span 8} .t-tall{grid-column:span 4} .t-a,.t-b,.t-c{grid-column:span 4}
+.intro-sub{font-size:15px;line-height:1.6;color:var(--fg-dim);margin-top:-6px}
+
+/* creation gallery & filters */
+.gallery-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.gfilter-btn{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:20px;font:500 12.5px/1 var(--mono);letter-spacing:.02em;background:var(--surface);border:1px solid var(--line);color:var(--fg-dim);cursor:pointer;transition:all .18s ease}
+.gfilter-btn:hover{border-color:var(--mint-edge);color:var(--fg);background:var(--surface-2)}
+.gfilter-btn.active{background:var(--mint-dim);border-color:var(--mint);color:var(--mint);font-weight:600;box-shadow:0 0 12px -2px var(--mint-dim)}
+.gfilter-btn:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+/* gallery grid & cards */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;align-items:stretch;margin-bottom:24px}
+@media (max-width:768px){
+  .gallery-grid{grid-template-columns:1fr;gap:20px}
+}
+.gallery-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;position:relative;transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease}
+.gallery-card:hover{border-color:var(--mint-edge);transform:translateY(-2px);box-shadow:0 14px 34px -12px var(--mint-edge)}
+.gallery-card:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.gallery-card.is-hidden{display:none!important}
+
+/* card header */
+.gcard-header{padding:16px 20px 14px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--line-soft);background:color-mix(in srgb,var(--surface-2) 40%,var(--surface))}
+.gcard-meta-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.gcard-cat{font:600 10.5px/1 var(--mono);color:var(--mint);letter-spacing:.08em;text-transform:uppercase}
+.gcard-format-pill{font:500 10.5px/1 var(--mono);color:var(--fg-faint);background:var(--bg-soft);border:1px solid var(--line);padding:3px 7px;border-radius:var(--radius-sm);letter-spacing:.04em}
+.gcard-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.gcard-title{font:600 15px/1.3 var(--sans);color:var(--fg);margin:0;letter-spacing:-.01em}
+.gcard-counter{font:600 11.5px/1 var(--mono);color:var(--fg-dim);background:var(--bg-soft);border:1px solid var(--line);padding:3px 8px;border-radius:var(--radius-sm);flex-shrink:0}
+
+/* card viewport & aspect ratios */
+.gcard-viewport-wrap{position:relative;width:100%;background:#06080c;overflow:hidden}
+[data-theme="light"] .gcard-viewport-wrap{background:#e8e5dc}
+.gcard-viewport-wrap.ratio-4-5{aspect-ratio:4/5}
+.gcard-viewport-wrap.ratio-1-1{aspect-ratio:1/1}
+.gcard-viewport-wrap.ratio-9-16{aspect-ratio:9/16}
+.gcard-viewport-wrap.ratio-16-9{aspect-ratio:16/9}
+
+.gcard-viewport{position:absolute;inset:0;overflow:hidden;touch-action:pan-y}
+.gcard-track{display:flex;width:100%;height:100%;will-change:transform;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+
+/* card slide */
+.gcard-slide{flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.slide-zoom-btn{width:100%;height:100%;padding:0;margin:0;border:none;background:transparent;cursor:zoom-in;position:relative;display:flex;align-items:center;justify-content:center}
+.slide-zoom-btn:focus-visible{outline:2px inset var(--mint)}
+.slide-img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block}
+.zoom-indicator{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(14,14,14,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:var(--fg);opacity:0;transition:opacity .2s ease;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+[data-theme="light"] .zoom-indicator{background:rgba(255,255,255,.88);border-color:rgba(0,0,0,.15);color:#1a1a17}
+.slide-zoom-btn:hover .zoom-indicator,.slide-zoom-btn:focus-visible .zoom-indicator{opacity:1}
+
+/* card navigation arrows */
+.gcard-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(14,14,14,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;z-index:4;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+[data-theme="light"] .gcard-nav{background:rgba(255,255,255,.88);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.gcard-nav.prev{left:10px}
+.gcard-nav.next{right:10px}
+.gcard-nav:hover:not(:disabled){background:var(--surface);border-color:var(--mint);color:var(--mint);transform:translateY(-50%) scale(1.08)}
+.gcard-nav:disabled{opacity:0;pointer-events:none}
+@media (pointer:coarse){
+  .gcard-nav{width:44px;height:44px}
+}
+
+/* card dots */
+.gcard-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:6px;z-index:4;pointer-events:auto}
+.gcard-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.32);border:none;padding:0;cursor:pointer;transition:all .25s ease}
+[data-theme="light"] .gcard-dot{background:rgba(0,0,0,.25)}
+.gcard-dot.active{width:18px;border-radius:3px;background:var(--mint);box-shadow:0 0 6px var(--mint)}
+
+/* card footer */
+.gcard-footer{padding:14px 20px 18px;display:flex;flex-direction:column;gap:10px;margin-top:auto;border-top:1px solid var(--line-soft)}
+.gcard-desc{font-size:13px;line-height:1.55;color:var(--fg-dim);margin:0}
+.gcard-link{display:inline-flex;align-items:center;gap:4px;font:600 12.5px/1 var(--sans);color:var(--mint);text-decoration:none;transition:color .15s}
+.gcard-link:hover{text-decoration:underline}
+
+/* lightbox modal */
+.gallery-lightbox{position:fixed;inset:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;margin:0;padding:0;border:none;background:transparent;z-index:2000;display:none;align-items:center;justify-content:center}
+.gallery-lightbox[open]{display:flex}
+.lightbox-backdrop{position:fixed;inset:0;background:rgba(6,8,12,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:1}
+[data-theme="light"] .lightbox-backdrop{background:rgba(240,238,232,.95)}
+.lightbox-dialog-pane{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;max-width:1400px;margin:0 auto;padding:20px 24px}
+.lightbox-topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line-soft);gap:16px}
+.lightbox-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+.lightbox-title{font:600 15px/1.3 var(--sans);color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lightbox-caption{font:400 12.5px/1.4 var(--mono);color:var(--fg-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lightbox-actions{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.lightbox-counter{font:600 12.5px/1 var(--mono);color:var(--mint);background:var(--mint-dim);border:1px solid var(--mint-edge);padding:4px 9px;border-radius:var(--radius-sm)}
+.lightbox-close{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s ease}
+.lightbox-close:hover{border-color:var(--mint);color:var(--mint);transform:scale(1.06)}
+.lightbox-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:space-between;position:relative;padding:16px 0;gap:14px}
+.lightbox-img-wrap{flex:1;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lightbox-img{max-width:100%;max-height:calc(100vh - 130px);object-fit:contain;border-radius:var(--radius);box-shadow:0 24px 60px rgba(0,0,0,.65)}
+.lightbox-nav{width:46px;height:46px;border-radius:50%;background:rgba(14,14,14,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;flex-shrink:0}
+[data-theme="light"] .lightbox-nav{background:rgba(255,255,255,.9)}
+.lightbox-nav:hover:not(:disabled){border-color:var(--mint);color:var(--mint);transform:scale(1.08)}
+.lightbox-nav:disabled{opacity:.2;pointer-events:none}
+@media (max-width:768px){
+  .lightbox-dialog-pane{padding:12px 14px}
+  .lightbox-stage{gap:8px}
+  .lightbox-nav{width:40px;height:40px}
+  .lightbox-title{font-size:13.5px}
+  .lightbox-caption{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  .gcard-track{transition:none!important}
+  .gallery-card,.gcard-nav,.gcard-dot,.lightbox-nav,.lightbox-close{transition:none!important}
+}
 .note{margin-top:28px;font-size:12px;color:var(--fg-faint)}
 
 /* stack */
@@ -314,7 +412,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
         <a href="#quickstart"><span lang="pt-BR">instalar</span><span lang="en">install</span></a>
         <a href="#formats"><span lang="pt-BR">formatos</span><span lang="en">formats</span></a>
         <a href="#pipeline">pipeline</a>
-        <a href="#work"><span lang="pt-BR">trabalhos</span><span lang="en">work</span></a>
+        <a href="#work"><span lang="pt-BR">galeria</span><span lang="en">gallery</span></a>
         <a href="#stack">stack</a>
         <a href="#credits"><span lang="pt-BR">ecossistema</span><span lang="en">ecosystem</span></a>
       </nav>
@@ -477,9 +575,10 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="work">
-  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title"><span lang="pt-BR">trabalhos &amp; exemplos</span><span lang="en">work &amp; examples</span></span><span class="sec-rule"></span><span class="sec-count">07</span></div>
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title"><span lang="pt-BR">galeria de criações</span><span lang="en">creation gallery</span></span><span class="sec-rule"></span><span class="sec-count">09</span></div>
   <div class="intro rv">
-    <h2><span lang="pt-BR">Renders reais, não maquetes.</span><span lang="en">Real renders, not mockups.</span></h2>
+    <h2><span lang="pt-BR">Galeria de Criações</span><span lang="en">Creation Gallery</span></h2>
+    <p class="intro-sub"><span lang="pt-BR">Explore vídeos, carrosséis, artes e experiências produzidas com o MOTION Studio.</span><span lang="en">Explore videos, carousels, artwork, and interactive experiences made with MOTION Studio.</span></p>
   </div>
 
   <!-- TRAVESSIA Featured Showcase -->
@@ -568,15 +667,61 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
     </div>
   </article>
 
-  <div class="work">
-    <figure class="tile t-wide rv"><img src="/assets/post-16x9.jpg" alt="@@Post de feed recomposto em 16:9::Feed post recomposed in 16:9@@"><figcaption><b><span lang="pt-BR">Post em 4 proporções</span><span lang="en">Post in 4 ratios</span></b><span>16:9 · 4:5 · 1:1 · 9:16 — <span lang="pt-BR">recomposição, não crop</span><span lang="en">recomposition, not crop</span></span></figcaption></figure>
-    <figure class="tile t-tall rv"><img src="/assets/story-01.jpg" alt="@@Story estático 9:16::Static 9:16 story@@"><figcaption><b><span lang="pt-BR">Story estático</span><span lang="en">Static story</span></b><span>PNG 2160×3840</span></figcaption></figure>
-    <figure class="tile t-a rv"><img src="/assets/carousel-01.jpg" alt="@@Slide 1 do carrossel::Carousel slide 1@@"><figcaption><b><span lang="pt-BR">Carrossel · 7 slides</span><span lang="en">Carousel · 7 slides</span></b><span>PNG 2160×2700</span></figcaption></figure>
-    <figure class="tile t-b rv"><img src="/assets/carousel-04.jpg" alt="@@Slide 4 do carrossel::Carousel slide 4@@"><figcaption><b><span lang="pt-BR">Mesmo sistema, outro ritmo</span><span lang="en">Same system, new rhythm</span></b><span>04 / 07</span></figcaption></figure>
-    <figure class="tile t-c rv"><img src="/assets/post-4x5.jpg" alt="@@Post de feed 4:5::4:5 feed post@@"><figcaption><b>Feed 4:5</b><span><span lang="pt-BR">hierarquia própria</span><span lang="en">its own hierarchy</span></span></figcaption></figure>
+  <!-- Filters Bar -->
+  <div class="gallery-filters rv" role="tablist" aria-label="@@Filtrar produções por categoria::Filter productions by category@@">
+    <button type="button" class="gfilter-btn active" data-filter="all" role="tab" aria-selected="true">
+      <span lang="pt-BR">Todos</span><span lang="en">All</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="carousels" role="tab" aria-selected="false">
+      <span lang="pt-BR">Carrosséis</span><span lang="en">Carousels</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="3d-web" role="tab" aria-selected="false">
+      <span>3D &amp; Web</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="motion" role="tab" aria-selected="false">
+      <span>Motion</span>
+    </button>
+    <button type="button" class="gfilter-btn" data-filter="posts" role="tab" aria-selected="false">
+      <span lang="pt-BR">Posts &amp; Stories</span><span lang="en">Posts &amp; Stories</span>
+    </button>
   </div>
-  <p class="note"><span lang="pt-BR">Produções de exemplo geradas pelo pipeline determinístico e código aberto do MOTION.</span><span lang="en">Sample productions generated by MOTION's deterministic open-source pipeline.</span></p>
+
+  <div class="gallery-grid" id="creationGallery">
+    {{GALLERY}}
+  </div>
+
+  <p class="note rv"><span lang="pt-BR">Produções de exemplo geradas pelo pipeline determinístico e código aberto do MOTION. Clique em qualquer imagem para ampliar em alta resolução.</span><span lang="en">Sample productions generated by MOTION's deterministic open-source pipeline. Click any image to view in high resolution.</span></p>
 </section>
+
+<!-- Modal de visualização ampliada (Lightbox) -->
+<dialog id="galleryLightbox" class="gallery-lightbox" aria-label="@@Visualização ampliada da produção::Enlarged production view@@">
+  <div class="lightbox-backdrop" data-action="close"></div>
+  <div class="lightbox-dialog-pane" role="document">
+    <div class="lightbox-topbar">
+      <div class="lightbox-info">
+        <span class="lightbox-title" id="lightboxTitle"></span>
+        <span class="lightbox-caption" id="lightboxCaption"></span>
+      </div>
+      <div class="lightbox-actions">
+        <span class="lightbox-counter" id="lightboxCounter" aria-live="polite">1 / 5</span>
+        <button type="button" class="lightbox-close" id="lightboxClose" data-action="close" aria-label="@@Fechar visualização (Esc)::Close view (Esc)@@">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+    <div class="lightbox-stage">
+      <button type="button" class="lightbox-nav prev" id="lightboxPrev" aria-label="@@Lâmina anterior (Seta esquerda)::Previous slide (Left arrow)@@">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="lightbox-img-wrap">
+        <img id="lightboxImg" src="" alt="" class="lightbox-img">
+      </div>
+      <button type="button" class="lightbox-nav next" id="lightboxNext" aria-label="@@Próxima lâmina (Seta direita)::Next slide (Right arrow)@@">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </div>
+</dialog>
 
 <section>
   <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title"><span lang="pt-BR">princípios</span><span lang="en">principles</span></h2><span class="sec-rule"></span><span class="sec-count">03</span></div>
@@ -780,7 +925,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
   (function(){
     var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
     // stagger: delay by index among siblings that reveal together
-    document.querySelectorAll(".steps,.grid3,.stack,.work,.facts,.cred-grid").forEach(function(g){
+    document.querySelectorAll(".steps,.grid3,.stack,.gallery-grid,.facts,.cred-grid").forEach(function(g){
       g.querySelectorAll(":scope > .rv").forEach(function(el,i){el.style.setProperty("--d",(Math.min(i,7)*0.06)+"s")});
     });
     if(reduce)return;
@@ -806,6 +951,270 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
       (function step(t){var k=clamp((t-t0)/dur), v=Math.round(to*(1-Math.pow(1-k,3))); b.textContent=v; if(k<1)requestAnimationFrame(step)})(t0);
     })},{threshold:.6});
     document.querySelectorAll(".fact b").forEach(function(b){cio.observe(b)});
+  })();
+
+  /* Creation Gallery: Carousel, Filters, Lightbox */
+  (function(){
+    var gallery = document.getElementById("creationGallery");
+    if (!gallery) return;
+
+    var cards = Array.from(gallery.querySelectorAll(".gallery-card"));
+    var filterBtns = Array.from(document.querySelectorAll(".gfilter-btn"));
+    var lightbox = document.getElementById("galleryLightbox");
+    var lightboxImg = document.getElementById("lightboxImg");
+    var lightboxTitle = document.getElementById("lightboxTitle");
+    var lightboxCaption = document.getElementById("lightboxCaption");
+    var lightboxCounter = document.getElementById("lightboxCounter");
+    var lightboxPrev = document.getElementById("lightboxPrev");
+    var lightboxNext = document.getElementById("lightboxNext");
+    var lightboxClose = document.getElementById("lightboxClose");
+    var activeModalSlides = [];
+    var activeModalIdx = 0;
+    var lastActiveTrigger = null;
+
+    // 1. CAROUSEL CONTROLLER FOR EACH CARD
+    cards.forEach(function(card){
+      var track = card.querySelector(".gcard-track");
+      var slides = Array.from(card.querySelectorAll(".gcard-slide"));
+      var dots = Array.from(card.querySelectorAll(".gcard-dot"));
+      var prevBtn = card.querySelector(".gcard-nav.prev");
+      var nextBtn = card.querySelector(".gcard-nav.next");
+      var counter = card.querySelector(".gcard-counter");
+      var total = slides.length;
+      var curIdx = 0;
+
+      if (total <= 1) return; // single slide cards have no navigation controls
+
+      function updateSlide(newIdx){
+        if (newIdx < 0) newIdx = 0;
+        if (newIdx >= total) newIdx = total - 1;
+        curIdx = newIdx;
+        track.style.transform = "translateX(-" + (curIdx * 100) + "%)";
+        slides.forEach(function(s, i){
+          s.classList.toggle("active", i === curIdx);
+        });
+        dots.forEach(function(d, i){
+          d.classList.toggle("active", i === curIdx);
+          d.setAttribute("aria-selected", String(i === curIdx));
+        });
+        if (counter) {
+          counter.textContent = (curIdx + 1) + " / " + total;
+        }
+        if (prevBtn) prevBtn.disabled = (curIdx === 0);
+        if (nextBtn) nextBtn.disabled = (curIdx === total - 1);
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener("click", function(e){
+          e.stopPropagation();
+          updateSlide(curIdx - 1);
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function(e){
+          e.stopPropagation();
+          updateSlide(curIdx + 1);
+        });
+      }
+
+      dots.forEach(function(dot){
+        dot.addEventListener("click", function(e){
+          e.stopPropagation();
+          var idx = parseInt(dot.getAttribute("data-slide-idx"), 10);
+          if (!isNaN(idx)) updateSlide(idx);
+        });
+      });
+
+      // Keyboard navigation when card or any inner element has focus
+      card.addEventListener("keydown", function(e){
+        // Don't intercept if lightbox is open
+        if (lightbox && lightbox.open) return;
+        if (e.key === "ArrowLeft") {
+          if (curIdx > 0) {
+            e.preventDefault();
+            updateSlide(curIdx - 1);
+          }
+        } else if (e.key === "ArrowRight") {
+          if (curIdx < total - 1) {
+            e.preventDefault();
+            updateSlide(curIdx + 1);
+          }
+        }
+      });
+
+      // Touch swipe support
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var touchDeltaX = 0;
+      var touchDeltaY = 0;
+      var viewport = card.querySelector(".gcard-viewport");
+
+      if (viewport) {
+        viewport.addEventListener("touchstart", function(e){
+          if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchDeltaX = 0;
+            touchDeltaY = 0;
+          }
+        }, {passive: true});
+
+        viewport.addEventListener("touchmove", function(e){
+          if (e.touches.length === 1) {
+            touchDeltaX = e.touches[0].clientX - touchStartX;
+            touchDeltaY = e.touches[0].clientY - touchStartY;
+          }
+        }, {passive: true});
+
+        viewport.addEventListener("touchend", function(){
+          // Only trigger if horizontal swipe is clearly dominant
+          if (Math.abs(touchDeltaX) > 40 && Math.abs(touchDeltaX) > Math.abs(touchDeltaY) * 1.5) {
+            if (touchDeltaX < 0) {
+              updateSlide(curIdx + 1);
+            } else {
+              updateSlide(curIdx - 1);
+            }
+          }
+        });
+      }
+    });
+
+    // 2. CATEGORY FILTERS
+    filterBtns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var filter = btn.getAttribute("data-filter");
+        filterBtns.forEach(function(b){
+          var isSel = (b === btn);
+          b.classList.toggle("active", isSel);
+          b.setAttribute("aria-selected", String(isSel));
+        });
+
+        cards.forEach(function(card){
+          var cats = card.getAttribute("data-category") || "";
+          var match = (filter === "all") || (cats.indexOf(filter) !== -1);
+          card.classList.toggle("is-hidden", !match);
+        });
+      });
+    });
+
+    // 3. LIGHTBOX MODAL
+    function openLightbox(card, slideIdx, triggerEl){
+      lastActiveTrigger = triggerEl || null;
+      var titleEl = card.querySelector(".gcard-title");
+      var title = titleEl ? titleEl.textContent.trim() : "";
+      var zoomBtns = Array.from(card.querySelectorAll(".slide-zoom-btn"));
+
+      activeModalSlides = zoomBtns.map(function(b){
+        return {
+          src: b.getAttribute("data-src") || "",
+          caption: b.getAttribute("data-caption") || "",
+          alt: b.getAttribute("data-alt") || "",
+          title: title
+        };
+      });
+
+      activeModalIdx = slideIdx;
+      renderLightboxSlide(activeModalIdx);
+
+      if (lightbox) {
+        document.body.style.overflow = "hidden";
+        if (typeof lightbox.showModal === "function") {
+          try {
+            lightbox.showModal();
+          } catch(e) {
+            lightbox.setAttribute("open", "");
+          }
+        } else {
+          lightbox.setAttribute("open", "");
+        }
+        if (lightboxClose) lightboxClose.focus();
+      }
+    }
+
+    function renderLightboxSlide(idx){
+      if (!activeModalSlides.length) return;
+      if (idx < 0) idx = 0;
+      if (idx >= activeModalSlides.length) idx = activeModalSlides.length - 1;
+      activeModalIdx = idx;
+
+      var cur = activeModalSlides[activeModalIdx];
+      if (lightboxImg) {
+        lightboxImg.src = cur.src;
+        lightboxImg.alt = cur.alt;
+      }
+      if (lightboxTitle) lightboxTitle.textContent = cur.title;
+      if (lightboxCaption) lightboxCaption.textContent = cur.caption;
+      if (lightboxCounter) {
+        lightboxCounter.textContent = (activeModalIdx + 1) + " / " + activeModalSlides.length;
+      }
+      if (lightboxPrev) lightboxPrev.disabled = (activeModalIdx === 0);
+      if (lightboxNext) lightboxNext.disabled = (activeModalIdx === activeModalSlides.length - 1);
+    }
+
+    function closeLightbox(){
+      if (!lightbox) return;
+      document.body.style.overflow = "";
+      if (typeof lightbox.close === "function") {
+        try { lightbox.close(); } catch(e){}
+      }
+      lightbox.removeAttribute("open");
+      if (lastActiveTrigger && typeof lastActiveTrigger.focus === "function") {
+        lastActiveTrigger.focus();
+      }
+    }
+
+    // Attach click listeners to all slide-zoom-btn
+    cards.forEach(function(card){
+      var zoomBtns = card.querySelectorAll(".slide-zoom-btn");
+      zoomBtns.forEach(function(btn){
+        btn.addEventListener("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var idx = parseInt(btn.getAttribute("data-slide-idx"), 10) || 0;
+          openLightbox(card, idx, btn);
+        });
+      });
+    });
+
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener("click", function(e){
+        e.stopPropagation();
+        renderLightboxSlide(activeModalIdx - 1);
+      });
+    }
+
+    if (lightboxNext) {
+      lightboxNext.addEventListener("click", function(e){
+        e.stopPropagation();
+        renderLightboxSlide(activeModalIdx + 1);
+      });
+    }
+
+    if (lightbox) {
+      lightbox.addEventListener("click", function(e){
+        if (e.target.hasAttribute("data-action") && e.target.getAttribute("data-action") === "close") {
+          closeLightbox();
+        }
+      });
+
+      lightbox.addEventListener("keydown", function(e){
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeLightbox();
+        } else if (e.key === "ArrowLeft") {
+          if (activeModalIdx > 0) {
+            e.preventDefault();
+            renderLightboxSlide(activeModalIdx - 1);
+          }
+        } else if (e.key === "ArrowRight") {
+          if (activeModalIdx < activeModalSlides.length - 1) {
+            e.preventDefault();
+            renderLightboxSlide(activeModalIdx + 1);
+          }
+        }
+      });
+    }
   })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
