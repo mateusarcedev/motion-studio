@@ -106,7 +106,7 @@ Instale o MOTION em qualquer projeto consumidor existente (Next.js, Vite, React,
 ### 1. Instalação via NPM
 
 > [!NOTE]
-> **Disponibilidade no NPM:** Os comandos `npm install -D motion-cli motion-core motion-studio-skills` estarão disponíveis no registro público oficial do npm após a publicação do release. Durante a fase de **Release Candidate (`1.0.0-rc.1`)**, a instalação é realizada via tarballs locais (`npm install -D ./dist/packages/*.tgz`) ou via repositório.
+> **Disponibilidade no NPM:** Os comandos `npm install -D motion-cli motion-core motion-studio-skills` estarão disponíveis no registro público oficial do npm após a publicação do release. Durante a fase de **Release Candidate (`1.0.0-rc.2`)**, a instalação é realizada via tarballs locais (`npm install -D ./dist/packages/*.tgz`) ou via repositório.
 
 ```bash
 # Instalação padrão pós-publicação

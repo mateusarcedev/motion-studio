@@ -73,10 +73,12 @@ the hands. Code must be deterministic and frame-driven, with controllable parame
 
 | Brief says | Producer |
 |---|---|
+| Explainer técnico, diagramas vivos, Big O benchmark, visualização de dados | **explainer-motion** (HTML/Canvas/SVG frame-driven + diagramas vivos) |
 | Distinctive artistic style | **lemo-opuscar** (59+ code-drawn styles) |
 | Promo of a real site/app UI | **video-shotcraft** (Remotion, real page captures, beat-synced cuts) |
 | Launch hype for the project | **brag** (reads the code directly) |
 | Custom motion graphics, charts, maps, kinetic type, explainers | **hyperframes** (+ **hyperframes-registry** blocks) |
+| Showreel, teaser, beat-edit, legendas por palavra, mock 3D | **motion-designer** (timeline.html + three-kit + beat-edit) |
 | Support as needed | **media-use** (music/SFX/voiceover) · **ui-ux-pro-max** (palette/tokens) · **anatomy** (isometric figure assets) · **diagram-design** (diagram assets) |
 
 Do not stack producers — one producer per film, support skills pulled in as needed. If the user

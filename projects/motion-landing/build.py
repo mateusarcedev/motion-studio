@@ -21,7 +21,7 @@ ECOSYSTEM = [
         "featured": True,
         "desc_pt": "Diretores de estúdio, motores de render determinístico e orquestração criativa multi-formato.",
         "desc_en": "Studio directors, deterministic rendering engines, and multiformat creative orchestration.",
-        "skills": ["motion-director", "studio-director", "web-director", "carousel-studio", "story-studio", "feed-studio", "shorts-director", "3d-scene-director"]
+        "skills": ["motion-director", "studio-director", "web-director", "carousel-studio", "story-studio", "feed-studio", "shorts-director", "3d-scene-director", "explainer-motion"]
     },
     {
         "owner": "emilkowalski",
@@ -143,6 +143,17 @@ ECOSYSTEM = [
         "desc_pt": "Entrevista técnica e refinamento implacável de briefing para alinhamento de escopo.",
         "desc_en": "Technical interview and relentless briefing refinement for scope alignment.",
         "skills": ["grill-me"]
+    },
+    {
+        "owner": "gabrielgreco1",
+        "who": "Gabriel Greco",
+        "repo": "gabrielgreco1/skills",
+        "lic": "Custom",
+        "type": "community",
+        "initials": "GG",
+        "desc_pt": "Especialidades educacionais e audiovisuais: aulas interativas determinísticas, motion design em código e auditoria de UI.",
+        "desc_en": "Educational and audiovisual skills: interactive deterministic lessons, code-driven motion design, and UI humanizer audit.",
+        "skills": ["aula-interativa", "motion-designer", "ui-humanizer"]
     },
     {
         "owner": "microsoft",
@@ -275,14 +286,151 @@ def build(lang):
     assert "{{" not in s and "@@" not in s
     return s
 
+CASE_HEAD = {
+    "pt-BR": dict(
+        title="TRAVESSIA — Do cais ao destino · MOTION Studio",
+        desc="Uma jornada cinematográfica por portos, estradas e movimento. Experiência 3D interativa e filmes master sob 30 FPS CFR produzidos com MOTION Studio.",
+        og="/assets/carga-01/cover.png", path="/projects/travessia/", loc="pt_BR"),
+    "en": dict(
+        title="TRAVESSIA — From Port to Destination · MOTION Studio",
+        desc="A cinematic journey through ports, roads, and motion. Interactive 3D experience and master films under 30 FPS CFR built with MOTION Studio.",
+        og="/assets/carga-01/cover.png", path="/en/projects/travessia/", loc="en_US"),
+}
+
+def case_head(lang):
+    h = CASE_HEAD[lang]; e = html.escape
+    return f'''<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(h["title"])}</title>
+<meta name="description" content="{e(h["desc"])}">
+<link rel="canonical" href="{URL}{h["path"]}">
+<link rel="alternate" hreflang="pt-BR" href="{URL}/projects/travessia/">
+<link rel="alternate" hreflang="en" href="{URL}/en/projects/travessia/">
+<link rel="alternate" hreflang="x-default" href="{URL}/projects/travessia/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="MOTION Studio">
+<meta property="og:title" content="{e(h["title"])}">
+<meta property="og:description" content="{e(h["desc"])}">
+<meta property="og:url" content="{URL}{h["path"]}">
+<meta property="og:image" content="{URL}{h["og"]}">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
+<meta property="og:locale" content="{h["loc"]}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(h["title"])}">
+<meta name="twitter:description" content="{e(h["desc"])}">
+<meta name="twitter:image" content="{URL}{h["og"]}">
+<meta name="theme-color" content="#0e0e0e">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/Geist.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/fonts/GeistMono.woff" as="font" type="font/woff" crossorigin>'''
+
+def build_case(lang):
+    s = (ROOT / "case.template.html").read_text()
+    drop = "en" if lang == "pt-BR" else "pt-BR"
+    s = re.sub(rf'<span lang="{drop}"[^>]*>.*?</span>', "", s, flags=re.S)
+    s = re.sub(r"@@(.*?)::(.*?)@@", lambda m: m.group(1 if lang == "pt-BR" else 2), s)
+    s = s.replace("{{CASE_HEAD}}", case_head(lang)).replace("{{LANG}}", lang).replace("{{GH}}", GH)
+    assert "{{" not in s and "@@" not in s
+    return s
+
+CASE_STATE_MACHINES_HEAD = {
+    "pt-BR": dict(
+        title="Máquinas de Estados — Explainer Motion | MOTION Studio",
+        desc="Uma animação educacional de 60 segundos criada com MOTION Studio, explorando estados, eventos, guardas e transições através de motion graphics programáticos.",
+        og="/assets/state-machines/thumb-16x9.png", path="/projects/state-machines/", loc="pt_BR"),
+    "en": dict(
+        title="State Machines — Explainer Motion | MOTION Studio",
+        desc="A 60-second educational animation built with MOTION Studio, exploring states, events, guards and transitions through programmatic motion graphics.",
+        og="/assets/state-machines/thumb-16x9.png", path="/en/projects/state-machines/", loc="en_US"),
+}
+
+def case_state_machines_head(lang):
+    h = CASE_STATE_MACHINES_HEAD[lang]; e = html.escape
+    return f'''<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(h["title"])}</title>
+<meta name="description" content="{e(h["desc"])}">
+<link rel="canonical" href="{URL}{h["path"]}">
+<link rel="alternate" hreflang="pt-BR" href="{URL}/projects/state-machines/">
+<link rel="alternate" hreflang="en" href="{URL}/en/projects/state-machines/">
+<link rel="alternate" hreflang="x-default" href="{URL}/projects/state-machines/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="MOTION Studio">
+<meta property="og:title" content="{e(h["title"])}">
+<meta property="og:description" content="{e(h["desc"])}">
+<meta property="og:url" content="{URL}{h["path"]}">
+<meta property="og:image" content="{URL}{h["og"]}">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta property="og:locale" content="{h["loc"]}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(h["title"])}">
+<meta name="twitter:description" content="{e(h["desc"])}">
+<meta name="twitter:image" content="{URL}{h["og"]}">
+<meta name="theme-color" content="#0e0e0e">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/Geist.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/fonts/GeistMono.woff" as="font" type="font/woff" crossorigin>'''
+
+def build_state_machines_case(lang):
+    s = (ROOT / "case-state-machines.template.html").read_text()
+    drop = "en" if lang == "pt-BR" else "pt-BR"
+    s = re.sub(rf'<span lang="{drop}"[^>]*>.*?</span>', "", s, flags=re.S)
+    s = re.sub(r"@@(.*?)::(.*?)@@", lambda m: m.group(1 if lang == "pt-BR" else 2), s)
+    s = s.replace("{{CASE_HEAD}}", case_state_machines_head(lang)).replace("{{LANG}}", lang).replace("{{GH}}", GH)
+    assert "{{" not in s and "@@" not in s
+    return s
+
+def redirect_html(target_url, title="Redirecionando..."):
+    return f'''<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url={target_url}">
+<link rel="canonical" href="{URL}{target_url}">
+<title>{title}</title>
+<script>window.location.replace("{target_url}");</script>
+</head>
+<body style="background:#0e0e0e;color:#a8a8a8;font-family:sans-serif;padding:40px;text-align:center;">
+<p>Redirecionando para <a href="{target_url}" style="color:#15F5BA;">{target_url}</a>...</p>
+</body>
+</html>'''
+
 (SITE).mkdir(exist_ok=True); (SITE / "en").mkdir(exist_ok=True)
+(SITE / "projects" / "travessia").mkdir(parents=True, exist_ok=True)
+(SITE / "en" / "projects" / "travessia").mkdir(parents=True, exist_ok=True)
+(SITE / "projects" / "carga-01").mkdir(parents=True, exist_ok=True)
+(SITE / "en" / "projects" / "carga-01").mkdir(parents=True, exist_ok=True)
+(SITE / "projects" / "state-machines").mkdir(parents=True, exist_ok=True)
+(SITE / "en" / "projects" / "state-machines").mkdir(parents=True, exist_ok=True)
+
 (SITE / "index.html").write_text(build("pt-BR"))
 (SITE / "en" / "index.html").write_text(build("en"))
+(SITE / "projects" / "travessia" / "index.html").write_text(build_case("pt-BR"))
+(SITE / "en" / "projects" / "travessia" / "index.html").write_text(build_case("en"))
+(SITE / "projects" / "state-machines" / "index.html").write_text(build_state_machines_case("pt-BR"))
+(SITE / "en" / "projects" / "state-machines" / "index.html").write_text(build_state_machines_case("en"))
+
+# Aliases / Redirects for backward compatibility with CARGA / 01 URLs
+(SITE / "projects" / "carga-01" / "index.html").write_text(redirect_html("/projects/travessia/", "TRAVESSIA — MOTION Studio"))
+(SITE / "en" / "projects" / "carga-01" / "index.html").write_text(redirect_html("/en/projects/travessia/", "TRAVESSIA — MOTION Studio"))
+
 (SITE / "sitemap.xml").write_text(f'''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url><loc>{URL}/</loc><xhtml:link rel="alternate" hreflang="pt-BR" href="{URL}/"/><xhtml:link rel="alternate" hreflang="en" href="{URL}/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="{URL}/"/></url>
   <url><loc>{URL}/en/</loc><xhtml:link rel="alternate" hreflang="pt-BR" href="{URL}/"/><xhtml:link rel="alternate" hreflang="en" href="{URL}/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="{URL}/"/></url>
+  <url><loc>{URL}/projects/travessia/</loc><xhtml:link rel="alternate" hreflang="pt-BR" href="{URL}/projects/travessia/"/><xhtml:link rel="alternate" hreflang="en" href="{URL}/en/projects/travessia/"/><xhtml:link rel="alternate" hreflang="x-default" href="{URL}/projects/travessia/"/></url>
+  <url><loc>{URL}/en/projects/travessia/</loc><xhtml:link rel="alternate" hreflang="pt-BR" href="{URL}/projects/travessia/"/><xhtml:link rel="alternate" hreflang="en" href="{URL}/en/projects/travessia/"/><xhtml:link rel="alternate" hreflang="x-default" href="{URL}/projects/travessia/"/></url>
+  <url><loc>{URL}/projects/state-machines/</loc><xhtml:link rel="alternate" hreflang="pt-BR" href="{URL}/projects/state-machines/"/><xhtml:link rel="alternate" hreflang="en" href="{URL}/en/projects/state-machines/"/><xhtml:link rel="alternate" hreflang="x-default" href="{URL}/projects/state-machines/"/></url>
+  <url><loc>{URL}/en/projects/state-machines/</loc><xhtml:link rel="alternate" hreflang="pt-BR" href="{URL}/projects/state-machines/"/><xhtml:link rel="alternate" hreflang="en" href="{URL}/en/projects/state-machines/"/><xhtml:link rel="alternate" hreflang="x-default" href="{URL}/projects/state-machines/"/></url>
 </urlset>
 ''')
 (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {URL}/sitemap.xml\n")
 print(f"✓ Landing page gerada com sucesso: pt-BR ({len(build('pt-BR'))} bytes), en ({len(build('en'))} bytes)")
+print(f"✓ Case Study TRAVESSIA gerado com sucesso: pt-BR ({len(build_case('pt-BR'))} bytes), en ({len(build_case('en'))} bytes)")
+print(f"✓ Case Study Máquinas de Estados gerado com sucesso: pt-BR ({len(build_state_machines_case('pt-BR'))} bytes), en ({len(build_state_machines_case('en'))} bytes)")

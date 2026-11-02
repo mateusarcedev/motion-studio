@@ -41,7 +41,7 @@ def main():
         role = next((v for k, v in ROLES.items() if k in p.parts), "other")
         files.append({
             "path": str(p.relative_to(a.folder)),
-            "sha256": hash_file(p)[:16],
+            "sha256": hash_file(p),
             "bytes": p.stat().st_size,
             "role": role,
         })

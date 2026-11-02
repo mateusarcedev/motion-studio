@@ -1,3 +1,6 @@
+import { stat } from "node:fs/promises";
+import path from "node:path";
+
 let listSkills;
 try {
   const mod = await import("motion-studio-skills");
@@ -63,7 +66,7 @@ export async function runList() {
     },
   ];
 
-  console.log("### Especialistas de Produção Criativa\n");
+  console.log("### Especialistas de Produção Criativa (Nativos)\n");
   for (const s of specialties) {
     console.log(`- **\`${s.name}\`** (${s.title})`);
     console.log(`  - *Formatos:* ${s.formats}`);
@@ -87,7 +90,51 @@ export async function runList() {
     console.log("- **`social`**: Carrosséis e posts sociais (`core` + `carousel-studio`, `story-studio`, `feed-studio`, `banner-design`, `slides`).");
     console.log("- **`3d`**: Criação de cenas 3D procedurais (`core` + `3d-scene-director`, `anatomy`, `diagram-design`).");
     console.log("- **`blender`**: Especialistas de modelagem e renderização Blender.");
-    console.log("- **`all`**: Instalação completa de todas as 50 skills do ecossistema.\n");
-    console.log(`Total de Agent Skills no catálogo: ${all.length} disponíveis.`);
+    console.log("- **`interactive`**: Aulas guiadas e conteúdo educacional (`core` + `diagram-design`, `slides`).");
+    console.log("- **`all`**: Instalação completa de todas as skills do ecossistema.\n");
+    console.log(`Total de Agent Skills nativas no catálogo: ${all.length} disponíveis.`);
+
+    const commIntegrations = [
+      {
+        name: "aula-interativa",
+        title: "Aulas Interativas Determinísticas",
+        desc: "Roteiro pedagógico, simuladores em runtime, exercícios com feedback explicativo causal e responsividade.",
+        profile: "interactive",
+      },
+      {
+        name: "motion-designer",
+        title: "Teasers Cinéticos & Beat Sync",
+        desc: "Motion design de alta precisão temporal, HUDs geométricos e sincronização no beat.",
+        profile: "motion",
+      },
+      {
+        name: "ui-humanizer",
+        title: "Auditoria Visual Anti-Template",
+        desc: "Auditoria heurística para detecção e eliminação de clichês e 'cara de IA' em interfaces.",
+        profile: "web",
+      },
+    ];
+
+    console.log(`\n### Integrações Externas da Comunidade (Gabriel Greco)\n`);
+    console.log("ℹ️ Estas especialidades são mantidas no repositório upstream (commit 9cf15be) sob licença Custom e devem ser adicionadas sob demanda (sem redistribuição em pacotes npm):\n");
+
+    for (const ci of commIntegrations) {
+      let isInstalled = false;
+      for (const p of [
+        path.join(process.cwd(), ".agents", "skills", ci.name),
+        path.join(process.cwd(), ".claude", "skills", ci.name),
+      ]) {
+        try {
+          await stat(p);
+          isInstalled = true;
+          break;
+        } catch {}
+      }
+      const statusBadge = isInstalled ? "✅ INSTALADA LOCALMENTE" : "⚪ DISPONÍVEL (NÃO INSTALADA)";
+      console.log(`- **\`${ci.name}\`** (${ci.title}) — [${statusBadge}]`);
+      console.log(`  - *Escopo:* ${ci.desc}`);
+      console.log(`  - *Perfil recomendado:* \`${ci.profile}\``);
+      console.log(`  - *Comando para adicionar:* \`npx skills add gabrielgreco1/skills --skill ${ci.name}\`\n`);
+    }
   } catch {}
 }

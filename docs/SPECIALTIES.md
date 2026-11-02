@@ -73,3 +73,54 @@ O MOTION Studio opera sob uma divisão estrita de departamentos criativos e exec
 - **Tecnologias:** Three.js / React Three Fiber / glTF Transform / Blender CLI (opcional).
 - **Saída:** Modelos `.glb` otimizados para web e componentes interativos.
 - **Isolamento:** Blender é tratado como ferramenta externa isolada; código Three.js serve como fallback autônomo.
+
+---
+
+## 9. `aula-interativa` (Especialidade Educacional — Integração da Comunidade)
+- **Origem:** Gabriel Greco (`gabrielgreco1/skills`).
+- **Papel:** Criação de aulas interativas autocontidas em HTML/CSS/JS.
+- **Entrada:** `BRIEF.md` (objetivo pedagógico, público, modelo mental) e `ROTEIRO.md` (telas, conceitos, feedbacks causais).
+- **Saída:**
+  - `lesson.html` autocontido (CSS, motion, kit de UI e player inlined, zero CDNs externas).
+  - Componentes pedagógicos com feedback causal para respostas certas e erradas.
+  - Teste automatizado de navegação e responsividade (mobile 390px e desktop).
+  - Folha de contato (`contact-sheet.png`) e entrega empacotada em `.zip`.
+- **Roteamento:** Invocado pelo `studio-director` quando o deliverable for educacional (`interactive-lesson`).
+
+---
+
+## 10. `motion-designer` (Especialidade Audiovisual — Integração da Comunidade)
+- **Origem:** Gabriel Greco (`gabrielgreco1/skills`).
+- **Papel:** Especialista em showreels, teasers de produto, transições cinéticas e sincronização rítmica.
+- **Entrada:** `BRIEF.md` e `STORYBOARD.md` com batidas narrativas por frame.
+- **Saída:**
+  - `comp.html` com bandas de layout padronizadas (HEAD, VIS, CAP).
+  - Animação determinística acionada por `window.__onFrame__(M)`.
+  - Render CFR 30 FPS YUV420p via `render_frames.mjs` + `assemble_video.py`.
+  - Portão de revisão do Crítico com folha de contato (`contact-sheet.png`) antes do full render.
+- **Roteamento:** Invocado pelo `motion-director` para refinamento cinético ou estilo showreel.
+
+---
+
+## 11. `ui-humanizer` (Especialidade de Auditoria Visual — Integração da Comunidade)
+- **Origem:** Gabriel Greco (`gabrielgreco1/skills`).
+- **Papel:** Auditor de design para identificar e remover "cara de IA" e clichês repetitivos em interfaces.
+- **Entrada:** Código de interface (HTML/CSS/Tailwind/React) e capturas de tela multi-viewport.
+- **Saída:**
+  - Diagnóstico heurístico via detector (`audit.py`).
+  - Laudo estruturado separando tells reais, falsos positivos e exceções deliberadas de marca.
+  - Recomendações priorizadas por severidade (`crítico`, `alto`, `médio`, `nit`).
+- **Roteamento:** Invocado pelo `web-director` na fase de revisão visual pós-construção.
+
+---
+
+## 12. `explainer-motion` (Especialidade de Motion Graphics Explicativos & Pedagogia Visual)
+- **Papel:** Criação de vídeos explicativos de alto nível para tópicos de tecnologia, ciência da computação, algoritmos e dados (padrão de benchmark Big O).
+- **Entrada:** `BRIEF.md`, `STYLE.md` (paleta semântica e tipografia editorial) e `STORYBOARD.md` com atos pedagógicos mapeados por frame.
+- **Saída:**
+  - `composition.html` com layout arquitetado em 3 zonas (Âncora Titular, Motor Visual Interativo Canvas/SVG e Telemetria Sincronizada).
+  - Animação determinística acionada exclusivamente pelo número absoluto do frame (`window.__onFrame__(frame, totalFrames, fps)`).
+  - Diagramas vivos que demonstram conceitos com transformações geométricas, feixes de dados, feedback causal e curvas animadas.
+  - Render CFR 30 FPS YUV420p Full HD (1080×1920 9:16 ou 1920×1080 16:9).
+  - Contact sheet com frames decodificados do MP4 e auditoria de legibilidade temporal.
+- **Roteamento:** Invocado pelo `studio-director` ou `motion-director` para explainer técnico, motion de produto, dados animados ou arquitetura de software.

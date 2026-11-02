@@ -86,8 +86,8 @@ p{color:var(--fg-dim)}
 .brand{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.02em}
 .brand strong{color:var(--fg);font-weight:600}
 .brand .sep{color:var(--fg-faint)} .brand .dim{color:var(--fg-dim)}
-.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:pulse 2.6s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.45}}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 6px color-mix(in srgb,var(--mint) 65%,transparent);transition:transform .2s ease,box-shadow .2s ease}
+.brand:hover .brand-dot{transform:scale(1.25);box-shadow:0 0 10px var(--mint)}
 .tools{display:flex;align-items:center;gap:14px}
 .tnav{display:flex;gap:22px;font-size:12px;color:var(--fg-dim)}
 .tnav a:hover{color:var(--fg)}
@@ -122,7 +122,7 @@ p{color:var(--fg-dim)}
 /* hero */
 .hero{padding-top:56px}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mint);margin-bottom:22px}
+.tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.02em;color:var(--mint);padding:4px 10px;background:var(--mint-dim);border:1px solid color-mix(in srgb,var(--mint) 22%,transparent);border-radius:var(--radius-sm);margin-bottom:22px}
 .hero h1{margin-bottom:24px}
 .hero .lead{margin-bottom:32px}
 .console{overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(180deg,var(--surface),var(--bg));box-shadow:0 20px 60px rgba(0,0,0,.24)}
@@ -133,7 +133,7 @@ p{color:var(--fg-dim)}
 .lights span:nth-child(2){background:var(--pink);opacity:.75}
 .lights span:nth-child(3){background:var(--mint);opacity:.82}
 .c-path{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--fg-faint);font-size:12px;letter-spacing:.03em}
-.c-live{display:inline-flex;align-items:center;gap:6px;color:var(--fg-dim);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.c-live{display:inline-flex;align-items:center;gap:6px;color:var(--fg-dim);font-size:11px;letter-spacing:.03em}
 .c-live i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 9px var(--mint)}
 .vid{aspect-ratio:9/16;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#000}
 .vid video{width:100%;height:100%;object-fit:cover}
@@ -194,10 +194,10 @@ p{color:var(--fg-dim)}
 
 /* section head (design system) */
 .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:36px}
-.sec-num{font-size:12px;color:var(--mint);letter-spacing:.18em;font-weight:600}
-.sec-title{font:600 13px/1 var(--mono);color:var(--fg);letter-spacing:.18em;text-transform:uppercase}
+.sec-num{font:600 12px/1 var(--mono);color:var(--mint);letter-spacing:.08em}
+.sec-title{font:500 12px/1.2 var(--mono);color:var(--fg-dim);letter-spacing:.06em;text-transform:uppercase}
 .sec-rule{flex:1;height:1px;background:var(--line);align-self:center}
-.sec-count{font-size:12px;color:var(--fg-faint);letter-spacing:.1em}
+.sec-count{font:450 11.5px/1 var(--mono);color:var(--fg-faint);letter-spacing:.04em}
 .intro{max-width:760px;margin-bottom:44px}
 .intro h2{margin-bottom:16px}
 
@@ -217,6 +217,36 @@ p{color:var(--fg-dim)}
 .gate{align-self:flex-start;margin-top:auto;padding:5px 10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--pink);background:var(--pink-dim);border:1px solid color-mix(in srgb,var(--pink) 35%,transparent);border-radius:var(--radius-sm)}
 
 /* work */
+.work-spotlight{display:grid;grid-template-columns:1.2fr 1fr;background:var(--surface);border:1px solid var(--mint-edge);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:32px;transition:all .25s ease;box-shadow:0 12px 32px -16px var(--mint-edge)}
+.work-spotlight:hover{border-color:var(--mint);transform:translateY(-2px);box-shadow:0 16px 40px -12px var(--mint-edge)}
+.state-machine-spotlight{border-color:rgba(0,240,255,.25);box-shadow:0 12px 32px -16px rgba(0,240,255,.25)}
+.state-machine-spotlight:hover{border-color:#00F0FF;box-shadow:0 16px 40px -12px rgba(0,240,255,.3)}
+.state-badge{border-color:rgba(0,240,255,.3);color:#00F0FF}
+.state-dot{background:#00F0FF;box-shadow:0 0 6px #00F0FF}
+.state-cat{color:#00F0FF}
+[data-theme="light"] .state-machine-spotlight{border-color:rgba(0,139,153,.3)}
+[data-theme="light"] .state-machine-spotlight:hover{border-color:#008B99}
+[data-theme="light"] .state-badge{color:#008B99;border-color:rgba(0,139,153,.3)}
+[data-theme="light"] .state-dot{background:#008B99;box-shadow:0 0 6px #008B99}
+[data-theme="light"] .state-cat{color:#008B99}
+.spotlight-media{position:relative;background:#070A0F;min-height:280px;overflow:hidden}
+.spotlight-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.work-spotlight:hover .spotlight-media img{transform:scale(1.025)}
+.spotlight-overlay-badge{position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;background:rgba(14,14,14,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--mint-edge);color:var(--mint);font:600 11px/1 var(--mono);padding:6px 11px;border-radius:var(--radius-sm);letter-spacing:.04em;text-transform:uppercase}
+.spotlight-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 6px var(--mint)}
+.spotlight-media-tag{position:absolute;bottom:12px;left:14px;background:rgba(7,10,15,.85);border:1px solid var(--line);color:var(--fg-dim);font:500 10.5px/1 var(--mono);padding:5px 9px;border-radius:4px;letter-spacing:.06em}
+.spotlight-body{padding:28px 30px;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.spotlight-cat{font:600 11px/1 var(--mono);color:var(--mint);letter-spacing:.12em;text-transform:uppercase}
+.spotlight-title{font-size:clamp(24px,2.6vw,34px);color:var(--fg);margin:0;letter-spacing:-.02em}
+.spotlight-accent{color:var(--mint)}
+.spotlight-sub{font:500 14px/1.4 var(--sans);color:var(--fg);margin-top:-4px}
+.spotlight-desc{font-size:13px;line-height:1.6;color:var(--fg-dim)}
+.spotlight-chips{display:flex;flex-wrap:wrap;gap:6px}
+.spotlight-actions{display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--line-soft);margin-top:auto}
+@media (max-width:860px){
+  .work-spotlight{grid-template-columns:1fr}
+  .spotlight-media{height:240px}
+}
 .work{display:grid;grid-template-columns:repeat(12,1fr);gap:24px 16px;align-items:start}
 .tile img{width:100%;border:1px solid var(--line);border-radius:var(--radius)}
 .tile figcaption{padding-top:12px;font-size:13px;color:var(--fg-dim)}
@@ -226,7 +256,7 @@ p{color:var(--fg-dim)}
 
 /* stack */
 .stack{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.stack h3{font:600 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg);margin-bottom:6px}
+.stack h3{font:600 13px/1.2 var(--mono);letter-spacing:.02em;color:var(--fg);margin-bottom:8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{display:inline-flex;align-items:center;padding:6px 11px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius-sm);font-size:12px;color:var(--fg);transition:transform .18s,border-color .18s}
 .chip:hover{transform:translateY(-1px);border-color:var(--mint-edge)}
@@ -269,7 +299,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
   .js .tile img{clip-path:inset(0 0 100% 0 round 10px);transition:clip-path .9s cubic-bezier(.2,.7,.2,1) calc(var(--d,0s) + .1s)}
   .js .tile.in img{clip-path:inset(0 0 0 0 round 10px)}
 }
-@media (prefers-reduced-motion:reduce){.brand-dot{animation:none}.progress,.rail{display:none}}
+@media (prefers-reduced-motion:reduce){.brand-dot,.brand:hover .brand-dot{transition:none;transform:none}.progress,.rail{display:none}}
 
 /* touch targets >=44px on coarse pointers */
 @media (pointer:coarse){
@@ -310,7 +340,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
         <a href="#quickstart"><span lang="pt-BR">instalar</span></a>
         <a href="#formats"><span lang="pt-BR">formatos</span></a>
         <a href="#pipeline">pipeline</a>
-        <a href="#work"><span lang="pt-BR">exemplos</span></a>
+        <a href="#work"><span lang="pt-BR">trabalhos</span></a>
         <a href="#stack">stack</a>
         <a href="#credits"><span lang="pt-BR">ecossistema</span></a>
       </nav>
@@ -394,19 +424,19 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="quickstart">
-  <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title"><span lang="pt-BR">instalação &amp; uso</span></h2><span class="sec-rule"></span><span class="sec-count">CLI</span></div>
+  <div class="sec-head"><span class="sec-num">01</span><span class="sec-title"><span lang="pt-BR">instalação &amp; uso</span></span><span class="sec-rule"></span><span class="sec-count">CLI</span></div>
   <div class="intro rv">
     <h2><span lang="pt-BR">Instale, use, estude e adapte.</span></h2>
     <p class="lead"><span lang="pt-BR">Sem assinaturas, planos ou lock-in comercial. Pacotes npm modulares e abertos para rodar em qualquer projeto ou agente de IA.</span></p>
   </div>
   <div class="card rv" style="font-family:var(--mono);padding:24px;background:var(--surface);border-radius:var(--radius);overflow-x:auto;border:1px solid var(--line);">
     <div style="color:var(--mint);font-size:11px;margin-bottom:12px;padding:6px 10px;background:rgba(16,185,129,0.08);border:1px solid var(--mint-edge);border-radius:4px;display:inline-block;">
-      <span lang="pt-BR">ℹ️ Pacotes npm em Release Candidate (v1.0.0-rc.1) — instalação pública direta disponível após a publicação oficial no registro.</span>
+      <span lang="pt-BR">ℹ️ Pacotes npm em Release Candidate (v1.0.0-rc.2) — instalação pública direta disponível após a publicação oficial no registro.</span>
       
     </div>
     <div style="color:var(--fg-dim);font-size:12px;margin-bottom:8px;"># 1. Instalar pacotes abertos (disponível publicamente após release npm)</div>
     <div style="color:var(--mint);font-size:14px;line-height:1.6;">npm install -D motion-cli motion-core motion-studio-skills</div>
-    <div style="color:var(--fg-dim);font-size:12px;margin:14px 0 8px;"># 2. Inicializar estúdio com perfil seletivo de skills (core, web, motion, social, 3d, all)</div>
+    <div style="color:var(--fg-dim);font-size:12px;margin:14px 0 8px;"># 2. Inicializar estúdio com perfil seletivo de skills (core, web, motion, social, 3d, interactive, all)</div>
     <div style="color:var(--mint);font-size:14px;line-height:1.6;">npx motion init --brand="MinhaMarca" --profile=core</div>
     <div style="color:var(--fg-dim);font-size:12px;margin:14px 0 8px;"># 3. Diagnóstico e criação de entregáveis reais a partir de código</div>
     <div style="color:var(--mint);font-size:14px;line-height:1.6;">npx motion doctor &amp;&amp; npx motion create carousel post-lancamento</div>
@@ -414,7 +444,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="formats">
-  <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title"><span lang="pt-BR">formatos</span></h2><span class="sec-rule"></span><span class="sec-count">06</span></div>
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title"><span lang="pt-BR">formatos</span></span><span class="sec-rule"></span><span class="sec-count">06</span></div>
   <div class="intro rv">
     <h2><span lang="pt-BR">Cinco formatos. Um só rigor.</span></h2>
     <p class="lead"><span lang="pt-BR">Briefing, direção, composição, render e crítico independente — o mesmo processo para qualquer entrega.</span></p>
@@ -454,7 +484,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="pipeline">
-  <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">pipeline</h2><span class="sec-rule"></span><span class="sec-count">08</span></div>
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">pipeline</span><span class="sec-rule"></span><span class="sec-count">08</span></div>
   <div class="intro rv">
     <h2><span lang="pt-BR">Um pipeline que se deixa auditar.</span></h2>
     <p class="lead"><span lang="pt-BR">Nada de código antes do storyboard. Você aprova o briefing e a direção de arte. O crítico nunca é o mesmo contexto que criou a peça.</span></p>
@@ -473,10 +503,97 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="work">
-  <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title"><span lang="pt-BR">exemplos</span></h2><span class="sec-rule"></span><span class="sec-count">05</span></div>
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title"><span lang="pt-BR">trabalhos &amp; exemplos</span></span><span class="sec-rule"></span><span class="sec-count">07</span></div>
   <div class="intro rv">
     <h2><span lang="pt-BR">Renders reais, não maquetes.</span></h2>
   </div>
+
+  <!-- TRAVESSIA Featured Showcase -->
+  <article class="work-spotlight rv">
+    <div class="spotlight-media">
+      <img src="/assets/carga-01/cover.png?v=2" alt="TRAVESSIA — Do cais ao destino" width="1440" height="900" loading="eager">
+      <div class="spotlight-overlay-badge">
+        <span class="spotlight-badge-dot"></span>
+        <span lang="pt-BR">Case em Destaque · Feito com MOTION Studio</span>
+        
+      </div>
+      <div class="spotlight-media-tag">3D WEB · 16:9 &amp; 9:16 CFR · 4:5 CAROUSEL</div>
+    </div>
+    <div class="spotlight-body">
+      <div>
+        <div class="spotlight-cat">Interactive 3D / Motion Design</div>
+        <h3 class="spotlight-title">TRAVESSIA</h3>
+        <p class="spotlight-sub">
+          <span lang="pt-BR">Do cais ao destino.</span>
+          
+        </p>
+        <p class="spotlight-desc">
+          <span lang="pt-BR">Uma jornada cinematográfica por portos, estradas e movimento. Experiência 3D interativa que acompanha o percurso de um contêiner sob iluminação industrial e 30 FPS CFR determinísticos.</span>
+          
+        </p>
+        <div class="spotlight-chips">
+          <span class="chip">Three.js r165</span>
+          <span class="chip">React Three Fiber</span>
+          <span class="chip">GLB 377 KB</span>
+          <span class="chip">30 FPS CFR</span>
+          <span class="chip">Playwright</span>
+          <span class="chip">FFmpeg</span>
+        </div>
+      </div>
+      <div class="spotlight-actions">
+        <a href="/projects/travessia/" class="btn primary sm">
+          <span lang="pt-BR">Explorar Case Study ↗</span>
+          
+        </a>
+        <a href="/demos/travessia/" target="_blank" rel="noopener" class="btn sm">
+          <span lang="pt-BR">Demonstração 3D ↗</span>
+          
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MÁQUINAS DE ESTADOS Featured Showcase -->
+  <article class="work-spotlight state-machine-spotlight rv">
+    <div class="spotlight-media">
+      <img src="/assets/state-machines/thumb-16x9.png" alt="Máquinas de Estados — Explainer Motion" width="1920" height="1080" loading="lazy">
+      <div class="spotlight-overlay-badge state-badge">
+        <span class="spotlight-badge-dot state-dot"></span>
+        <span lang="pt-BR">Produção original · MOTION Studio</span>
+        
+      </div>
+      <div class="spotlight-media-tag">9:16 VERTICAL · 60s CFR 30FPS · DETERMINÍSTICO</div>
+    </div>
+    <div class="spotlight-body">
+      <div>
+        <div class="spotlight-cat state-cat">Explainer Motion / Educational Motion Graphics</div>
+        <h3 class="spotlight-title"><span lang="pt-BR">Máquinas de Estados</span></h3>
+        <p class="spotlight-sub">
+          <span lang="pt-BR">Quando o movimento explica a lógica.</span>
+          
+        </p>
+        <p class="spotlight-desc">
+          <span lang="pt-BR">Uma explicação visual sobre máquinas de estados, eventos, guardas e transições, criada com animações determinísticas e renderização quadro a quadro pelo MOTION Studio.</span>
+          
+        </p>
+        <div class="spotlight-chips">
+          <span class="chip">HTML5 Canvas</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">Playwright</span>
+          <span class="chip">FFmpeg</span>
+          <span class="chip">explainer-motion</span>
+          <span class="chip">60s CFR 30fps</span>
+        </div>
+      </div>
+      <div class="spotlight-actions">
+        <a href="/projects/state-machines/" class="btn primary sm">
+          <span lang="pt-BR">Explorar Case Study ↗</span>
+          
+        </a>
+      </div>
+    </div>
+  </article>
+
   <div class="work">
     <figure class="tile t-wide rv"><img src="/assets/post-16x9.jpg" alt="Post de feed recomposto em 16:9"><figcaption><b><span lang="pt-BR">Post em 4 proporções</span></b><span>16:9 · 4:5 · 1:1 · 9:16 — <span lang="pt-BR">recomposição, não crop</span></span></figcaption></figure>
     <figure class="tile t-tall rv"><img src="/assets/story-01.jpg" alt="Story estático 9:16"><figcaption><b><span lang="pt-BR">Story estático</span></b><span>PNG 2160×3840</span></figcaption></figure>
@@ -497,7 +614,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="stack">
-  <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title">stack</h2><span class="sec-rule"></span><span class="sec-count">04</span></div>
+  <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">stack</span><span class="sec-rule"></span><span class="sec-count">04</span></div>
   <div class="intro rv">
     <h2><span lang="pt-BR">Só o necessário.</span></h2>
     <p class="lead"><span lang="pt-BR">Motores via linha de comando, independentes de agente. Qualquer um deles roda sem o outro.</span></p>
@@ -511,7 +628,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 </section>
 
 <section id="credits">
-  <div class="sec-head"><span class="sec-num">07</span><h2 class="sec-title"><span lang="pt-BR">ecossistema open source</span></h2><span class="sec-rule"></span><span class="sec-count">14</span></div>
+  <div class="sec-head"><span class="sec-num">07</span><span class="sec-title"><span lang="pt-BR">ecossistema open source</span></span><span class="sec-rule"></span><span class="sec-count">15</span></div>
   <div class="intro rv">
     <h2><span lang="pt-BR">Biblioteca viva da comunidade aberta.</span></h2>
     <p class="lead"><span lang="pt-BR">O MOTION orquestra capacidades autorais e repositórios abertos de criadores excepcionais da comunidade. Cada card exibe o autor, perfil no GitHub, licença e proveniência transparente de cada capability integrada.</span></p>
@@ -535,7 +652,7 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
         </div>
       </div>
       <p class="cred-desc">Diretores de estúdio, motores de render determinístico e orquestração criativa multi-formato.</p>
-      <div class="cred-chips"><span class="chip">motion-director</span><span class="chip">studio-director</span><span class="chip">web-director</span><span class="chip">carousel-studio</span><span class="chip">story-studio</span><span class="chip">feed-studio</span><span class="chip">shorts-director</span><span class="chip">3d-scene-director</span></div>
+      <div class="cred-chips"><span class="chip">motion-director</span><span class="chip">studio-director</span><span class="chip">web-director</span><span class="chip">carousel-studio</span><span class="chip">story-studio</span><span class="chip">feed-studio</span><span class="chip">shorts-director</span><span class="chip">3d-scene-director</span><span class="chip">explainer-motion</span></div>
     </article>
     <article class="card cred-card rv">
       <div class="cred-header">
@@ -760,6 +877,26 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
     <article class="card cred-card rv">
       <div class="cred-header">
         <div class="cred-avatar-wrap">
+          <img src="https://github.com/gabrielgreco1.png?size=96" alt="Avatar de Gabriel Greco" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="cred-fallback" aria-hidden="true">GG</div>
+        </div>
+        <div class="cred-meta">
+          <div class="cred-owner-row">
+            <span class="cred-who">Gabriel Greco</span>
+            <span class="cred-type-badge community">Skill da Comunidade</span>
+          </div>
+          <div class="cred-sub-row">
+            <a class="cred-repo" href="https://github.com/gabrielgreco1/skills" target="_blank" rel="noopener">github.com/gabrielgreco1/skills ↗</a>
+            <span class="cred-lic">Custom</span>
+          </div>
+        </div>
+      </div>
+      <p class="cred-desc">Especialidades educacionais e audiovisuais: aulas interativas determinísticas, motion design em código e auditoria de UI.</p>
+      <div class="cred-chips"><span class="chip">aula-interativa</span><span class="chip">motion-designer</span><span class="chip">ui-humanizer</span></div>
+    </article>
+    <article class="card cred-card rv">
+      <div class="cred-header">
+        <div class="cred-avatar-wrap">
           <img src="https://github.com/microsoft.png?size=96" alt="Avatar de Playwright" class="cred-avatar" width="50" height="50" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
           <div class="cred-fallback" aria-hidden="true">MS</div>
         </div>
@@ -803,7 +940,6 @@ footer{max-width:var(--maxw);margin:0 auto;padding:28px var(--gut) 40px;display:
 
 <section id="contact" class="cta">
   <div class="box rv">
-    <span class="tag"><span class="brand-dot"></span><span lang="pt-BR">código aberto</span></span>
     <h2>
       <span class="cta-ln">O código é aberto.</span> <span class="cta-ln">A criação é sua.</span>
     </h2>

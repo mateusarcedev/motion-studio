@@ -3,11 +3,11 @@ import path from "node:path";
 
 export async function runCreate(type, name, options = {}) {
   if (!type || !name) {
-    console.error("Uso: motion create <website|video|carousel|story|post> <nome_do_projeto>");
+    console.error("Uso: motion create <website|video|carousel|story|post|lesson> <nome_do_projeto>");
     process.exit(1);
   }
 
-  const validTypes = ["website", "video", "carousel", "story", "post"];
+  const validTypes = ["website", "video", "carousel", "story", "post", "lesson"];
   if (!validTypes.includes(type.toLowerCase())) {
     console.error(`Tipo inválido '${type}'. Tipos suportados: ${validTypes.join(", ")}`);
     process.exit(1);
@@ -54,6 +54,8 @@ export async function runCreate(type, name, options = {}) {
     await scaffoldStory(projectDir, name, brandTokens);
   } else if (type === "post") {
     await scaffoldPost(projectDir, name, brandTokens);
+  } else if (type === "lesson") {
+    await scaffoldLesson(projectDir, name, brandTokens);
   }
 
   console.log(`✅ Projeto '${name}' criado com sucesso em ${projectDir}`);
@@ -708,4 +710,46 @@ async function scaffoldStory(dir, name, tokens) {
 async function scaffoldPost(dir, name, tokens) {
   // Simple square 1080x1080 layout
   await writeFile(path.join(dir, "BRIEF.md"), `# Post: ${name}`, "utf-8");
+}
+
+async function scaffoldLesson(dir, name, tokens) {
+  await writeFile(
+    path.join(dir, "BRIEF.md"),
+    `# Aula Interativa: ${name}\n\n- **Tema:** ${name}\n- **Público:** Desenvolvedores e estudantes\n- **Formato:** Aula HTML autocontida com slides interativos, diagramas animados e exercícios com feedback causal.\n`,
+    "utf-8"
+  );
+  await writeFile(
+    path.join(dir, "ROTEIRO.md"),
+    `# Roteiro Pedagógico: ${name}\n\n1. Introdução ao Mecanismo\n2. O Problema e a Causa Raiz\n3. Exemplo Prático e Transições\n4. Exercício Interativo com Feedback\n5. Conclusão e Aplicação Prática\n`,
+    "utf-8"
+  );
+  const lessonHtml = `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${name} — Aula Interativa</title>
+  <style>
+    :root {
+      --bg: ${tokens.color?.background || "#090D16"};
+      --surface: ${tokens.color?.surface || "#1E293B"};
+      --accent: ${tokens.color?.accent || "#10B981"};
+      --text: ${tokens.color?.text || "#F8FAFC"};
+      --muted: ${tokens.color?.muted || "#94A3B8"};
+      --line: rgba(255,255,255,0.1);
+    }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+    .card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:32px; max-width:640px; text-align:center; }
+    h1 { margin-top:0; color:var(--accent); font-size:28px; }
+    p { color:var(--muted); font-size:16px; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>${name}</h1>
+    <p>Scaffold de aula interativa gerado pelo MOTION Studio. Utilize os padrões de <code>aula-interativa</code> para compor seus slides determinísticos, diagramas animados e exercícios práticos.</p>
+  </div>
+</body>
+</html>`;
+  await writeFile(path.join(dir, "lesson.html"), lessonHtml, "utf-8");
 }

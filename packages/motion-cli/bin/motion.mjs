@@ -11,7 +11,7 @@ import { runRender } from "../lib/render.mjs";
 import { runExport } from "../lib/export.mjs";
 import { runQA } from "../lib/qa.mjs";
 
-const VERSION = "1.0.0-rc.1";
+const VERSION = "1.0.0-rc.2";
 
 const rawArgs = process.argv.slice(2);
 const flags = {};
@@ -38,7 +38,7 @@ Uso: motion <comando> [opções]
 Comandos principais:
   init                     Inicializa o MOTION Studio no projeto atual
     --brand=<nome>         Define o nome da marca (padrão: nome da pasta)
-    --profile=<nome>       Perfil de skills: core, web, motion, social, 3d, blender, all (padrão: core)
+    --profile=<nome>       Perfil de skills: core, web, motion, social, 3d, blender, interactive, all (padrão: core)
     --force                Sobrescreve configuração existente
 
   doctor                   Verifica requisitos de sistema e dependências (Node, Python, FFmpeg, Chromium, etc.)
@@ -46,7 +46,7 @@ Comandos principais:
   list | specs             Lista especialidades do estúdio e capacidades dos motores
 
   create <tipo> <nome>     Cria um scaffold real de entregável
-    Tipos suportados:      website, video, carousel, story, post
+    Tipos suportados:      website, video, carousel, story, post, lesson
 
   preview [caminho]        Inicia servidor HTTP local de pré-visualização
     --port=<num>           Porta HTTP (padrão: 3300)

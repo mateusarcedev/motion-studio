@@ -26,3 +26,10 @@ tests/tmp/
 
 # Distribution packages
 dist/packages/*.tgz
+
+# Vercel CLI
+.vercel/
+
+# Heavy delivery archives (>100MB)
+projects/*/*.zip
+

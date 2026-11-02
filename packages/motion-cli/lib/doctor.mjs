@@ -162,12 +162,72 @@ export async function runDoctor() {
     details: chatterboxStatus === "PASS" ? "Síntese vocal disponível (com model card auditado)" : "Opcional (shorts utilizam fallback silencioso com legendas)",
   });
 
+  // 8. Edge-TTS (Optional Narration Tool)
+  let edgeTtsStatus = "INFO";
+  let edgeTtsVer = "Não instalado";
+  try {
+    const raw = execSync("edge-tts --version", { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
+    edgeTtsVer = raw.trim();
+    edgeTtsStatus = "PASS";
+  } catch {}
+  results.push({
+    name: "Edge-TTS (Opcional)",
+    required: false,
+    status: edgeTtsStatus,
+    version: edgeTtsVer,
+    details: edgeTtsStatus === "PASS" ? "Síntese vocal gratuita (motion-designer)" : "Opcional (pip3 install edge-tts)",
+  });
+
+  // 9. Sharp (Optional Image/Contact Sheet Tool)
+  let sharpStatus = "INFO";
+  let sharpVer = "Não instalado";
+  try {
+    const s = await import("sharp");
+    sharpVer = "Instalado";
+    sharpStatus = "PASS";
+  } catch {}
+  results.push({
+    name: "Sharp (Opcional)",
+    required: false,
+    status: sharpStatus,
+    version: sharpVer,
+    details: sharpStatus === "PASS" ? "Processamento raster acelerado" : "Opcional (contact sheets utilizam Playwright/Pillow nativo)",
+  });
+
   // Display Table
   console.log("| Componente | Obrigatório | Status | Versão / Caminho | Observações |");
   console.log("|---|---|---|---|---|");
   for (const r of results) {
     const badge = r.status === "PASS" ? "✅ PASS" : r.status === "FAIL" ? "❌ FAIL" : r.status === "WARN" ? "⚠️ WARN" : "ℹ️ INFO";
     console.log(`| **${r.name}** | ${r.required ? "Sim" : "Não"} | ${badge} | ${r.version} | ${r.details} |`);
+  }
+
+  // Community Integrations check
+  const commSkills = [
+    { name: "aula-interativa", desc: "Aulas interativas HTML determinísticas", profile: "interactive" },
+    { name: "motion-designer", desc: "Teasers cinéticos e animações no beat", profile: "motion" },
+    { name: "ui-humanizer", desc: "Auditoria visual contra clichês de IA", profile: "web" },
+  ];
+  console.log("\n### Integrações Externas da Comunidade (Gabriel Greco)");
+  console.log("ℹ️ Habilidades externas mantidas no repositório upstream, instaladas sob demanda (sem inclusão no bundle npm):\n");
+  for (const cs of commSkills) {
+    let installed = false;
+    for (const p of [
+      path.join(process.cwd(), ".agents", "skills", cs.name),
+      path.join(process.cwd(), ".claude", "skills", cs.name),
+    ]) {
+      try {
+        await stat(p);
+        installed = true;
+        break;
+      } catch {}
+    }
+    const badge = installed ? "✅ INSTALADA LOCALMENTE" : "⚪ DISPONÍVEL (NÃO INSTALADA)";
+    console.log(`- **${cs.name}** [${badge}]`);
+    console.log(`  - *Função:* ${cs.desc} (perfil: \`${cs.profile}\`)`);
+    if (!installed) {
+      console.log(`  - *Comando para adicionar:* \`npx skills add gabrielgreco1/skills --skill ${cs.name}\``);
+    }
   }
 
   const hasFail = results.some((r) => r.required && r.status === "FAIL");

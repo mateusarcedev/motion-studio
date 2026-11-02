@@ -2,6 +2,36 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.0.0-rc.2] — 2026-10-30
+
+### Integração Gabriel Greco Skills & Perfil Interactive (Missão 10)
+
+#### Novidades & Melhorias
+- **Integração de Skills da Comunidade (`gabrielgreco1/skills`):**
+  - Integração arquitetural das especialidades `aula-interativa`, `motion-designer` e `ui-humanizer` auditadas no commit `9cf15be76c960c94edddcc78fc5fa237e0778c44`.
+  - Política de conformidade de licença: código de terceiros não é redistribuído nos tarballs npm; usuários instalam via `npx skills add gabrielgreco1/skills --skill <name>`.
+  - Catálogo de integrações externas exportado em `motion-studio-skills` (`EXTERNAL_INTEGRATIONS`).
+- **Novo Perfil de Instalação `interactive`:**
+  - Adicionado suporte a `--profile=interactive` no `motion init`, incluindo os diretores essenciais e ferramentas de diagramação, apresentações e design.
+- **CLI (`motion-cli`):**
+  - Novo gerador de scaffolds: `motion create lesson <nome>` para criação rápida de aulas interativas autocontidas.
+  - Subcomando `motion list` exibe catálogo de especialidades e integrações da comunidade.
+  - Subcomando `motion doctor` verifica status de instalação das skills e ferramentas opcionais.
+- **Roteamento de Diretores:**
+  - `studio-director` despacha entregáveis pedagógicos para `aula-interativa`.
+  - `motion-director` integra `motion-designer` para refinamento de showreels e animações cinéticas de produto.
+  - `web-director` integra `ui-humanizer` para portão de revisão visual e detecção de clichês de IA.
+- **Entregáveis Reais de Demonstração & QA:**
+  - `projects/example-state-machine-lesson`: Aula interativa autocontida sobre Máquinas de Estados Finitos com grafo SVG, simulador dinâmico, feedback causal e teste Playwright (100% aprovado).
+  - `projects/example-motion-designer`: Teaser vertical 9:16 (1080×1920) a 30 FPS CFR com bandas HEAD/VIS/CAP, áudio sintetizado e contact sheet.
+  - `projects/ui-humanizer-audit`: Laudo de auditoria visual da landing page com detector `audit.py` e evidências multi-viewport.
+  - Ambos os projetos registrados na galeria persistente (`gallery.json`) com status `draft`.
+- **Landing Page Oficial (`motion-landing`):**
+  - Adicionado Gabriel Greco (@gabrielgreco1) como 15º criador do ecossistema open-source com avatar do GitHub e badge de proveniência.
+  - QA multi-viewport executado com aprovação total (5/5 telas PASS: mobile-s, mobile, tablet, desktop, wide).
+- **Suíte de Testes:**
+  - Adicionado Teste 11 à suíte de regressão (`tests/suite.test.mjs`), cobrindo perfil `interactive`, catálogo e CLI (11/11 testes PASS).
+
 ## [1.0.0-rc.1] — 2026-10-30
 
 ### Release Candidate e Preparação Pública (Missão 08)

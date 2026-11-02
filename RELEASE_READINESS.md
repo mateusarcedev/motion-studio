@@ -4,7 +4,7 @@
 > **Data:** 30 de Outubro de 2026  
 > **Responsável:** Engenheiro de Distribuição e Release Candidate  
 > **Status de Prontidão:** **READY WITH WARNINGS**  
-> **Versão Avaliada:** `1.0.0-rc.1`
+> **Versão Avaliada:** `1.0.0-rc.2`
 
 ---
 

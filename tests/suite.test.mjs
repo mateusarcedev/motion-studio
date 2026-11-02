@@ -15,7 +15,7 @@ import {
   exportZip,
   createMotionDriver
 } from "../packages/motion-core/index.js";
-import { listSkills, SKILL_PROFILES, resolveSkillsForProfile } from "../packages/motion-skills/index.js";
+import { listSkills, SKILL_PROFILES, resolveSkillsForProfile, EXTERNAL_INTEGRATIONS } from "../packages/motion-skills/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tmpDir = path.join(__dirname, "tmp");
@@ -139,9 +139,16 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
       assert.ok(found, `Item original ${id} ausente da galeria!`);
       assert.equal(found.status, "draft", `Item original ${id} teve status draft alterado sem autorização!`);
     }
-    // Todas as produções cadastradas devem estar em draft
+    // Somente a produção v4 autorizada nesta missão pode estar aprovada.
+    const authorizedRelease = baseGallery.items.filter((i) => i.id === "explainer-state-machine");
+    assert.equal(authorizedRelease.length, 1, "A produção Explainer Motion v4 deve existir uma única vez");
+    assert.equal(authorizedRelease[0].status, "approved", "A produção Explainer Motion v4 autorizada deve estar aprovada");
+
+    // Todas as demais produções preservam o status draft.
     for (const item of baseGallery.items) {
-      assert.equal(item.status, "draft", `Item ${item.id} não está em draft!`);
+      if (item.id !== "explainer-state-machine") {
+        assert.equal(item.status, "draft", `Item ${item.id} teve status alterado sem autorização!`);
+      }
     }
   });
 
@@ -184,5 +191,35 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     assert.throws(() => {
       resolveSkillsForProfile("perfil_inexistente");
     }, /Perfil desconhecido/);
+  });
+
+  test("11. Integrações Externas da Comunidade e Perfil 'interactive'", () => {
+    // Validação do perfil 'interactive'
+    assert.ok("interactive" in SKILL_PROFILES, "Perfil 'interactive' não registrado em SKILL_PROFILES");
+    const interactiveSkills = resolveSkillsForProfile("interactive");
+    assert.ok(interactiveSkills.includes("studio-director"), "studio-director deve estar em interactive");
+    assert.ok(interactiveSkills.includes("diagram-design"), "diagram-design deve estar em interactive");
+    assert.ok(interactiveSkills.includes("slides"), "slides deve estar em interactive");
+
+    // Validação do catálogo de integrações externas
+    assert.ok(EXTERNAL_INTEGRATIONS, "EXTERNAL_INTEGRATIONS não exportado em motion-skills");
+    assert.ok("aula-interativa" in EXTERNAL_INTEGRATIONS, "aula-interativa ausente em EXTERNAL_INTEGRATIONS");
+    assert.ok("motion-designer" in EXTERNAL_INTEGRATIONS, "motion-designer ausente em EXTERNAL_INTEGRATIONS");
+    assert.ok("ui-humanizer" in EXTERNAL_INTEGRATIONS, "ui-humanizer ausente em EXTERNAL_INTEGRATIONS");
+
+    assert.equal(
+      EXTERNAL_INTEGRATIONS["aula-interativa"].commitSha,
+      "9cf15be76c960c94edddcc78fc5fa237e0778c44",
+      "Commit SHA auditado da skill aula-interativa incorreto"
+    );
+
+    // Validação de visualização na CLI
+    const outList = execSync("node packages/motion-cli/bin/motion.mjs list", { encoding: "utf-8" });
+    assert.ok(outList.includes("aula-interativa"), "CLI list deve listar aula-interativa");
+    assert.ok(outList.includes("interactive"), "CLI list deve listar perfil interactive");
+
+    // Validação do scaffold 'lesson' na CLI
+    const outHelp = execSync("node packages/motion-cli/bin/motion.mjs create --help", { encoding: "utf-8" });
+    assert.ok(outHelp.includes("lesson"), "CLI create deve listar lesson como tipo suportado");
   });
 });

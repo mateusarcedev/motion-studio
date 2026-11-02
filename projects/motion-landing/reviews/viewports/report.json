@@ -1,21 +1,14 @@
 {
-  "url": "projects/motion-landing/site/index.html",
+  "url": "http://127.0.0.1:3388",
   "results": [
     {
       "viewport": "mobile-s",
       "size": "360x740",
-      "ok": false,
-      "issues": [
-        "console/page errors: 16 (Access to font at 'file:///fonts/Geist.woff' from origin 'null' has been blocked by CORS policy: Cross origin requests a)",
-        "failed requests: 14 (FAILED file:///fonts/Geist.woff)",
-        "fonts not loaded: Geist, Geist Mono"
-      ],
+      "ok": true,
+      "issues": [],
       "metrics": {
         "overflowX": 0,
-        "fonts": [
-          "Geist",
-          "Geist Mono"
-        ],
+        "fonts": [],
         "small": [],
         "canvases": []
       }
@@ -23,18 +16,11 @@
     {
       "viewport": "mobile",
       "size": "390x844",
-      "ok": false,
-      "issues": [
-        "console/page errors: 16 (Access to font at 'file:///fonts/Geist.woff' from origin 'null' has been blocked by CORS policy: Cross origin requests a)",
-        "failed requests: 14 (FAILED file:///fonts/Geist.woff)",
-        "fonts not loaded: Geist, Geist Mono"
-      ],
+      "ok": true,
+      "issues": [],
       "metrics": {
         "overflowX": 0,
-        "fonts": [
-          "Geist",
-          "Geist Mono"
-        ],
+        "fonts": [],
         "small": [],
         "canvases": []
       }
@@ -42,18 +28,11 @@
     {
       "viewport": "tablet",
       "size": "768x1024",
-      "ok": false,
-      "issues": [
-        "console/page errors: 16 (Access to font at 'file:///fonts/Geist.woff' from origin 'null' has been blocked by CORS policy: Cross origin requests a)",
-        "failed requests: 14 (FAILED file:///fonts/Geist.woff)",
-        "fonts not loaded: Geist, Geist Mono"
-      ],
+      "ok": true,
+      "issues": [],
       "metrics": {
         "overflowX": 0,
-        "fonts": [
-          "Geist",
-          "Geist Mono"
-        ],
+        "fonts": [],
         "small": [],
         "canvases": []
       }
@@ -61,52 +40,44 @@
     {
       "viewport": "desktop",
       "size": "1280x800",
-      "ok": false,
-      "issues": [
-        "console/page errors: 16 (Access to font at 'file:///fonts/Geist.woff' from origin 'null' has been blocked by CORS policy: Cross origin requests a)",
-        "failed requests: 14 (FAILED file:///fonts/Geist.woff)",
-        "fonts not loaded: Geist, Geist Mono"
-      ],
+      "ok": true,
+      "issues": [],
       "metrics": {
         "overflowX": 0,
-        "fonts": [
-          "Geist",
-          "Geist Mono"
-        ],
+        "fonts": [],
         "small": [
-          "a 326x21",
+          "a 325x21",
           "a 58x20",
           "a 58x20",
           "a 58x20",
           "a 58x20",
-          "a 37x20",
+          "a 36x20",
           "a 80x20",
-          "button 47x26",
-          "button 54x26",
-          "a 33x26",
-          "a 33x26",
+          "button#themeToggle 36x36",
+          "button#langTrigger 36x36",
           "a 85x30",
           "a 157x42",
-          "a 102x42",
+          "a 101x42",
           "a 157x42",
           "a 257x40",
-          "a 234x20",
-          "a 256x20",
-          "a 234x20",
+          "a 233x20",
+          "a 255x20",
+          "a 233x20",
           "a 257x40",
-          "a 256x20",
+          "a 255x20",
           "a 257x40",
-          "a 241x20",
+          "a 240x20",
           "a 257x40",
           "a 226x20",
           "a 257x40",
-          "a 219x20",
-          "a 241x20",
-          "a 190x20",
+          "a 218x20",
+          "a 240x20",
+          "a 240x20",
+          "a 189x20",
           "a 157x42",
           "a 197x42",
           "a 197x42",
-          "a 292x14"
+          "a 291x14"
         ],
         "canvases": []
       }
@@ -114,52 +85,44 @@
     {
       "viewport": "wide",
       "size": "1920x1080",
-      "ok": false,
-      "issues": [
-        "console/page errors: 16 (Access to font at 'file:///fonts/Geist.woff' from origin 'null' has been blocked by CORS policy: Cross origin requests a)",
-        "failed requests: 14 (FAILED file:///fonts/Geist.woff)",
-        "fonts not loaded: Geist, Geist Mono"
-      ],
+      "ok": true,
+      "issues": [],
       "metrics": {
         "overflowX": 0,
-        "fonts": [
-          "Geist",
-          "Geist Mono"
-        ],
+        "fonts": [],
         "small": [
-          "a 326x21",
+          "a 325x21",
           "a 58x20",
           "a 58x20",
           "a 58x20",
           "a 58x20",
-          "a 37x20",
+          "a 36x20",
           "a 80x20",
-          "button 47x26",
-          "button 54x26",
-          "a 33x26",
-          "a 33x26",
+          "button#themeToggle 36x36",
+          "button#langTrigger 36x36",
           "a 85x30",
           "a 157x42",
-          "a 102x42",
+          "a 101x42",
           "a 157x42",
           "a 257x40",
-          "a 234x20",
-          "a 256x20",
-          "a 234x20",
+          "a 233x20",
+          "a 255x20",
+          "a 233x20",
           "a 257x40",
-          "a 256x20",
+          "a 255x20",
           "a 257x40",
-          "a 241x20",
+          "a 240x20",
           "a 257x40",
           "a 226x20",
           "a 257x40",
-          "a 219x20",
-          "a 241x20",
-          "a 190x20",
+          "a 218x20",
+          "a 240x20",
+          "a 240x20",
+          "a 189x20",
           "a 157x42",
           "a 197x42",
           "a 197x42",
-          "a 292x14"
+          "a 291x14"
         ],
         "canvases": []
       }

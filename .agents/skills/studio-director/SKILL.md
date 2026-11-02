@@ -14,16 +14,25 @@ Leia primeiro: `CLAUDE.md` (regras), `pipeline.md` (handoffs), `creative-core/pr
 
 | Pedido do usuário | Fluxo | Skill produtora |
 |---|---|---|
-| vídeo, motion, teaser, filme, animação, MP4 | pipeline audiovisual (8 estágios) | **motion-director** |
+| vídeo, motion, teaser, filme, animação, MP4 | pipeline audiovisual (8 estágios) | **motion-director** (especialista: **motion-designer**) |
+| explainer técnico, motion explicativo, dados animados | pipeline explainer (Big O benchmark) | **motion-director** (especialista: **explainer-motion**) |
 | carrossel, slides, deck para post social | pipeline estático | **carousel-studio** |
 | stories (estático/animado), sequência vertical | pipeline estático (+Remotion se animado) | **story-studio** |
 | post de feed, card, tipográfico, infographic, arte | pipeline estático | **feed-studio** |
-| site, landing page, hero 3D, componente web, página interativa | pipeline web (brief → estrutura → build → QA multi-viewport) | **web-director** |
+| site, landing page, hero 3D, componente web, página interativa | pipeline web (brief → estrutura → build → QA multi-viewport) | **web-director** (auditoria: **ui-humanizer**) |
+| aula interativa, lição guiada, tutorial passo-a-passo HTML com exercícios | pipeline educacional interativo | **aula-interativa** |
 | N formatos juntos de um briefing ("vídeo + carousel + stories") | campanha multiformato | **voce mesmo (este skill)** |
 | ambíguo ("crie conteúdo de X") | decida. Uma pergunta no máximo; senão norma + escolhe | roteie |
 
 Regra de decisão: movimento é parte da MENSAGEM? → motion. É conteúdo estático que o usuário
-lê em slides? → estático. São os dois? → **campanha**.
+lê em slides? → estático. É aprendizado interativo com prática/feedback? → **interactive-lesson**. São vários? → **campanha**.
+
+## 1b · Roteamento de Especialistas Integrados (Ecossistema Gabriel Greco)
+
+- `interactive-lesson` → **`aula-interativa`**: Aulas HTML autocontidas com roteiro didático, diagramas animados, exemplos resolvidos, exercícios com feedback causal e responsividade.
+- `explainer-motion` → **`explainer-motion`**: Especialista em motion graphics explicativos, pedagogia visual, diagramas animados em Canvas/SVG, transformações geométricas e contadores sincronizados (benchmark Big O).
+- `motion-director` → **`motion-designer`**: Especialista audiovisual para showreels, teasers, beat edits e legendas sincronizadas (mantendo `motion-director` como coordenador de briefing e entrega).
+- `web-director` → **`ui-humanizer`**: Auditor de design pré-QA para eliminar clichês e "cara de IA" (tokens da marca sempre prevalecem).
 
 ## 2 · Resolver marca e memória
 

@@ -47,7 +47,7 @@ export async function runInit(options = {}) {
     skills: {
       profile,
     },
-    version: "1.0.0-rc.1",
+    version: "1.0.0-rc.2",
   };
 
   await mkdir(path.join(cwd, "motion", "brand"), { recursive: true });
@@ -122,8 +122,14 @@ export async function runInit(options = {}) {
     profile,
   });
   console.log(`✅ ${skillRes.installed.length} skills configuradas em .agents/skills (e adaptadores .claude / .opencode).`);
-  if (profile !== "all") {
-    console.log(`ℹ Dica: Para instalar perfis adicionais ou todas as skills: npx motion init --force --profile=all (perfis: core, web, motion, social, 3d, blender, all).`);
+
+  if (profile === "interactive") {
+    console.log(`\nℹ️ [Perfil Interactive]: Habilidades nativas essenciais instaladas.`);
+    console.log(`  A especialidade educacional 'aula-interativa' (Gabriel Greco) é uma integração externa da comunidade.`);
+    console.log(`  Para adicioná-la a este projeto, execute:`);
+    console.log(`    npx skills add gabrielgreco1/skills --skill aula-interativa\n`);
+  } else if (profile !== "all") {
+    console.log(`ℹ Dica: Para instalar perfis adicionais ou todas as skills: npx motion init --force --profile=all (perfis: core, web, motion, social, 3d, interactive, blender, all).`);
   }
 
   console.log("\n🎉 MOTION Studio inicializado com sucesso!");

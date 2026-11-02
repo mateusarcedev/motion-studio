@@ -2,6 +2,111 @@
   "$schema": "registro da galeria persistente — cada peça aprovada entra aqui",
   "items": [
     {
+      "id": "explainer-state-machine",
+      "title": "Máquinas de Estados — Explainer Motion (9:16)",
+      "title_en": "State Machines — Explainer Motion (9:16)",
+      "format": "explainer motion video (9:16 vertical, 1080x1920, 30fps CFR, 60s)",
+      "formats": ["9:16"],
+      "category": "Explainer Motion / Educational Motion Graphics",
+      "specialty": "explainer-motion",
+      "brand": "motion",
+      "date": "2026-10-31",
+      "status": "approved",
+      "release": "v4",
+      "brief": "../../projects/explainer-state-machine/BRIEF.md",
+      "source": "../../projects/explainer-state-machine/",
+      "routes": {
+        "pt": "/projects/state-machines/",
+        "en": "/en/projects/state-machines/"
+      },
+      "publication": {
+        "video": "../../projects/motion-landing/site/videos/state-machines/state-machine-9x16-v4.mp4",
+        "poster": "../../projects/motion-landing/site/assets/state-machines/poster-9x16.png",
+        "thumbnail": "../../projects/motion-landing/site/assets/state-machines/thumb-16x9.png"
+      },
+      "caption": "Uma explicação visual sobre máquinas de estados, eventos, guardas e transições, criada com animações determinísticas e renderização quadro a quadro pelo MOTION Studio.",
+      "caption_en": "A visual explanation of state machines, events, guards, and transitions, built with deterministic animations and frame-by-frame rendering by MOTION Studio.",
+      "tech": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "cfr": true,
+        "frames": 1800,
+        "duration": 60.0,
+        "codec": "h264/yuv420p",
+        "tools": ["HTML5 Canvas", "JavaScript", "Playwright", "FFmpeg"],
+        "sha256": "b3740b81007a92f4c03c53107d2279df918337cda5d0b7d8a22d6f5eb43c72ca"
+      },
+      "slides": [
+        {
+          "n": "thumb-16x9",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/thumb-16x9.png"
+        },
+        {
+          "n": "poster-9x16",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/poster-9x16.png"
+        },
+        {
+          "n": "contact-sheet",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/contact-sheet.png"
+        },
+        {
+          "n": "act-01-sopa-booleanos",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-01-sopa-booleanos.png"
+        },
+        {
+          "n": "act-02-estados-finitos",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-02-estados-finitos.png"
+        },
+        {
+          "n": "act-03-a-transicao",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-03-a-transicao.png"
+        },
+        {
+          "n": "act-04-guardas-logicas",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-04-guardas-logicas.png"
+        },
+        {
+          "n": "act-05-evento-invalido",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-05-evento-invalido.png"
+        },
+        {
+          "n": "act-06-ciclo-completo",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-06-ciclo-completo.png"
+        },
+        {
+          "n": "act-07-sintese-fsm",
+          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-07-sintese-fsm.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "composition.html",
+          "path": "../../projects/explainer-state-machine/composition.html"
+        },
+        {
+          "name": "BRIEF.md",
+          "path": "../../projects/explainer-state-machine/BRIEF.md"
+        },
+        {
+          "name": "STYLE.md",
+          "path": "../../projects/explainer-state-machine/STYLE.md"
+        },
+        {
+          "name": "STORYBOARD.md",
+          "path": "../../projects/explainer-state-machine/STORYBOARD.md"
+        },
+        {
+          "name": "TIMELINE.md",
+          "path": "../../projects/explainer-state-machine/TIMELINE.md"
+        },
+        {
+          "name": "EXPLAINER_MOTION_V4_RELEASE_REVIEW.md",
+          "path": "../../projects/explainer-state-machine/EXPLAINER_MOTION_V4_RELEASE_REVIEW.md"
+        }
+      ]
+    },
+    {
       "id": "aurora-landing",
       "title": "Aurora Watch Landing Page",
       "format": "web landing page (responsive)",

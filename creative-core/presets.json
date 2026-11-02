@@ -27,5 +27,12 @@
     "type": "motion",
     "size": [1080, 1920],
     "fps": 30
+  },
+  "explainer-vertical": {
+    "type": "motion",
+    "size": [1080, 1920],
+    "fps": 30,
+    "style": "explainer-motion",
+    "safe-zones": { "top": 8, "bottom": 8, "left": 8, "right": 8, "$comment": "explainer-vertical: zona de leitura 9:16 com âncora no terço superior, motor visual central e telemetria inferior" }
   }
 }

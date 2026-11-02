@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Explainer Motion — Máquinas de Estados em Programação (v2)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #070A13;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+      color: #F8FAFC;
+      -webkit-font-smoothing: antialiased;
+    }
+    #wrapper {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      z-index: 1;
+    }
+    /* Global progress bar at the very top */
+    .progress-bar-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      z-index: 10;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00F0FF, #FF8A00);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+    }
+    /* Minimal contextual telemetry pill */
+    #context-hud {
+      position: absolute;
+      bottom: 60px;
+      left: 86px;
+      right: 86px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      background: rgba(14, 22, 38, 0.92);
+      border: 1.5px solid #1E293B;
+      border-radius: 14px;
+      font-family: ui-monospace, "SF Mono", monospace;
+      font-size: 19px;
+      color: #94A3B8;
+      z-index: 5;
+      transition: opacity 0.2s ease;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hud-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #00F0FF;
+      box-shadow: 0 0 8px #00F0FF;
+    }
+    .hud-right {
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <canvas id="canvas" width="1080" height="1920"></canvas>
+    
+    <div id="context-hud">
+      <div class="hud-left">
+        <span class="hud-dot" id="hudDot"></span>
+        <span id="hudTopic">FSM ENGINE // LOG</span>
+      </div>
+      <div class="hud-right" id="hudMetric">ESTADO ATIVO: [IDLE]</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const elProgress = document.getElementById("progressBar");
+    const elHud = document.getElementById("context-hud");
+    const elHudDot = document.getElementById("hudDot");
+    const elHudTopic = document.getElementById("hudTopic");
+    const elHudMetric = document.getElementById("hudMetric");
+
+    // Pure Analytical Easings
+    function clamp(val, min = 0, max = 1) {
+      return Math.min(Math.max(val, min), max);
+    }
+    function progress(t, a, b) {
+      return clamp((t - a) / (b - a));
+    }
+    function easeOutCubic(x) {
+      return 1 - Math.pow(1 - x, 3);
+    }
+    function easeInOutCubic(x) {
+      return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    }
+    function easeOutBack(x, c1 = 1.70158) {
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+    }
+    function easeOutElastic(x) {
+      const c4 = (2 * Math.PI) / 3;
+      return x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
+    }
+    function dampedShake(tLocal, amp = 14, decay = 9, freq = 36) {
+      if (tLocal <= 0) return 0;
+      return amp * Math.exp(-decay * tLocal) * Math.sin(freq * tLocal);
+    }
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    // Node layout constants
+    const NODES = {
+      IDLE: { x: 540, y: 680, label: "IDLE", color: "#00F0FF" },
+      FETCHING: { x: 840, y: 1040, label: "FETCHING", color: "#FF8A00" },
+      RESOLVED: { x: 540, y: 1400, label: "RESOLVED", color: "#15F5BA" },
+      ERROR: { x: 240, y: 1040, label: "ERROR", color: "#FF4757" }
+    };
+
+    function roundRect(ctx, x, y, w, h, r) {
+      if (typeof ctx.roundRect === 'function') {
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, r);
+        return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    // Draw Node with orbital rings and dynamic scale
+    function drawNode(ctx, n, activeLevel = 0, pulseTime = 0, labelOverride = null, customScale = 1.0) {
+      ctx.save();
+      ctx.translate(n.x, n.y);
+      ctx.scale(customScale, customScale);
+
+      const baseR = 82;
+      const glowR = baseR + 8 + activeLevel * 14 + Math.sin(pulseTime * 4) * 4;
+
+      if (activeLevel > 0.05) {
+        // Deep Radial Glow
+        const grad = ctx.createRadialGradient(0, 0, baseR * 0.4, 0, 0, glowR + 40);
+        grad.addColorStop(0, n.color + "33");
+        grad.addColorStop(0.6, n.color + "11");
+        grad.addColorStop(1, "transparent");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(0, 0, glowR + 40, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Outer Orbital Ring
+        ctx.strokeStyle = n.color;
+        ctx.lineWidth = 3;
+        ctx.globalAlpha = activeLevel * 0.85;
+        ctx.beginPath();
+        ctx.arc(0, 0, glowR, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Rotating Accent Arcs
+        ctx.save();
+        ctx.rotate(pulseTime * 2.2);
+        ctx.strokeStyle = n.color;
+        ctx.lineWidth = 4;
+        ctx.globalAlpha = activeLevel * 0.95;
+        ctx.beginPath();
+        ctx.arc(0, 0, glowR + 8, 0, Math.PI * 0.35);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, 0, glowR + 8, Math.PI, Math.PI * 1.35);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Node Body (Polimento Visual v4: Contraste Aprimorado para Nós Inativos)
+      ctx.globalAlpha = 1.0;
+      ctx.fillStyle = activeLevel > 0.1 ? "#0D1829" : "#10192C";
+      ctx.strokeStyle = activeLevel > 0.1 ? n.color : "#475569";
+      ctx.lineWidth = activeLevel > 0.1 ? 4 : 2.5;
+
+      ctx.beginPath();
+      ctx.arc(0, 0, baseR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Node Label (Alto contraste e nitidez sem competir com o nó ativo)
+      ctx.font = "800 24px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = activeLevel > 0.1 ? "#FFFFFF" : "#CBD5E1";
+      ctx.fillText(labelOverride || n.label, 0, 0);
+
+      ctx.restore();
+    }
+
+    // Draw connection arc with directional indicator
+    function drawArc(ctx, fromNode, toNode, progress = 1, color = "#334155", width = 2, arrowSize = 12, label = null) {
+      if (progress <= 0) return;
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.globalAlpha = 0.85;
+
+      const dx = toNode.x - fromNode.x;
+      const dy = toNode.y - fromNode.y;
+      const angle = Math.atan2(dy, dx);
+
+      const r = 84;
+      const startX = fromNode.x + Math.cos(angle) * r;
+      const startY = fromNode.y + Math.sin(angle) * r;
+      const endX = toNode.x - Math.cos(angle) * r;
+      const endY = toNode.y - Math.sin(angle) * r;
+
+      const currEndX = startX + (endX - startX) * progress;
+      const currEndY = startY + (endY - startY) * progress;
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(currEndX, currEndY);
+      ctx.stroke();
+
+      if (progress >= 0.95) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(endX - arrowSize * Math.cos(angle - Math.PI / 6), endY - arrowSize * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(endX - arrowSize * Math.cos(angle + Math.PI / 6), endY - arrowSize * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+
+        if (label) {
+          const midX = (startX + endX) / 2;
+          const midY = (startY + endY) / 2;
+          ctx.font = "700 18px monospace";
+          ctx.fillStyle = (color === "#1E293B" || color === "#334155" || color === "#475569") ? "#94A3B8" : color;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillText(label, midX + Math.sin(angle) * 16, midY - Math.cos(angle) * 16);
+        }
+      }
+
+      ctx.restore();
+    }
+
+    // Helper: Wrap text cleanly respecting maximum allowed width
+    function wrapText(ctx, text, maxWidth) {
+      if (!text) return [];
+      const words = text.split(" ");
+      const lines = [];
+      let currentLine = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const testLine = currentLine + " " + word;
+        const testWidth = ctx.measureText(testLine).width;
+        if (testWidth <= maxWidth) {
+          currentLine = testLine;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    }
+
+    // Screen Space Header with true measurement, safe zones & auto-wrapping
+    function drawHeader(ctx, kicker, title, sub, titleColor = "#FF8A00", alpha = 1.0) {
+      if (alpha <= 0.001) return;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      const leftMargin = 86;
+      const maxUsableWidth = 908; // Safe margins: 1080 - 86*2
+
+      // 1. Kicker (Screen Space)
+      ctx.font = "700 20px monospace";
+      ctx.fillStyle = "#00F0FF";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText(`• ${kicker}`, leftMargin, 175);
+
+      // 2. Title (Screen Space with real measurement & word-wrapping)
+      const titleFontSize = 104;
+      ctx.font = `850 ${titleFontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+      ctx.letterSpacing = "-0.03em";
+      ctx.fillStyle = titleColor;
+
+      const titleLines = wrapText(ctx, title, maxUsableWidth);
+      const titleStartY = 270;
+      const titleLineHeight = 110;
+
+      titleLines.forEach((line, idx) => {
+        ctx.fillText(line, leftMargin, titleStartY + idx * titleLineHeight);
+      });
+
+      // 3. Subtitle (Screen Space with real measurement & word-wrapping)
+      const subFontSize = 34;
+      ctx.font = `500 ${subFontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+      ctx.letterSpacing = "0em";
+      ctx.fillStyle = "#F8FAFC";
+
+      const subLines = wrapText(ctx, sub, maxUsableWidth);
+      const subStartY = titleStartY + (titleLines.length - 1) * titleLineHeight + 62;
+      const subLineHeight = 44;
+
+      subLines.forEach((line, idx) => {
+        ctx.fillText(line, leftMargin, subStartY + idx * subLineHeight);
+      });
+
+      ctx.restore();
+    }
+
+    // 2D Virtual Camera with smooth continuous C1 interpolation & Editorial Safe Zone clearance
+    function getCamera(t) {
+      let zoom = 1.0, x = 0, y = 0;
+      if (t < 16.0) {
+        // Acts 1 & 2: Neutral Base Framing
+        zoom = 1.0; x = 0; y = 0;
+      } else if (t < 17.6) {
+        // Smooth transition into Act 3 (Macro on transition vector)
+        const p = easeInOutCubic(progress(t, 16.0, 17.6));
+        zoom = lerp(1.0, 1.15, p);
+        x = lerp(0, -50, p);
+        y = lerp(0, -35, p);
+      } else if (t < 23.8) {
+        // Act 3 hold
+        zoom = 1.15; x = -50; y = -35;
+      } else if (t < 25.4) {
+        // Smooth transition into Act 4 (Focus on guard portal with generous top clearance)
+        const p = easeInOutCubic(progress(t, 23.8, 25.4));
+        zoom = lerp(1.15, 1.12, p);
+        x = lerp(-50, -60, p);
+        y = lerp(-35, -30, p);
+      } else if (t < 32.8) {
+        // Act 4 hold (Guarantees IDLE top > 504px, leaving > 64px clearance below Editorial Safe Zone)
+        zoom = 1.12; x = -60; y = -30;
+      } else if (t < 34.4) {
+        // Smooth transition into Act 5 (Focus on RESOLVED node)
+        const p = easeInOutCubic(progress(t, 32.8, 34.4));
+        zoom = lerp(1.12, 1.10, p);
+        x = lerp(-60, 0, p);
+        y = lerp(-30, -35, p);
+      } else if (t < 41.8) {
+        // Act 5 hold
+        zoom = 1.10; x = 0; y = -35;
+      } else if (t < 43.8) {
+        // Smooth pull-back to wide monumental shot (Act 6)
+        const p = easeInOutCubic(progress(t, 41.8, 43.8));
+        zoom = lerp(1.10, 0.95, p);
+        x = lerp(0, 0, p);
+        y = lerp(-35, 0, p);
+      } else if (t < 51.0) {
+        // Act 6 hold
+        zoom = 0.95; x = 0; y = 0;
+      } else if (t < 52.6) {
+        // Smooth return to 1:1 framing for Act 7
+        const p = easeInOutCubic(progress(t, 51.0, 52.6));
+        zoom = lerp(0.95, 1.0, p);
+        x = 0;
+        y = 0;
+      } else {
+        // Act 7 hold
+        zoom = 1.0; x = 0; y = 0;
+      }
+      return { zoom, x, y };
+    }
+
+    // Editorial Screen-Space Header Dispatcher (Completely isolated from Camera)
+    function renderSceneHeader(ctx, t) {
+      if (t < 8.0) {
+        const pCollapse = easeInOutCubic(progress(t, 7.0, 8.0));
+        drawHeader(
+          ctx,
+          "ARQUITETURA DE ESTADO // 01",
+          "Sopa de Booleanos",
+          "Quantos estados seu app realmente tem?",
+          "#FF8A00",
+          1.0 - pCollapse
+        );
+      } else if (t < 16.0) {
+        const pIn = easeOutCubic(progress(t, 8.0, 9.2));
+        drawHeader(
+          ctx,
+          "O GRAFO DISCRETO // 02",
+          "Estados Finitos",
+          "Apenas um estado ativo em qualquer instante.",
+          "#00F0FF",
+          pIn
+        );
+      } else if (t < 25.0) {
+        drawHeader(
+          ctx,
+          "DINÂMICA DE TRANSIÇÃO // 03",
+          "A Transição",
+          "Eventos são os únicos gatilhos autorizados.",
+          "#FF8A00",
+          1.0
+        );
+      } else if (t < 34.0) {
+        drawHeader(
+          ctx,
+          "VALIDAÇÃO CONDICIONAL // 04",
+          "Guardas Lógicas",
+          "Transições condicionadas por predicados puros.",
+          "#15F5BA",
+          1.0
+        );
+      } else if (t < 43.0) {
+        drawHeader(
+          ctx,
+          "SEGURANÇA POR CONSTRUÇÃO // 05",
+          "Evento Inválido",
+          "Neste modelo, eventos sem transição permitida não alteram o estado.",
+          "#FF4757",
+          1.0
+        );
+      } else if (t < 52.0) {
+        drawHeader(
+          ctx,
+          "FLUXO ASSÍNCRONO // 06",
+          "Ciclo em Ação",
+          "ERROR ➔ RETRY ➔ FETCHING ➔ RESOLVED.",
+          "#00F0FF",
+          1.0
+        );
+      } else {
+        const pIn = easeOutCubic(progress(t, 52.2, 53.6));
+        drawHeader(
+          ctx,
+          "SÍNTESE DE ENGENHARIA // 07",
+          "Máquinas de Estados",
+          "Uma modelagem explícita ajuda a impedir estados e transições inválidos.",
+          "#FF8A00",
+          pIn
+        );
+      }
+    }
+
+    // Frame evaluation hook
+    window.__onFrame__ = function(frameArg, totalArg, fpsArg) {
+      let frame = 0, totalFrames = 1800, fps = 30;
+      if (typeof frameArg === "object" && frameArg !== null) {
+        frame = frameArg.frame || 0;
+        totalFrames = frameArg.totalFrames || 1800;
+        fps = frameArg.fps || 30;
+      } else {
+        frame = frameArg || 0;
+        totalFrames = totalArg || 1800;
+        fps = fpsArg || 30;
+      }
+
+      const t = frame / fps;
+
+      // Update progress bar
+      const pTotal = clamp(frame / (totalFrames - 1));
+      elProgress.style.width = (pTotal * 100).toFixed(2) + "%";
+
+      // Clear canvas
+      ctx.clearRect(0, 0, 1080, 1920);
+
+      // Ambient radial background glow
+      const bgGlow = ctx.createRadialGradient(540, 1000, 80, 540, 1000, 950);
+      bgGlow.addColorStop(0, "rgba(0, 240, 255, 0.045)");
+      bgGlow.addColorStop(0.5, "rgba(255, 138, 0, 0.025)");
+      bgGlow.addColorStop(1, "rgba(7, 10, 19, 0)");
+      ctx.fillStyle = bgGlow;
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      // Camera State Calculation (C1 continuous)
+      const cam = getCamera(t);
+
+      // ==========================================
+      // 1. WORLD SPACE (Subject to Virtual Camera)
+      // ==========================================
+      ctx.save();
+      ctx.translate(540, 960);
+      ctx.scale(cam.zoom, cam.zoom);
+      ctx.translate(-540 + cam.x, -960 + cam.y);
+
+      // ==========================================
+      // SCENE 01: 0.0s – 8.0s (Frames 0 – 239)
+      // O Caos da Sopa Booleana & Colapso Morfológico
+      // ==========================================
+      if (t < 8.0) {
+        const pIn = easeOutCubic(progress(t, 0.2, 1.2));
+        const pExpand = easeInOutCubic(progress(t, 3.2, 4.2));
+        const pConflict = easeOutBack(progress(t, 5.0, 5.8));
+        const pCollapse = easeInOutCubic(progress(t, 7.0, 8.0));
+
+
+
+        // 4 Boolean Flags Cards
+        const flags = [
+          { name: "isLoading", val: t > 5.0 ? "true" : (t > 1.5 ? "true" : "false"), col: t > 5.0 ? "#FF4757" : "#00F0FF" },
+          { name: "isError", val: "false", col: "#94A3B8" },
+          { name: "isSuccess", val: t > 5.0 ? "true" : "false", col: t > 5.0 ? "#FF4757" : "#94A3B8" },
+          { name: "isEmpty", val: "false", col: "#94A3B8" }
+        ];
+
+        const cardW = 760;
+        const cardH = 80;
+        const startY = 460;
+
+        ctx.save();
+        ctx.globalAlpha = pIn * (1.0 - pCollapse * 0.8);
+
+        flags.forEach((f, idx) => {
+          const cy = startY + idx * 100;
+          ctx.fillStyle = "#0E1626";
+          ctx.strokeStyle = f.col;
+          ctx.lineWidth = f.val === "true" ? 3 : 1.5;
+          roundRect(ctx, 160, cy, cardW, cardH, 12);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = "700 28px monospace";
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#F8FAFC";
+          ctx.fillText(`let ${f.name} = `, 200, cy + 50);
+
+          ctx.fillStyle = f.col;
+          ctx.fillText(`${f.val};`, 500, cy + 50);
+
+          ctx.fillStyle = f.val === "true" ? f.col : "#334155";
+          ctx.beginPath();
+          ctx.arc(860, cy + 40, 12, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Combinatorial Matrix 4x4
+        if (pExpand > 0) {
+          const mAlpha = pExpand * (1.0 - pCollapse);
+          ctx.globalAlpha = mAlpha;
+
+          ctx.font = "800 24px monospace";
+          ctx.fillStyle = "#94A3B8";
+          ctx.textAlign = "center";
+          ctx.fillText("4 VARIÁVEIS = 2⁴ = 16 COMBINAÇÕES POSSÍVEIS", 540, 930);
+
+          const gridStartX = 390;
+          const gridStartY = 970;
+          for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+              let gx = gridStartX + c * 75;
+              let gy = gridStartY + r * 75;
+
+              // Morphing: in collapse phase, pull towards the 3 node positions!
+              if (pCollapse > 0) {
+                const targetNode = (r === 0) ? NODES.IDLE : (c > 1 ? NODES.FETCHING : NODES.RESOLVED);
+                gx = gx + (targetNode.x - gx) * pCollapse;
+                gy = gy + (targetNode.y - gy) * pCollapse;
+              }
+
+              const isContradiction = (r === 0 && c === 2);
+              ctx.fillStyle = isContradiction && pConflict > 0.5 ? "#FF4757" : "#1E293B";
+              ctx.strokeStyle = isContradiction && pConflict > 0.5 ? "#FFFFFF" : "#334155";
+              ctx.lineWidth = isContradiction && pConflict > 0.5 ? 2.5 : 1;
+              roundRect(ctx, gx, gy, 60, 60, 8);
+              ctx.fill();
+              ctx.stroke();
+            }
+          }
+
+          if (pConflict > 0.1 && pCollapse < 0.5) {
+            ctx.fillStyle = "rgba(255, 71, 87, 0.2)";
+            ctx.strokeStyle = "#FF4757";
+            ctx.lineWidth = 2;
+            roundRect(ctx, 160, 1340, 760, 70, 12);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.font = "800 22px monospace";
+            ctx.fillStyle = "#FF4757";
+            ctx.textAlign = "center";
+            ctx.fillText("⚠️ COLISÃO: SPINNER & SUCESSO AO MESMO TEMPO!", 540, 1383);
+          }
+        }
+        ctx.restore();
+
+        // Update Context HUD
+        elHudDot.style.background = t > 5.0 ? "#FF4757" : "#00F0FF";
+        elHudDot.style.boxShadow = `0 0 8px ${elHudDot.style.background}`;
+        elHudTopic.textContent = "DIAGNÓSTICO // SOPA BOOLEANA";
+        elHudMetric.textContent = t > 5.0 ? "COLISÃO DE ESTADO ❌" : "16 COMBINAÇÕES (2⁴)";
+      }
+
+      // ==========================================
+      // SCENE 02: 8.0s – 16.0s (Frames 240 – 479)
+      // O Grafo Discreto & Domínio Finito
+      // ==========================================
+      else if (t < 16.0) {
+        const pIn = easeOutCubic(progress(t, 8.0, 9.2));
+
+
+
+        ctx.save();
+        ctx.globalAlpha = pIn;
+
+        // Arcs
+        drawArc(ctx, NODES.IDLE, NODES.FETCHING, pIn, "#334155", 3, 12, "FETCH");
+        drawArc(ctx, NODES.FETCHING, NODES.RESOLVED, pIn, "#334155", 3, 12, "RESOLVE");
+
+        // Nodes: IDLE is active (1.0), others in resting state (0.0)
+        drawNode(ctx, NODES.IDLE, 1.0, t);
+        drawNode(ctx, NODES.FETCHING, 0.0, t);
+        drawNode(ctx, NODES.RESOLVED, 0.0, t);
+
+        // Contextual indicator badge attached directly to IDLE node
+        const pBadge = easeOutBack(progress(t, 9.5, 10.6));
+        if (pBadge > 0) {
+          ctx.save();
+          ctx.globalAlpha = pBadge;
+          ctx.translate(NODES.IDLE.x + 115, NODES.IDLE.y);
+
+          ctx.fillStyle = "#0E1626";
+          ctx.strokeStyle = "#00F0FF";
+          ctx.lineWidth = 1.5;
+          roundRect(ctx, 0, -26, 260, 52, 26);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = "800 18px monospace";
+          ctx.fillStyle = "#00F0FF";
+          ctx.textAlign = "center";
+          ctx.fillText("ESTADO ATIVO", 130, 6);
+          ctx.restore();
+        }
+
+        ctx.restore();
+
+        // Context HUD
+        elHudDot.style.background = "#00F0FF";
+        elHudDot.style.boxShadow = "0 0 8px #00F0FF";
+        elHudTopic.textContent = "MODELO FORMAL // FSM";
+        elHudMetric.textContent = "ESTADOS IMPOSSÍVEIS: 0 (ELIMINADOS)";
+      }
+
+      // ==========================================
+      // SCENE 03: 16.0s – 25.0s (Frames 480 – 749)
+      // A Transição: Vetor e Impacto Físico (Macro Zoom)
+      // ==========================================
+      else if (t < 25.0) {
+        const pTravel = easeInOutCubic(progress(t, 18.0, 20.6));
+        const pRebound = easeOutElastic(progress(t, 20.6, 22.0));
+
+        const idleActive = clamp(1.0 - pTravel * 1.2);
+        const fetchingActive = clamp(pTravel > 0.95 ? 1.0 : 0.0);
+        const fetchingScale = pTravel > 0.95 ? (1.0 + (1.0 - pRebound) * 0.28) : 1.0;
+
+
+
+        ctx.save();
+
+        // Arcs
+        drawArc(ctx, NODES.IDLE, NODES.FETCHING, 1.0, pTravel > 0 ? "#FF8A00" : "#334155", pTravel > 0 ? 4 : 2, 12);
+        drawArc(ctx, NODES.FETCHING, NODES.RESOLVED, 1.0, "#1E293B", 2);
+
+        // Nodes
+        drawNode(ctx, NODES.IDLE, idleActive, t);
+        drawNode(ctx, NODES.FETCHING, fetchingActive, t, null, fetchingScale);
+        drawNode(ctx, NODES.RESOLVED, 0.0, t);
+
+        // Event Badge falling onto the vector
+        const pEventBadge = easeOutBack(progress(t, 16.4, 17.5));
+        if (pEventBadge > 0) {
+          ctx.globalAlpha = pEventBadge;
+          ctx.fillStyle = "rgba(14, 22, 38, 0.95)";
+          ctx.strokeStyle = "#FF8A00";
+          ctx.lineWidth = 2;
+          roundRect(ctx, 620, 830, 260, 56, 12);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = "800 22px monospace";
+          ctx.fillStyle = "#FF8A00";
+          ctx.textAlign = "center";
+          ctx.fillText("⚡ EVENT: FETCH", 750, 865);
+        }
+
+        // Particle with Velocity Squash & Stretch Tail
+        if (pTravel > 0.02 && pTravel < 0.98) {
+          const r = 84;
+          const dx = NODES.FETCHING.x - NODES.IDLE.x;
+          const dy = NODES.FETCHING.y - NODES.IDLE.y;
+          const angle = Math.atan2(dy, dx);
+
+          const startX = NODES.IDLE.x + Math.cos(angle) * r;
+          const startY = NODES.IDLE.y + Math.sin(angle) * r;
+          const endX = NODES.FETCHING.x - Math.cos(angle) * r;
+          const endY = NODES.FETCHING.y - Math.sin(angle) * r;
+
+          const px = startX + (endX - startX) * pTravel;
+          const py = startY + (endY - startY) * pTravel;
+
+          // Velocity Tail
+          ctx.save();
+          ctx.translate(px, py);
+          ctx.rotate(angle);
+
+          const tailLen = 42;
+          const tailGrad = ctx.createLinearGradient(-tailLen, 0, 10, 0);
+          tailGrad.addColorStop(0, "transparent");
+          tailGrad.addColorStop(0.7, "#00F0FF");
+          tailGrad.addColorStop(1, "#FFFFFF");
+          ctx.fillStyle = tailGrad;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, tailLen, 12, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Particle Core
+          ctx.fillStyle = "#FFFFFF";
+          ctx.beginPath();
+          ctx.arc(10, 0, 10, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        ctx.restore();
+
+        // Update Context HUD
+        elHudDot.style.background = pTravel >= 0.95 ? "#FF8A00" : "#00F0FF";
+        elHudDot.style.boxShadow = `0 0 8px ${elHudDot.style.background}`;
+        elHudTopic.textContent = "VETOR DE TRANSIÇÃO";
+        elHudMetric.textContent = pTravel >= 0.95 ? "ESTADO ATUAL: FETCHING" : "TRANSIÇÃO: IDLE ➔ FETCHING";
+      }
+
+      // ==========================================
+      // SCENE 04: 25.0s – 34.0s (Frames 750 – 1019)
+      // Guardas Lógicas: O Portal de Validação Condicional
+      // ==========================================
+      else if (t < 34.0) {
+        const pGuardIn = easeOutCubic(progress(t, 25.2, 26.5));
+        const pTest1 = easeInOutCubic(progress(t, 27.0, 28.5));
+        const pTest2 = easeInOutCubic(progress(t, 30.0, 31.8));
+
+        const gateApproved = t >= 31.0;
+        const gateColor = gateApproved ? "#15F5BA" : (t >= 28.0 && t < 30.0 ? "#FF4757" : "#FF8A00");
+
+
+
+        ctx.save();
+
+        // Arcs
+        drawArc(ctx, NODES.IDLE, NODES.FETCHING, 1.0, "#1E293B", 2);
+        drawArc(ctx, NODES.FETCHING, NODES.RESOLVED, 1.0, gateApproved ? "#15F5BA" : "#FF8A00", 3);
+
+        // Nodes
+        drawNode(ctx, NODES.IDLE, 0.0, t);
+        drawNode(ctx, NODES.FETCHING, gateApproved ? 0.2 : 1.0, t);
+        drawNode(ctx, NODES.RESOLVED, gateApproved ? 1.0 : 0.0, t);
+
+        // Guard Gate (Diamond at: X = 690, Y = 1220)
+        const gateX = 690;
+        const gateY = 1220;
+
+        if (pGuardIn > 0) {
+          ctx.globalAlpha = pGuardIn;
+          ctx.save();
+          ctx.translate(gateX, gateY);
+
+          // Diamond Body
+          ctx.fillStyle = "#0B132B";
+          ctx.strokeStyle = gateColor;
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(0, -50);
+          ctx.lineTo(50, 0);
+          ctx.lineTo(0, 50);
+          ctx.lineTo(-50, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Gate Lock Blades (Rotates 90 deg open when approved!)
+          const lockAngle = gateApproved ? Math.PI * 0.5 : 0;
+          ctx.rotate(lockAngle);
+          ctx.strokeStyle = gateColor;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(-20, 0);
+          ctx.lineTo(20, 0);
+          ctx.stroke();
+
+          ctx.restore();
+
+          // Condition Banner
+          ctx.fillStyle = "#0E1626";
+          ctx.strokeStyle = gateColor;
+          ctx.lineWidth = 1.5;
+          roundRect(ctx, 420, gateY + 68, 540, 52, 10);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = "700 20px monospace";
+          ctx.fillStyle = gateColor;
+          ctx.textAlign = "center";
+          ctx.fillText(`guard: hasValidData() === ${gateApproved ? 'true' : (t >= 28.0 && t < 30.0 ? 'false' : '...')}`, 690, gateY + 101);
+
+          if (t >= 28.0 && t < 29.8) {
+            // Rejection shockwave
+            ctx.strokeStyle = "#FF4757";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(gateX, gateY, 55 + (t - 28.0) * 35, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+
+        // Particle dynamics
+        if (t >= 27.0 && t < 29.5) {
+          // Rejection test 1
+          const travelD = pTest1 < 0.7 ? pTest1 / 0.7 : 1.0 - (pTest1 - 0.7) / 0.3 * 0.45;
+          const px = NODES.FETCHING.x + (gateX - NODES.FETCHING.x) * travelD;
+          const py = NODES.FETCHING.y + (gateY - NODES.FETCHING.y) * travelD;
+          ctx.fillStyle = "#FF4757";
+          ctx.beginPath();
+          ctx.arc(px, py, 11, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (t >= 30.0 && t < 32.2) {
+          // Approved test 2: travels through gate directly into RESOLVED perimeter
+          const travelD = Math.min(pTest2, 0.88);
+          const px = NODES.FETCHING.x + (NODES.RESOLVED.x - NODES.FETCHING.x) * travelD;
+          const py = NODES.FETCHING.y + (NODES.RESOLVED.y - NODES.FETCHING.y) * travelD;
+          ctx.fillStyle = "#15F5BA";
+          ctx.beginPath();
+          ctx.arc(px, py, 13, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+
+        // Update Context HUD
+        elHudDot.style.background = gateColor;
+        elHudDot.style.boxShadow = `0 0 8px ${gateColor}`;
+        elHudTopic.textContent = "PORTAL DE VALIDAÇÃO";
+        elHudMetric.textContent = gateApproved ? "TRANSIÇÃO AUTORIZADA ✓" : (t >= 28.0 ? "BLOQUEADO (PAYLOAD VAZIO) ❌" : "AVALIANDO REQUISITOS");
+      }
+
+      // ==========================================
+      // SCENE 05: 34.0s – 43.0s (Frames 1020 – 1289)
+      // Evento Inválido & Deflexão Protetora
+      // ==========================================
+      else if (t < 43.0) {
+        const hitTime = 36.8;
+        const isHit = t >= hitTime;
+        const shake = isHit ? dampedShake(t - hitTime, 18, 8, 32) : 0;
+
+
+
+        ctx.save();
+
+        // Arcs
+        drawArc(ctx, NODES.IDLE, NODES.FETCHING, 1.0, "#1E293B", 2);
+        drawArc(ctx, NODES.FETCHING, NODES.RESOLVED, 1.0, "#1E293B", 2);
+
+        // Nodes
+        drawNode(ctx, NODES.IDLE, 0.0, t);
+        drawNode(ctx, NODES.FETCHING, 0.0, t);
+
+        // RESOLVED with physical shake on impact
+        ctx.save();
+        ctx.translate(shake, 0);
+        drawNode(ctx, NODES.RESOLVED, 1.0, t);
+
+        // Deflector Shield upon impact
+        if (isHit && t < hitTime + 1.4) {
+          const shieldAlpha = clamp(1.0 - (t - hitTime) / 1.4);
+          ctx.strokeStyle = "#FF4757";
+          ctx.lineWidth = 6;
+          ctx.globalAlpha = shieldAlpha;
+          ctx.beginPath();
+          ctx.arc(NODES.RESOLVED.x, NODES.RESOLVED.y, 102, Math.PI * 0.75, Math.PI * 1.65);
+          ctx.stroke();
+
+          // Deflected ricochet sparks
+          ctx.fillStyle = "#FF4757";
+          for (let s = 0; s < 6; s++) {
+            const spX = NODES.RESOLVED.x - 120 - s * 16;
+            const spY = NODES.RESOLVED.y - 50 + s * 20 + Math.sin(t * 22 + s) * 12;
+            ctx.beginPath();
+            ctx.arc(spX, spY, 5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        ctx.restore();
+
+        // Incoming Illegal Projectile (from left)
+        if (t >= 35.4 && t <= hitTime) {
+          const pBeam = progress(t, 35.4, hitTime);
+          const bx = 160 + (NODES.RESOLVED.x - 260) * pBeam;
+          const by = NODES.RESOLVED.y - 70 + 70 * pBeam;
+
+          ctx.strokeStyle = "#FF4757";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(160, NODES.RESOLVED.y - 70);
+          ctx.lineTo(bx, by);
+          ctx.stroke();
+
+          ctx.font = "800 20px monospace";
+          ctx.fillStyle = "#FF4757";
+          ctx.textAlign = "center";
+          ctx.fillText("⚡ ILEGAL: FETCH", 260, NODES.RESOLVED.y - 95);
+        }
+
+        // Callout card explaining correct technical concept
+        if (isHit) {
+          const pCard = easeOutCubic(progress(t, hitTime, hitTime + 0.6));
+          ctx.globalAlpha = pCard;
+          ctx.fillStyle = "#0E1626";
+          ctx.strokeStyle = "#FF4757";
+          ctx.lineWidth = 2;
+          roundRect(ctx, 160, 1140, 760, 72, 12);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = "800 22px monospace";
+          ctx.fillStyle = "#FF4757";
+          ctx.textAlign = "center";
+          ctx.fillText("EVENTO NÃO AUTORIZADO: ESTADO INALTERADO", 540, 1184);
+        }
+
+        ctx.restore();
+
+        // Context HUD
+        elHudDot.style.background = isHit ? "#FF4757" : "#15F5BA";
+        elHudDot.style.boxShadow = `0 0 8px ${elHudDot.style.background}`;
+        elHudTopic.textContent = "PROTEÇÃO ESTRUTURAL";
+        elHudMetric.textContent = isHit ? "EVENTO REJEITADO: ESTADO INALTERADO ✓" : "SISTEMA ESTÁVEL EM RESOLVED";
+      }
+
+      // ==========================================
+      // SCENE 06: 43.0s – 52.0s (Frames 1290 – 1559)
+      // Ciclo Assíncrono Completo & Resiliente (Correção Técnica)
+      // ==========================================
+      else if (t < 52.0) {
+        // Correct 4-stage lifecycle:
+        // Stage 1 (43.0 - 45.2): IDLE -> FETCHING (EVENT: FETCH)
+        // Stage 2 (45.2 - 47.4): FETCHING -> ERROR (NETWORK TIMEOUT / REJECT)
+        // Stage 3 (47.4 - 49.6): ERROR -> FETCHING (EVENT: RETRY)
+        // Stage 4 (49.6 - 52.0): FETCHING -> RESOLVED (RESOLVE / SUCCESS)
+        const stage = t < 45.2 ? 1 : (t < 47.4 ? 2 : (t < 49.6 ? 3 : 4));
+
+
+
+        ctx.save();
+
+        // Arcs connecting all 4 nodes with clear arrows and event labels
+        drawArc(ctx, NODES.IDLE, NODES.FETCHING, 1.0, stage >= 1 ? "#00F0FF" : "#1E293B", 2.5, 12, "FETCH");
+        drawArc(ctx, NODES.FETCHING, NODES.ERROR, 1.0, stage >= 2 ? "#FF4757" : "#1E293B", 2.5, 12, "REJECT");
+        drawArc(ctx, NODES.ERROR, NODES.FETCHING, 1.0, stage >= 3 ? "#FF8A00" : "#1E293B", 2.5, 12, "RETRY");
+        drawArc(ctx, NODES.FETCHING, NODES.RESOLVED, 1.0, stage >= 4 ? "#15F5BA" : "#1E293B", 3.5, 12, "RESOLVE");
+
+        // Active levels per stage
+        const aIdle = stage === 1 && t < 44.4 ? 1.0 : 0.1;
+        const aFetch = (stage === 1 && t >= 44.4) || stage === 3 ? 1.0 : 0.15;
+        const aError = stage === 2 ? 1.0 : 0.1;
+        const aResolved = stage === 4 ? 1.0 : 0.1;
+
+        drawNode(ctx, NODES.IDLE, aIdle, t);
+        drawNode(ctx, NODES.FETCHING, aFetch, t);
+        drawNode(ctx, NODES.ERROR, aError, t);
+        drawNode(ctx, NODES.RESOLVED, aResolved, t);
+
+        // Stage Progression Banner
+        ctx.fillStyle = "#0E1626";
+        ctx.strokeStyle = stage === 2 ? "#FF4757" : (stage === 4 ? "#15F5BA" : "#FF8A00");
+        ctx.lineWidth = 2;
+        roundRect(ctx, 240, 850, 600, 60, 12);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.font = "800 21px monospace";
+        ctx.textAlign = "center";
+        if (stage === 1) {
+          ctx.fillStyle = "#00F0FF";
+          ctx.fillText("ETAPA 1: IDLE ➔ FETCHING (REQUISIÇÃO)", 540, 887);
+        } else if (stage === 2) {
+          ctx.fillStyle = "#FF4757";
+          ctx.fillText("ETAPA 2: TIMEOUT DE REDE ➔ [ERROR]", 540, 887);
+        } else if (stage === 3) {
+          ctx.fillStyle = "#FF8A00";
+          ctx.fillText("ETAPA 3: EVENT: RETRY ➔ RECUPERAÇÃO FETCHING", 540, 887);
+        } else {
+          ctx.fillStyle = "#15F5BA";
+          ctx.fillText("ETAPA 4: SUCESSO ➔ [RESOLVED]", 540, 887);
+        }
+
+        ctx.restore();
+
+        // Context HUD
+        elHudDot.style.background = stage === 2 ? "#FF4757" : (stage === 4 ? "#15F5BA" : "#FF8A00");
+        elHudDot.style.boxShadow = `0 0 8px ${elHudDot.style.background}`;
+        elHudTopic.textContent = "CICLO ASSÍNCRONO DETERMINÍSTICO";
+        elHudMetric.textContent = `ETAPA ${stage}/4 · RECUPERAÇÃO RESILIENTE`;
+      }
+
+      // ==========================================
+      // SCENE 07: 52.0s – 60.0s (Frames 1560 – 1799)
+      // Síntese de Engenharia & 3 Preceitos FSM
+      // ==========================================
+      else {
+        const pIn = easeOutCubic(progress(t, 52.2, 53.6));
+        const pCards = progress(t, 53.8, 57.2);
+
+        ctx.save();
+        ctx.globalAlpha = pIn;
+
+        // Central Emblem (X: 540, Y: 760)
+        const cx = 540;
+        const cy = 760;
+
+        ctx.strokeStyle = "rgba(0, 240, 255, 0.4)";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 130, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(255, 138, 0, 0.6)";
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 102, 0, Math.PI * 2);
+        ctx.stroke();
+
+        const gradCore = ctx.createRadialGradient(cx, cy, 15, cx, cy, 75);
+        gradCore.addColorStop(0, "rgba(21, 245, 186, 0.4)");
+        gradCore.addColorStop(1, "transparent");
+        ctx.fillStyle = gradCore;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 75, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = "900 44px monospace";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("FSM", cx, cy);
+
+        // 3 Key Architectural Takeaways (Corrigidas tecnicamente!)
+        const cardData = [
+          { num: "01", title: "ESTADOS DISCRETOS", desc: "Elimine combinações booleanas cegas." },
+          { num: "02", title: "TRANSIÇÕES EXPLÍCITAS", desc: "Apenas eventos autorizados alteram o sistema." },
+          { num: "03", title: "MODELAGEM EXPLÍCITA", desc: "Ajuda a impedir estados e transições inválidos." }
+        ];
+
+        cardData.forEach((c, i) => {
+          const cardP = easeOutCubic(clamp((pCards - i * 0.28) / 0.4));
+          if (cardP > 0) {
+            const cardY = 960 + i * 125;
+            ctx.save();
+            ctx.globalAlpha = cardP;
+            ctx.translate(0, (1 - cardP) * 35);
+
+            ctx.fillStyle = "#0E1626";
+            ctx.strokeStyle = i === 2 ? "#15F5BA" : "#1E293B";
+            ctx.lineWidth = i === 2 ? 2.5 : 1.5;
+            roundRect(ctx, 120, cardY, 840, 100, 14);
+            ctx.fill();
+            ctx.stroke();
+
+            // Number tag
+            ctx.font = "800 24px monospace";
+            ctx.fillStyle = i === 2 ? "#15F5BA" : "#FF8A00";
+            ctx.textAlign = "left";
+            ctx.fillText(c.num, 160, cardY + 58);
+
+            // Title & description
+            ctx.font = "800 23px -apple-system, sans-serif";
+            ctx.fillStyle = "#F8FAFC";
+            ctx.fillText(c.title, 225, cardY + 44);
+
+            ctx.font = "500 19px -apple-system, sans-serif";
+            ctx.fillStyle = "#94A3B8";
+            ctx.fillText(c.desc, 225, cardY + 74);
+
+            ctx.restore();
+          }
+        });
+
+        ctx.restore();
+
+        // Context HUD
+        elHudDot.style.background = "#15F5BA";
+        elHudDot.style.boxShadow = "0 0 8px #15F5BA";
+        elHudTopic.textContent = "PADRÃO ARQUITETURAL";
+        elHudMetric.textContent = "MODELAGEM EXPLÍCITA E PREVISÍVEL ✓";
+      }
+
+      ctx.restore(); // END WORLD SPACE
+
+      // ==========================================
+      // 2. SCREEN SPACE (1:1 Fixed Editorial Layer)
+      // ==========================================
+      renderSceneHeader(ctx, t);
+    };
+
+    if (!window.__MOTION_DRIVEN__) {
+      window.__onFrame__(0, 1800, 30);
+    }
+  </script>
+</body>
+</html>

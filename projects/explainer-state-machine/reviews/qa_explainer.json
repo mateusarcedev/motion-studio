@@ -1,0 +1,118 @@
+{
+  "project": "explainer-state-machine",
+  "file": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/out/state-machine-9x16.mp4",
+  "resolution": "1080x1920",
+  "fps": "30/1",
+  "duration": "60.000000",
+  "codec": "h264",
+  "pix_fmt": "yuv420p",
+  "frames_count": "1800",
+  "bit_rate": "562494",
+  "extracted_frames": [
+    {
+      "label": "01_0s",
+      "timestamp": 1.0,
+      "scene": "Ato 01 \u00b7 Abertura: Flags Booleanas",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_01_0s.png",
+      "size_kb": 356.3
+    },
+    {
+      "label": "04_0s",
+      "timestamp": 4.0,
+      "scene": "Ato 01 \u00b7 Matriz Combinat\u00f3ria 2\u2074 = 16",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_04_0s.png",
+      "size_kb": 387.6
+    },
+    {
+      "label": "06_0s",
+      "timestamp": 6.0,
+      "scene": "Ato 01 \u00b7 Conflito Booleano / Colis\u00e3o",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_06_0s.png",
+      "size_kb": 405.9
+    },
+    {
+      "label": "10_0s",
+      "timestamp": 10.0,
+      "scene": "Ato 02 \u00b7 Estados Finitos (IDLE Ativo)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_10_0s.png",
+      "size_kb": 483.8
+    },
+    {
+      "label": "14_0s",
+      "timestamp": 14.0,
+      "scene": "Ato 02 \u00b7 Callout e Dom\u00ednio Finito",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_14_0s.png",
+      "size_kb": 483.5
+    },
+    {
+      "label": "18_0s",
+      "timestamp": 18.0,
+      "scene": "Ato 03 \u00b7 Disparo EVENT: FETCH (Part\u00edcula)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_18_0s.png",
+      "size_kb": 475.5
+    },
+    {
+      "label": "22_0s",
+      "timestamp": 22.0,
+      "scene": "Ato 03 \u00b7 FETCHING Absorvido com Spring",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_22_0s.png",
+      "size_kb": 479.0
+    },
+    {
+      "label": "28_0s",
+      "timestamp": 28.0,
+      "scene": "Ato 04 \u00b7 Guarda Rejeitada (isValid: false)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_28_0s.png",
+      "size_kb": 508.3
+    },
+    {
+      "label": "32_0s",
+      "timestamp": 32.0,
+      "scene": "Ato 04 \u00b7 Guarda Aprovada (Flash Menta)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_32_0s.png",
+      "size_kb": 525.5
+    },
+    {
+      "label": "38_0s",
+      "timestamp": 38.0,
+      "scene": "Ato 05 \u00b7 Evento Ilegal Repelido (Mola)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_38_0s.png",
+      "size_kb": 509.7
+    },
+    {
+      "label": "42_0s",
+      "timestamp": 42.0,
+      "scene": "Ato 05 \u00b7 Integridade e Estado Intacto",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_42_0s.png",
+      "size_kb": 481.7
+    },
+    {
+      "label": "46_0s",
+      "timestamp": 46.0,
+      "scene": "Ato 06 \u00b7 Ciclo Completo (Passo 2/4)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_46_0s.png",
+      "size_kb": 551.7
+    },
+    {
+      "label": "50_0s",
+      "timestamp": 50.0,
+      "scene": "Ato 06 \u00b7 Ciclo Completo (Passo 4/4)",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_50_0s.png",
+      "size_kb": 517.2
+    },
+    {
+      "label": "55_0s",
+      "timestamp": 55.0,
+      "scene": "Ato 07 \u00b7 S\u00edntese e 3 Preceitos FSM",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_55_0s.png",
+      "size_kb": 503.2
+    },
+    {
+      "label": "59_5s",
+      "timestamp": 59.5,
+      "scene": "Ato 07 \u00b7 Encerramento de Engenharia",
+      "path": "/home/mateusarcedev/projetos/motion/projects/explainer-state-machine/reviews/decoded/frame_59_5s.png",
+      "size_kb": 468.3
+    }
+  ]
+}

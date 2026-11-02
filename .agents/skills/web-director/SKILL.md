@@ -36,6 +36,7 @@ Gate 1: usuário aprova o BRIEF antes de qualquer código.
 | Director | BRIEF.md + `STRUCTURE.md` (seções, hierarquia por breakpoint, copy real) | aprovação humana |
 | Art Director | STYLE.md (tipografia, cor via tokens, layout, motion, lista "evitar") | aprovação humana |
 | Builder | código em `projects/<slug>/web/` (componentes, estilos, assets) | — |
+| UI Auditor | pré-QA de humanização via `ui-humanizer` (remover clichês/cara de IA) | — |
 | QA Engineer | `reviews/viewports/` — screenshots + relatório por viewport | — |
 | Critic | `reviews/findings.md` com evidência (viewport, seletor, screenshot) | sign-off |
 
@@ -54,6 +55,15 @@ O Critic é outro contexto (subagente), avalia screenshots e vídeo curto, não 
   `Suspense` com fallback; `dpr={[1,2]}`; poster estático para `prefers-reduced-motion`/sem WebGL.
 - Determinismo: páginas são interativas, mas QA e screenshots devem ser reprodutíveis —
   sem `Math.random()`/`Date.now()` no render inicial; animações de entrada dirigidas por estado.
+
+## 3b · Auditoria Visual de Humanização (`ui-humanizer`)
+
+Antes de submeter ao QA multi-viewport, execute a auditoria heurística para detectar decisões genéricas e "cara de IA":
+`web-director -> construção -> ui-humanizer -> QA visual -> correção`
+
+- Execute o scanner de tells (`audit.py`).
+- Avalie ocorrências: diferencie problemas reais de escolhas visuais intencionais da marca (tokens oficiais e design system próprio sempre prevalecem).
+- Refine o código eliminando clichês não justificados antes do QA multi-viewport.
 
 ## 4 · QA multi-viewport (gate obrigatório)
 

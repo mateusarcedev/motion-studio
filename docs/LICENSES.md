@@ -39,3 +39,22 @@ Os pacotes do MOTION Studio (`motion-core`, `motion-cli`, `motion-studio-skills`
 ### Model Cards de Áudio / TTS (ex: Chatterbox)
 - O código do repositório pode ser MIT, mas cada modelo de voz / pesos de rede neural possui termos de uso específicos.
 - O MOTION Studio adota **fallback silencioso com legendas** e nunca instala modelos de voz sem prévia auditoria de model card.
+
+---
+
+## 4. Integrações Externas da Comunidade
+
+### Repositório Gabriel Greco (`gabrielgreco1/skills`)
+- **Repositório:** `https://github.com/gabrielgreco1/skills`
+- **Commit SHA Auditado:** `9cf15be76c960c94edddcc78fc5fa237e0778c44`
+- **Skills Integradas:** `aula-interativa`, `motion-designer`, `ui-humanizer`.
+- **Status de Licença Upstream:** Custom / Termos expressos no README do autor:
+  > *"Use the skills, change them, ship videos with them. The vendored third-party code keeps its own license (Three.js is MIT)."*
+- **Política de Distribuição no MOTION:**
+  - O código-fonte externo **NÃO é embutido diretamente nos pacotes de distribuição npm** (`motion-studio-skills`, `motion-core`, `motion-cli`), preservando a pureza da licença Apache-2.0 do MOTION e evitando qualquer ambiguidade redistributiva.
+  - A integração é puramente arquitetural: o MOTION exporta o perfil `interactive`, documenta as rotas de despacho em seus diretores (`studio-director`, `motion-director`, `web-director`), fornece diagnóstico via `motion doctor`, suporte de scaffold via `motion create lesson`, e orienta os usuários a adicionarem as skills diretamente da fonte upstream:
+    ```bash
+    npx skills add gabrielgreco1/skills --skill aula-interativa
+    npx skills add gabrielgreco1/skills --skill motion-designer
+    npx skills add gabrielgreco1/skills --skill ui-humanizer
+    ```
