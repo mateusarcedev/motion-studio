@@ -1,0 +1,72 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/homolog-a-api-explainer",
+  "counts": {
+    "files": 9,
+    "png": 4,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/still-01-req.png",
+    "out/still-02-gateway.png",
+    "out/still-03-db.png",
+    "out/still-04-ok.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "72de8ac9bbe09502cdf854254b86df06c0dd8a451cac4b40a8ce3c84b9de98cb",
+      "bytes": 1966,
+      "role": "other"
+    },
+    {
+      "path": "STORYBOARD.md",
+      "sha256": "cba7c45e41099bc1a5fb23773e6d9cda41f75eaf96527411cfd4d667f8634b43",
+      "bytes": 1403,
+      "role": "other"
+    },
+    {
+      "path": "STYLE.md",
+      "sha256": "97e029d89789a304beacde8245e9e6a0654f816bcf475d6a6161509c79a24c8b",
+      "bytes": 1183,
+      "role": "other"
+    },
+    {
+      "path": "assets.manifest.json",
+      "sha256": "186206289aff46c0af24a5cff6ca0cf0c8b46b9a2e8c7149d5bed46521d07732",
+      "bytes": 1355,
+      "role": "other"
+    },
+    {
+      "path": "composition.html",
+      "sha256": "4f9b0368a804c150af57767741dd10bf4a7cd6a8b838eb46acbff5a52842c59c",
+      "bytes": 11907,
+      "role": "other"
+    },
+    {
+      "path": "out/still-01-req.png",
+      "sha256": "ec9015a43ad1490aab65a6dc4bf4bf55b3b22242a0f3acdff8a01629c9156b61",
+      "bytes": 174831,
+      "role": "render"
+    },
+    {
+      "path": "out/still-02-gateway.png",
+      "sha256": "e08c81563776b24b267fc0f8d019fe4974d5a1016287ca847c36c5c9227b979b",
+      "bytes": 179257,
+      "role": "render"
+    },
+    {
+      "path": "out/still-03-db.png",
+      "sha256": "31208fe044e3053486a6e94b95936c461edb770fdfe4b344de5547c71f6e7f9c",
+      "bytes": 177853,
+      "role": "render"
+    },
+    {
+      "path": "out/still-04-ok.png",
+      "sha256": "465dc064c299ab1f1a971abdc4b5645bcd8fe17070742735089cc5786429a001",
+      "bytes": 177903,
+      "role": "render"
+    }
+  ]
+}

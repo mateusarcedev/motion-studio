@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Teste C — Liofilização Industrial de Alimentos</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #0B0F17;
+      color: #F3F4F6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    .ambient-glow {
+      position: absolute;
+      width: 1100px;
+      height: 1100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, rgba(11, 15, 23, 0) 70%);
+      top: 450px;
+      left: -10px;
+      pointer-events: none;
+    }
+    .header {
+      position: absolute;
+      top: 130px;
+      left: 80px;
+      right: 80px;
+      z-index: 10;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1.5px solid rgba(245, 158, 11, 0.4);
+      border-radius: 30px;
+      color: #F59E0B;
+      font-family: monospace;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .title {
+      font-size: 78px;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: #F3F4F6;
+      margin-bottom: 20px;
+    }
+    .title span { color: #F59E0B; }
+    .title span.cryo { color: #38BDF8; }
+    .subtitle {
+      font-size: 31px;
+      line-height: 1.45;
+      color: #9CA3AF;
+      max-width: 880px;
+    }
+    .stage {
+      position: absolute;
+      top: 520px;
+      left: 80px;
+      width: 920px;
+      height: 1000px;
+      background: #111827;
+      border: 2px solid #1F2937;
+      border-radius: 28px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .stage-topbar {
+      width: 100%;
+      height: 72px;
+      background: #0F172A;
+      border-bottom: 1.5px solid #1F2937;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      font-family: monospace;
+      font-size: 24px;
+      color: #94A3B8;
+      z-index: 10;
+    }
+    .stage-topbar span.highlight { color: #F59E0B; }
+
+    .chamber-viewport {
+      width: 100%;
+      height: 700px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    /* Process Graphics */
+    .chamber-cylinder {
+      width: 780px;
+      height: 520px;
+      border: 3px dashed #374151;
+      border-radius: 24px;
+      background: #0B0F17;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .condenser-coil {
+      position: absolute;
+      top: 24px;
+      right: 30px;
+      width: 220px;
+      height: 120px;
+      border: 3px solid #38BDF8;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: monospace;
+      font-size: 20px;
+      color: #38BDF8;
+    }
+    .condenser-coil .coil-temp {
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .shelf-rack {
+      width: 660px;
+      height: 220px;
+      border-top: 4px solid #F59E0B;
+      border-bottom: 4px solid #F59E0B;
+      background: rgba(245, 158, 11, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      position: relative;
+    }
+    .food-sample {
+      width: 160px;
+      height: 160px;
+      border-radius: 20px;
+      background: #DC2626;
+      border: 3px solid #F87171;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .food-sample .label {
+      font-size: 22px;
+      font-weight: 800;
+      color: #FFF;
+      text-transform: uppercase;
+    }
+    .food-sample .state-tag {
+      font-family: monospace;
+      font-size: 18px;
+      color: #FEF08A;
+      margin-top: 6px;
+    }
+
+    /* Vapor particles animation container */
+    .vapor-stream {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .vapor-arrow {
+      position: absolute;
+      color: #38BDF8;
+      font-size: 32px;
+      opacity: 0.8;
+      animation: none;
+    }
+
+    .process-banner {
+      width: 840px;
+      min-height: 140px;
+      background: #0F172A;
+      border: 1.5px solid #1E293B;
+      border-radius: 20px;
+      padding: 24px 30px;
+      font-size: 26px;
+      line-height: 1.45;
+      color: #CBD5E1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .process-banner strong { color: #F59E0B; font-weight: 800; }
+    .process-banner strong.cryo { color: #38BDF8; }
+
+    .telemetry-footer {
+      position: absolute;
+      bottom: 110px;
+      left: 80px;
+      right: 80px;
+      height: 190px;
+      background: #111827;
+      border: 2px solid #1F2937;
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 24px 28px;
+      gap: 16px;
+      align-items: center;
+    }
+    .tel-col { display: flex; flex-direction: column; gap: 6px; }
+    .tel-label { font-family: monospace; font-size: 20px; color: #6B7280; text-transform: uppercase; }
+    .tel-val { font-family: monospace; font-size: 32px; font-weight: 800; color: #F3F4F6; }
+    .tel-val.cryo { color: #38BDF8; }
+    .tel-val.amber { color: #F59E0B; }
+    .tel-val.ok { color: #10B981; }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow" data-bleed="true"></div>
+
+  <div class="header">
+    <div class="badge">Engenharia de Processos · Alimentos</div>
+    <h1 class="title">Como Funciona a <span class="cryo">Liofilização</span>?</h1>
+    <p class="subtitle">A física do ponto triplo e a sublimação do gelo para preservar alimentos por até 25 anos.</p>
+  </div>
+
+  <div class="stage">
+    <div class="stage-topbar">
+      <div id="reactorStatus">CÂMARA DE VÁCUO INDUSTRIAL</div>
+      <div id="actLabel" class="highlight">ATO 1 / 4 · ULTRACONGELAMENTO</div>
+    </div>
+
+    <div class="chamber-viewport">
+      <div class="chamber-cylinder">
+        <div class="condenser-coil" id="condenser">
+          <span>SERPENTINA</span>
+          <span class="coil-temp" id="coilTemp">-70 °C</span>
+          <span style="font-size: 16px; color: #94A3B8;">Armadilha de Vapor</span>
+        </div>
+
+        <div class="shelf-rack" id="shelfRack">
+          <div class="food-sample" id="food1">
+            <span class="label">MORANGO</span>
+            <span class="state-tag" id="stateTag1">GELADO</span>
+          </div>
+          <div class="food-sample" id="food2">
+            <span class="label">CAFÉ SOLÚVEL</span>
+            <span class="state-tag" id="stateTag2">GELADO</span>
+          </div>
+          <div class="food-sample" id="food3">
+            <span class="label">PROTEÍNA</span>
+            <span class="state-tag" id="stateTag3">GELADO</span>
+          </div>
+        </div>
+
+        <div class="vapor-stream" id="vaporStream">
+          <div class="vapor-arrow" style="top: 150px; left: 320px;">↑ H₂O(v)</div>
+          <div class="vapor-arrow" style="top: 130px; left: 480px;">↗ H₂O(v)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-banner" id="processBanner">
+      <strong class="cryo">Ultracongelamento Criogênico (-45 °C):</strong> Resfriamento rápido cria microcristais sem romper as paredes celulares do alimento.
+    </div>
+  </div>
+
+  <div class="telemetry-footer">
+    <div class="tel-col">
+      <span class="tel-label">Temperatura</span>
+      <span class="tel-val cryo" id="telTemp">-45.0 °C</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Pressão Absoluta</span>
+      <span class="tel-val" id="telPressure">1013 mbar</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Umidade Residual</span>
+      <span class="tel-val" id="telMoisture">85.0%</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Estado Físico</span>
+      <span class="tel-val amber" id="telState">SÓLIDO (GELO)</span>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_FRAMES = 1350; // 45s @ 30fps
+
+    window.__onFrame__ = function(frame) {
+      const raw = typeof frame === "object" && frame !== null ? (frame.frame ?? 0) : Number(frame || 0);
+      const f = Math.max(0, Math.min(raw, TOTAL_FRAMES - 1));
+
+      const actLabel = document.getElementById("actLabel");
+      const reactorStatus = document.getElementById("reactorStatus");
+      const processBanner = document.getElementById("processBanner");
+      const vaporStream = document.getElementById("vaporStream");
+      const condenser = document.getElementById("condenser");
+      const telTemp = document.getElementById("telTemp");
+      const telPressure = document.getElementById("telPressure");
+      const telMoisture = document.getElementById("telMoisture");
+      const telState = document.getElementById("telState");
+      const stateTag1 = document.getElementById("stateTag1");
+      const stateTag2 = document.getElementById("stateTag2");
+      const stateTag3 = document.getElementById("stateTag3");
+
+      if (f < 330) {
+        // ACT 1: Ultracongelamento (-45°C, 1013 mbar)
+        actLabel.textContent = "ATO 1 / 4 · ULTRACONGELAMENTO";
+        reactorStatus.textContent = "TÚNEL CRIOGÊNICO · PRESSÃO AMBIENTE";
+        vaporStream.style.display = "none";
+        condenser.style.opacity = "0.3";
+
+        const p = f / 330;
+        const temp = Math.round(20 - p * 65);
+        telTemp.textContent = temp.toFixed(1) + " °C";
+        telTemp.className = "tel-val cryo";
+        telPressure.textContent = "1013 mbar";
+        telMoisture.textContent = "85.0%";
+        telState.textContent = "CONGELANDO";
+        telState.className = "tel-val cryo";
+
+        stateTag1.textContent = "MICRO-GELO";
+        stateTag2.textContent = "MICRO-GELO";
+        stateTag3.textContent = "MICRO-GELO";
+        processBanner.innerHTML = "<strong class='cryo'>1. Ultracongelamento Rápido (-45 °C):</strong> Formação de microcristais de gelo que impedem o rompimento das membranas celulares e conservam a textura.";
+      } else if (f < 690) {
+        // ACT 2: Sublimação Primária (< 6.11 mbar, -15°C)
+        actLabel.textContent = "ATO 2 / 4 · SUBLIMAÇÃO PRIMÁRIA";
+        reactorStatus.textContent = "CÂMARA DE VÁCUO · P < PONTO TRIPLO (6.11 mbar)";
+        vaporStream.style.display = "flex";
+        condenser.style.opacity = "1";
+
+        const p = (f - 330) / 360;
+        const press = (1.5 * (1 - p) + 0.08).toFixed(2);
+        const moist = (85 - p * 65).toFixed(1);
+        telTemp.textContent = "-15.0 °C";
+        telTemp.className = "tel-val amber";
+        telPressure.textContent = press + " mbar";
+        telMoisture.textContent = moist + "%";
+        telState.textContent = "SUBLIMAÇÃO";
+        telState.className = "tel-val amber";
+
+        stateTag1.textContent = "SUBLIMANDO";
+        stateTag2.textContent = "SUBLIMANDO";
+        stateTag3.textContent = "SUBLIMANDO";
+        processBanner.innerHTML = "<strong>2. Vácuo e Sublimação Primária (0.08 mbar):</strong> A pressão abaixo de 6.11 mbar força a água sólida a virar vapor diretamente, sem virar líquido nem enrugar.";
+      } else if (f < 1050) {
+        // ACT 3: Dessorção Secundária (+30°C, 0.02 mbar)
+        actLabel.textContent = "ATO 3 / 4 · DESSORÇÃO SECUNDÁRIA";
+        reactorStatus.textContent = "AQUECIMENTO SUAVE (+30 °C) · VÁCUO ELEVADO";
+        vaporStream.style.display = "none";
+        condenser.style.opacity = "0.7";
+
+        const p = (f - 690) / 360;
+        const moist = (20 - p * 18.2).toFixed(1);
+        telTemp.textContent = "+30.0 °C";
+        telTemp.className = "tel-val amber";
+        telPressure.textContent = "0.02 mbar";
+        telMoisture.textContent = moist + "%";
+        telState.textContent = "DESSORÇÃO";
+        telState.className = "tel-val amber";
+
+        stateTag1.textContent = "MATRIZ SECA";
+        stateTag2.textContent = "MATRIZ SECA";
+        stateTag3.textContent = "MATRIZ SECA";
+        processBanner.innerHTML = "<strong>3. Dessorção Secundária (+30 °C):</strong> O calor suave extrai a umidade ligada residual. O teor de água cai para menos de 2%, tornando o alimento imune a bactérias.";
+      } else {
+        // ACT 4: Selagem sob N2 e Síntese
+        actLabel.textContent = "ATO 4 / 4 · INJEÇÃO DE N₂ & SELAGEM";
+        reactorStatus.textContent = "ATMOSFERA INERTE (100% NITROGÊNIO ALIMENTÍCIO)";
+        vaporStream.style.display = "none";
+        condenser.style.opacity = "0.2";
+
+        telTemp.textContent = "+22.0 °C";
+        telTemp.className = "tel-val ok";
+        telPressure.textContent = "1013 mbar (N₂)";
+        telMoisture.textContent = "1.5%";
+        telState.textContent = "ESTÁVEL (25 ANOS)";
+        telState.className = "tel-val ok";
+
+        stateTag1.textContent = "PRONTO";
+        stateTag2.textContent = "PRONTO";
+        stateTag3.textContent = "PRONTO";
+        processBanner.innerHTML = "<strong style='color:#10B981;'>4. Selagem Hermética com Nitrogênio ($N_2$):</strong> Sem oxigênio nem água líquida, os nutrientes e sabores originais permanecem intactos por até 25 anos à temperatura ambiente.";
+      }
+    };
+
+    // Auto-init preview at frame 500
+    window.__onFrame__(500);
+  </script>
+</body>
+</html>

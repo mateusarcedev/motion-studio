@@ -18,5 +18,11 @@
 **/scripts/bin/**
 
 # Heavy demos / workbench build caches
-**/workbench/dist/**
-**/workbench/node_modules/**
+**/workbench/**
+**/demos/**
+**/examples/**/*.html
+**/*.blend
+**/*.blend1
+**/*.glb
+**/*.fbx
+**/*.tar.gz

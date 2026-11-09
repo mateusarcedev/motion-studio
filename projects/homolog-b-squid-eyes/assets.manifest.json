@@ -1,0 +1,72 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/homolog-b-squid-eyes",
+  "counts": {
+    "files": 9,
+    "png": 4,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/still-01-scale.png",
+    "out/still-02-optics.png",
+    "out/still-03-wake.png",
+    "out/still-04-survival.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "3b5a49fea6b426766a7b243f71d77cc0203bcdc6afa89b325abaddf97826a717",
+      "bytes": 1640,
+      "role": "other"
+    },
+    {
+      "path": "RESEARCH.md",
+      "sha256": "219a0c5384d1b489ba65c46835f9137ba78fa9b49ba6edd44c84fcbdab103b61",
+      "bytes": 3157,
+      "role": "other"
+    },
+    {
+      "path": "STORYBOARD.md",
+      "sha256": "e275436d10c0bfe5de18782704acba3ee1adf0781e61cce74f6f5f7bd3ce4b08",
+      "bytes": 1201,
+      "role": "other"
+    },
+    {
+      "path": "STYLE.md",
+      "sha256": "1c4ff92ac52a4a1076b5cc5af26d7ad63b34c5101810245eab9e0774ae097e17",
+      "bytes": 1182,
+      "role": "other"
+    },
+    {
+      "path": "composition.html",
+      "sha256": "4bb60b2604db22090a8785b773e9759c755748d13e44bb853cae6f26d52f1d87",
+      "bytes": 10184,
+      "role": "other"
+    },
+    {
+      "path": "out/still-01-scale.png",
+      "sha256": "51d6d187c15de140c0d3551c5559803685eea38f4ff10ef2823511cc30876558",
+      "bytes": 296736,
+      "role": "render"
+    },
+    {
+      "path": "out/still-02-optics.png",
+      "sha256": "7204ef1135bcbc03df8f9e21609e1294063c04b582a5b254d5429dae11bc17fb",
+      "bytes": 304581,
+      "role": "render"
+    },
+    {
+      "path": "out/still-03-wake.png",
+      "sha256": "d04ca1e51a00d0c5777fe04f0521c97d778a212e475f71c94af8437e84ea2ca1",
+      "bytes": 345741,
+      "role": "render"
+    },
+    {
+      "path": "out/still-04-survival.png",
+      "sha256": "18a01f52a121e522e79b594e3b4aa6969ddf534b188a5e00af54132ed60ebf18",
+      "bytes": 342726,
+      "role": "render"
+    }
+  ]
+}

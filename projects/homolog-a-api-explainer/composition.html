@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Teste A — Como Funcionam as APIs?</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #0D1117;
+      color: #F0F6FC;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Geist", sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(48, 54, 61, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(48, 54, 61, 0.25) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .header {
+      position: absolute;
+      top: 140px;
+      left: 80px;
+      right: 80px;
+      z-index: 10;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: rgba(88, 166, 255, 0.12);
+      border: 1.5px solid rgba(88, 166, 255, 0.4);
+      border-radius: 30px;
+      color: #58A6FF;
+      font-family: monospace;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .title {
+      font-size: 82px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #F0F6FC;
+      margin-bottom: 20px;
+    }
+    .title span { color: #58A6FF; }
+    .subtitle {
+      font-size: 34px;
+      line-height: 1.45;
+      color: #8B949E;
+      max-width: 850px;
+    }
+    .stage {
+      position: absolute;
+      top: 540px;
+      left: 80px;
+      right: 80px;
+      height: 980px;
+      background: #161B22;
+      border: 2px solid #30363D;
+      border-radius: 28px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+    .stage-topbar {
+      height: 70px;
+      background: #21262D;
+      border-bottom: 1.5px solid #30363D;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      font-family: monospace;
+      font-size: 24px;
+      color: #8B949E;
+    }
+    .lights { display: flex; gap: 12px; }
+    .light { width: 18px; height: 18px; border-radius: 50%; }
+    .light-r { background: #FF5F56; }
+    .light-y { background: #FFBD2E; }
+    .light-g { background: #27C93F; }
+
+    .node {
+      position: absolute;
+      width: 260px;
+      padding: 24px;
+      background: #0D1117;
+      border: 2px solid #30363D;
+      border-radius: 20px;
+      font-family: monospace;
+      z-index: 5;
+    }
+    .node-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #8B949E;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+    .node-val {
+      font-size: 28px;
+      font-weight: 800;
+      color: #F0F6FC;
+    }
+    .node.client { top: 120px; left: 60px; border-color: #58A6FF; }
+    .node.gateway { top: 120px; right: 60px; border-color: #D29922; }
+    .node.server { bottom: 120px; left: 60px; border-color: #BC8CFF; }
+    .node.db { bottom: 120px; right: 60px; border-color: #3FB950; }
+
+    svg.network-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+    .packet {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #58A6FF;
+      box-shadow: 0 0 25px #58A6FF;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0D1117;
+      font-weight: 900;
+      font-size: 20px;
+    }
+    .packet.response {
+      background: #3FB950;
+      box-shadow: 0 0 25px #3FB950;
+    }
+
+    .payload-box {
+      position: absolute;
+      top: 360px;
+      left: 140px;
+      right: 140px;
+      height: 250px;
+      background: rgba(13, 17, 23, 0.95);
+      border: 2px solid #58A6FF;
+      border-radius: 18px;
+      padding: 24px 30px;
+      font-family: monospace;
+      font-size: 26px;
+      line-height: 1.5;
+      color: #79C0FF;
+      z-index: 6;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+    .payload-box.ok { border-color: #3FB950; color: #7EE787; }
+    .payload-label { font-size: 20px; color: #8B949E; margin-bottom: 8px; text-transform: uppercase; }
+
+    .telemetry-footer {
+      position: absolute;
+      bottom: 90px;
+      left: 80px;
+      right: 80px;
+      height: 190px;
+      background: #161B22;
+      border: 2px solid #30363D;
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 24px 32px;
+      gap: 20px;
+      align-items: center;
+    }
+    .tel-col { display: flex; flex-direction: column; gap: 6px; }
+    .tel-label { font-family: monospace; font-size: 20px; color: #8B949E; text-transform: uppercase; }
+    .tel-val { font-family: monospace; font-size: 34px; font-weight: 800; color: #58A6FF; }
+    .tel-val.ok { color: #3FB950; }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <div class="header">
+    <div class="badge">Educação em Tecnologia · Explainer Motion</div>
+    <h1 class="title">Como Funcionam as <span>APIs?</span></h1>
+    <p class="subtitle">A ponte que conecta clientes, gateways, lógica de backend e bancos de dados em milissegundos.</p>
+  </div>
+
+  <div class="stage">
+    <div class="stage-topbar">
+      <div class="lights">
+        <div class="light light-r"></div>
+        <div class="light light-y"></div>
+        <div class="light light-g"></div>
+      </div>
+      <div id="protocolLabel">HTTP/2 TLS 1.3 · TCP HANDSHAKE</div>
+      <div id="actLabel">ATO 1 / 4</div>
+    </div>
+
+    <svg class="network-lines">
+      <!-- Client to Gateway -->
+      <line x1="320" y1="200" x2="600" y2="200" stroke="#30363D" stroke-width="4" stroke-dasharray="8 8"/>
+      <!-- Gateway to Server -->
+      <line x1="730" y1="300" x2="730" y2="700" stroke="#30363D" stroke-width="4" stroke-dasharray="8 8"/>
+      <!-- Server to DB -->
+      <line x1="320" y1="800" x2="600" y2="800" stroke="#30363D" stroke-width="4" stroke-dasharray="8 8"/>
+      <!-- DB to Client Return -->
+      <line x1="190" y1="300" x2="190" y2="700" stroke="#30363D" stroke-width="4" stroke-dasharray="8 8"/>
+    </svg>
+
+    <div class="node client">
+      <div class="node-title">01 · Cliente</div>
+      <div class="node-val">Mobile App</div>
+    </div>
+
+    <div class="node gateway">
+      <div class="node-title">02 · Gateway</div>
+      <div class="node-val">Auth & Proxy</div>
+    </div>
+
+    <div class="node server">
+      <div class="node-title">03 · Servidor</div>
+      <div class="node-val">Node.js API</div>
+    </div>
+
+    <div class="node db">
+      <div class="node-title">04 · Banco</div>
+      <div class="node-val">PostgreSQL</div>
+    </div>
+
+    <div class="payload-box" id="payloadBox">
+      <div class="payload-label" id="payloadLabel">HTTP REQUEST</div>
+      <pre id="payloadCode">GET /api/v1/orders/402
+Host: api.servico.com
+Authorization: Bearer ****</pre>
+    </div>
+
+    <div class="packet" id="packet">REQ</div>
+  </div>
+
+  <div class="telemetry-footer">
+    <div class="tel-col">
+      <span class="tel-label">Método</span>
+      <span class="tel-val" id="telMethod">GET</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Status HTTP</span>
+      <span class="tel-val" id="telStatus">...</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Latência RTT</span>
+      <span class="tel-val" id="telLatency">12 ms</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Payload Size</span>
+      <span class="tel-val ok" id="telSize">1.4 KB</span>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_FRAMES = 1050; // 35s @ 30fps
+
+    window.__onFrame__ = function(frame) {
+      const rawFrame = typeof frame === "object" && frame !== null ? (frame.frame ?? 0) : Number(frame || 0);
+      const f = Math.max(0, Math.min(rawFrame, TOTAL_FRAMES - 1));
+      const packet = document.getElementById("packet");
+      const payloadBox = document.getElementById("payloadBox");
+      const payloadLabel = document.getElementById("payloadLabel");
+      const payloadCode = document.getElementById("payloadCode");
+      const actLabel = document.getElementById("actLabel");
+      const telStatus = document.getElementById("telStatus");
+      const telLatency = document.getElementById("telLatency");
+
+      // Stage geometry coordinates:
+      // Client center: (190, 200)
+      // Gateway center: (730, 200)
+      // DB center: (730, 800)
+      // Server center: (190, 800)
+
+      if (f < 260) {
+        // ACT 1: Client -> Gateway
+        actLabel.textContent = "ATO 1 / 4 · REQUISIÇÃO";
+        const progress = f / 260;
+        const x = 190 + (730 - 190) * progress;
+        const y = 200;
+        packet.className = "packet";
+        packet.textContent = "REQ";
+        packet.style.left = x + "px";
+        packet.style.top = y + "px";
+
+        payloadBox.className = "payload-box";
+        payloadLabel.textContent = "HTTP REQUEST PACKET";
+        payloadCode.textContent = 'GET /api/v1/orders/402 HTTP/2\\nHost: api.hub.io\\nAuth: Bearer eyJhbGci...';
+        telStatus.textContent = "SENDING";
+        telStatus.className = "tel-val";
+        telLatency.textContent = Math.round(progress * 14) + " ms";
+      } else if (f < 540) {
+        // ACT 2: Gateway -> DB
+        actLabel.textContent = "ATO 2 / 4 · AUTENTICAÇÃO & GATEWAY";
+        const progress = (f - 260) / 280;
+        const x = 730;
+        const y = 200 + (800 - 200) * progress;
+        packet.className = "packet";
+        packet.textContent = "VAL";
+        packet.style.left = x + "px";
+        packet.style.top = y + "px";
+
+        payloadBox.className = "payload-box";
+        payloadLabel.textContent = "GATEWAY FILTER VERIFICATION";
+        payloadCode.textContent = 'Token validado (Role: user_read)\\nRate limit: 12/1000s OK\\nRoteando para: microservico-pedidos';
+        telStatus.textContent = "VERIFIED";
+        telStatus.className = "tel-val";
+        telLatency.textContent = Math.round(14 + progress * 16) + " ms";
+      } else if (f < 810) {
+        // ACT 3: DB -> Server
+        actLabel.textContent = "ATO 3 / 4 · CONSULTA & PERSISTÊNCIA";
+        const progress = (f - 540) / 270;
+        const x = 730 - (730 - 190) * progress;
+        const y = 800;
+        packet.className = "packet response";
+        packet.textContent = "DATA";
+        packet.style.left = x + "px";
+        packet.style.top = y + "px";
+
+        payloadBox.className = "payload-box ok";
+        payloadLabel.textContent = "SQL QUERY RESOLUTION";
+        payloadCode.textContent = 'SELECT * FROM orders WHERE id=402;\\n1 row returned (1.4 KB)\\nStatus: Pedido Entregue';
+        telStatus.textContent = "DB HIT";
+        telStatus.className = "tel-val ok";
+        telLatency.textContent = Math.round(30 + progress * 5) + " ms";
+      } else {
+        // ACT 4: Server -> Client
+        actLabel.textContent = "ATO 4 / 4 · RESPOSTA 200 OK & SÍNTESE";
+        const progress = (f - 810) / 240;
+        const x = 190;
+        const y = 800 - (800 - 200) * progress;
+        packet.className = "packet response";
+        packet.textContent = "200";
+        packet.style.left = x + "px";
+        packet.style.top = y + "px";
+
+        payloadBox.className = "payload-box ok";
+        payloadLabel.textContent = "HTTP 200 OK JSON RESPONSE";
+        payloadCode.textContent = '{\\n  "order_id": 402,\\n  "customer": "Mateus A.",\\n  "status": "delivered",\\n  "rtt_ms": 38\\n}';
+        telStatus.textContent = "200 OK";
+        telStatus.className = "tel-val ok";
+        telLatency.textContent = "38 ms";
+      }
+    };
+
+    // Auto-initialize at frame 150 for immediate preview
+    window.__onFrame__(150);
+  </script>
+</body>
+</html>

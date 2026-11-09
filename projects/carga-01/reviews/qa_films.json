@@ -1,0 +1,176 @@
+{
+  "horizontal_16x9": {
+    "file": "/home/mateusarcedev/projetos/motion/projects/carga-01/out/carga-01-16x9.mp4",
+    "resolution": "1920x1080",
+    "fps": "30/1",
+    "codec": "h264",
+    "pix_fmt": "yuv420p",
+    "frames_count": "600",
+    "extracted_frames": [
+      {
+        "label": "0s",
+        "timestamp": 0.0,
+        "scene": "Cena 01 \u00b7 Estabelecimento",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_0s.png",
+        "size_kb": 461.7
+      },
+      {
+        "label": "2s",
+        "timestamp": 2.0,
+        "scene": "Cena 01 \u00b7 Cais & Navio",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_2s.png",
+        "size_kb": 539.6
+      },
+      {
+        "label": "4s",
+        "timestamp": 4.0,
+        "scene": "Cena 02 \u00b7 Transi\u00e7\u00e3o",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_4s.png",
+        "size_kb": 531.0
+      },
+      {
+        "label": "6s",
+        "timestamp": 6.0,
+        "scene": "Cena 02 \u00b7 Cont\u00eainer TRV-01-A",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_6s.png",
+        "size_kb": 704.5
+      },
+      {
+        "label": "8s",
+        "timestamp": 8.0,
+        "scene": "Cena 03 \u00b7 Spreader & Trava",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_8s.png",
+        "size_kb": 428.4
+      },
+      {
+        "label": "10s",
+        "timestamp": 10.0,
+        "scene": "Cena 03 \u00b7 I\u00e7amento Vertical",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_10s.png",
+        "size_kb": 502.2
+      },
+      {
+        "label": "12s",
+        "timestamp": 12.0,
+        "scene": "Cena 04 \u00b7 Acoplamento Carreta",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_12s.png",
+        "size_kb": 674.5
+      },
+      {
+        "label": "14s",
+        "timestamp": 14.0,
+        "scene": "Cena 04 \u00b7 Estrada Noturna",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_14s.png",
+        "size_kb": 762.7
+      },
+      {
+        "label": "16s",
+        "timestamp": 16.0,
+        "scene": "Cena 05 \u00b7 Desacelera\u00e7\u00e3o Hub",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_16s.png",
+        "size_kb": 674.2
+      },
+      {
+        "label": "18s",
+        "timestamp": 18.0,
+        "scene": "Cena 05 \u00b7 Destino Final",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_18s.png",
+        "size_kb": 794.0
+      },
+      {
+        "label": "19.9s",
+        "timestamp": 19.9,
+        "scene": "Cena 05 \u00b7 Encerramento Po\u00e9tico",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-16x9/frame_19_9s.png",
+        "size_kb": 733.5
+      }
+    ]
+  },
+  "vertical_9x16": {
+    "file": "/home/mateusarcedev/projetos/motion/projects/carga-01/out/carga-01-9x16.mp4",
+    "resolution": "1080x1920",
+    "fps": "30/1",
+    "codec": "h264",
+    "pix_fmt": "yuv420p",
+    "frames_count": "600",
+    "extracted_frames": [
+      {
+        "label": "0s",
+        "timestamp": 0.0,
+        "scene": "Cena 01 \u00b7 Estabelecimento",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_0s.png",
+        "size_kb": 489.7
+      },
+      {
+        "label": "2s",
+        "timestamp": 2.0,
+        "scene": "Cena 01 \u00b7 Cais & Navio",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_2s.png",
+        "size_kb": 562.1
+      },
+      {
+        "label": "4s",
+        "timestamp": 4.0,
+        "scene": "Cena 02 \u00b7 Transi\u00e7\u00e3o",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_4s.png",
+        "size_kb": 383.3
+      },
+      {
+        "label": "6s",
+        "timestamp": 6.0,
+        "scene": "Cena 02 \u00b7 Cont\u00eainer TRV-01-A",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_6s.png",
+        "size_kb": 476.1
+      },
+      {
+        "label": "8s",
+        "timestamp": 8.0,
+        "scene": "Cena 03 \u00b7 Spreader & Trava",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_8s.png",
+        "size_kb": 439.4
+      },
+      {
+        "label": "10s",
+        "timestamp": 10.0,
+        "scene": "Cena 03 \u00b7 I\u00e7amento Vertical",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_10s.png",
+        "size_kb": 527.1
+      },
+      {
+        "label": "12s",
+        "timestamp": 12.0,
+        "scene": "Cena 04 \u00b7 Acoplamento Carreta",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_12s.png",
+        "size_kb": 517.3
+      },
+      {
+        "label": "14s",
+        "timestamp": 14.0,
+        "scene": "Cena 04 \u00b7 Estrada Noturna",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_14s.png",
+        "size_kb": 593.0
+      },
+      {
+        "label": "16s",
+        "timestamp": 16.0,
+        "scene": "Cena 05 \u00b7 Desacelera\u00e7\u00e3o Hub",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_16s.png",
+        "size_kb": 570.3
+      },
+      {
+        "label": "18s",
+        "timestamp": 18.0,
+        "scene": "Cena 05 \u00b7 Destino Final",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_18s.png",
+        "size_kb": 717.3
+      },
+      {
+        "label": "19.9s",
+        "timestamp": 19.9,
+        "scene": "Cena 05 \u00b7 Encerramento Po\u00e9tico",
+        "path": "/home/mateusarcedev/projetos/motion/projects/carga-01/reviews/decoded-9x16/frame_19_9s.png",
+        "size_kb": 705.6
+      }
+    ]
+  }
+}

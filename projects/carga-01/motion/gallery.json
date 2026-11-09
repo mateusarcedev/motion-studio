@@ -1,0 +1,57 @@
+{
+  "$schema": "registro da galeria de produções do consumidor",
+  "brand": "carga---01",
+  "items": [
+    {
+      "id": "carga-01",
+      "title": "TRAVESSIA — Do cais ao destino",
+      "format": "multiformat (interactive web + 16:9 video + 9:16 video + 4:5 carousel)",
+      "brand": "carga---01",
+      "date": "2026-10-30",
+      "status": "approved",
+      "brief": "./BRIEF.md",
+      "source": "./",
+      "caption": "Experiência digital cinematográfica autoral que acompanha a jornada logística de um contêiner pelo porto, movimentação STS e rodovia sob iluminação cinematográfica Blue Hour e 30 FPS CFR determinísticos. Produzido com MOTION Studio.",
+      "slides": [
+        {
+          "n": "web-abertura",
+          "thumb": "./reviews/viewports/desktop-1440-01-abertura.png"
+        },
+        {
+          "n": "web-conteiner",
+          "thumb": "./reviews/viewports/desktop-1440-02-conteiner.png"
+        },
+        {
+          "n": "contact-sheet-16x9",
+          "thumb": "./reviews/contact-sheet-16x9.png"
+        },
+        {
+          "n": "contact-sheet-9x16",
+          "thumb": "./reviews/contact-sheet-9x16.png"
+        },
+        {
+          "n": "carousel-slide-1",
+          "thumb": "./carousel/out/01-1080x1350.png"
+        }
+      ],
+      "files": [
+        {
+          "name": "carga-01-16x9.mp4",
+          "path": "./out/carga-01-16x9.mp4"
+        },
+        {
+          "name": "carga-01-9x16.mp4",
+          "path": "./out/carga-01-9x16.mp4"
+        },
+        {
+          "name": "assets.manifest.json",
+          "path": "./assets.manifest.json"
+        },
+        {
+          "name": "entrega-v1.zip",
+          "path": "./entrega-v1.zip"
+        }
+      ]
+    }
+  ]
+}

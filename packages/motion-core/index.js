@@ -23,6 +23,15 @@ export const PATHS = {
 };
 
 export { createMotionDriver } from "./design-system/frame.js";
+export {
+  classifyCreativeIntent,
+  calculateAdaptiveDuration,
+  SUBJECT_DOMAINS,
+  INTENT_TYPES,
+  AUDIENCE_PROFILES,
+  CHANNELS,
+  VISUAL_LANGUAGES,
+} from "./intent/router.js";
 
 function runProcess(cmd, args, options = {}) {
   return new Promise((resolve, reject) => {

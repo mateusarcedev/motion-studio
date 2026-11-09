@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>TRAVESSIA — Slide 03</title>
+  <style>
+    :root {
+      --bg: #070A0F;
+      --surface: #0F172A;
+      --primary: #FF8A00;
+      --secondary: #00F0FF;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --dim: #64748B;
+      --border: #273549;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1350px;
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+    .wrap {
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 100px 96px;
+      z-index: 2;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+    .series-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--secondary);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .step-badge {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-family: 'Geist Mono', monospace;
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .main-body {
+      margin: auto 0;
+    }
+    .kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 18px;
+      color: var(--secondary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 64px;
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+    .grid-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .spec-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      border-radius: 4px;
+    }
+    .spec-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .spec-val {
+      font-family: 'Geist Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .spec-desc {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .tech-quote {
+      border-left: 4px solid var(--primary);
+      padding-left: 20px;
+      font-size: 20px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .tech-quote strong {
+      color: var(--text);
+    }
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 16px;
+      color: var(--muted);
+    }
+    .page-num {
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-lines"></div>
+
+  <div class="wrap">
+    <div class="header-bar">
+      <div class="series-tag">ENGENHARIA 3D & GLB</div>
+      <div class="step-badge">ETAPA 03</div>
+    </div>
+
+    <div class="main-body">
+      <div class="kicker">MODELAGEM PROCEDURAL & SHADERS PBR</div>
+      <h2>Construção do Mundo 3D.</h2>
+
+      <div class="grid-specs">
+        <div class="spec-item">
+          <div class="spec-label">CONTÊINER PROTAGONISTA</div>
+          <div class="spec-val" style="color: var(--primary);">TRV-01-A (184 KB)</div>
+          <div class="spec-desc">Chapas corrugadas, cantoneiras ISO twistlock fundidas e estêncil TRAVESSIA.</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-label">CAVALO MECÂNICO 6×4</div>
+          <div class="spec-val" style="color: var(--secondary);">SEMI TRUCK 6×4 (41 KB)</div>
+          <div class="spec-desc">Chassi porta-contêiner, eixos duplos, faróis xenônio e lanternas emissivas.</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-label">GUINDASTE PÓRTICO STS</div>
+          <div class="spec-val">GANTRY STS (20 KB)</div>
+          <div class="spec-desc">Treliça estrutural de 36m, cabos tensores e spreader telescópico móvel.</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-label">NAVIO CARGUEIRO</div>
+          <div class="spec-val">PORTA-CONTÊINER (127 KB)</div>
+          <div class="spec-desc">Casco de 100m, conveses em degrau e pilhas de contêineres coloridos.</div>
+        </div>
+      </div>
+
+      <div class="tech-quote">
+        <strong>Sem Blender no runtime:</strong> Modelagem procedural nativa com Three.js r165 e pipeline de exportação binária GLB, garantindo carregamento instantâneo no navegador.
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div style="color: var(--secondary);">STORYTELLING & ANIMAÇÕES →</div>
+      <div class="page-num">03 / 05</div>
+    </div>
+  </div>
+</body>
+</html>

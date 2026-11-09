@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-10-30T11:28:00Z",
+  "project": "example-motion-designer",
+  "video": "projects/example-motion-designer/out/nexus-flow-9x16.mp4",
+  "status": "PASS",
+  "checks": {
+    "dimensions": {
+      "expected": "1080x1920",
+      "actual": "1080x1920",
+      "status": "PASS"
+    },
+    "fps": {
+      "expected": 30.0,
+      "actual": 30.0,
+      "cfr": true,
+      "status": "PASS"
+    },
+    "pixel_format": {
+      "expected": "yuv420p",
+      "actual": "yuv420p",
+      "status": "PASS"
+    },
+    "duration_seconds": {
+      "expected": 6.0,
+      "actual": 6.0,
+      "status": "PASS"
+    },
+    "audio": {
+      "codec": "aac",
+      "duration": 5.99,
+      "status": "PASS"
+    },
+    "contact_sheet": {
+      "path": "projects/example-motion-designer/reviews/contact-sheet.png",
+      "frames_sampled": 13,
+      "status": "PASS"
+    }
+  },
+  "critic_verdict": {
+    "approved": true,
+    "score": 9.7,
+    "notes": "4 cenas com continuidade tipográfica e cromática, motion design determinístico com interpolação suave em 30 FPS, sem saltos visuais, legenda sincronizada com ritmo."
+  }
+}

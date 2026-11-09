@@ -1,6 +1,6 @@
 {
   "name": "motion-core",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Engines de produção, QA determinístico e exportação do MOTION Studio",
   "type": "module",
   "main": "./index.js",
@@ -15,12 +15,14 @@
   },
   "files": [
     "index.js",
+    "intent/**/*",
     "renderers/**/*",
     "quality/**/*",
     "exporters/**/*",
     "design-system/**/*",
     "gallery/**/*",
     "presets.json",
+    "LICENSE",
     "README.md"
   ],
   "dependencies": {
@@ -36,5 +38,10 @@
     "multiformat"
   ],
   "author": "MOTION Studio",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateusarcedev/motion-studio.git",
+    "directory": "packages/motion-core"
+  }
 }

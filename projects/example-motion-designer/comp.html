@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Nexus Flow — Motion Designer Composition</title>
+  <style>
+    :root {
+      --bg: #090D16;
+      --mint: #10B981;
+      --mint-glow: rgba(16, 185, 129, 0.4);
+      --cyan: #06B6D4;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --line: rgba(255, 255, 255, 0.12);
+      --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font-sans); }
+
+    /* Motion Canvas Shell */
+    .stage {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      padding: 180px 80px 240px; /* Safe Zones */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* Grid background */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(rgba(16, 185, 129, 0.15) 1px, transparent 1px),
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px, 20px 20px;
+      background-position: 0 0, 10px 10px;
+      opacity: 0.6;
+    }
+
+    /* Band: HEAD */
+    .band-head {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--mint);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .badge-fps {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      padding: 8px 16px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    /* Band: VIS (Visual Central Area) */
+    .band-vis {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      margin: 60px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scene-view {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .scene-view.active {
+      opacity: 1;
+    }
+
+    /* Scene 1: Hook */
+    .logo-hero {
+      width: 180px;
+      height: 180px;
+      border-radius: 40px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.1));
+      border: 2px solid var(--mint);
+      box-shadow: 0 0 60px var(--mint-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    .logo-hero svg { width: 90px; height: 90px; color: var(--mint); }
+    .hero-title {
+      font-size: 92px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 32px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+
+    /* Scene 2: Metric */
+    .metric-big {
+      font-size: 160px;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      color: var(--mint);
+      line-height: 1;
+      text-shadow: 0 0 50px var(--mint-glow);
+      margin-bottom: 24px;
+    }
+    .metric-label {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .metric-sub {
+      font-size: 26px;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.4;
+    }
+
+    /* Scene 3: Graph */
+    .graph-svg {
+      width: 900px;
+      height: 600px;
+    }
+
+    /* Scene 4: EndCard */
+    .end-brand {
+      font-size: 76px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .end-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 48px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: #090D16;
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 40px;
+      box-shadow: 0 10px 40px var(--mint-glow);
+    }
+    .end-url {
+      margin-top: 36px;
+      font-family: var(--font-mono);
+      font-size: 26px;
+      color: var(--muted);
+    }
+
+    /* Band: CAP (Captions) */
+    .band-cap {
+      position: relative;
+      z-index: 10;
+      min-height: 140px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+    .caption-text {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .caption-text .hl {
+      color: var(--mint);
+      font-weight: 800;
+      text-shadow: 0 0 20px var(--mint-glow);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="grid-bg"></div>
+
+    <!-- BAND: HEAD -->
+    <header class="band-head">
+      <div class="kicker" id="kickerText">NEXUS FLOW</div>
+      <div class="badge-fps" id="timeCode">00:00:00</div>
+    </header>
+
+    <!-- BAND: VIS -->
+    <main class="band-vis">
+      <!-- Scene 1: Hook -->
+      <section class="scene-view active" id="scene1">
+        <div class="logo-hero" id="s1Logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <h1 class="hero-title" id="s1Title">NEXUS FLOW</h1>
+        <p class="hero-sub" id="s1Sub">STATE ENGINE</p>
+      </section>
+
+      <!-- Scene 2: Metric -->
+      <section class="scene-view" id="scene2">
+        <div class="metric-big" id="s2Metric">0</div>
+        <h2 class="metric-label" id="s2Label">IMPOSSIBLE STATES</h2>
+        <p class="metric-sub" id="s2Sub">Mathematically proven state safety for real-time web applications.</p>
+      </section>
+
+      <!-- Scene 3: Graph -->
+      <section class="scene-view" id="scene3">
+        <svg class="graph-svg" viewBox="0 0 900 600">
+          <!-- Edges -->
+          <line x1="200" y1="300" x2="450" y2="300" stroke="rgba(255,255,255,0.2)" stroke-width="6" />
+          <line x1="450" y1="300" x2="700" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="6" />
+          <line x1="450" y1="300" x2="700" y2="420" stroke="rgba(255,255,255,0.2)" stroke-width="6" />
+
+          <!-- Pulse line -->
+          <line id="pulseLine1" x1="200" y1="300" x2="450" y2="300" stroke="#10B981" stroke-width="8" stroke-dasharray="100 150" stroke-dashoffset="0" />
+
+          <!-- Nodes -->
+          <g transform="translate(200, 300)">
+            <circle r="70" fill="#090D16" stroke="#10B981" stroke-width="6" />
+            <text text-anchor="middle" dominant-baseline="central" fill="#F8FAFC" font-size="24" font-weight="800">IDLE</text>
+          </g>
+
+          <g transform="translate(450, 300)">
+            <circle r="70" fill="#090D16" stroke="#06B6D4" stroke-width="6" id="midNodeCircle" />
+            <text text-anchor="middle" dominant-baseline="central" fill="#F8FAFC" font-size="22" font-weight="800">DISPATCH</text>
+          </g>
+
+          <g transform="translate(700, 180)">
+            <circle r="70" fill="#090D16" stroke="#10B981" stroke-width="6" />
+            <text text-anchor="middle" dominant-baseline="central" fill="#10B981" font-size="22" font-weight="800">RESOLVE</text>
+          </g>
+
+          <g transform="translate(700, 420)">
+            <circle r="70" fill="#090D16" stroke="#EF4444" stroke-width="4" opacity="0.6" />
+            <text text-anchor="middle" dominant-baseline="central" fill="#EF4444" font-size="22" font-weight="800" opacity="0.6">REJECT</text>
+          </g>
+        </svg>
+      </section>
+
+      <!-- Scene 4: EndCard -->
+      <section class="scene-view" id="scene4">
+        <div class="logo-hero" style="width:140px; height:140px; margin-bottom:32px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2 class="end-brand">THE CODE IS OPEN.</h2>
+        <div class="end-pill">EXPLORE ON GITHUB ↗</div>
+        <div class="end-url">github.com/mateusarcedev/motion-studio</div>
+      </section>
+    </main>
+
+    <!-- BAND: CAP -->
+    <footer class="band-cap">
+      <div class="caption-text" id="captionText">
+        Every state in your system...
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Frame-driven animation controller
+    const s1 = document.getElementById("scene1");
+    const s2 = document.getElementById("scene2");
+    const s3 = document.getElementById("scene3");
+    const s4 = document.getElementById("scene4");
+    const kicker = document.getElementById("kickerText");
+    const timeCode = document.getElementById("timeCode");
+    const caption = document.getElementById("captionText");
+    const pulseLine = document.getElementById("pulseLine1");
+
+    function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+    function easeOut(t) { return 1 - Math.pow(1 - clamp(t, 0, 1), 3); }
+
+    window.__onFrame__ = function(state) {
+      const f = state.frame;
+      const t = state.time;
+      const progress = state.progress;
+
+      // Update timecode
+      const sec = Math.floor(f / 30);
+      const ff = f % 30;
+      timeCode.textContent = \`00:00:0\${sec}:\${String(ff).padStart(2, '0')}\`;
+
+      // Scene boundaries:
+      // S01: 0 - 44 (0.0s - 1.5s)
+      // S02: 45 - 89 (1.5s - 3.0s)
+      // S03: 90 - 134 (3.0s - 4.5s)
+      // S04: 135 - 179 (4.5s - 6.0s)
+
+      if (f < 45) {
+        // Scene 1 Active
+        s1.classList.add("active");
+        s2.classList.remove("active");
+        s3.classList.remove("active");
+        s4.classList.remove("active");
+        kicker.textContent = "NEXUS FLOW";
+
+        const p = easeOut(f / 30);
+        document.getElementById("s1Logo").style.transform = \`scale(\${0.8 + 0.2 * p})\`;
+        document.getElementById("s1Title").style.opacity = p;
+        caption.innerHTML = 'Every <span class="hl">state</span> in your software system...';
+      } else if (f < 90) {
+        // Scene 2 Active
+        s1.classList.remove("active");
+        s2.classList.add("active");
+        s3.classList.remove("active");
+        s4.classList.remove("active");
+        kicker.textContent = "VERIFIED LOGIC";
+
+        const p = easeOut((f - 45) / 30);
+        document.getElementById("s2Metric").style.transform = \`scale(\${0.9 + 0.1 * p})\`;
+        caption.innerHTML = '...strictly verified and <span class="hl">deterministic</span>.';
+      } else if (f < 135) {
+        // Scene 3 Active
+        s1.classList.remove("active");
+        s2.classList.remove("active");
+        s3.classList.add("active");
+        s4.classList.remove("active");
+        kicker.textContent = "TRANSITION GRAPH";
+
+        const offset = -((f - 90) * 8);
+        pulseLine.setAttribute("stroke-dashoffset", offset);
+        caption.innerHTML = 'Zero boolean soup. <span class="hl">Pure transitions</span>.';
+      } else {
+        // Scene 4 Active
+        s1.classList.remove("active");
+        s2.classList.remove("active");
+        s3.classList.remove("active");
+        s4.classList.add("active");
+        kicker.textContent = "MOTION STUDIO";
+
+        caption.innerHTML = 'Nexus Flow. <span class="hl">The creation is yours</span>.';
+      }
+    };
+  </script>
+</body>
+</html>

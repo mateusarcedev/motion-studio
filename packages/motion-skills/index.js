@@ -154,6 +154,18 @@ export const EXTERNAL_INTEGRATIONS = {
     license: "Custom (uso/modificação permitidos pelo README do autor; sem redistribuição de pacote)",
     installCommand: "npx skills add gabrielgreco1/skills --skill ui-humanizer",
   },
+  "stageshow": {
+    name: "stageshow",
+    profile: "web",
+    role: "Especialista em apresentações de produto, UI motion, cursores animados e bento grids",
+    repo: "https://github.com/benjitaylor/skills",
+    skillSubpath: "stageshow",
+    author: "Benji Taylor",
+    authorUrl: "https://github.com/benjitaylor",
+    commitSha: "audit-v1.0.0",
+    license: "MIT (código e componentes; marcas e logos registrados excluídos)",
+    installCommand: "npx skills add benjitaylor/skills --skill stageshow",
+  },
 };
 
 export function resolveSkillsForProfile(profile) {

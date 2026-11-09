@@ -204,11 +204,12 @@ export async function runDoctor() {
 
   // Community Integrations check
   const commSkills = [
-    { name: "aula-interativa", desc: "Aulas interativas HTML determinísticas", profile: "interactive" },
-    { name: "motion-designer", desc: "Teasers cinéticos e animações no beat", profile: "motion" },
-    { name: "ui-humanizer", desc: "Auditoria visual contra clichês de IA", profile: "web" },
+    { name: "aula-interativa", desc: "Aulas interativas HTML determinísticas", profile: "interactive", repo: "gabrielgreco1/skills" },
+    { name: "motion-designer", desc: "Teasers cinéticos e animações no beat", profile: "motion", repo: "gabrielgreco1/skills" },
+    { name: "ui-humanizer", desc: "Auditoria visual contra clichês de IA", profile: "web", repo: "gabrielgreco1/skills" },
+    { name: "stageshow", desc: "Showcases de produto, UI motion, cursores e bento grids", profile: "web", repo: "benjitaylor/skills" },
   ];
-  console.log("\n### Integrações Externas da Comunidade (Gabriel Greco)");
+  console.log("\n### Integrações Externas da Comunidade (Gabriel Greco / Benji Taylor)");
   console.log("ℹ️ Habilidades externas mantidas no repositório upstream, instaladas sob demanda (sem inclusão no bundle npm):\n");
   for (const cs of commSkills) {
     let installed = false;
@@ -226,7 +227,7 @@ export async function runDoctor() {
     console.log(`- **${cs.name}** [${badge}]`);
     console.log(`  - *Função:* ${cs.desc} (perfil: \`${cs.profile}\`)`);
     if (!installed) {
-      console.log(`  - *Comando para adicionar:* \`npx skills add gabrielgreco1/skills --skill ${cs.name}\``);
+      console.log(`  - *Comando para adicionar:* \`npx skills add ${cs.repo} --skill ${cs.name}\``);
     }
   }
 

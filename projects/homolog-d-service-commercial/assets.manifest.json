@@ -1,0 +1,66 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/homolog-d-service-commercial",
+  "counts": {
+    "files": 8,
+    "png": 4,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/still-01-intro.png",
+    "out/still-02-craft.png",
+    "out/still-03-proof.png",
+    "out/still-04-cta.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "9c57315a7bf3b8cacca25ce545d58e09ef78e96270c93a5f74482279074f162f",
+      "bytes": 2357,
+      "role": "other"
+    },
+    {
+      "path": "STORYBOARD.md",
+      "sha256": "759472507a20b4c739ac8e6114fe16b580c3efd3ad6d2697102d9cdb05b8ba34",
+      "bytes": 2258,
+      "role": "other"
+    },
+    {
+      "path": "STYLE.md",
+      "sha256": "f0583fe6c3c2b0cf89ab063259fd7a68968620c396120ca9c0e535868a1d0a41",
+      "bytes": 1624,
+      "role": "other"
+    },
+    {
+      "path": "composition.html",
+      "sha256": "a70c3d8b722290cd2c5d125c34c10fe99b3e607fdd462023dbdadc1cea70598c",
+      "bytes": 10114,
+      "role": "other"
+    },
+    {
+      "path": "out/still-01-intro.png",
+      "sha256": "be5756073367949d0f92bd1227804c96e515ae295ca0d0cf565cb64db34302aa",
+      "bytes": 681698,
+      "role": "render"
+    },
+    {
+      "path": "out/still-02-craft.png",
+      "sha256": "58a44ab9fd60142b35df16454838a641dc1fdf11cb8075bcdfe0934c511e3811",
+      "bytes": 624447,
+      "role": "render"
+    },
+    {
+      "path": "out/still-03-proof.png",
+      "sha256": "ed5316d27c9fdcc75021c4b98860f72208a006f4cf01ec9fcc4c846432845c70",
+      "bytes": 675949,
+      "role": "render"
+    },
+    {
+      "path": "out/still-04-cta.png",
+      "sha256": "81e8abc73f47c8a31900215843edb0336ed6333be013c425372a8fb4eb201e04",
+      "bytes": 631377,
+      "role": "render"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-10-30T17:36:43.456Z",
+  "totalViewports": 5,
+  "allPassed": true,
+  "results": [
+    {
+      "viewport": {
+        "name": "mobile-s",
+        "width": 360,
+        "height": 740,
+        "touch": true
+      },
+      "passed": true,
+      "overflowX": 0,
+      "smallTargets": [],
+      "canvasReady": true,
+      "consoleErrors": []
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844,
+        "touch": true
+      },
+      "passed": true,
+      "overflowX": 0,
+      "smallTargets": [],
+      "canvasReady": true,
+      "consoleErrors": []
+    },
+    {
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "touch": true
+      },
+      "passed": true,
+      "overflowX": 0,
+      "smallTargets": [],
+      "canvasReady": true,
+      "consoleErrors": []
+    },
+    {
+      "viewport": {
+        "name": "desktop-1440",
+        "width": 1440,
+        "height": 900,
+        "touch": false
+      },
+      "passed": true,
+      "overflowX": 0,
+      "smallTargets": [],
+      "canvasReady": true,
+      "consoleErrors": []
+    },
+    {
+      "viewport": {
+        "name": "wide-1920",
+        "width": 1920,
+        "height": 1080,
+        "touch": false
+      },
+      "passed": true,
+      "overflowX": 0,
+      "smallTargets": [],
+      "canvasReady": true,
+      "consoleErrors": []
+    }
+  ]
+}

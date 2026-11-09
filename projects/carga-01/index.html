@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRAVESSIA — Vitrine do Projeto (MOTION Studio Showcase)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23070A0F'/><path d='M25 35h50v30H25z' fill='%23FF8A00'/><circle cx='70' cy='35' r='5' fill='%2300F0FF'/></svg>">
+  <style>
+    :root {
+      --bg: #070A0F;
+      --surface: #0F172A;
+      --surface-elevated: #1E293B;
+      --border: #273549;
+      --primary: #FF8A00;
+      --primary-hover: #FFA02E;
+      --secondary: #00F0FF;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --dim: #64748B;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: var(--secondary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    /* Header */
+    header.showcase-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 36px;
+      margin-bottom: 48px;
+    }
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10B981;
+      color: #10B981;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .badge-status::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+    }
+    h1.project-title {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    h1.project-title span { color: var(--primary); }
+    .project-subtitle {
+      font-size: 1.25rem;
+      color: var(--muted);
+      max-width: 850px;
+      margin-bottom: 24px;
+    }
+    nav.showcase-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .nav-pill {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .nav-pill:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      text-decoration: none;
+    }
+    /* Section styling */
+    section.showcase-section {
+      margin-bottom: 64px;
+      padding-top: 24px;
+    }
+    .section-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--secondary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    /* Web Preview Card */
+    .preview-frame-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .preview-frame-header {
+      background: #0A0E17;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    iframe.preview-iframe {
+      width: 100%;
+      height: 720px;
+      border: none;
+      display: block;
+      background: #070A0F;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #000;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 10px 20px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .btn-action:hover {
+      background: var(--primary-hover);
+      text-decoration: none;
+    }
+    .btn-secondary {
+      background: var(--surface-elevated);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+    }
+    /* Video Grid */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 900px) {
+      .video-grid { grid-template-columns: 1fr; }
+    }
+    .video-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 16px;
+    }
+    .video-card h3 {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+    video.player {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
+      background: #000;
+    }
+    /* Carousel Viewer */
+    .carousel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .carousel-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .carousel-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+    .carousel-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .carousel-item-info {
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+    /* 3D Assets Grid */
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .asset-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 20px;
+    }
+    .asset-name {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .asset-size {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+    .asset-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    /* QA Viewports Grid */
+    .qa-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .qa-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .qa-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      background: #000;
+    }
+    .qa-card-body {
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .qa-badge-pass {
+      color: #10B981;
+      font-weight: 700;
+    }
+    /* Footer */
+    footer.showcase-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 36px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--dim);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="showcase-header">
+      <div class="badge-status">PRODUÇÃO FINALIZADA & AUDITADA · MOTION STUDIO 1.0.0-RC.2</div>
+      <h1 class="project-title">TRAVESSIA — <span>Uma jornada em movimento</span></h1>
+      <p class="project-subtitle">
+        Showcase de portfólio criativo de alto nível. Uma experiência digital cinematográfica original explorando a estética do transporte de carga intermodal através de 3D procedural, narrativa em 5 cenas, dois filmes de 20s e carrossel editorial.
+      </p>
+
+      <nav class="showcase-nav">
+        <a href="#experiencia-web" class="nav-pill">🌐 EXPERIÊNCIA WEB</a>
+        <a href="#videos-master" class="nav-pill">🎬 VÍDEOS MASTER</a>
+        <a href="#carrossel" class="nav-pill">🎠 CARROSSEL 4:5</a>
+        <a href="#assets-3d" class="nav-pill">📦 ASSETS 3D (GLB)</a>
+        <a href="#qa-visual" class="nav-pill">🔍 AUDITORIA QA</a>
+        <a href="#case-study" class="nav-pill">📄 CASE STUDY</a>
+        <a href="#downloads" class="nav-pill">⬇ PACOTE ZIP</a>
+      </nav>
+    </header>
+
+    <!-- 1. Experiência Web -->
+    <section class="showcase-section" id="experiencia-web">
+      <div class="section-kicker">01 · PRODUÇÃO WEB INTERATIVA</div>
+      <h2 class="section-title">Experiência Web Cinematográfica</h2>
+      <p style="color: var(--muted); margin-bottom: 20px; max-width: 900px;">
+        Construída com React, React Three Fiber e Three.js r165. Acompanha a transição fluida do contêiner em 5 cenas contínuas, com reflow responsivo de câmera, iluminação ACESFilmic e suporte a acessibilidade e touch targets &ge; 44px.
+      </p>
+
+      <div class="preview-frame-wrap">
+        <div class="preview-frame-header">
+          <span>PORTAL DE NAVEGAÇÃO 3D REAL-TIME</span>
+          <span>STATUS: COMPILED & BUILD PASS (dist/)</span>
+        </div>
+        <iframe src="./web/dist/index.html" class="preview-iframe" title="TRAVESSIA Live Web Experience"></iframe>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <a href="./web/dist/index.html" target="_blank" class="btn-action">ABRIR EXPERIÊNCIA EM TELA CHEIA ↗</a>
+        <a href="./web/src/" class="btn-action btn-secondary">EXPLORAR CÓDIGO-FONTE REACT</a>
+      </div>
+    </section>
+
+    <!-- 2. Vídeos Promocionais -->
+    <section class="showcase-section" id="videos-master">
+      <div class="section-kicker">02 · MASTER AUDIOVISUAL DETERMINÍSTICO</div>
+      <h2 class="section-title">Dois Filmes Promocionais (20s @ 30 FPS CFR)</h2>
+      <p style="color: var(--muted); margin-bottom: 20px; max-width: 900px;">
+        Renderização determinística bit a bit (600 frames em cada formato) utilizando o frame driver do MOTION e codificação FFmpeg yuv420p. Ambos os masters compartilham os mesmos assets 3D, câmeras, cores e tipografia.
+      </p>
+
+      <div class="video-grid">
+        <div class="video-card">
+          <h3>
+            <span>MASTER HORIZONTAL (16:9)</span>
+            <span style="color: var(--secondary);">1920×1080 · 600 FRAMES · 20.0s</span>
+          </h3>
+          <video class="player" controls playsinline preload="metadata">
+            <source src="./out/carga-01-16x9.mp4" type="video/mp4">
+            Seu navegador não suporta a tag de vídeo.
+          </video>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim);">
+            <span>ARQUIVO: carga-01-16x9.mp4 (1.5 MB)</span>
+            <a href="./reviews/contact-sheet-16x9.png" target="_blank">VER CONTACT SHEET ↗</a>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <h3>
+            <span>MASTER VERTICAL (9:16)</span>
+            <span style="color: var(--primary);">1080×1920 · 600 FRAMES · 20.0s</span>
+          </h3>
+          <video class="player" controls playsinline preload="metadata" style="max-height: 580px; object-fit: contain;">
+            <source src="./out/carga-01-9x16.mp4" type="video/mp4">
+            Seu navegador não suporta a tag de vídeo.
+          </video>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim);">
+            <span>ARQUIVO: carga-01-9x16.mp4 (1.4 MB)</span>
+            <a href="./reviews/contact-sheet-9x16.png" target="_blank">VER CONTACT SHEET ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Carrossel Editorial -->
+    <section class="showcase-section" id="carrossel">
+      <div class="section-kicker">03 · MÍDIA SOCIAL EDITORIAL</div>
+      <h2 class="section-title">Carrossel Editorial em 5 Lâminas (4:5)</h2>
+      <p style="color: var(--muted); margin-bottom: 20px;">
+        Roteiro: <em>"Do conceito à experiência: como construí TRAVESSIA."</em> Renderizado em escala padrão (1080×1350) e retina (2160×2700).
+      </p>
+
+      <div class="carousel-grid">
+        <div class="carousel-item">
+          <a href="./carousel/out/01-2160x2700.png" target="_blank">
+            <img src="./carousel/out/01-1080x1350.png" alt="Slide 01">
+          </a>
+          <div class="carousel-item-info">
+            <span>01 · APRESENTAÇÃO</span>
+            <span>1080×1350</span>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <a href="./carousel/out/02-2160x2700.png" target="_blank">
+            <img src="./carousel/out/02-1080x1350.png" alt="Slide 02">
+          </a>
+          <div class="carousel-item-info">
+            <span>02 · DIREÇÃO DE ARTE</span>
+            <span>1080×1350</span>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <a href="./carousel/out/03-2160x2700.png" target="_blank">
+            <img src="./carousel/out/03-1080x1350.png" alt="Slide 03">
+          </a>
+          <div class="carousel-item-info">
+            <span>03 · MUNDO 3D GLB</span>
+            <span>1080×1350</span>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <a href="./carousel/out/04-2160x2700.png" target="_blank">
+            <img src="./carousel/out/04-1080x1350.png" alt="Slide 04">
+          </a>
+          <div class="carousel-item-info">
+            <span>04 · STORYTELLING</span>
+            <span>1080×1350</span>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <a href="./carousel/out/05-2160x2700.png" target="_blank">
+            <img src="./carousel/out/05-1080x1350.png" alt="Slide 05">
+          </a>
+          <div class="carousel-item-info">
+            <span>05 · RESULTADO FINAL</span>
+            <span>1080×1350</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 6px; margin-bottom: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--secondary); margin-bottom: 8px;">LEGENDA SOCIAL APROVADA:</div>
+        <pre style="font-family: var(--font-sans); font-size: 0.9rem; color: var(--muted); white-space: pre-wrap;">Do conceito à experiência: como construí TRAVESSIA. 🚢📦
+
+A maioria das experiências 3D na web cai em um de dois extremos: minimalismo pastel genérico ou clichês de ficção científica neon. 
+
+Em TRAVESSIA, busquei uma terceira via: o realismo industrial cinematográfico. O protagonista não é um smartphone, mas um contêiner de aço corten — a invenção utilitária que move a logística do planeta.
+
+#CreativeDevelopment #ThreeJS #ReactThreeFiber #MotionDesign #ArtDirection #Web3D</pre>
+      </div>
+    </section>
+
+    <!-- 4. Assets 3D -->
+    <section class="showcase-section" id="assets-3d">
+      <div class="section-kicker">04 · MODELAGEM TRIDIMENSIONAL PROCEDURAL</div>
+      <h2 class="section-title">Modelos 3D Otimizados (GLB)</h2>
+
+      <div class="asset-grid">
+        <div class="asset-card">
+          <div class="asset-name">carga-container.glb</div>
+          <div class="asset-size">PESO: 184 KB · BINÁRIO GLB</div>
+          <div class="asset-desc">Chapas corrugadas, 8 cantoneiras ISO twistlock fundidas, travas de alavanca e textura estêncil CRG-01-A 2048px.</div>
+          <a href="./models/carga-container.glb" download class="btn-action btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">BAIXAR GLB</a>
+        </div>
+
+        <div class="asset-card">
+          <div class="asset-name">carga-truck.glb</div>
+          <div class="asset-size">PESO: 41 KB · BINÁRIO GLB</div>
+          <div class="asset-desc">Cavalo mecânico 6×4 com cabine estilizada, faróis xenônio ciano, lanternas vermelhas, chassi rebaixado e eixos duplos.</div>
+          <a href="./models/carga-truck.glb" download class="btn-action btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">BAIXAR GLB</a>
+        </div>
+
+        <div class="asset-card">
+          <div class="asset-name">carga-crane.glb</div>
+          <div class="asset-size">PESO: 20 KB · BINÁRIO GLB</div>
+          <div class="asset-desc">Guindaste portuário STS monumental de 36 metros de altura com treliça de aço, lança horizontal e spreader telescópico.</div>
+          <a href="./models/carga-crane.glb" download class="btn-action btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">BAIXAR GLB</a>
+        </div>
+
+        <div class="asset-card">
+          <div class="asset-name">carga-ship.glb</div>
+          <div class="asset-size">PESO: 127 KB · BINÁRIO GLB</div>
+          <div class="asset-desc">Navio porta-contêineres de 100 metros com casco escuro, linha d'água avermelhada, mastro de radar e pilhas de contêineres coloridos.</div>
+          <a href="./models/carga-ship.glb" download class="btn-action btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">BAIXAR GLB</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QA Visual -->
+    <section class="showcase-section" id="qa-visual">
+      <div class="section-kicker">05 · AUDITORIA DE ENGENHARIA & PLAYWRIGHT</div>
+      <h2 class="section-title">Garantia de Qualidade Multi-Viewport (5 Resoluções)</h2>
+      <p style="color: var(--muted); margin-bottom: 20px;">
+        Auditoria automatizada com Playwright em 5 viewports (360×740, 390×844, 768×1024, 1440×900, 1920×1080), validando zero overflow horizontal, conformidade de touch targets (&ge;44px), WebGL ativo e ausência de erros no console.
+      </p>
+
+      <div class="qa-grid">
+        <div class="qa-card">
+          <a href="./reviews/viewports/mobile-s-01-abertura.png" target="_blank">
+            <img src="./reviews/viewports/mobile-s-01-abertura.png" alt="Mobile S">
+          </a>
+          <div class="qa-card-body">
+            <strong>360×740 (Mobile S)</strong>
+            <div class="qa-badge-pass">✓ PASS (Overflow: 0px)</div>
+          </div>
+        </div>
+
+        <div class="qa-card">
+          <a href="./reviews/viewports/mobile-02-conteiner.png" target="_blank">
+            <img src="./reviews/viewports/mobile-02-conteiner.png" alt="Mobile">
+          </a>
+          <div class="qa-card-body">
+            <strong>390×844 (Mobile)</strong>
+            <div class="qa-badge-pass">✓ PASS (Touch &ge; 44px)</div>
+          </div>
+        </div>
+
+        <div class="qa-card">
+          <a href="./reviews/viewports/tablet-03-movimentacao.png" target="_blank">
+            <img src="./reviews/viewports/tablet-03-movimentacao.png" alt="Tablet">
+          </a>
+          <div class="qa-card-body">
+            <strong>768×1024 (Tablet)</strong>
+            <div class="qa-badge-pass">✓ PASS (Canvas Ativo)</div>
+          </div>
+        </div>
+
+        <div class="qa-card">
+          <a href="./reviews/viewports/desktop-1440-04-estrada.png" target="_blank">
+            <img src="./reviews/viewports/desktop-1440-04-estrada.png" alt="Desktop 1440">
+          </a>
+          <div class="qa-card-body">
+            <strong>1440×900 (Desktop)</strong>
+            <div class="qa-badge-pass">✓ PASS (Zero Console Errors)</div>
+          </div>
+        </div>
+
+        <div class="qa-card">
+          <a href="./reviews/viewports/wide-1920-05-destino.png" target="_blank">
+            <img src="./reviews/viewports/wide-1920-05-destino.png" alt="Wide 1920">
+          </a>
+          <div class="qa-card-body">
+            <strong>1920×1080 (Wide)</strong>
+            <div class="qa-badge-pass">✓ PASS (Framing Reflow OK)</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <a href="./reviews/viewports/report.md" target="_blank" class="btn-action btn-secondary">LER RELATÓRIO COMPLETO DE QA (MD)</a>
+        <a href="./reviews/findings.md" target="_blank" class="btn-action btn-secondary">LER REVISÃO DO CRÍTICO INDEPENDENTE</a>
+      </div>
+    </section>
+
+    <!-- 6. Case Study & Downloads -->
+    <section class="showcase-section" id="case-study">
+      <div class="section-kicker">06 · DOCUMENTAÇÃO & ARQUIVAMENTO</div>
+      <h2 class="section-title">Case Study & Pacote de Entrega</h2>
+      <p style="color: var(--muted); margin-bottom: 24px; max-width: 900px;">
+        Todo o projeto é autocontido e independente do monorepo principal. Todos os hashes SHA-256 e arquivos-fonte editáveis estão catalogados no manifesto.
+      </p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 40px;" id="downloads">
+        <a href="./entrega-v1.zip" download class="btn-action">⬇ BAIXAR PACOTE COMPLETO (ZIP)</a>
+        <a href="./CASE_STUDY.md" target="_blank" class="btn-action btn-secondary">LER CASE STUDY COMPLETO</a>
+        <a href="./assets.manifest.json" target="_blank" class="btn-action btn-secondary">VER MANIFESTO SHA-256</a>
+        <a href="./BRIEF.md" target="_blank" class="btn-action btn-secondary">BRIEFING</a>
+        <a href="./STYLE.md" target="_blank" class="btn-action btn-secondary">DIREÇÃO DE ARTE</a>
+        <a href="./STORYBOARD.md" target="_blank" class="btn-action btn-secondary">STORYBOARD</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="showcase-footer">
+      <div>TRAVESSIA · EXPERIÊNCIA ORIGINAL PRODUZIDA COM MOTION STUDIO 1.0.0-RC.2</div>
+      <div>ENGENHARIA E DIREÇÃO CRIATIVA AUTORAL · 2026</div>
+    </footer>
+  </div>
+</body>
+</html>

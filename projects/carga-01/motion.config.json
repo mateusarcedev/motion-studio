@@ -1,0 +1,18 @@
+{
+  "name": "CARGA / 01",
+  "brand": {
+    "name": "CARGA / 01",
+    "slug": "carga---01",
+    "profile": "./motion/brand/PROFILE.md",
+    "tokens": "./motion/brand/tokens.json"
+  },
+  "paths": {
+    "projects": "./motion/projects",
+    "out": "./motion/out",
+    "gallery": "./motion/gallery.json"
+  },
+  "skills": {
+    "profile": "all"
+  },
+  "version": "1.0.0-rc.2"
+}

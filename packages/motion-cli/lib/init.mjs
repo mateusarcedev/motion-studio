@@ -47,7 +47,7 @@ export async function runInit(options = {}) {
     skills: {
       profile,
     },
-    version: "1.0.0-rc.2",
+    version: "1.0.0-rc.3",
   };
 
   await mkdir(path.join(cwd, "motion", "brand"), { recursive: true });

@@ -1,0 +1,16 @@
+Do conceito à experiência: como construí TRAVESSIA. 🚢📦
+
+A maioria das experiências 3D na web cai em um de dois extremos: minimalismo pastel genérico ou clichês de ficção científica neon. 
+
+Em TRAVESSIA, busquei uma terceira via: o realismo industrial cinematográfico. O protagonista não é um smartphone ou um tênis de luxo, mas um contêiner de aço corten — a invenção utilitária que move a logística do planeta.
+
+Neste carrossel, compartilho os bastidores criativos e técnicos da produção:
+1️⃣ Conceito & Filosofia: Blue Hour marítima e contraste de escala.
+2️⃣ Engenharia 3D: Modelagem procedural e shaders PBR em Three.js r165 com exportação GLB otimizada.
+3️⃣ Storytelling em 5 Cenas: Transição contínua da água para o asfalto sob 30 FPS determinísticos.
+4️⃣ Produção Multiformato: Web interativa + 2 filmes de 20s (16:9 e 9:16) + carrossel editorial.
+
+Produzido com MOTION Studio 1.0.0.
+Projeto autoral e conceitual por Mateus Arce.
+
+#CreativeDevelopment #ThreeJS #ReactThreeFiber #MotionDesign #ArtDirection #Web3D #FrontEnd #CreativeCoding

@@ -1,0 +1,66 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/homolog-e-software-showcase",
+  "counts": {
+    "files": 8,
+    "png": 4,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/still-01-setup.png",
+    "out/still-02-bento.png",
+    "out/still-03-cursor-click.png",
+    "out/still-04-solution.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "3398abebd7e8d5a690c0d7eeca8293351dc594da40f32e944b485bd2ede482ff",
+      "bytes": 2480,
+      "role": "other"
+    },
+    {
+      "path": "STORYBOARD.md",
+      "sha256": "bfd0736976d0a01d6cad272afb4de6a45df518fe5e79a14fe1b1378589e120fc",
+      "bytes": 2615,
+      "role": "other"
+    },
+    {
+      "path": "STYLE.md",
+      "sha256": "95b01c5dabe921a3e2e404812c72b33b3d125cceb1204f060b59bc9bf86f4626",
+      "bytes": 2053,
+      "role": "other"
+    },
+    {
+      "path": "composition.html",
+      "sha256": "adbbb439d3303d5e52f1059ab2ff82ac5ee20fbd7f3d8bdce0905a2d75feea2d",
+      "bytes": 17393,
+      "role": "other"
+    },
+    {
+      "path": "out/still-01-setup.png",
+      "sha256": "689efa8d45247e90aad3515991ba4ac3cc38efd345a0ec34dcc3007ef006bacf",
+      "bytes": 193844,
+      "role": "render"
+    },
+    {
+      "path": "out/still-02-bento.png",
+      "sha256": "0ce9dbf18bf46aacfaddaf7396dcff261a318c6fdf65a46165ee55952894c90b",
+      "bytes": 196895,
+      "role": "render"
+    },
+    {
+      "path": "out/still-03-cursor-click.png",
+      "sha256": "59504f7e214412aa8afc3826a521527da4409100db433db47c0d48219460b033",
+      "bytes": 209355,
+      "role": "render"
+    },
+    {
+      "path": "out/still-04-solution.png",
+      "sha256": "b882b532c50a7b4056dc4b315ec8be608be30a78d4d60509128f739449220580",
+      "bytes": 206764,
+      "role": "render"
+    }
+  ]
+}

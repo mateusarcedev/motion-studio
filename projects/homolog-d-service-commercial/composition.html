@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Teste D — Atelier Aurora Alta Confeitaria</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #2D0A14;
+      color: #FDFBF7;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    .gold-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, rgba(229, 195, 120, 0.15) 0%, rgba(45, 10, 20, 0.95) 75%);
+      pointer-events: none;
+    }
+    .gold-border {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      width: 980px;
+      height: 1820px;
+      border: 2px solid rgba(229, 195, 120, 0.45);
+      border-radius: 20px;
+      pointer-events: none;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+    }
+    .gold-inner-border {
+      position: absolute;
+      top: 62px;
+      left: 62px;
+      width: 956px;
+      height: 1796px;
+      border: 1px solid rgba(229, 195, 120, 0.2);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    /* Container */
+    .content-container {
+      position: absolute;
+      top: 100px;
+      left: 90px;
+      width: 900px;
+      height: 1720px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 40px;
+      text-align: center;
+      z-index: 5;
+    }
+
+    .top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 28px;
+      background: rgba(229, 195, 120, 0.12);
+      border: 1.5px solid #E5C378;
+      border-radius: 40px;
+      color: #E5C378;
+      font-size: 22px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* Beat Scenes */
+    .beat-scene {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      position: relative;
+    }
+
+    /* Beat 1: Intro */
+    .monogram {
+      width: 180px;
+      height: 180px;
+      border: 3px solid #E5C378;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Georgia", "Playfair Display", serif;
+      font-size: 80px;
+      font-weight: 700;
+      color: #E5C378;
+      margin-bottom: 40px;
+      box-shadow: 0 0 50px rgba(229, 195, 120, 0.25);
+    }
+    .brand-title {
+      font-family: "Georgia", "Playfair Display", serif;
+      font-size: 72px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #FDFBF7;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+    .brand-title span { color: #E5C378; }
+    .brand-desc {
+      font-size: 32px;
+      line-height: 1.45;
+      color: #E8A598;
+      max-width: 760px;
+      font-weight: 400;
+    }
+
+    /* Beat 2: Ingredients */
+    .cards-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      align-items: center;
+    }
+    .luxury-card {
+      width: 780px;
+      background: rgba(45, 10, 20, 0.7);
+      border: 1.5px solid rgba(229, 195, 120, 0.35);
+      border-radius: 20px;
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      text-align: left;
+    }
+    .card-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 16px;
+      background: rgba(229, 195, 120, 0.15);
+      border: 1px solid #E5C378;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      flex-shrink: 0;
+    }
+    .card-info h3 {
+      font-family: "Georgia", serif;
+      font-size: 32px;
+      color: #E5C378;
+      margin-bottom: 8px;
+    }
+    .card-info p {
+      font-size: 24px;
+      color: #FDFBF7;
+      line-height: 1.35;
+    }
+
+    /* Beat 3: Proof */
+    .metric-hero {
+      font-family: "Georgia", serif;
+      font-size: 110px;
+      font-weight: 800;
+      color: #E5C378;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .metric-sub {
+      font-size: 30px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #FDFBF7;
+      margin-bottom: 36px;
+    }
+    .stars-bar {
+      font-size: 52px;
+      color: #E5C378;
+      letter-spacing: 12px;
+      margin-bottom: 24px;
+    }
+    .quote-box {
+      width: 760px;
+      background: rgba(229, 195, 120, 0.08);
+      border-left: 4px solid #E5C378;
+      padding: 26px 36px;
+      font-style: italic;
+      font-size: 28px;
+      line-height: 1.45;
+      color: #FDFBF7;
+      border-radius: 0 16px 16px 0;
+    }
+
+    /* Beat 4: CTA */
+    .cta-card {
+      width: 800px;
+      background: rgba(45, 10, 20, 0.85);
+      border: 2px solid #E5C378;
+      border-radius: 28px;
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    }
+    .cta-button {
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(135deg, #E5C378 0%, #D4AF37 100%);
+      color: #2D0A14;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 35px rgba(229, 195, 120, 0.4);
+      margin-top: 36px;
+    }
+    .urgency-note {
+      margin-top: 24px;
+      font-size: 24px;
+      color: #E8A598;
+      font-weight: 500;
+    }
+
+    /* Bottom footer */
+    .footer-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(229, 195, 120, 0.25);
+      font-family: monospace;
+      font-size: 22px;
+      color: #E5C378;
+    }
+  </style>
+</head>
+<body>
+  <div class="gold-vignette" data-bleed="true"></div>
+  <div class="gold-border"></div>
+  <div class="gold-inner-border"></div>
+
+  <div class="content-container">
+    <div class="top-badge" id="topBadge">ALTA CONFEITARIA · EVENTOS EXCLUSIVOS</div>
+
+    <!-- BEAT SCENE CONTAINER -->
+    <div class="beat-scene" id="sceneBeat">
+      <!-- Injected by script -->
+    </div>
+
+    <div class="footer-bar">
+      <span>ATELIER AURORA</span>
+      <span id="timingIndicator">03.5s / 15.0s</span>
+      <span>SÃO PAULO · RIO</span>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_FRAMES = 450; // 15s @ 30fps
+
+    window.__onFrame__ = function(frame) {
+      const raw = typeof frame === "object" && frame !== null ? (frame.frame ?? 0) : Number(frame || 0);
+      const f = Math.max(0, Math.min(raw, TOTAL_FRAMES - 1));
+
+      const scene = document.getElementById("sceneBeat");
+      const topBadge = document.getElementById("topBadge");
+      const timingIndicator = document.getElementById("timingIndicator");
+
+      const currentTime = (f / 30).toFixed(1);
+      timingIndicator.textContent = currentTime + "s / 15.0s";
+
+      if (f < 113) {
+        // BEAT 1: Abertura (0s - 3.75s)
+        topBadge.textContent = "ALTA CONFEITARIA · ARTE & SABOR";
+        scene.innerHTML = `
+          <div class="monogram">AA</div>
+          <h1 class="brand-title">Atelier<br><span>Aurora</span></h1>
+          <p class="brand-desc">Doces finos esculpidos à mão para casamentos e grandes celebrações que exigem excelência memorável.</p>
+        `;
+      } else if (f < 225) {
+        // BEAT 2: Ingredientes e Artesanato (3.75s - 7.5s)
+        topBadge.textContent = "CURADORIA DE INGREDIENTES NOBRES";
+        scene.innerHTML = `
+          <div class="cards-stack">
+            <div class="luxury-card">
+              <div class="card-icon">🌿</div>
+              <div class="card-info">
+                <h3>Pistache de Bronte DOP</h3>
+                <p>Direto da Sicília, moagem fresca sem aditivos artificiais.</p>
+              </div>
+            </div>
+            <div class="luxury-card">
+              <div class="card-icon">🍫</div>
+              <div class="card-info">
+                <h3>Chocolate Belga Callebaut 70%</h3>
+                <p>Ganaches sedosas de cacau de agricultura sustentável.</p>
+              </div>
+            </div>
+            <div class="luxury-card">
+              <div class="card-icon">✨</div>
+              <div class="card-info">
+                <h3>Acabamento em Ouro 24k</h3>
+                <p>Lâminas comestíveis aplicadas individualmente a cada doce.</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (f < 338) {
+        // BEAT 3: Credibilidade e Prova Social (7.5s - 11.25s)
+        topBadge.textContent = "RECONHECIMENTO & CONFIANÇA";
+        scene.innerHTML = `
+          <div class="metric-hero">+300</div>
+          <div class="metric-sub">Casamentos & Galas Atendidos</div>
+          <div class="stars-bar">★★★★★</div>
+          <div class="quote-box">
+            "A mesa de doces do Atelier Aurora foi o grande comentário da nossa festa de casamento. Pura perfeição estética e gustativa."
+          </div>
+        `;
+      } else {
+        // BEAT 4: Chamada para Ação (11.25s - 15.0s)
+        topBadge.textContent = "CALENDÁRIO 2026 / 2027";
+        scene.innerHTML = `
+          <div class="cta-card">
+            <h2 style="font-family: 'Georgia', serif; font-size: 46px; color: #E5C378; margin-bottom: 16px;">Reserve Sua Experiência</h2>
+            <p style="font-size: 26px; color: #FDFBF7; line-height: 1.4;">Agende uma sessão exclusiva de degustação para o seu casamento ou celebração especial.</p>
+            <div class="cta-button">Agendar Degustação</div>
+            <div class="urgency-note">Atendimento sob medida com vagas limitadas por fim de semana.</div>
+          </div>
+        `;
+      }
+    };
+
+    // Auto-init preview at frame 60
+    window.__onFrame__(60);
+  </script>
+</body>
+</html>

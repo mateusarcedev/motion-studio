@@ -42,7 +42,7 @@ Especialista em showreels, teasers de produto de alta densidade visual, HUDs geo
 - **Entrega Padrão:** Composição frame-driven (`window.__onFrame__`), vídeo CFR 30 FPS MP4 YUV420p, folha de contato (`contact-sheet.png`) e relatório de QC.
 
 ### 3. `ui-humanizer`
-Auditor visual e de código que detecta clichês e "cara de IA" em páginas e interfaces, separando falsos positivos e oferecendo recomendações editoriais humanas.
+Auditor de design e código que detecta clichês e "cara de IA" em páginas e interfaces, separando falsos positivos e oferecendo recomendações editoriais humanas.
 - **Instalação:**
   ```bash
   npx skills add gabrielgreco1/skills --skill ui-humanizer
@@ -54,6 +54,34 @@ Auditor visual e de código que detecta clichês e "cara de IA" em páginas e in
   ```bash
   python3 scripts/audit.py caminho/do/arquivo.html
   ```
+
+---
+
+## 2b. Repositório Auditado: Benji Taylor (`benjitaylor/skills`)
+
+- **Repositório Upstream:** [https://github.com/benjitaylor/skills](https://github.com/benjitaylor/skills)
+- **Autor:** Benji Taylor ([@benjitaylor](https://github.com/benjitaylor))
+- **Licenciamento:** MIT (código e componentes; marcas registradas e logos excluídos).
+- **Especialidade:** `stageshow`
+
+### `stageshow`
+Especialista em apresentações de software, product showcases de alta fidelidade, animação de cursores, microinterações de UI e layouts bento grid para demonstração de recursos de aplicações.
+- **Instalação:**
+  ```bash
+  npx skills add benjitaylor/skills --skill stageshow
+  ```
+- **Roteamento no MOTION:**
+  Invocado pelo `studio-director` ou `motion-director` quando o entregável envolve demonstração de aplicativos, software ou UI motion:
+  `studio-director` ➔ `software_showcase` ➔ `stageshow` ➔ `motion-core`.
+- **Quando Utilizar:**
+  - Demonstrações de software / SaaS / apps web e mobile.
+  - Animação de cursor (trajetória suave, hover, clique, seleção).
+  - Bento grids com cards de produto ativos.
+  - Microinterações e estados de interface ilustrativos.
+- **Quando NÃO Utilizar:**
+  - Conteúdo científico ou de natureza (ex: lulas gigantes, biologia marinha).
+  - Processos industriais ou fabris (onde diagramas técnicos e infografia são adequados).
+  - Vídeos puramente publicitários de bens de consumo físicos ou serviços artesanais.
 
 ---
 

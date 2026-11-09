@@ -11,7 +11,7 @@ import { runRender } from "../lib/render.mjs";
 import { runExport } from "../lib/export.mjs";
 import { runQA } from "../lib/qa.mjs";
 
-const VERSION = "1.0.0-rc.2";
+const VERSION = "1.0.0-rc.3";
 
 const rawArgs = process.argv.slice(2);
 const flags = {};

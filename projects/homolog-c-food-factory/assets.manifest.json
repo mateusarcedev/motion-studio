@@ -1,0 +1,72 @@
+{
+  "generated_by": "creative-core/exporters/manifest.py",
+  "root": "projects/homolog-c-food-factory",
+  "counts": {
+    "files": 9,
+    "png": 4,
+    "mp4": 0,
+    "html": 1
+  },
+  "renditions": [
+    "out/still-01-freeze.png",
+    "out/still-02-sublimation.png",
+    "out/still-03-desorption.png",
+    "out/still-04-sealing.png"
+  ],
+  "files": [
+    {
+      "path": "BRIEF.md",
+      "sha256": "47f8e31af4230a3dc475c635be82c2d7b20416ac5d8492eb161d64a121791a61",
+      "bytes": 2173,
+      "role": "other"
+    },
+    {
+      "path": "PROCESS.md",
+      "sha256": "f5026e01a55b421d4d524d620818c6f3beb93fc6655af62c88ca3625de16e402",
+      "bytes": 3225,
+      "role": "other"
+    },
+    {
+      "path": "STORYBOARD.md",
+      "sha256": "33d5e2d977dbfbefe36541eae64314c0b6268b01902a2277e70e70e45da652aa",
+      "bytes": 2609,
+      "role": "other"
+    },
+    {
+      "path": "STYLE.md",
+      "sha256": "b7daa5e2becb94048e1be98aba2898597f224a6b929a8a75337098e7a311f068",
+      "bytes": 1891,
+      "role": "other"
+    },
+    {
+      "path": "composition.html",
+      "sha256": "92c688a5fa1949bc6f5ba4017fe3a9be55c63445b2cb1137de10c7375c45dc16",
+      "bytes": 13956,
+      "role": "other"
+    },
+    {
+      "path": "out/still-01-freeze.png",
+      "sha256": "86abb7453775b1d5ed9897526356f85799b51fb9f46addddc55a44611e3e4eca",
+      "bytes": 182141,
+      "role": "render"
+    },
+    {
+      "path": "out/still-02-sublimation.png",
+      "sha256": "32d506566594fee87f590fa875994519d55b17093cac4f977f980e5341548df6",
+      "bytes": 191828,
+      "role": "render"
+    },
+    {
+      "path": "out/still-03-desorption.png",
+      "sha256": "2cc2d8f71978c953e4c3f722fede5e6ce69306123e43cd81c5d867a7cba5e9cc",
+      "bytes": 192386,
+      "role": "render"
+    },
+    {
+      "path": "out/still-04-sealing.png",
+      "sha256": "149772efe6832997affc93b711ce18b843fa6ba79f6c687d3d50cbeae74f9594",
+      "bytes": 191380,
+      "role": "render"
+    }
+  ]
+}

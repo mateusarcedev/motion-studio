@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>TRAVESSIA — 9:16 Vertical Master</title>
+  <style>
+    :root {
+      --bg: #0A1220;
+      --primary: #FF8A00;
+      --secondary: #00F0FF;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --border: #273549;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: var(--bg);
+      overflow: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+    }
+    #canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .hud {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 80px 56px;
+    }
+    .top-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .brand-title {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-tag {
+      background: var(--primary);
+      color: #000;
+      font-size: 16px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+    }
+    .brand-sub {
+      font-family: 'Geist Mono', monospace, monospace;
+      font-size: 18px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+    }
+    .tc-readout {
+      font-family: 'Geist Mono', monospace, monospace;
+      font-size: 20px;
+      color: var(--secondary);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+    }
+    .scene-card {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 140px;
+      background: rgba(10, 18, 32, 0.94);
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--primary);
+      padding: 32px 36px;
+      border-radius: 6px;
+      backdrop-filter: blur(14px);
+      transition: opacity 0.3s ease;
+    }
+    .scene-tag {
+      font-family: 'Geist Mono', monospace, monospace;
+      font-size: 16px;
+      color: var(--secondary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .scene-headline {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .scene-meta {
+      font-family: 'Geist Mono', monospace, monospace;
+      font-size: 16px;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 12px;
+    }
+    .scene-meta span { color: var(--text); font-weight: 600; }
+    .hero-center-reveal {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 12;
+      pointer-events: none;
+      padding: 40px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      background: radial-gradient(circle at center, rgba(10, 18, 32, 0.25) 0%, rgba(10, 18, 32, 0.7) 100%);
+    }
+    .hero-quote {
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      text-shadow: 0 4px 24px rgba(0,0,0,0.85);
+    }
+    .hero-quote span {
+      color: var(--primary);
+    }
+    .hero-sub {
+      font-family: 'Geist Mono', monospace, monospace;
+      font-size: 20px;
+      color: var(--secondary);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1.5;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div class="hud">
+    <div class="top-row">
+      <div class="brand-title">TRAVESSIA <span class="brand-tag">VERTICAL</span></div>
+      <div class="brand-sub">DO CAIS AO DESTINO · MOTION STUDIO</div>
+      <div class="tc-readout" id="tc">TC 00:00:00:00</div>
+    </div>
+
+    <div class="scene-card" id="sceneCard">
+      <div class="scene-tag" id="sceneTag">CENA 01 · ESTABELECIMENTO INDUSTRIAL</div>
+      <div class="scene-headline" id="sceneHeadline">O Porto ao Crepúsculo</div>
+      <div class="scene-meta" id="sceneMeta">
+        <div>TERMINAL: <span>SANTOS [BR-SSZ]</span></div>
+        <div>OPERAÇÃO: <span>DESCARGA STS</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-center-reveal" id="heroReveal">
+    <div class="hero-quote">Cada jornada tem<br><span>uma história.</span></div>
+    <div class="hero-sub">TRAVESSIA<br>DO CAIS AO DESTINO · MOTION STUDIO</div>
+  </div>
+
+  <script type="module">
+    import * as THREE from '/node_modules/three/build/three.module.js';
+
+    const canvas = document.getElementById('canvas');
+    const tcEl = document.getElementById('tc');
+    const sceneCard = document.getElementById('sceneCard');
+    const sceneTag = document.getElementById('sceneTag');
+    const sceneHeadline = document.getElementById('sceneHeadline');
+    const sceneMeta = document.getElementById('sceneMeta');
+    const heroReveal = document.getElementById('heroReveal');
+
+    // Setup Renderer matching WebGL CargaExperience parameters
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+      preserveDrawingBuffer: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setSize(1080, 1920);
+    renderer.setPixelRatio(1);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.85;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1A293D);
+    scene.fog = new THREE.Fog(0x1E2C3D, 80, 360);
+
+    const camera = new THREE.PerspectiveCamera(54, 1080 / 1920, 0.1, 600);
+    const cameraLookAt = new THREE.Vector3(-2, 3.2, 0);
+
+    // ==========================================
+    // ATMOSPHERIC SKY BACKDROP & LIGHTING
+    // ==========================================
+    function createSkyTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 512; cvs.height = 512;
+      const ctx = cvs.getContext('2d');
+      const grad = ctx.createLinearGradient(0, 0, 0, 512);
+      grad.addColorStop(0, '#111F36');
+      grad.addColorStop(0.30, '#1C3459');
+      grad.addColorStop(0.58, '#284976');
+      grad.addColorStop(0.74, '#3E6090');
+      grad.addColorStop(0.86, '#6D5D72');
+      grad.addColorStop(0.93, '#9E6B4B');
+      grad.addColorStop(1, '#243447');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 512);
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    const skyGeo = new THREE.SphereGeometry(260, 32, 16);
+    const skyMat = new THREE.MeshBasicMaterial({ map: createSkyTexture(), side: THREE.BackSide, depthWrite: false });
+    const skyMesh = new THREE.Mesh(skyGeo, skyMat);
+    skyMesh.position.set(0, 40, 0);
+    skyMesh.scale.set(-1, 1, 1);
+    scene.add(skyMesh);
+
+    // Hemisphere Light
+    const hemiLight = new THREE.HemisphereLight(0xBAE6FD, 0x334155, 1.6);
+    scene.add(hemiLight);
+
+    // Ambient Light
+    const ambientLight = new THREE.AmbientLight(0xE2E8F0, 1.0);
+    scene.add(ambientLight);
+
+    // Primary Sun Key Light
+    const keyLight = new THREE.DirectionalLight(0xFFF5E6, 3.6);
+    keyLight.position.set(25, 28, 28);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(1024, 1024);
+    keyLight.shadow.bias = -0.0001;
+    scene.add(keyLight);
+
+    // Secondary Fill Light
+    const fillLight = new THREE.DirectionalLight(0x7DD3FC, 1.8);
+    fillLight.position.set(-25, 20, 20);
+    scene.add(fillLight);
+
+    // Cyan Rim Light
+    const rimLight = new THREE.DirectionalLight(0x00F0FF, 2.2);
+    rimLight.position.set(-30, 25, -20);
+    scene.add(rimLight);
+
+    // Overhead Spot
+    const floodCyan = new THREE.SpotLight(0x00F0FF, 90, 120, 0.65, 0.7);
+    floodCyan.position.set(8, 30, 16);
+    scene.add(floodCyan);
+
+    // Container Amber Light
+    const containerLight = new THREE.PointLight(0xFF8A00, 45, 35);
+    containerLight.position.set(-3, 6, 8);
+    scene.add(containerLight);
+
+    // Dedicated Container Fill Light
+    const containerDirectLight = new THREE.PointLight(0xFF9500, 45, 25);
+    containerDirectLight.position.set(0, 3.5, 4.5);
+    scene.add(containerDirectLight);
+
+    // Highway Fill Light for Scenes 4 & 5
+    const highwayFillLight = new THREE.DirectionalLight(0x38BDF8, 1.2);
+    highwayFillLight.position.set(10, 20, 15);
+    highwayFillLight.visible = false;
+    scene.add(highwayFillLight);
+
+    // ==========================================
+    // PROCEDURAL ASSETS & TEXTURES
+    // ==========================================
+    function createContainerTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 2048; cvs.height = 1024;
+      const ctx = cvs.getContext('2d');
+
+      ctx.fillStyle = '#E86500';
+      ctx.fillRect(0, 0, 2048, 1024);
+
+      for (let x = 0; x < 2048; x += 32) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+        ctx.fillRect(x, 0, 8, 1024);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.fillRect(x + 16, 0, 8, 1024);
+      }
+
+      ctx.fillStyle = 'rgba(20, 20, 20, 0.15)';
+      ctx.fillRect(0, 0, 2048, 60);
+      ctx.fillRect(0, 960, 2048, 64);
+
+      const stripeW = 30;
+      ctx.save();
+      ctx.rect(120, 100, 480, 40);
+      ctx.clip();
+      for (let sx = 0; sx < 800; sx += stripeW * 2) {
+        ctx.fillStyle = '#111';
+        ctx.beginPath();
+        ctx.moveTo(sx, 100);
+        ctx.lineTo(sx + stripeW, 100);
+        ctx.lineTo(sx + stripeW - 20, 140);
+        ctx.lineTo(sx - 20, 140);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      ctx.fillStyle = '#F8FAFC';
+      ctx.font = 'bold 110px sans-serif';
+      ctx.fillText('TRAVESSIA', 140, 240);
+
+      ctx.font = 'bold 52px monospace';
+      ctx.fillText('TRV-01-A  ·  45G1 HIGH CUBE', 140, 330);
+
+      ctx.strokeStyle = 'rgba(248, 250, 252, 0.45)';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(140, 390, 850, 440);
+
+      ctx.font = '34px monospace';
+      ctx.fillText('MAX GROSS :  32,500 KG   71,650 LBS', 170, 460);
+      ctx.fillText('TARE      :   3,820 KG    8,420 LBS', 170, 530);
+      ctx.fillText('NET       :  28,680 KG   63,230 LBS', 170, 600);
+      ctx.fillText('CU. CAP.  :    76.2 CU.M 2,690 CU.FT', 170, 670);
+      ctx.fillText('OPERATOR  :  MOTION STUDIO · TRAVESSIA', 170, 740);
+      ctx.fillText('STATUS    :  DO CAIS AO DESTINO', 170, 800);
+
+      ctx.fillStyle = '#111';
+      ctx.fillRect(1150, 390, 640, 340);
+      ctx.fillStyle = '#00F0FF';
+      ctx.font = 'bold 30px monospace';
+      ctx.fillText('VERIFIED GROSS MASS [VGM]', 1180, 450);
+      ctx.fillStyle = '#F8FAFC';
+      ctx.font = '28px monospace';
+      ctx.fillText('PORT TERMINAL SANTOS (BR)', 1180, 510);
+      ctx.fillText('EXPEDITION: #TRV-2026-EXP', 1180, 570);
+
+      let seedX = 1180;
+      for (let i = 0; i < 38; i++) {
+        const w = (i % 3 === 0) ? 9 : 4;
+        ctx.fillRect(seedX, 630, w, 76);
+        seedX += w + 8;
+      }
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    const containerGroup = new THREE.Group();
+    const contMat = new THREE.MeshStandardMaterial({
+      color: 0xE86500,
+      map: createContainerTexture(),
+      roughness: 0.45,
+      metalness: 0.25
+    });
+    const contBox = new THREE.Mesh(new THREE.BoxGeometry(12.0, 2.9, 2.44), contMat);
+    contBox.position.y = 1.45;
+    contBox.castShadow = true;
+    contBox.receiveShadow = true;
+    containerGroup.add(contBox);
+
+    const railMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.5, metalness: 0.7 });
+    const topRail = new THREE.Mesh(new THREE.BoxGeometry(12.04, 0.12, 2.48), railMat);
+    topRail.position.y = 2.9;
+    containerGroup.add(topRail);
+    const botRail = new THREE.Mesh(new THREE.BoxGeometry(12.04, 0.12, 2.48), railMat);
+    botRail.position.y = 0.06;
+    containerGroup.add(botRail);
+
+    const ribGeo = new THREE.BoxGeometry(0.12, 2.7, 0.05);
+    const ribMat = new THREE.MeshStandardMaterial({ color: 0xD05500, roughness: 0.5, metalness: 0.3 });
+    for (let i = 0; i < 36; i++) {
+      const rx = -5.6 + (i * 11.2) / 35;
+      const r1 = new THREE.Mesh(ribGeo, ribMat);
+      r1.position.set(rx, 1.45, 1.24);
+      containerGroup.add(r1);
+      const r2 = new THREE.Mesh(ribGeo, ribMat);
+      r2.position.set(rx, 1.45, -1.24);
+      containerGroup.add(r2);
+    }
+
+    const cornerMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.4, metalness: 0.8 });
+    const cGeo = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+    [-6.0, 6.0].forEach(cx => {
+      [0.15, 2.75].forEach(cy => {
+        [-1.22, 1.22].forEach(cz => {
+          const c = new THREE.Mesh(cGeo, cornerMat);
+          c.position.set(cx, cy, cz);
+          containerGroup.add(c);
+        });
+      });
+    });
+
+    const doorBarMat = new THREE.MeshStandardMaterial({ color: 0x94A3B8, metalness: 0.9, roughness: 0.2 });
+    const doorBarGeo = new THREE.CylinderGeometry(0.03, 0.03, 2.6, 12);
+    [-0.6, -0.2, 0.2, 0.6].forEach(bz => {
+      const bar = new THREE.Mesh(doorBarGeo, doorBarMat);
+      bar.position.set(6.02, 1.45, bz);
+      containerGroup.add(bar);
+    });
+
+    scene.add(containerGroup);
+
+    // Build Semi-Truck matching build_models.mjs
+    const truckGroup = new THREE.Group();
+    const cabMat = new THREE.MeshStandardMaterial({ color: 0x243E63, roughness: 0.25, metalness: 0.6 });
+    const chassisMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.6, metalness: 0.7 });
+    const chromeMat = new THREE.MeshStandardMaterial({ color: 0xCBD5E1, roughness: 0.1, metalness: 0.95 });
+    const cyanLightMat = new THREE.MeshStandardMaterial({ color: 0x00F0FF, emissive: 0x00F0FF, emissiveIntensity: 3.5 });
+    const redLightMat = new THREE.MeshStandardMaterial({ color: 0xEF4444, emissive: 0xEF4444, emissiveIntensity: 3.5 });
+    const amberBeaconMat = new THREE.MeshStandardMaterial({ color: 0xF59E0B, emissive: 0xF59E0B, emissiveIntensity: 3.0 });
+
+    const chassis = new THREE.Mesh(new THREE.BoxGeometry(16.5, 0.35, 2.4), chassisMat);
+    chassis.position.set(0, 1.1, 0);
+    chassis.castShadow = true;
+    truckGroup.add(chassis);
+
+    const cab = new THREE.Mesh(new THREE.BoxGeometry(3.6, 2.9, 2.4), cabMat);
+    cab.position.set(6.4, 2.65, 0);
+    cab.castShadow = true;
+    truckGroup.add(cab);
+
+    const fairingGeo = new THREE.CylinderGeometry(0.2, 1.2, 0.8, 4);
+    fairingGeo.rotateY(Math.PI / 4);
+    const fairing = new THREE.Mesh(fairingGeo, cabMat);
+    fairing.position.set(6.0, 4.4, 0);
+    fairing.scale.set(1.8, 1, 1);
+    truckGroup.add(fairing);
+
+    const ws = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.1, 2.0), chromeMat);
+    ws.position.set(8.22, 3.0, 0);
+    truckGroup.add(ws);
+
+    const grille = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.9, 1.9), chromeMat);
+    grille.position.set(8.25, 2.0, 0);
+    truckGroup.add(grille);
+
+    const bumper = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 2.6), chassisMat);
+    bumper.position.set(8.3, 1.1, 0);
+    truckGroup.add(bumper);
+
+    const hl1 = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.4), cyanLightMat);
+    hl1.position.set(8.35, 2.0, 0.85);
+    truckGroup.add(hl1);
+    const hl2 = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.25, 0.4), cyanLightMat);
+    hl2.position.set(8.35, 2.0, -0.85);
+    truckGroup.add(hl2);
+
+    const truckHeadlightR = new THREE.PointLight(0x00F0FF, 60, 30);
+    truckHeadlightR.position.set(9.0, 2.0, 0.85);
+    truckGroup.add(truckHeadlightR);
+    const truckHeadlightL = new THREE.PointLight(0x00F0FF, 60, 30);
+    truckHeadlightL.position.set(9.0, 2.0, -0.85);
+    truckGroup.add(truckHeadlightL);
+
+    const b1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.15, 12), amberBeaconMat);
+    b1.position.set(6.9, 4.15, 0.9);
+    truckGroup.add(b1);
+    const b2 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.15, 12), amberBeaconMat);
+    b2.position.set(6.9, 4.15, -0.9);
+    truckGroup.add(b2);
+
+    const ex1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3.2, 12), chromeMat);
+    ex1.position.set(4.4, 3.0, 1.0);
+    truckGroup.add(ex1);
+    const ex2 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3.2, 12), chromeMat);
+    ex2.position.set(4.4, 3.0, -1.0);
+    truckGroup.add(ex2);
+
+    const tankGeo = new THREE.CylinderGeometry(0.4, 0.4, 2.2, 16);
+    tankGeo.rotateZ(Math.PI / 2);
+    const tank1 = new THREE.Mesh(tankGeo, chromeMat);
+    tank1.position.set(3.2, 0.9, 1.3);
+    truckGroup.add(tank1);
+    const tank2 = new THREE.Mesh(tankGeo, chromeMat);
+    tank2.position.set(3.2, 0.9, -1.3);
+    truckGroup.add(tank2);
+
+    const tl1 = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.2, 0.5), redLightMat);
+    tl1.position.set(-8.3, 1.0, 0.8);
+    truckGroup.add(tl1);
+    const tl2 = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.2, 0.5), redLightMat);
+    tl2.position.set(-8.3, 1.0, -0.8);
+    truckGroup.add(tl2);
+
+    const tireGeo = new THREE.CylinderGeometry(0.55, 0.55, 0.35, 20);
+    tireGeo.rotateX(Math.PI / 2);
+    const tireMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.9 });
+    const rimGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.37, 16);
+    rimGeo.rotateX(Math.PI / 2);
+
+    [7.6, 4.2, 2.8, -4.2, -5.6, -7.0].forEach(wx => {
+      [1.32, -1.32].forEach(wz => {
+        const wGroup = new THREE.Group();
+        const tire = new THREE.Mesh(tireGeo, tireMat);
+        const rim = new THREE.Mesh(rimGeo, chromeMat);
+        wGroup.add(tire);
+        wGroup.add(rim);
+        wGroup.position.set(wx, 0.55, wz);
+        truckGroup.add(wGroup);
+      });
+    });
+    scene.add(truckGroup);
+
+    // ==========================================
+    // HARBOR ENVIRONMENT
+    // ==========================================
+    const harborGroup = new THREE.Group();
+
+    const ocean = new THREE.Mesh(
+      new THREE.PlaneGeometry(160, 300),
+      new THREE.MeshStandardMaterial({ color: 0x0E2A47, roughness: 0.08, metalness: 0.85 })
+    );
+    ocean.rotation.x = -Math.PI / 2;
+    ocean.position.set(-56, -0.2, 0);
+    harborGroup.add(ocean);
+
+    const pier = new THREE.Mesh(
+      new THREE.PlaneGeometry(60, 300),
+      new THREE.MeshStandardMaterial({ color: 0x263445, roughness: 0.4, metalness: 0.25 })
+    );
+    pier.rotation.x = -Math.PI / 2;
+    pier.position.set(18, -0.1, 0);
+    harborGroup.add(pier);
+
+    const hazardLine = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.5, 300),
+      new THREE.MeshBasicMaterial({ color: 0xFF9900 })
+    );
+    hazardLine.rotation.x = -Math.PI / 2;
+    hazardLine.position.set(-11.5, 0.01, 0);
+    harborGroup.add(hazardLine);
+
+    const shipGroup = new THREE.Group();
+    shipGroup.position.set(-24, 0, 0);
+
+    const shipHull = new THREE.Mesh(
+      new THREE.BoxGeometry(16, 10, 100),
+      new THREE.MeshStandardMaterial({ color: 0x1E2B3E, roughness: 0.5, metalness: 0.4 })
+    );
+    shipHull.position.y = 5.0;
+    shipGroup.add(shipHull);
+
+    const waterline = new THREE.Mesh(
+      new THREE.BoxGeometry(16.2, 2.2, 100.2),
+      new THREE.MeshStandardMaterial({ color: 0x991B1B, roughness: 0.5, metalness: 0.2 })
+    );
+    waterline.position.y = 1.1;
+    shipGroup.add(waterline);
+
+    const deckColors = [0x1E3A8A, 0x047857, 0xB45309, 0x334155, 0x0F766E];
+    let colIdx = 0;
+    for (let sz = -38; sz <= 38; sz += 14) {
+      for (let sx = -5; sx <= 5; sx += 3.4) {
+        for (let sy = 0; sy < 3; sy++) {
+          const col = deckColors[(colIdx++) % deckColors.length];
+          const sc = new THREE.Mesh(
+            new THREE.BoxGeometry(2.8, 2.6, 12),
+            new THREE.MeshStandardMaterial({ color: col, roughness: 0.5, metalness: 0.2 })
+          );
+          sc.position.set(sx, 11.3 + sy * 2.6, sz);
+          shipGroup.add(sc);
+        }
+      }
+    }
+
+    const bridge = new THREE.Mesh(
+      new THREE.BoxGeometry(14, 18, 12),
+      new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.3, metalness: 0.1 })
+    );
+    bridge.position.set(0, 19, -42);
+    shipGroup.add(bridge);
+
+    harborGroup.add(shipGroup);
+
+    const craneGroup = new THREE.Group();
+    const craneMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5, metalness: 0.7 });
+    const legGeo = new THREE.BoxGeometry(1.6, 36, 1.6);
+    [[-8, -10], [-8, 10], [8, -10], [8, 10]].forEach(([lx, lz]) => {
+      const leg = new THREE.Mesh(legGeo, craneMat);
+      leg.position.set(lx, 18, lz);
+      craneGroup.add(leg);
+    });
+
+    const crossbeam = new THREE.Mesh(new THREE.BoxGeometry(18, 2, 22), craneMat);
+    crossbeam.position.set(0, 18, 0);
+    craneGroup.add(crossbeam);
+
+    const boom = new THREE.Mesh(new THREE.BoxGeometry(60, 3.2, 4), craneMat);
+    boom.position.set(-10, 36, 0);
+    craneGroup.add(boom);
+
+    const opCab = new THREE.Mesh(new THREE.BoxGeometry(3, 2.5, 3), new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.5 }));
+    opCab.position.set(-6, 33, 0);
+    craneGroup.add(opCab);
+
+    [-25, -15, -5, 5].forEach(bx => {
+      const fl = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), cyanLightMat);
+      fl.position.set(bx, 34.2, 2.2);
+      craneGroup.add(fl);
+    });
+
+    const spreader = new THREE.Mesh(
+      new THREE.BoxGeometry(12.2, 0.8, 2.6),
+      new THREE.MeshStandardMaterial({ color: 0xFF7A00, roughness: 0.35, metalness: 0.5 })
+    );
+    spreader.position.set(0, 18, 0);
+    craneGroup.add(spreader);
+    harborGroup.add(craneGroup);
+
+    scene.add(harborGroup);
+
+    // ==========================================
+    // HIGHWAY ENVIRONMENT
+    // ==========================================
+    const highwayGroup = new THREE.Group();
+    const road = new THREE.Mesh(
+      new THREE.PlaneGeometry(300, 20),
+      new THREE.MeshStandardMaterial({ color: 0x222C3A, roughness: 0.25, metalness: 0.3 })
+    );
+    road.rotation.x = -Math.PI / 2;
+    road.position.y = -0.05;
+    highwayGroup.add(road);
+
+    const centerLine = new THREE.Mesh(
+      new THREE.PlaneGeometry(300, 0.28),
+      new THREE.MeshBasicMaterial({ color: 0xF1F5F9 })
+    );
+    centerLine.rotation.x = -Math.PI / 2;
+    centerLine.position.y = 0.01;
+    highwayGroup.add(centerLine);
+
+    const borderL1 = new THREE.Mesh(new THREE.PlaneGeometry(300, 0.25), new THREE.MeshBasicMaterial({ color: 0xF59E0B }));
+    borderL1.rotation.x = -Math.PI / 2;
+    borderL1.position.set(0, 0.01, 6);
+    highwayGroup.add(borderL1);
+    const borderL2 = new THREE.Mesh(new THREE.PlaneGeometry(300, 0.25), new THREE.MeshBasicMaterial({ color: 0xF59E0B }));
+    borderL2.rotation.x = -Math.PI / 2;
+    borderL2.position.set(0, 0.01, -6);
+    highwayGroup.add(borderL2);
+
+    const poleMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8, roughness: 0.4 });
+    const amberLampMat = new THREE.MeshStandardMaterial({ color: 0xF59E0B, emissive: 0xF59E0B, emissiveIntensity: 4.5 });
+    const polesGroup = new THREE.Group();
+    for (let px = -120; px <= 150; px += 30) {
+      const p = new THREE.Group();
+      p.position.set(px, 0, -8);
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.15, 9, 8), poleMat);
+      pole.position.y = 4.5;
+      p.add(pole);
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3.5, 8), poleMat);
+      arm.position.set(1, 8.8, 1.5);
+      arm.rotation.z = -Math.PI / 6;
+      p.add(arm);
+      const lamp = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.3, 0.5), amberLampMat);
+      lamp.position.set(2.2, 9.4, 1.5);
+      p.add(lamp);
+      const pl = new THREE.PointLight(0xF59E0B, 140, 45, 1.4);
+      pl.position.set(2.2, 8.5, 1.5);
+      p.add(pl);
+      polesGroup.add(p);
+    }
+    highwayGroup.add(polesGroup);
+    scene.add(highwayGroup);
+
+    // ==========================================
+    // DETERMINISTIC 5-ACT FRAME CHOREOGRAPHY (Vertical 9:16)
+    // ==========================================
+    window.renderFrame = function(frameIndex, totalFrames = 600) {
+      const fps = 30;
+      const t = frameIndex / fps;
+
+      const sec = Math.floor(t);
+      const remFrames = frameIndex % 30;
+      const tcStr = `TC 00:00:${String(sec).padStart(2, '0')}:${String(remFrames).padStart(2, '0')}`;
+      tcEl.textContent = tcStr;
+
+      if (frameIndex < 120) {
+        // CENA 01: O PORTO (F0 - F120) - 0-4s - Vertical wide 3/4 framing
+        harborGroup.visible = true;
+        highwayGroup.visible = false;
+        highwayFillLight.visible = false;
+        truckGroup.visible = true;
+        truckGroup.position.set(0, 0, 8);
+        containerGroup.position.set(0, 0.05, 0);
+        spreader.position.set(0, 24, 0);
+
+        containerDirectLight.position.set(0, 3.5, 4.5);
+        containerDirectLight.intensity = 45;
+
+        const p = frameIndex / 120;
+        camera.fov = 54;
+        camera.updateProjectionMatrix();
+        camera.position.set(14 - p * 3, 15 - p * 2, 34 - p * 6);
+        cameraLookAt.set(-2, 3.2, 0);
+
+        sceneCard.style.opacity = 1;
+        sceneTag.textContent = 'CENA 01 · ESTABELECIMENTO INDUSTRIAL';
+        sceneHeadline.textContent = 'O Porto ao Crepúsculo';
+        sceneMeta.innerHTML = '<div>TERMINAL: <span>SANTOS [BR-SSZ]</span></div><div>OPERAÇÃO: <span>DESCARGA STS</span></div>';
+        heroReveal.style.opacity = 0;
+      }
+      else if (frameIndex < 240) {
+        // CENA 02: O CONTÊINER PROTAGONISTA (F120 - F240) - 4-8s - Centered vertical framing
+        harborGroup.visible = true;
+        highwayGroup.visible = false;
+        highwayFillLight.visible = false;
+        truckGroup.visible = true;
+        truckGroup.position.set(0, 0, 8);
+        containerGroup.position.set(0, 0.05, 0);
+        spreader.position.set(0, 20, 0);
+
+        containerDirectLight.position.set(0, 3.5, 4.5);
+        containerDirectLight.intensity = 55;
+
+        const p = (frameIndex - 120) / 120;
+        camera.fov = 52;
+        camera.updateProjectionMatrix();
+        // Centered above bottom card, full 12m container visible
+        camera.position.set(-1.5 + p * 2.5, 2.6 + p * 0.4, 17.5 - p * 2.0);
+        cameraLookAt.set(0, 1.45, 0);
+
+        sceneCard.style.opacity = 1;
+        sceneTag.textContent = 'CENA 02 · O PROTAGONISTA';
+        sceneHeadline.textContent = 'Contêiner TRV-01-A';
+        sceneMeta.innerHTML = '<div>ISO: <span>45G1 HIGH CUBE</span></div><div>OPERADOR: <span>MOTION STUDIO · TRAVESSIA</span></div>';
+        heroReveal.style.opacity = 0;
+      }
+      else if (frameIndex < 360) {
+        // CENA 03: A MOVIMENTAÇÃO (F240 - F360) - 8-12s - Vertical hoist inside crane portal
+        harborGroup.visible = true;
+        highwayGroup.visible = false;
+        highwayFillLight.visible = false;
+        truckGroup.visible = true;
+        truckGroup.position.set(0, 0, 0);
+
+        const p = (frameIndex - 240) / 120;
+        const liftY = 0.05 + Math.sin(p * Math.PI) * 8.5;
+        containerGroup.position.set(-2.2 * p, liftY, 0);
+        spreader.position.set(-2.2 * p, liftY + 2.8, 0);
+
+        containerDirectLight.position.set(-2.2 * p, liftY + 3.0, 4.5);
+        containerDirectLight.intensity = 55;
+
+        camera.fov = 54;
+        camera.updateProjectionMatrix();
+        camera.position.set(6 - p * 1.5, 11 + p * 1.5, 23 - p * 3);
+        cameraLookAt.set(0, 5.2, 0);
+
+        sceneCard.style.opacity = 1;
+        sceneTag.textContent = 'CENA 03 · OPERAÇÃO INTERMODAL';
+        sceneHeadline.textContent = 'Içamento & Transferência';
+        sceneMeta.innerHTML = '<div>EQUIPAMENTO: <span>STS GANTRY LIEBHERR</span></div><div>VETOR: <span>+14.2M VERTICAL</span></div>';
+        heroReveal.style.opacity = 0;
+      }
+      else if (frameIndex < 480) {
+        // CENA 04: A ESTRADA (F360 - F480) - 12-16s - Vertical highway dynamic tracking
+        harborGroup.visible = false;
+        highwayGroup.visible = true;
+        highwayFillLight.visible = true;
+        truckGroup.visible = true;
+        truckGroup.position.set(0, 0, 0);
+        containerGroup.position.set(-2.2, 1.45, 0);
+
+        containerDirectLight.position.set(-2.2, 3.5, 4.5);
+        containerDirectLight.intensity = 60;
+
+        const p = (frameIndex - 360) / 120;
+        polesGroup.position.x = -((frameIndex - 360) * 1.5) % 30;
+
+        camera.fov = 52;
+        camera.updateProjectionMatrix();
+        camera.position.set(8.0, 4.2 + Math.sin(p * 8) * 0.05, 18.0);
+        cameraLookAt.set(0, 2.0, 0);
+
+        sceneCard.style.opacity = 1;
+        sceneTag.textContent = 'CENA 04 · TRÂNSITO TERRESTRE';
+        sceneHeadline.textContent = 'A Travessia Rodoviária';
+        sceneMeta.innerHTML = '<div>ROTA: <span>SP-150 / ANCHIETA</span></div><div>VELOCIDADE: <span>80 KM/H</span></div><div>CONDIÇÃO: <span>CHUVA FINA</span></div>';
+        heroReveal.style.opacity = 0;
+      }
+      else {
+        // CENA 05: O DESTINO & ENCERRAMENTO (F480 - F600) - 16-20s
+        harborGroup.visible = false;
+        highwayGroup.visible = true;
+        highwayFillLight.visible = true;
+        truckGroup.visible = true;
+        truckGroup.position.set(0, 0, 0);
+        containerGroup.position.set(-2.2, 1.45, 0);
+
+        containerDirectLight.position.set(-2.2, 3.5, 4.5);
+        containerDirectLight.intensity = 60;
+
+        const p = (frameIndex - 480) / 120;
+        camera.fov = 52;
+        camera.updateProjectionMatrix();
+        camera.position.set(5.0 - p * 5.0, 4.0 + p * 1.5, 20.0 + p * 6.0);
+        cameraLookAt.set(-0.5, 1.8, 0);
+
+        sceneCard.style.opacity = Math.max(0, 1 - p * 3);
+        heroReveal.style.opacity = Math.min(1, p * 2.2);
+      }
+
+      camera.lookAt(cameraLookAt);
+      renderer.render(scene, camera);
+    };
+
+    window.__onFrame__ = function(state) {
+      window.renderFrame(state.frame, state.totalFrames || 600);
+    };
+
+    if (!window.__MOTION_DRIVEN__) {
+      let f = 0;
+      function loop() {
+        window.renderFrame(f % 600, 600);
+        f++;
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+  </script>
+</body>
+</html>

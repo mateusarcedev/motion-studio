@@ -1,6 +1,6 @@
 {
   "name": "motion-studio-skills",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Catálogo e instalador de habilidades de agentes para o MOTION Studio",
   "type": "module",
   "main": "./index.js",
@@ -19,5 +19,10 @@
     "antigravity"
   ],
   "author": "MOTION Studio",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateusarcedev/motion-studio.git",
+    "directory": "packages/motion-skills"
+  }
 }

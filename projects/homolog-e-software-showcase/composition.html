@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Teste E — DevMetrics Engine Software Showcase</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #090D16;
+      color: #F8FAFC;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Geist", sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    .ambient-glow {
+      position: absolute;
+      width: 1100px;
+      height: 1100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.10) 0%, rgba(9, 13, 22, 0) 70%);
+      top: 450px;
+      left: -10px;
+      pointer-events: none;
+    }
+    .header {
+      position: absolute;
+      top: 130px;
+      left: 80px;
+      right: 80px;
+      z-index: 10;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1.5px solid rgba(139, 92, 246, 0.4);
+      border-radius: 30px;
+      color: #A78BFA;
+      font-family: monospace;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .title {
+      font-size: 78px;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: #F8FAFC;
+      margin-bottom: 20px;
+    }
+    .title span { color: #8B5CF6; }
+    .subtitle {
+      font-size: 31px;
+      line-height: 1.45;
+      color: #94A3B8;
+      max-width: 880px;
+    }
+
+    /* Main Stage */
+    .stage {
+      position: absolute;
+      top: 520px;
+      left: 80px;
+      width: 920px;
+      height: 1000px;
+      background: #0F172A;
+      border: 2px solid #1E293B;
+      border-radius: 28px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+    }
+    .stage-topbar {
+      width: 100%;
+      height: 72px;
+      background: #090D16;
+      border-bottom: 1.5px solid #1E293B;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      font-family: monospace;
+      font-size: 24px;
+      color: #94A3B8;
+      z-index: 10;
+    }
+    .stage-topbar span.highlight { color: #8B5CF6; }
+
+    .stage-viewport {
+      width: 100%;
+      height: 710px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    /* Act 1: Terminal */
+    .terminal-window {
+      width: 820px;
+      background: #030712;
+      border: 1.5px solid #1F2937;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .terminal-header {
+      height: 48px;
+      background: #111827;
+      border-bottom: 1px solid #1F2937;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 10px;
+    }
+    .t-dot { width: 14px; height: 14px; border-radius: 50%; }
+    .t-red { background: #EF4444; }
+    .t-yellow { background: #F59E0B; }
+    .t-green { background: #10B981; }
+    .t-title { margin-left: 12px; font-family: monospace; font-size: 18px; color: #6B7280; }
+    .terminal-body {
+      padding: 28px 32px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 24px;
+      line-height: 1.6;
+      color: #E2E8F0;
+    }
+    .code-comment { color: #64748B; }
+    .code-kw { color: #F43F5E; }
+    .code-fn { color: #38BDF8; }
+    .code-str { color: #34D399; }
+    .code-ok { color: #10B981; font-weight: 700; margin-top: 14px; }
+
+    /* Act 2: Bento Grid */
+    .bento-grid {
+      width: 840px;
+      height: 640px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+    }
+    .bento-card {
+      background: #030712;
+      border: 1.5px solid #1E293B;
+      border-radius: 20px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .bento-card.alert {
+      border-color: #F43F5E;
+      background: rgba(244, 63, 94, 0.05);
+      box-shadow: 0 0 35px rgba(244, 63, 94, 0.2);
+    }
+    .b-label { font-family: monospace; font-size: 20px; color: #64748B; text-transform: uppercase; }
+    .b-val { font-family: monospace; font-size: 54px; font-weight: 800; color: #F8FAFC; }
+    .b-val.ok { color: #10B981; }
+    .b-val.alert { color: #F43F5E; }
+    .b-sub { font-size: 20px; color: #94A3B8; }
+    .sparkline-svg { width: 100%; height: 50px; }
+
+    /* Act 3: Trace Waterfall Modal */
+    .waterfall-modal {
+      width: 840px;
+      background: #030712;
+      border: 2px solid #8B5CF6;
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 0 50px rgba(139, 92, 246, 0.25);
+    }
+    .wf-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #8B5CF6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wf-span {
+      background: #0F172A;
+      border: 1px solid #1E293B;
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: monospace;
+      font-size: 22px;
+    }
+    .wf-span.alert { border-color: #F43F5E; background: rgba(244, 63, 94, 0.1); color: #FCA5A5; }
+    .wf-bar { height: 10px; border-radius: 5px; background: #8B5CF6; }
+    .wf-bar.red { background: #F43F5E; }
+
+    /* Stageshow Virtual Cursor */
+    .stageshow-cursor {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      pointer-events: none;
+      z-index: 100;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8));
+      transition: transform 0.05s ease-out;
+    }
+    .cursor-ripple {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid #8B5CF6;
+      top: -13px;
+      left: -13px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Stage Bottom Banner */
+    .stage-banner {
+      width: 840px;
+      min-height: 120px;
+      background: #090D16;
+      border: 1.5px solid #1E293B;
+      border-radius: 18px;
+      padding: 22px 28px;
+      font-size: 25px;
+      line-height: 1.45;
+      color: #CBD5E1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .stage-banner strong { color: #8B5CF6; font-weight: 800; }
+    .stage-banner strong.ok { color: #10B981; }
+
+    /* Footer Telemetry */
+    .telemetry-footer {
+      position: absolute;
+      bottom: 110px;
+      left: 80px;
+      right: 80px;
+      height: 190px;
+      background: #0F172A;
+      border: 2px solid #1E293B;
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 24px 28px;
+      gap: 16px;
+      align-items: center;
+    }
+    .tel-col { display: flex; flex-direction: column; gap: 6px; }
+    .tel-label { font-family: monospace; font-size: 20px; color: #64748B; text-transform: uppercase; }
+    .tel-val { font-family: monospace; font-size: 32px; font-weight: 800; color: #F8FAFC; }
+    .tel-val.purple { color: #8B5CF6; }
+    .tel-val.ok { color: #10B981; }
+    .tel-val.alert { color: #F43F5E; }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow" data-bleed="true"></div>
+
+  <div class="header">
+    <div class="badge">Ferramental de Software · Observabilidade</div>
+    <h1 class="title">DevMetrics <span>Engine</span></h1>
+    <p class="subtitle">Tracing distribuído em tempo real com setup em 1 linha e diagnósticos instantâneos.</p>
+  </div>
+
+  <div class="stage">
+    <div class="stage-topbar">
+      <div id="clusterStatus">CLUSTER US-EAST (NODEJS + GO RUNTIME)</div>
+      <div id="actLabel" class="highlight">ATO 1 / 4 · SETUP ZERO-CONFIG</div>
+    </div>
+
+    <div class="stage-viewport" id="viewport">
+      <!-- Act content rendered via script -->
+    </div>
+
+    <!-- Stageshow Cursor -->
+    <div class="stageshow-cursor" id="cursor" style="display: none;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+        <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" fill="#FFFFFF" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <div class="cursor-ripple" id="ripple"></div>
+    </div>
+
+    <div class="stage-banner" id="stageBanner">
+      <strong>Zero-Config SDK:</strong> Inicialização declarativa com amostragem inteligente de 100% dos spans críticos.
+    </div>
+  </div>
+
+  <div class="telemetry-footer">
+    <div class="tel-col">
+      <span class="tel-label">Throughput</span>
+      <span class="tel-val purple" id="telThroughput">48,210 RPS</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Latência P99</span>
+      <span class="tel-val ok" id="telP99">18.4 ms</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Active Spans</span>
+      <span class="tel-val" id="telSpans">1,420 /s</span>
+    </div>
+    <div class="tel-col">
+      <span class="tel-label">Status da Malha</span>
+      <span class="tel-val ok" id="telStatus">HEALTHY</span>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_FRAMES = 900; // 30s @ 30fps
+
+    window.__onFrame__ = function(frame) {
+      const raw = typeof frame === "object" && frame !== null ? (frame.frame ?? 0) : Number(frame || 0);
+      const f = Math.max(0, Math.min(raw, TOTAL_FRAMES - 1));
+
+      const actLabel = document.getElementById("actLabel");
+      const clusterStatus = document.getElementById("clusterStatus");
+      const stageBanner = document.getElementById("stageBanner");
+      const viewport = document.getElementById("viewport");
+      const cursor = document.getElementById("cursor");
+      const ripple = document.getElementById("ripple");
+      const telThroughput = document.getElementById("telThroughput");
+      const telP99 = document.getElementById("telP99");
+      const telSpans = document.getElementById("telSpans");
+      const telStatus = document.getElementById("telStatus");
+
+      if (f < 225) {
+        // ACT 1: Setup em 1 Linha (0s - 7.5s)
+        actLabel.textContent = "ATO 1 / 4 · SETUP ZERO-CONFIG";
+        clusterStatus.textContent = "TERMINAL DE DESENVOLVIMENTO";
+        cursor.style.display = "none";
+
+        viewport.innerHTML = `
+          <div class="terminal-window">
+            <div class="terminal-header">
+              <div class="t-dot t-red"></div>
+              <div class="t-dot t-yellow"></div>
+              <div class="t-dot t-green"></div>
+              <span class="t-title">bash · node-services</span>
+            </div>
+            <div class="terminal-body">
+              <span class="code-comment">// 1. Instalar o agente</span><br>
+              $ npm i @devmetrics/node<br><br>
+              <span class="code-comment">// 2. Conectar à malha em 1 linha</span><br>
+              <span class="code-kw">import</span> { devmetrics } <span class="code-kw">from</span> <span class="code-str">"@devmetrics/node"</span>;<br>
+              devmetrics.<span class="code-fn">init</span>({ traceSample: <span class="code-str">1.0</span> });<br><br>
+              <div class="code-ok">✓ Connected to DevMetrics telemetry mesh (0.8ms RTT)</div>
+            </div>
+          </div>
+        `;
+        stageBanner.innerHTML = "<strong>Zero-Config SDK:</strong> Uma única linha no entrypoint inicia o tracing distribuído em todos os microserviços.";
+        telThroughput.textContent = "-- RPS";
+        telP99.textContent = "-- ms";
+        telSpans.textContent = "0 /s";
+        telStatus.textContent = "CONNECTING";
+        telStatus.className = "tel-val purple";
+      } else if (f < 450) {
+        // ACT 2: Bento Grid Live Telemetry (7.5s - 15.0s)
+        actLabel.textContent = "ATO 2 / 4 · DASHBOARD BENTO EM TEMPO REAL";
+        clusterStatus.textContent = "CLUSTER US-EAST (64 PODS)";
+        cursor.style.display = "none";
+
+        viewport.innerHTML = `
+          <div class="bento-grid">
+            <div class="bento-card">
+              <span class="b-label">Throughput Global</span>
+              <span class="b-val ok">48,210</span>
+              <span class="b-sub">requisições por segundo</span>
+            </div>
+            <div class="bento-card">
+              <span class="b-label">Latência P99</span>
+              <span class="b-val ok">18.4 ms</span>
+              <span class="b-sub">SLA Garantido (&lt; 50ms)</span>
+            </div>
+            <div class="bento-card">
+              <span class="b-label">Error Budget</span>
+              <span class="b-val ok">99.98%</span>
+              <span class="b-sub">30 dias corridos</span>
+            </div>
+            <div class="bento-card">
+              <span class="b-label">Active Tracing Spans</span>
+              <span class="b-val">1,420 /s</span>
+              <span class="b-sub">Amostragem inteligente</span>
+            </div>
+          </div>
+        `;
+        stageBanner.innerHTML = "<strong>Bento Grid Telemetry:</strong> Visão consolidada de alta fidelidade com renderização a 60 FPS no navegador.";
+        telThroughput.textContent = "48,210 RPS";
+        telP99.textContent = "18.4 ms";
+        telP99.className = "tel-val ok";
+        telSpans.textContent = "1,420 /s";
+        telStatus.textContent = "HEALTHY";
+        telStatus.className = "tel-val ok";
+      } else if (f < 675) {
+        // ACT 3: Spike & Stageshow Cursor Interaction (15.0s - 22.5s)
+        actLabel.textContent = "ATO 3 / 4 · INSPEÇÃO COM CURSOR & SPANS";
+        clusterStatus.textContent = "ALERTA DE ANOMALIA DETECTADA";
+
+        // Cursor animation progression:
+        cursor.style.display = "block";
+        const p = (f - 450) / 225;
+        // Bezier glide from (700, 500) to (350, 220)
+        const curX = 600 - p * 250;
+        const curY = 480 - p * 260;
+        cursor.style.left = curX + "px";
+        cursor.style.top = curY + "px";
+
+        if (p > 0.5) {
+          ripple.style.opacity = (1 - (p - 0.5) * 2).toString();
+          ripple.style.transform = `scale(${1 + (p - 0.5) * 2})`;
+        } else {
+          ripple.style.opacity = "0";
+        }
+
+        viewport.innerHTML = `
+          <div class="waterfall-modal">
+            <div class="wf-title">
+              <span>TRACE: POST /api/v1/checkout</span>
+              <span style="color: #F43F5E;">TOTAL: 342.1 ms</span>
+            </div>
+            <div class="wf-span">
+              <span>api-gateway · HTTP POST</span>
+              <span>1.8 ms</span>
+            </div>
+            <div class="wf-span">
+              <span>auth-service · JWT verify</span>
+              <span>2.1 ms</span>
+            </div>
+            <div class="wf-span alert">
+              <span>postgres · acquire_pool_connection</span>
+              <span>338.2 ms ⚠️ [LOCK CONTENTION]</span>
+            </div>
+          </div>
+        `;
+        stageBanner.innerHTML = "<strong style='color:#F43F5E;'>Interação Stageshow:</strong> O cursor tátil seleciona o pico de latência e decompõe a árvore de spans em milissegundos.";
+        telThroughput.textContent = "41,800 RPS";
+        telP99.textContent = "342.1 ms";
+        telP99.className = "tel-val alert";
+        telSpans.textContent = "1,980 /s";
+        telStatus.textContent = "ANOMALY SPIKE";
+        telStatus.className = "tel-val alert";
+      } else {
+        // ACT 4: Resolução & Síntese Open-Source (22.5s - 30.0s)
+        actLabel.textContent = "ATO 4 / 4 · CAUSA-RAIZ IDENTIFICADA & SÍNTESE";
+        clusterStatus.textContent = "AUTOCURA & RETORNO À NORMALIDADE";
+        cursor.style.display = "none";
+
+        viewport.innerHTML = `
+          <div class="terminal-window">
+            <div class="terminal-header">
+              <div class="t-dot t-red"></div>
+              <div class="t-dot t-yellow"></div>
+              <div class="t-dot t-green"></div>
+              <span class="t-title">DevMetrics AI Diagnostics</span>
+            </div>
+            <div class="terminal-body">
+              <div class="code-ok">✓ Causa-Raiz Localizada:</div>
+              Exaustão de conexões em postgres-replica-02.<br>
+              Pool auto-escalado de 20 para 80 conexões.<br><br>
+              <span class="code-comment">// Experimente no seu cluster</span><br>
+              $ npm i @devmetrics/node<br>
+              <div style="margin-top: 18px; color: #8B5CF6; font-weight: 700;">★ GitHub: devmetrics/engine (14.2k stars)</div>
+            </div>
+          </div>
+        `;
+        stageBanner.innerHTML = "<strong class='ok'>Diagnóstico Instantâneo:</strong> Redução do MTTR de horas para segundos, mantendo a equipe focada no código de valor.";
+        telThroughput.textContent = "49,100 RPS";
+        telP99.textContent = "16.2 ms";
+        telP99.className = "tel-val ok";
+        telSpans.textContent = "1,450 /s";
+        telStatus.textContent = "RESOLVED";
+        telStatus.className = "tel-val ok";
+      }
+    };
+
+    // Auto-init preview at frame 340
+    window.__onFrame__(340);
+  </script>
+</body>
+</html>

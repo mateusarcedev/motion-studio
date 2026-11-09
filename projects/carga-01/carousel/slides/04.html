@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>TRAVESSIA — Slide 04</title>
+  <style>
+    :root {
+      --bg: #070A0F;
+      --surface: #0F172A;
+      --primary: #FF8A00;
+      --secondary: #00F0FF;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --dim: #64748B;
+      --border: #273549;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1350px;
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+    .wrap {
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 100px 96px;
+      z-index: 2;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+    .series-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--secondary);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .step-badge {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-family: 'Geist Mono', monospace;
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .main-body {
+      margin: auto 0;
+    }
+    .kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 18px;
+      color: var(--secondary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 64px;
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+    .timeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .t-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 18px 22px;
+      border-radius: 4px;
+    }
+    .t-num {
+      font-family: 'Geist Mono', monospace;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--primary);
+      background: rgba(255, 138, 0, 0.15);
+      padding: 4px 10px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .t-content h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .t-content p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 16px;
+      color: var(--muted);
+    }
+    .page-num {
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-lines"></div>
+
+  <div class="wrap">
+    <div class="header-bar">
+      <div class="series-tag">NARRATIVA & CINEMATOGRAFIA</div>
+      <div class="step-badge">ETAPA 04</div>
+    </div>
+
+    <div class="main-body">
+      <div class="kicker">SCROLL-DRIVEN & CONTINUIDADE SEM CORTES</div>
+      <h2>Storytelling em 5 Cenas.</h2>
+
+      <div class="timeline-list">
+        <div class="t-item">
+          <div class="t-num">01 · PORTO</div>
+          <div class="t-content">
+            <h3>Establishing Shot Monumental</h3>
+            <p>O navio cargueiro atracado no cais molhado; névoa oceânica cortada por holofotes ciano.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-num">02 · CONTÊINER</div>
+          <div class="t-content">
+            <h3>Foco no Protagonista TRV-01-A</h3>
+            <p>Mergulho de câmera revelando texturas corrugadas, cantoneiras ISO e telemetria industrial.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-num">03 · IÇAMENTO</div>
+          <div class="t-content">
+            <h3>Movimentação Gantry STS</h3>
+            <p>O spreader trava e eleva a unidade intermodal em arco, posicionando sobre a carreta.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-num">04 · ESTRADA</div>
+          <div class="t-content">
+            <h3>Tracking Shot Dinâmico</h3>
+            <p>Traveling lateral pela rodovia sob chuva fina e reflexos contínuos de vapor de sódio.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-num">05 · DESTINO</div>
+          <div class="t-content">
+            <h3>Chegada ao Hub Metropolitano</h3>
+            <p>Desaceleração na baía logística sob luzes industriais. "Cada jornada tem uma história."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div style="color: var(--secondary);">ENTREGÁVEIS & CONCLUSÃO →</div>
+      <div class="page-num">04 / 05</div>
+    </div>
+  </div>
+</body>
+</html>
