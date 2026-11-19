@@ -78,3 +78,7 @@ projects/*/*.zip
 __pycache__/
 *.pyc
 
+/projects/*/contact-sheet.png
+/projects/*/stills/
+dist/packages/SHA256SUMS-*.txt
+/projects/*/reviews/determinism/

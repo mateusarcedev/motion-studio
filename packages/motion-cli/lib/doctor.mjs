@@ -2,11 +2,8 @@ import { execSync } from "node:child_process";
 import { stat, readdir } from "node:fs/promises";
 import path from "node:path";
 
-export async function runDoctor() {
-  console.log("=========================================");
-  console.log("       MOTION Studio — Doctor Check      ");
-  console.log("=========================================\n");
-
+/** Collects engine diagnostics without printing or exiting. */
+export async function collectDoctor() {
   const results = [];
 
   // 1. Node.js
@@ -42,7 +39,7 @@ export async function runDoctor() {
   let pyVer = "Não encontrado";
   let pyStatus = "FAIL";
   try {
-    pyVer = execSync("python3 --version", { encoding: "utf-8" }).trim();
+    pyVer = execSync("python3 --version", { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
     pyStatus = "PASS";
   } catch {}
   results.push({
@@ -57,7 +54,7 @@ export async function runDoctor() {
   let ffmpegVer = "Não encontrado";
   let ffmpegStatus = "FAIL";
   try {
-    const raw = execSync("ffmpeg -version", { encoding: "utf-8" });
+    const raw = execSync("ffmpeg -version", { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
     ffmpegVer = raw.split("\n")[0].trim();
     ffmpegStatus = "PASS";
   } catch {}
@@ -152,7 +149,7 @@ export async function runDoctor() {
   let blenderVer = "Não detectado";
   let blenderStatus = "INFO";
   try {
-    const raw = execSync("blender --version", { encoding: "utf-8" });
+    const raw = execSync("blender --version", { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
     blenderVer = raw.split("\n")[0].trim();
     blenderStatus = "PASS";
   } catch {}
@@ -212,6 +209,15 @@ export async function runDoctor() {
     details: sharpStatus === "PASS" ? "Processamento raster acelerado" : "Opcional (contact sheets utilizam Playwright/Pillow nativo)",
   });
 
+  return results;
+}
+
+export async function runDoctor() {
+  console.log("=========================================");
+  console.log("       MOTION Studio — Doctor Check      ");
+  console.log("=========================================\n");
+  const results = await collectDoctor();
+
   // Display Table
   console.log("| Componente | Obrigatório | Status | Versão / Caminho | Observações |");
   console.log("|---|---|---|---|---|");
@@ -219,6 +225,20 @@ export async function runDoctor() {
     const badge = r.status === "PASS" ? "✅ PASS" : r.status === "FAIL" ? "❌ FAIL" : r.status === "WARN" ? "⚠️ WARN" : "ℹ️ INFO";
     console.log(`| **${r.name}** | ${r.required ? "Sim" : "Não"} | ${badge} | ${r.version} | ${r.details} |`);
   }
+
+  // Install integrity (only when this project was bootstrapped)
+  let installFail = false;
+  try {
+    const { verifyInstall, MANIFEST_REL } = await import("./bootstrap/index.mjs");
+    const { exists } = await import("./bootstrap/util.mjs");
+    if (await exists(path.join(process.cwd(), MANIFEST_REL))) {
+      const checks = await verifyInstall(process.cwd());
+      const bad = checks.filter((c) => !c.ok);
+      installFail = bad.length > 0;
+      console.log(`\n### Instalação MOTION (${MANIFEST_REL})`);
+      console.log(bad.length ? bad.map((c) => `❌ ${c.name}: ${c.detail}`).join("\n") : `✅ ${checks.length} verificações de Skills/integração OK`);
+    }
+  } catch {}
 
   // Community Integrations check
   const commSkills = [
@@ -249,7 +269,7 @@ export async function runDoctor() {
     }
   }
 
-  const hasFail = results.some((r) => r.required && r.status === "FAIL");
+  const hasFail = installFail || results.some((r) => r.required && r.status === "FAIL");
   console.log("\n-----------------------------------------");
   if (hasFail) {
     console.error("❌ O MOTION Studio encontrou dependências obrigatórias ausentes. Resolva os itens marcados com FAIL.");

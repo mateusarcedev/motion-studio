@@ -1,0 +1,41 @@
+{
+  "name": "@technomanceer/motion-studio",
+  "version": "1.0.0",
+  "description": "Instalador público do MOTION Studio: `npx @technomanceer/motion-studio init` instala CLI, Core e as Skills oficiais e integra aos agentes.",
+  "type": "module",
+  "bin": {
+    "motion-studio": "./bin/motion-studio.mjs"
+  },
+  "files": [
+    "bin/**/*",
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {
+    "@technomanceer/motion-cli": "1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "motion",
+    "installer",
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "gemini-cli",
+    "opencode",
+    "copilot"
+  ],
+  "author": "MOTION Studio",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateusarcedev/motion-studio.git",
+    "directory": "packages/motion-studio"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  }
+}

@@ -25,9 +25,10 @@ pipeline.md                              # handoff contract — read it, follow 
 
 ## Stage 1 · DIRECTOR — interview and brief (BRIEF.md)
 
-Read `.agents/skills/grill-me/SKILL.md` and follow its technique: one question at a time,
-3–5 concrete options each, recommended first with a one-line reason; accept "decidi você" /
-"free conversation". The questions, in order:
+Interview with this technique (if the optional `grill-me` Skill happens to be installed at
+`.agents/skills/grill-me/SKILL.md`, it may be used as an equivalent; it is not part of the official
+package and is never required): one question at a time, 3–5 concrete options each, recommended
+first with a one-line reason; accept "decidi você" / "free conversation". The questions, in order:
 
 1. **Purpose** — launch film / social media / explainer / portfolio / announcement
 2. **Duration** — 15s / 30s / 60s / 90s+ (recommended: 30s)

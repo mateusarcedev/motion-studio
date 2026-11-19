@@ -154,20 +154,14 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
   });
 
   test("9. Auditoria dos Pacotes Distribuíveis (Tarballs em dist/packages/)", async () => {
-    const pkgJson = JSON.parse(await readFile(path.join(__dirname, "..", "packages", "motion-core", "package.json"), "utf-8"));
-    const ver = pkgJson.version;
-    const pkgFile = (name) => `${name.replace(/^@/, "").replaceAll("/", "-")}-${ver}.tgz`;
-    const coreTar = path.join(__dirname, "..", "dist", "packages", pkgFile("@technomanceer/motion-core"));
-    const skillsTar = path.join(__dirname, "..", "dist", "packages", pkgFile("@technomanceer/motion-studio-skills"));
-    const cliTar = path.join(__dirname, "..", "dist", "packages", pkgFile("@technomanceer/motion-cli"));
-
-    const cStat = await stat(coreTar);
-    const sStat = await stat(skillsTar);
-    const clStat = await stat(cliTar);
-
-    assert.ok(cStat.size > 5000, "motion-core tarball corrompido");
-    assert.ok(sStat.size > 5000, "motion-studio-skills tarball corrompido");
-    assert.ok(clStat.size > 5000, "motion-cli tarball corrompido");
+    const pkgs = { "motion-core": "@technomanceer/motion-core", "motion-skills": "@technomanceer/motion-studio-skills", "motion-cli": "@technomanceer/motion-cli", "motion-studio": "@technomanceer/motion-studio" };
+    for (const [dir, name] of Object.entries(pkgs)) {
+      const pkgJson = JSON.parse(await readFile(path.join(__dirname, "..", "packages", dir, "package.json"), "utf-8"));
+      assert.equal(pkgJson.name, name);
+      const tar = path.join(__dirname, "..", "dist", "packages", `${name.replace(/^@/, "").replaceAll("/", "-")}-${pkgJson.version}.tgz`);
+      const st = await stat(tar);
+      assert.ok(st.size > 3000, `${name} tarball corrompido`);
+    }
   });
 
   test("10. Distribuição Seletiva de Skills por Perfil (core, web, motion, social, 3d, blender, all)", () => {

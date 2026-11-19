@@ -1,6 +1,6 @@
 {
   "name": "motion-studio-monorepo",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0",
   "private": true,
   "description": "MOTION Studio — Estúdio criativo multiformato dirigido por código e operado por IA.",
   "type": "module",

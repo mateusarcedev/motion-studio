@@ -1,6 +1,6 @@
 {
   "name": "@technomanceer/motion-core",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0",
   "description": "Engines de produção, QA determinístico e exportação do MOTION Studio",
   "type": "module",
   "main": "./index.js",

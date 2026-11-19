@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "package": {
     "name": "@technomanceer/motion-studio-skills",
-    "version": "1.0.0-rc.4"
+    "version": "1.0.0"
   },
   "integrity": {
     "algorithm": "sha256",
@@ -83,7 +83,7 @@
     {
       "name": "motion-director",
       "path": "skills/motion-director/SKILL.md",
-      "version": "snapshot-53f8956a9c16",
+      "version": "snapshot-7aa5f08315ff",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -92,7 +92,7 @@
       },
       "license": { "spdx": "Apache-2.0", "file": "LICENSE" },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "53f8956a9c160d33e63d745b58a98fce9aa54ab854b96fc9cb498beba72b4476"
+      "sha256": "7aa5f08315ff7c1e7cdf1b5a27e33e90d9e00d36ac905b0634801b197e6cb453"
     },
     {
       "name": "shorts-director",

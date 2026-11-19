@@ -9,15 +9,22 @@ const distDir = path.join(rootDir, "dist", "packages");
 
 await mkdir(distDir, { recursive: true });
 
-const pkgs = ["motion-core", "motion-skills", "motion-cli"];
+// Publish order matters: dependencies first, installer last.
+const expectedVersions = {
+  "motion-core": "1.0.0",
+  "motion-skills": "1.0.0",
+  "motion-cli": "1.0.0",
+  "motion-studio": "1.0.0",
+};
+const pkgs = Object.keys(expectedVersions);
 
 console.log("📦 Empacotando pacotes distribuíveis do MOTION Studio...\n");
 
 for (const pkg of pkgs) {
   const pkgDir = path.join(rootDir, "packages", pkg);
   const manifest = JSON.parse(await readFile(path.join(pkgDir, "package.json"), "utf8"));
-  if (!manifest.name.startsWith("@technomanceer/") || manifest.version !== "1.0.0-rc.4") {
-    throw new Error(`${pkg} precisa usar @technomanceer/* e 1.0.0-rc.4 antes do empacotamento`);
+  if (!manifest.name.startsWith("@technomanceer/") || manifest.version !== expectedVersions[pkg]) {
+    throw new Error(`${pkg} precisa usar @technomanceer/* e ${expectedVersions[pkg]} antes do empacotamento`);
   }
   console.log(`Empacotando ${manifest.name}@${manifest.version}...`);
   const out = execSync("npm pack --pack-destination " + distDir, {

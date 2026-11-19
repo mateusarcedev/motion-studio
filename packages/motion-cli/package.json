@@ -1,6 +1,6 @@
 {
   "name": "@technomanceer/motion-cli",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0",
   "description": "CLI unificada de execução e gerenciamento do MOTION Studio",
   "type": "module",
   "bin": {
@@ -13,16 +13,9 @@
     "README.md"
   ],
   "dependencies": {
-    "@technomanceer/motion-core": "1.0.0-rc.4",
+    "@technomanceer/motion-core": "1.0.0",
+    "@technomanceer/motion-studio-skills": "1.0.0",
     "playwright-core": "^1.64.1"
-  },
-  "peerDependencies": {
-    "@technomanceer/motion-studio-skills": "1.0.0-rc.4"
-  },
-  "peerDependenciesMeta": {
-    "@technomanceer/motion-studio-skills": {
-      "optional": true
-    }
   },
   "keywords": [
     "motion",
@@ -41,5 +34,14 @@
   "publishConfig": {
     "access": "public",
     "tag": "next"
+  },
+  "exports": {
+    ".": "./lib/main.mjs",
+    "./main": "./lib/main.mjs",
+    "./bootstrap": "./lib/bootstrap/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

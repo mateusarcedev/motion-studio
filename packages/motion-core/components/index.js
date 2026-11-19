@@ -1,4 +1,4 @@
-const VERSION = "1.0.0-rc.4";
+const VERSION = "1.0.0";
 const DEFAULT_THEME = Object.freeze({
   primary: "#2563EB",
   accent: "#22C55E",
