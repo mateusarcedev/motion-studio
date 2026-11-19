@@ -26,12 +26,18 @@ export const PATHS = {
   transitionRenderer: path.join(__dirname, "transitions", "ffmpeg.py"),
   verifyDeterminism: path.join(__dirname, "quality", "determinism.mjs"),
   safeZoneQA: path.join(__dirname, "quality", "safe_zones.mjs"),
+  svgMotion: path.join(__dirname, "design-system", "svg-motion.js"),
+  iconPack: path.join(__dirname, "assets", "icons", "lucide.pack.json"),
 };
 
 export { createMotionDriver } from "./design-system/frame.js";
 export { MotionError, ERROR_CODES } from "./lib/errors.mjs";
 export { parseFrameSelection } from "./lib/frames.mjs";
 export { diagnoseBrowser, locateBrowser, smokeTestBrowser } from "./lib/browser.mjs";
+export { validateSvg, assertSafeSvg, optimizeSvg, rasterizeSvg, buildComponent as buildSvgComponent, listComponents as listSvgComponents, applyTokens, paletteFromTokens } from "./svg/index.mjs";
+export { loadIconPacks, renderIcon, iconProvenance } from "./icons/index.mjs";
+export { searchIcons, createAssetSession } from "./visual-assets/index.mjs";
+export * as svgMotion from "./design-system/svg-motion.js";
 export { listMotionComponents, getMotionComponent, validateComponentConfig, generateComponentHtml, componentSize } from "./components/index.js";
 export { previewMotionComponent, renderMotionComponent, renderComposition } from "./components/render.js";
 export { listTransitions, renderTransition } from "./transitions/index.js";

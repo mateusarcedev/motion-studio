@@ -24,6 +24,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { launchBrowser } from "../lib/browser.mjs";
 import { ERROR_CODES, MotionError, reportError } from "../lib/errors.mjs";
 import { createHealthMonitor, parseOptionalAssets } from "../lib/render-health.mjs";
+import { createStaticServer } from "../lib/static-server.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const m = a.match(/^--([^=]+)(?:=(.*))?$/); return m ? [m[1], m[2] ?? true] : [a, true];
@@ -46,22 +47,8 @@ if (!input || !output) {
   process.exit(2);
 }
 
-// ---- servidor local (evita restrições de file:// com assets relativos) ----
-const rootDir = path.dirname(path.resolve(input));
-async function handler(req, res) {
-  try {
-    const url = new URL(req.url, "http://localhost");
-    let p = path.join(rootDir, decodeURIComponent(url.pathname === "/" ? path.basename(input) : url.pathname));
-    if (url.pathname === "/") p = path.resolve(input);
-    const data = await readFile(p);
-    const ext = path.extname(p).slice(1);
-    const types = { html:"text/html", css:"text/css", js:"text/javascript", png:"image/png", jpg:"image/jpeg",
-      jpeg:"image/jpeg", webp:"image/webp", svg:"image/svg+xml", woff:"font/woff", woff2:"font/woff2", ttf:"font/ttf", otf:"font/otf", json:"application/json" };
-    res.writeHead(200, { "content-type": types[ext] ?? "application/octet-stream" });
-    res.end(data);
-  } catch { res.writeHead(404); res.end("not found"); }
-}
-const server = createServer(handler);
+// ---- servidor local (compartilhado: import map + montagem /@motion) ----
+const { server, listen } = createStaticServer(input);
 
 function failPayload(error) {
   const exitCode = reportError(error);
@@ -70,8 +57,7 @@ function failPayload(error) {
 }
 
 async function main() {
-  await new Promise((r) => server.listen(0, "127.0.0.1", r));
-  const port = server.address().port;
+  const port = await listen();
   const { browser } = await launchBrowser();
   try {
     const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });

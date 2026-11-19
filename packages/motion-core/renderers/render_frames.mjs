@@ -16,6 +16,7 @@ import { launchBrowser } from "../lib/browser.mjs";
 import { ERROR_CODES, MotionError, reportError } from "../lib/errors.mjs";
 import { parseFrameSelection, frameFileName } from "../lib/frames.mjs";
 import { createHealthMonitor, parseOptionalAssets } from "../lib/render-health.mjs";
+import { createStaticServer } from "../lib/static-server.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const m = a.match(/^--([^=]+)(?:=(.*))?$/);
@@ -45,51 +46,9 @@ if (!input || !outdir) {
 
 await mkdir(outdir, { recursive: true });
 
-// ---- local server ----
+// ---- local server (shared: import map + /@motion mount) ----
 const inputAbs = path.resolve(input);
-const rootDir = path.dirname(inputAbs);
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-
-async function handler(req, res) {
-  try {
-    const url = new URL(req.url, "http://localhost");
-    if (url.pathname === "/favicon.ico") {
-      res.writeHead(204);
-      res.end();
-      return;
-    }
-    let p;
-    if (url.pathname === "/") {
-      p = inputAbs;
-    } else if (url.pathname.startsWith("/creative-core/")) {
-      p = path.join(repoRoot, decodeURIComponent(url.pathname));
-    } else {
-      p = path.join(rootDir, decodeURIComponent(url.pathname));
-      try {
-        await stat(p);
-      } catch {
-        // fallback to repoRoot
-        p = path.join(repoRoot, decodeURIComponent(url.pathname));
-      }
-    }
-
-    const data = await readFile(p);
-    const ext = path.extname(p).slice(1);
-    const types = {
-      html: "text/html", css: "text/css", js: "text/javascript", mjs: "text/javascript",
-      png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", webp: "image/webp",
-      svg: "image/svg+xml", woff: "font/woff", woff2: "font/woff2", ttf: "font/ttf",
-      otf: "font/otf", json: "application/json", glb: "model/gltf-binary", gltf: "model/gltf+json"
-    };
-    res.writeHead(200, { "content-type": types[ext] ?? "application/octet-stream" });
-    res.end(data);
-  } catch {
-    res.writeHead(404);
-    res.end("not found");
-  }
-}
-
-const server = createServer(handler);
+const { server, listen } = createStaticServer(inputAbs);
 
 function failPayload(error) {
   const exitCode = reportError(error);
@@ -111,8 +70,7 @@ async function main() {
     frameIndexes = Array.from({ length: endFrame - startFrame + 1 }, (_, i) => startFrame + i);
   }
 
-  await new Promise((r) => server.listen(0, "127.0.0.1", r));
-  const port = server.address().port;
+  const port = await listen();
   const { browser } = await launchBrowser({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
   try {
     const browserVersion = browser.version();

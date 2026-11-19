@@ -11,6 +11,7 @@ import { runExport } from "./export.mjs";
 import { runQA } from "./qa.mjs";
 import { runComponents } from "./components.mjs";
 import { runTransition } from "./transition.mjs";
+import { runAssets, runSvg } from "./assets.mjs";
 import { VERSION } from "./version.mjs";
 
 export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } = {}) {
@@ -84,6 +85,10 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
     transition render <cena1> <cena2> [...] --output=<mp4> [--kind=wipe] [--easing=ease-out]
     transition preview <cena1> <cena2> [...] --output=<mp4> Renderiza prévia 640×360 a 15fps
 
+    assets resolve "<intenção>"   Escolhe o ícone certo por significado (usado automaticamente pelas Skills)
+    assets search "<consulta>"    Lista candidatos ranqueados · assets packs: pacotes de ícones e licenças
+    svg validate|optimize|rasterize|component   Ferramentas SVG (validação segura, otimização, PNG, componentes)
+
   Opções globais:
     -v, --version            Exibe a versão do MOTION Studio
     -h, --help               Exibe esta ajuda
@@ -141,6 +146,15 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
 
       case "transition":
         await runTransition(posArgs[1], posArgs.slice(2), flags);
+        break;
+
+      case "assets":
+      case "icons":
+        await runAssets(command.toLowerCase() === "icons" && !["resolve", "search", "packs"].includes(posArgs[1]) ? "search" : posArgs[1], posArgs.slice(command.toLowerCase() === "icons" && !["resolve", "search", "packs"].includes(posArgs[1]) ? 1 : 2), flags);
+        break;
+
+      case "svg":
+        await runSvg(posArgs[1], posArgs.slice(2), flags);
         break;
 
       default:

@@ -17,13 +17,22 @@
     "./components": "./components/index.js",
     "./transitions": "./transitions/index.js",
     "./safe-zones": "./quality/safe_zones.mjs",
-    "./quality/determinism": "./quality/determinism.mjs"
+    "./quality/determinism": "./quality/determinism.mjs",
+    "./svg-motion": "./design-system/svg-motion.js",
+    "./svg": "./svg/index.mjs",
+    "./icons": "./icons/index.mjs",
+    "./visual-assets": "./visual-assets/index.mjs"
   },
   "files": [
     "index.js",
     "intent/*.js",
     "renderers/*.mjs",
     "lib/*.mjs",
+    "assets/icons/LICENSE-*.txt",
+    "assets/icons/*.json",
+    "visual-assets/*.mjs",
+    "icons/*.mjs",
+    "svg/*.mjs",
     "renderers/*.py",
     "quality/*.mjs",
     "quality/*.py",
@@ -42,6 +51,7 @@
   ],
   "dependencies": {
     "playwright-core": "^1.64.1",
+    "svgo": "^4.1.0",
     "three": "^0.165.0"
   },
   "keywords": [

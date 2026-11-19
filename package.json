@@ -20,5 +20,8 @@
     "@technomanceer/motion-studio-skills": "file:packages/motion-skills",
     "playwright-core": "^1.64.1",
     "three": "^0.165.0"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.76.0"
   }
 }
