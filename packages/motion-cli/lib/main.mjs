@@ -87,7 +87,9 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
     transition render <cena1> <cena2> [...] --output=<mp4> [--kind=wipe] [--easing=ease-out]
     transition preview <cena1> <cena2> [...] --output=<mp4> Renderiza prévia 640×360 a 15fps
 
-    assets resolve "<intenção>"   Escolhe o ícone certo por significado (usado automaticamente pelas Skills)
+    assets pick "<intenção>" [--kind=]   Escolhe qualquer recurso visual (ícone, animado, logo, personagem, ilustração, Lottie) — usado automaticamente pelas Skills
+    assets providers · assets import <pasta> --prefix=...   Providers e licenças · importa pacote SVG local (ex.: LS Graphics) com licença declarada
+    assets resolve "<intenção>"   Escolhe só o ícone certo por significado
     assets search "<consulta>"    Lista candidatos ranqueados · assets packs: pacotes de ícones e licenças
     svg validate|optimize|rasterize|component   Ferramentas SVG (validação segura, otimização, PNG, componentes)
 

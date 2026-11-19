@@ -11,6 +11,8 @@ import { ERROR_CODES, MotionError } from "../lib/errors.mjs";
 import { iconProvenance, loadIconPacks, renderIcon } from "../icons/icon-library.mjs";
 import { LEXICON } from "./lexicon.mjs";
 import { fallbackGlyph } from "../svg/shapes.mjs";
+import { buildCredits } from "./license-policy.mjs";
+import { classifyNeed } from "./intent.mjs";
 
 const STOP = new Set(("a o as os um uma uns umas de do da dos das em no na nos nas por para com sem sobre entre e ou que como mais menos muito muita ao aos à às pelo pela " +
   "the an of to in on for with without and or about between more less very is are icon icone ícone imagem simbolo símbolo representando representa ilustrando").split(/\s+/));
@@ -64,7 +66,7 @@ function indexPack(pack) {
   return idx;
 }
 
-function scorePack(pack, tokens, concepts, queryNorm) {
+export function scorePack(pack, tokens, concepts, queryNorm) {
   const { entries, df, n } = indexPack(pack);
   const idf = (t) => Math.log(1 + n / (1 + (df.get(t) ?? 0))) / Math.log(1 + n);
   const expanded = new Map(); // token -> weight, from the concept terms (EN tags match here)
@@ -116,7 +118,7 @@ export async function searchIcons(query, { packs, limit = 6, avoid = new Set(), 
  * avoids using the same icon for different concepts, falls back to a geometric glyph, and
  * records provenance for every asset used.
  */
-export async function createAssetSession({ pack: packPrefix = "lucide", size = 48, strokeWidth, color = "currentColor", packs, cwd, rerank, minScore = 4 } = {}) {
+export async function createAssetSession({ pack: packPrefix = "lucide", size = 48, strokeWidth, color = "currentColor", packs, cwd, rerank, minScore = 4, registry: givenRegistry, allowNetwork = false, commercial = true } = {}) {
   const loaded = packs ? { packs, skipped: [] } : await loadIconPacks({ cwd });
   const primary = loaded.packs.find((p) => p.prefix === packPrefix) ?? loaded.packs[0];
   if (!primary) throw new MotionError(ERROR_CODES.ICON_NOT_FOUND, "Nenhum pacote de ícones disponível.");
@@ -156,16 +158,68 @@ export async function createAssetSession({ pack: packPrefix = "lucide", size = 4
     return asset;
   }
 
+  let registry = givenRegistry ?? null;
+  const getRegistry = async () => (registry ??= await (await import("./providers/defaults.mjs")).createDefaultRegistry({ cwd, allowNetwork, commercial }));
+  const usedAssets = new Map(); // asset id -> intent that claimed it (no sharing between different intents)
+  const byIntent = new Map();
+
+  /**
+   * Resolves ANY visual need through the provider registry (icons, animated icons, logos, characters,
+   * illustrations, Lottie). The caller never names a library. Consistency rules:
+   *  - icons stay in the locked stroke family; characters/illustrations stay in one illustration pack;
+   *  - different intents never share an asset; same intent is stable;
+   *  - license policy applied by the registry; blocked candidates are reported, not used.
+   */
+  async function asset(intent, { kinds, size: sz, color: col, strokeWidth: sw, idPrefix, title } = {}) {
+    const key = `${normalize(intent).trim()}|${(kinds ?? []).join(",")}`;
+    if (byIntent.has(key) && !sz && !col) return byIntent.get(key);
+    const reg = await getRegistry();
+    const need = classifyNeed(intent, { kinds });
+    const blockedAll = [], skippedAll = [];
+    for (const group of need.groups) {
+      const found = await reg.search(intent, { kinds: group, limit: 12 });
+      blockedAll.push(...found.blocked); skippedAll.push(...found.skipped);
+      const mine = key.split("|")[0];
+      const usable = found.candidates.filter((c) => {
+        if (c.score < (need.minScore[c.kind] ?? minScore)) return false;
+        const claimed = usedAssets.get(c.id); if (claimed && claimed !== mine) return false;
+        if ((c.kind === "icon" || c.kind === "animated-icon") && c.style?.kind && c.style.kind !== style.kind) return false; // style lock
+        if (c.kind === "icon" && c.provider !== style.pack && c.style?.kind === style.kind && c.provider === "iconify" && !allowNetwork) return false;
+        return true;
+      });
+      // prefer the locked pack among near-equal icon candidates (visual consistency)
+      usable.sort((a, b) => (b.score + (b.provider === style.pack ? 1.5 : 0)) - (a.score + (a.provider === style.pack ? 1.5 : 0)));
+      const best = usable[0];
+      if (!best) continue;
+      const resolved = await reg.resolve(best, { size: sz ?? size, color: col ?? color, strokeWidth: sw ?? style.strokeWidth, idPrefix, title });
+      usedAssets.set(best.id, mine);
+      const out = { intent, kind: best.kind, id: best.id, provider: best.provider, svg: resolved.svg, motion: resolved.motion, lottie: resolved.lottie, fallback: false,
+        confidence: confidenceOf(best.score), score: best.score, reasons: [...need.reasons, ...best.reasons].slice(0, 5), alternatives: usable.slice(1, 4).map((c) => c.id),
+        provenance: resolved.provenance, license: resolved.license, licenseVerdict: resolved.licenseVerdict, sha256: resolved.sha256, blocked: blockedAll, skipped: skippedAll };
+      byIntent.set(key, out); records.push(out); return out;
+    }
+    const glyph = fallbackGlyph(intent, { size: sz ?? size, strokeWidth: sw ?? style.strokeWidth, color: col ?? color });
+    const out = { intent, kind: "icon", id: `motion:glyph-${glyph.motif}`, provider: "motion-generated", svg: glyph.svg, fallback: true, confidence: "none", score: 0,
+      reasons: [...need.reasons, "nenhum recurso suficientemente relevante e permitido; glifo geométrico original"], alternatives: [],
+      provenance: { kind: "icon", id: `motion:glyph-${glyph.motif}`, pack: "MOTION generated", license: "Apache-2.0", attributionRequired: false, modified: "generated" },
+      license: { spdx: "Apache-2.0" }, blocked: blockedAll, skipped: skippedAll };
+    byIntent.set(key, out); records.push(out); return out;
+  }
+
   return {
     style,
     icon,
+    asset,
+    registry: getRegistry,
+    /** Attribution/credits text for everything used that needs it (CC-BY, trademarks, notices). */
+    credits() { return buildCredits(records.filter((r) => !r.fallback).map((r) => ({ pack: r.provenance?.pack ?? r.provider, license: r.provenance?.licenseDetail ?? r.license ?? {} }))); },
     /** Resolves a list of intents, guaranteeing distinct icons. */
     async assign(intents) { const out = []; for (const i of intents) out.push(await icon(i)); return out; },
     /** Provenance for credits / assets.manifest.json (unique). */
     manifest() {
       const seen = new Map();
       for (const r of records) seen.set(r.provenance.id, r.provenance);
-      return { style, assets: [...seen.values()] };
+      return { style, assets: [...seen.values()], credits: this.credits().entries };
     },
     report() {
       const fallbacks = records.filter((r) => r.fallback).map((r) => r.intent);

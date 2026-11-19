@@ -166,7 +166,8 @@ export function optimizeSvg(svg, { prefix, multipass = true, trusted = false } =
   const checked = validateSvg(svg, { trusted });
   if (!checked.ok) throw new MotionError(checked.findings[0]?.code ?? ERROR_CODES.SVG_INVALID, checked.findings[0]?.message ?? "SVG inválido.", { details: checked.findings });
   const plugins = [
-    { name: "preset-default", params: { overrides: { cleanupIds: prefix ? false : undefined } } },
+    // keep id NAMES stable (prefixing needs them) but drop unused/duplicate ids that design tools emit
+    { name: "preset-default", params: { overrides: { cleanupIds: { minify: false, remove: true } } } },
     ...(prefix ? [{ name: "prefixIds", params: { prefix, delim: "__" } }] : []),
   ];
   const before = checked.svg.length;

@@ -11,6 +11,7 @@
  * Import map (injected only when the page has none), so non-technical authors never fix imports:
  *   "@technomanceer/motion-core/frame"       → /@motion/design-system/frame.js
  *   "@technomanceer/motion-core/svg-motion"  → /@motion/design-system/svg-motion.js
+ *   "@technomanceer/motion-core/lottie"      → /@motion/design-system/lottie-motion.js
  */
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
@@ -24,6 +25,7 @@ export const IMPORT_MAP = {
   imports: {
     "@technomanceer/motion-core/frame": "/@motion/design-system/frame.js",
     "@technomanceer/motion-core/svg-motion": "/@motion/design-system/svg-motion.js",
+    "@technomanceer/motion-core/lottie": "/@motion/design-system/lottie-motion.js",
   },
 };
 

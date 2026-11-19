@@ -36,7 +36,7 @@ export { parseFrameSelection } from "./lib/frames.mjs";
 export { diagnoseBrowser, locateBrowser, smokeTestBrowser } from "./lib/browser.mjs";
 export { validateSvg, assertSafeSvg, optimizeSvg, rasterizeSvg, buildComponent as buildSvgComponent, listComponents as listSvgComponents, applyTokens, paletteFromTokens } from "./svg/index.mjs";
 export { loadIconPacks, renderIcon, iconProvenance } from "./icons/index.mjs";
-export { searchIcons, createAssetSession } from "./visual-assets/index.mjs";
+export { searchIcons, createAssetSession, createDefaultRegistry, createProviderRegistry, defineProvider, importSvgPack, assessLicense, buildCredits, createAssetCache, validateLottie, classifyNeed } from "./visual-assets/index.mjs";
 export { QA_STATUS, combineStatuses, createQaReport } from "./quality/qa-status.mjs";
 export { qaMedia } from "./quality/media_qa.mjs";
 export { qaFrames } from "./quality/frame_qa.mjs";

@@ -41,16 +41,17 @@ function normalizePack(raw, source) {
   const icons = {};
   for (const [name, icon] of Object.entries(raw.icons)) {
     if (!icon?.body) continue;
-    icons[name] = { body: icon.body, tags: icon.tags ?? [], width: icon.width ?? width, height: icon.height ?? height };
+    icons[name] = { body: icon.body, tags: icon.tags ?? [], aliases: icon.aliases ?? [], pose: icon.pose, sha: icon.sha, width: icon.width ?? width, height: icon.height ?? height };
   }
   for (const [alias, def] of Object.entries(raw.aliases ?? {})) {
     const base = icons[def.parent];
     if (base && !icons[alias]) icons[alias] = { ...base, tags: [...base.tags] };
   }
+  const kind = raw.kind ?? "icon";
   const style = { kind: raw.style?.kind ?? "stroke", strokeWidth: raw.style?.strokeWidth ?? 2, linecap: raw.style?.linecap ?? "round", linejoin: raw.style?.linejoin ?? "round" };
   return {
-    prefix, name: raw.name ?? prefix, version: raw.version ?? null, homepage: raw.homepage ?? raw.info?.url ?? null,
-    license: { ...license, spdx, ...(KNOWN_LICENSES[spdx] ?? { openSource: null, attributionRequired: null }) },
+    prefix, kind, name: raw.name ?? prefix, version: raw.version ?? null, homepage: raw.homepage ?? raw.info?.url ?? null,
+    license: { ...(KNOWN_LICENSES[spdx] ?? { openSource: null, attributionRequired: null }), ...license, spdx },
     style, width, height, icons, source,
   };
 }
@@ -102,18 +103,25 @@ export function renderIcon(pack, name, { size = 24, strokeWidth, color = "curren
   let body = icon.body;
   if (idPrefix) body = body.replace(/\bid="([^"]+)"/g, `id="${idPrefix}__$1"`).replace(/url\(#([^)]+)\)/g, `url(#${idPrefix}__$1)`);
   const sw = strokeWidth ?? pack.style.strokeWidth;
+  const t = title ? `<title>${String(title).replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]))}</title>` : "";
+  const a11y = title ? ' role="img"' : ' aria-hidden="true"';
+  // multi-color logos and illustrations keep their own paint; `size` is the larger side (aspect ratio preserved)
+  if (pack.style.kind === "color" || pack.style.kind === "illustration") {
+    const k = size / Math.max(icon.width, icon.height);
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(icon.width * k * 100) / 100}" height="${Math.round(icon.height * k * 100) / 100}" viewBox="0 0 ${icon.width} ${icon.height}"${a11y}>${t}${body}</svg>`;
+  }
   const attrs = pack.style.kind === "stroke"
     ? `fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="${pack.style.linecap}" stroke-linejoin="${pack.style.linejoin}"`
     : `fill="${color}"`;
-  const t = title ? `<title>${String(title).replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]))}</title>` : "";
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${icon.width} ${icon.height}" ${attrs}${title ? ' role="img"' : ' aria-hidden="true"'}>${t}${body}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${icon.width} ${icon.height}" ${attrs}${a11y}>${t}${body}</svg>`;
   return svg;
 }
 
 /** Provenance record for assets.manifest / credits. */
 export function iconProvenance(pack, name) {
   return {
-    kind: "icon", id: `${pack.prefix}:${name}`, pack: pack.name, version: pack.version, homepage: pack.homepage,
+    kind: pack.kind ?? "icon", id: `${pack.prefix}:${name}`, pack: pack.name, sha256: pack.icons[name]?.sha ?? null,
+    licenseDetail: { spdx: pack.license.spdx, scope: pack.license.scope ?? "assets", attributionRequired: Boolean(pack.license.attributionRequired), attribution: pack.license.attribution ?? null, trademark: Boolean(pack.license.trademark), note: pack.license.assetsNote ?? null }, version: pack.version, homepage: pack.homepage,
     license: pack.license.spdx, licenseUrl: pack.license.url ?? null, attribution: pack.license.attribution ?? null,
     attributionRequired: pack.license.attributionRequired, source: path.relative(process.cwd(), pack.source) || pack.source,
     modified: "recolored/resized via MOTION (geometry unchanged)",

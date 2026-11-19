@@ -21,7 +21,9 @@
     "./svg-motion": "./design-system/svg-motion.js",
     "./svg": "./svg/index.mjs",
     "./icons": "./icons/index.mjs",
-    "./visual-assets": "./visual-assets/index.mjs"
+    "./visual-assets": "./visual-assets/index.mjs",
+    "./lottie": "./design-system/lottie-motion.js",
+    "./providers": "./visual-assets/providers/index.mjs"
   },
   "files": [
     "index.js",
@@ -29,8 +31,12 @@
     "renderers/*.mjs",
     "lib/*.mjs",
     "assets/icons/LICENSE-*.txt",
-    "assets/icons/*.json",
     "visual-assets/*.mjs",
+    "visual-assets/providers/*.mjs",
+    "assets/packs/*.json",
+    "assets/vendor/*",
+    "assets/lottie/*",
+    "assets/icons/*.json",
     "icons/*.mjs",
     "svg/*.mjs",
     "renderers/*.py",

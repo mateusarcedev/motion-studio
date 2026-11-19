@@ -13,7 +13,8 @@
  *   ]);
  *   window.__onFrame__ = (M) => motion.seek(M);
  *
- * Effects: draw, fade, translate, scale, rotate, pop, reveal, orbit, parallax, morph, gradient-shift, color.
+ * Effects: draw, fade, translate, scale, rotate, pop, wobble, pulse, reveal, orbit, parallax, morph, gradient-shift, color.
+ * Target ":scope" is the root element itself; ":scope > *" its direct children.
  * Numbers written to the DOM are rounded (4 decimals) so output is bit-stable across runs.
  */
 
@@ -89,6 +90,11 @@ export function evaluateEffect(effect, p, spec = {}, ctx = {}) {
     }
     case "scale": return { transform: `scale(${round(lerp(spec.from ?? 0, spec.to ?? 1, p))})`, origin: "center" };
     case "rotate": return { transform: `rotate(${round(lerp(spec.from ?? 0, spec.to ?? 360, p))})`, origin: "center" };
+    case "wobble": { // damped oscillation, settles at 0
+      const a = (spec.amplitude ?? 12) * Math.sin(2 * Math.PI * (spec.cycles ?? 3) * p) * (1 - p);
+      return { transform: `rotate(${round(a)})`, origin: spec.origin ?? "center" };
+    }
+    case "pulse": return { transform: `scale(${round(1 + (spec.amplitude ?? 0.12) * (0.5 - 0.5 * Math.cos(2 * Math.PI * (spec.cycles ?? 2) * p)))})`, origin: "center" };
     case "pop": return { transform: `scale(${round(lerp(spec.from ?? 0.6, 1, p))})`, opacity: round(clamp01(p * 3)), origin: "center" };
     case "reveal": {
       const dir = spec.direction ?? "left"; const rest = round((1 - p) * 100);
@@ -113,7 +119,11 @@ export function evaluateEffect(effect, p, spec = {}, ctx = {}) {
 
 // ---------- DOM layer ----------
 function timeOf(M) { return M.time ?? ((M.frame ?? 0) / (M.fps ?? 30)); }
-function resolveTargets(root, target) { return typeof target === "string" ? Array.from(root.querySelectorAll(target)) : [].concat(target); }
+function resolveTargets(root, target) {
+  if (typeof target !== "string") return [].concat(target);
+  return target === ":scope" ? [root] : Array.from(root.querySelectorAll(target));
+}
+const ORIGINS = { center: "50% 50%", top: "50% 0%", bottom: "50% 100%", left: "0% 50%", right: "100% 50%" };
 
 /**
  * @param {SVGElement} root
@@ -150,8 +160,13 @@ export function createSvgMotion(root, timeline) {
           const out = evaluateEffect(step.effect, p, step, ctx);
           if (out.attrs) for (const [k, v] of Object.entries(out.attrs)) el.setAttribute(k, v);
           if (out.transform !== undefined) {
-            el.setAttribute("transform", `${el.dataset?.baseTransform ?? el.getAttribute("data-base-transform") ?? ""} ${out.transform}`.trim());
-            if (out.origin === "center") { el.style.transformBox = "fill-box"; el.style.transformOrigin = "center"; }
+            if (el === root) { // outer <svg>: CSS transform (the transform attribute is not reliable on the root element)
+              el.style.transform = out.transform.replace(/rotate\(([-\d.e]+)\)/, "rotate($1deg)");
+              el.style.transformOrigin = ORIGINS[out.origin ?? "center"];
+            } else {
+              el.setAttribute("transform", `${el.dataset?.baseTransform ?? el.getAttribute("data-base-transform") ?? ""} ${out.transform}`.trim());
+              if (out.origin) { el.style.transformBox = "fill-box"; el.style.transformOrigin = ORIGINS[out.origin] ?? "center"; }
+            }
           }
           if (out.style) for (const [k, v] of Object.entries(out.style)) el.style.setProperty(k, v);
           if (out.opacity !== undefined) el.style.opacity = String(out.opacity);

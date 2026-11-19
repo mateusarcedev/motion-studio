@@ -20,6 +20,28 @@ export async function runAssets(sub, args, flags) {
       out({ intent, id: asset.id, confidence: asset.confidence, score: asset.score, fallback: asset.fallback, reasons: asset.reasons, alternatives: asset.alternatives, provenance: asset.provenance });
       return;
     }
+    case "providers": {
+      const reg = await c.createDefaultRegistry({ allowNetwork: flags.network === true });
+      out(await reg.describe());
+      return;
+    }
+    case "pick": {
+      const intent = args.join(" ");
+      if (!intent) throw new TypeError('Uso: motion assets pick "<intenção>" [--kind=icon|animated-icon|logo|character|illustration|lottie] [--network] [--svg]');
+      const session = await c.createAssetSession({ size: Number(flags.size ?? 64), allowNetwork: flags.network === true });
+      const a = await session.asset(intent, { kinds: typeof flags.kind === "string" ? [flags.kind] : undefined });
+      if (flags.svg && a.svg) { console.log(a.svg); return; }
+      out({ intent, kind: a.kind, id: a.id, provider: a.provider, confidence: a.confidence, fallback: a.fallback, reasons: a.reasons, alternatives: a.alternatives, license: a.provenance.licenseDetail ?? a.provenance.license, blocked: a.blocked, skipped: a.skipped, motion: a.motion ? a.motion.preset : undefined });
+      return;
+    }
+    case "import": {
+      const [dir] = args;
+      if (!dir || typeof flags.prefix !== "string") throw new TypeError("Uso: motion assets import <pasta_de_svgs> --prefix=<kebab> [--kind=illustration|character|icon|logo] [--spdx=<SPDX> | --grant=user-licensed --commercial] [--attribution=\"texto\"]");
+      const license = { spdx: typeof flags.spdx === "string" ? flags.spdx : "UNKNOWN", grant: flags.grant, commercialUse: flags.commercial === true, attribution: flags.attribution, attributionRequired: Boolean(flags.attribution) };
+      const r = await c.importSvgPack({ dir, prefix: flags.prefix, kind: typeof flags.kind === "string" ? flags.kind : "illustration", license, outDir: typeof flags.out === "string" ? flags.out : ".motion/assets" });
+      out(r);
+      return;
+    }
     case "search": {
       const intent = args.join(" ");
       if (!intent) throw new TypeError('Uso: motion assets search "<consulta>" [--limit=8]');
@@ -33,7 +55,7 @@ export async function runAssets(sub, args, flags) {
       return;
     }
     default:
-      throw new TypeError("Uso: motion assets <resolve|search|packs>");
+      throw new TypeError("Uso: motion assets <pick|resolve|search|packs|providers|import>");
   }
 }
 
