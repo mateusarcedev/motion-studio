@@ -211,3 +211,15 @@ Coletado **2026-10-29** via GitHub API. Ferramentas do adendo da Missão 05 não
 | tabler-icons / phosphor | https://tabler.io/icons · https://phosphoricons.com | 3.x / 2.x | MIT | icons | pacotes extras no formato Iconify | **suportado, não incluído** | `./.motion/icon-packs/`, `$MOTION_ICON_PACKS` |
 | iconify-api | https://iconify.design | — | por pacote | icons/rede | busca remota opcional, com cache e sanitização | **opt-in** (`createIconifyFetcher`) | nenhum por padrão |
 | simple-icons | https://simpleicons.org | 16.x | CC0 (marcas registradas dos titulares) | logos | — | **não integrado** | logos exigem asset aprovado pelo usuário (regra 2) |
+
+## Registro — Missão 20.1 (Provider Registry)
+
+| Nome | URL | Versão | Licença (código / assets) | Categoria | Finalidade | Status | Consumido por |
+|---|---|---|---|---|---|---|---|
+| developer-icons | https://xandemon.github.io/developer-icons/ | 7.1.0 | MIT / marcas dos titulares | logos | logos de tecnologias por nome | **integrado (pack offline)** | motion-core (provider `developer-icons`) |
+| humaaans | https://www.humaaans.com/ | espelho 2019 | CC0 (site) · CC-BY-4.0 (espelho) → atribuição | characters | personagens vetoriais | **integrado (subconjunto)** | provider `humaaans` |
+| animateicons | https://animateicons.in/ | cli 0.3.0 | MIT / Lucide ISC + Hugeicons | animated-icon | catálogo de referência | **adapter limitado** (componentes React tempo real não seekable; não redistribuídos) | provider `animateicons` |
+| lottie-web (light) | https://github.com/airbnb/lottie-web | 5.13.0 | MIT | lottie runtime | render determinístico de Lottie | **integrado (vendorizado)** | `@technomanceer/motion-core/lottie` |
+| dotlottie-web | https://github.com/LottieFiles/dotlottie-web | 0.83 | MIT | lottie runtime | alternativa wasm | **não integrado** | motivo: wasm/canvas extra; formato `.lottie` já é lido por `readDotLottie` |
+| iconify | https://iconify.design | api | MIT / por coleção | icons/rede | catálogo unificado | **opt-in** | provider `iconify` |
+| ls-graphics | https://www.ls.graphics/illustrations | — | licença do titular (login/termos) | illustration | ilustrações | **opcional, local** — sem download/redistribuição | `motion assets import` |

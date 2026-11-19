@@ -11,10 +11,10 @@ await mkdir(distDir, { recursive: true });
 
 // Publish order matters: dependencies first, installer last.
 const expectedVersions = {
-  "motion-core": "1.0.0",
-  "motion-skills": "1.0.0",
-  "motion-cli": "1.0.0",
-  "motion-studio": "1.0.0",
+  "motion-core": "1.1.0",
+  "motion-skills": "1.1.0",
+  "motion-cli": "1.1.0",
+  "motion-studio": "1.1.0",
 };
 const pkgs = Object.keys(expectedVersions);
 

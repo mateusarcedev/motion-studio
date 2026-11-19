@@ -22,6 +22,10 @@ intenção em linguagem natural ──► Visual Asset Resolver ──► ícone
 | SVG Design Studio | `svg/svg-tools.mjs`, `svg/builder.mjs` | Validar/sanitizar/otimizar/rasterizar; componentes vetoriais com tokens da marca. |
 | SVG Motion Engine | `design-system/svg-motion.js` | Animação vetorial pura por frame/tempo. |
 
+> **Missão 20.1:** o resolver agora consulta um **registry de providers** (Lucide, Developer Icons, Humaaans, ícones animados,
+> Lottie, Iconify opt-in, pacotes locais). Tipos, limitações e licenças em [PROVIDERS.md](PROVIDERS.md). API principal:
+> `createAssetSession().asset(intenção)` (o `icon()` da Missão 20 continua funcionando).
+
 ## Fluxo de resolução
 
 1. **Interpretar**: normaliza o texto (acentos, plural), remove palavras vazias e identifica *conceitos* ("segurança dos dados" → `security`, `data`).

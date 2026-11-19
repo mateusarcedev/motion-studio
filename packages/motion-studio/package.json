@@ -1,6 +1,6 @@
 {
   "name": "@technomanceer/motion-studio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Instalador público do MOTION Studio: `npx @technomanceer/motion-studio init` instala CLI, Core e as Skills oficiais e integra aos agentes.",
   "type": "module",
   "bin": {
@@ -12,7 +12,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@technomanceer/motion-cli": "1.0.0"
+    "@technomanceer/motion-cli": "1.1.0"
   },
   "engines": {
     "node": ">=18"

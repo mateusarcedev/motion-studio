@@ -19,7 +19,7 @@ export function classifyNeed(intent, { kinds } = {}) {
   const reasons = [];
   if (kinds?.length) { groups = kinds.map((k) => [k]); reasons.push("tipo definido pelo diretor"); }
   else if (RX.lottie.test(n)) { groups = [["lottie"], ["animated-icon", "icon"]]; reasons.push("pedido de animação Lottie"); }
-  else if (RX.animated.test(n)) { groups = [["logo"], ["animated-icon"], ["icon"]]; reasons.push("pedido de ícone animado"); }
+  else if (RX.animated.test(n)) { groups = [["logo"], ["lottie"], ["animated-icon"], ["icon"]]; reasons.push("pedido de animação (Lottie se houver correspondência; senão ícone animado)"); }
   else if (RX.character.test(n)) { groups = [["character"], ["illustration"], ["icon"]]; reasons.push("pessoas/personagens"); }
   else if (RX.illustration.test(n)) { groups = [["illustration"], ["character"], ["icon"]]; reasons.push("ilustração"); }
   else { groups = [["logo"], ["icon"]]; reasons.push("pictograma (logo só se uma tecnologia for citada)"); }

@@ -10,7 +10,7 @@ const pkg = JSON.parse(await readFile(path.join(packageDir, "package.json"), "ut
 const manifest = JSON.parse(await readFile(path.join(packageDir, "public-skills.json"), "utf8"));
 
 assert.equal(pkg.name, "@technomanceer/motion-studio-skills");
-assert.equal(pkg.version, "1.0.0");
+assert.equal(pkg.version, "1.1.0");
 assert.equal(manifest.package.name, pkg.name);
 assert.equal(manifest.package.version, pkg.version);
 assert.equal(manifest.integrity.algorithm, "sha256");

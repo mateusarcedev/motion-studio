@@ -104,7 +104,7 @@ describe("Licenciamento e créditos", () => {
 describe("Seleção automática por intenção (PT/EN)", () => {
   test("classificação do tipo de recurso, sem o usuário escolher biblioteca", () => {
     assert.equal(classifyNeed("pessoas trabalhando").groups[0][0], "character");
-    assert.equal(classifyNeed("sino de notificação animado").groups[1][0], "animated-icon");
+    assert.equal(classifyNeed("sino de notificação animado").groups[2][0], "animated-icon");
     assert.equal(classifyNeed("success lottie").groups[0][0], "lottie");
     assert.equal(classifyNeed("cena de ilustração").groups[0][0], "illustration");
     assert.equal(classifyNeed("segurança").groups[1][0], "icon");
@@ -260,6 +260,11 @@ describe("Lottie / dotLottie", () => {
     assert.equal(lottieFrameAt(0.5, m), 15); assert.equal(lottieFrameAt(-1, m), 0);
     assert.ok(lottieFrameAt(5, m) < 30); assert.equal(lottieFrameAt(1.5, m, { loop: true }), 15);
     assert.equal(lottieFrameAt(1, m, { start: 0.5 }), 15);
+  });
+  test('"animação de sucesso" (sem dizer Lottie) prefere o Lottie correspondente ao ícone animado genérico', async () => {
+    const s = await createAssetSession({ registry });
+    assert.equal((await s.asset("animação de sucesso")).id, "lottie:check-pop");
+    assert.equal((await s.asset("sino de notificação animado")).kind, "animated-icon", "sem Lottie correspondente, cai no ícone animado");
   });
   test("provider local resolve 'sucesso' → check-pop com licença Apache-2.0 do sidecar", async () => {
     const s = await createAssetSession({ registry });

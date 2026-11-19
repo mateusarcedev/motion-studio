@@ -95,6 +95,7 @@ Mostra os motores e, se o projeto foi instalado pelo `init`, revalida Skills e l
 | `motion.config.json não é um JSON válido` | Arquivo editado com erro | Corrija o JSON; o instalador não o sobrescreve |
 | `Este diretório é o próprio pacote` | Rodou no repo do MOTION | Rode em um projeto consumidor |
 | Doctor: FFmpeg/Chromium FAIL | Motor ausente | `apt/brew install ffmpeg`; `npx playwright install chromium` |
+| Doctor: `MOTION_BROWSER_VERSION_MISMATCH` | Há Chromium, mas de outra revisão que a do Playwright instalado (acontece quando o projeto resolve um `playwright-core` mais novo) | `npx playwright install chromium` na pasta do projeto |
 | Agente não vê as Skills | Sessão aberta antes da instalação | Reinicie o agente na raiz do projeto |
 
 ## 7. Atualização

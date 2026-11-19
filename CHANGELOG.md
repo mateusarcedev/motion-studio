@@ -2,7 +2,20 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
-## [Não lançado] — Missão 20: Production Reliability & Visual Intelligence
+## [1.1.0] — não publicado (em homologação)
+
+Primeira versão menor após a 1.0.0: reúne a Missão 20 e a Missão 20.1. **Versão proposta 1.1.0** (SemVer: funcionalidades aditivas; contratos de API preservados; a única mudança de comportamento — render com erro deixa de ser "OK" — corrige um falso positivo e tem saídas explícitas).
+
+### Missão 20.1 — Ecossistema visual de terceiros
+- **Visual Asset Provider Registry** (`defineProvider`, `createProviderRegistry`, `createDefaultRegistry`): novos providers sem alterar o resolver. `session.asset()` escolhe o tipo (ícone, ícone animado, logo, personagem, ilustração, Lottie) e a fonte automaticamente; `session.icon()` segue igual.
+- Providers: **Developer Icons** (326 logos, por nome/alias, ciente de marcas), **Humaaans** (10 personagens, atribuição CC-BY registrada), **AnimateIcons** (adapter: formas Lucide + presets determinísticos; componentes React em tempo real não são seekable), **Lottie/dotLottie** (validação sem expressões/assets externos, runtime lottie-web light, render determinístico), **Iconify** (opt-in, licença por coleção, cache com hash), **pacotes locais** (`motion assets import`, ex.: LS Graphics com licença declarada pelo usuário).
+- Licenciamento: `assessLicense` (código ≠ assets; bloqueia NC/ND/SA/GPL/desconhecida), `credits()`, proveniência com SHA-256, `createAssetCache`.
+- `@technomanceer/motion-core/lottie` e `/svg-motion` com `wobble`/`pulse`; `/providers`.
+- CLI: `motion assets pick|providers|import`.
+- Skills (8) passam a usar `assets pick` e a incluir créditos. `scripts/release-gate.mjs` (gate de publicação sem publicar).
+- Correção: SVGs de ferramentas de design (IDs duplicados/não usados) são limpos na otimização.
+
+### Missão 20: Production Reliability & Visual Intelligence
 
 Nenhum pacote foi publicado. Mudanças são aditivas; contratos públicos existentes preservados (veja "Compatibilidade").
 
@@ -25,7 +38,7 @@ Nenhum pacote foi publicado. Mudanças são aditivas; contratos públicos existe
 - Skills (studio-director, motion-director, carousel/story/feed-studio, shorts-director, explainer-motion, web-director) passam a usar a infraestrutura; `docs/ART_DIRECTION.md`, `docs/QA.md`, `docs/VISUAL_INTELLIGENCE.md`.
 
 ### Compatibilidade
-- Novas dependências de runtime em `motion-core`: `svgo` (MIT). `lucide-static` é apenas devDependency (gera o pacote offline).
+- Novas dependências de runtime em `motion-core`: `svgo` (MIT). Novos assets embutidos: lottie-web light (MIT), Developer Icons (MIT, marcas dos titulares), Humaaans (subconjunto). `lucide-static` é apenas devDependency (gera o pacote offline).
 - Mudança de comportamento intencional: renders com erro de JS / controlador ausente / imagem essencial quebrada deixam de retornar sucesso. Composições estáticas legítimas em `render frames` usam `--allow-no-controller`; imagens decorativas, `data-optional`.
 - `creative-core/renderers/{render_static,render_frames,qa_viewports}.mjs` viram wrappers do código canônico em `packages/motion-core`.
 
