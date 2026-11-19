@@ -106,6 +106,20 @@ describe("Tokens e componentes SVG", () => {
     const p = paletteFromTokens(brand);
     for (const c of svg.match(/#[0-9a-f]{6}/gi)) assert.ok(Object.values(p).includes(c.toLowerCase()) || Object.values(p).includes(c), `cor fora da paleta: ${c}`);
   });
+  test("networkGraph respeita a zona silenciosa (avoid): sem nós nem arestas sobre o texto", () => {
+    const rect = [200, 150, 400, 300];
+    const svg = buildComponent("networkGraph", { tokens: brand, seed: 9, width: 1000, height: 700, nodes: 20, avoid: rect });
+    const multi = buildComponent("networkGraph", { tokens: brand, seed: 9, width: 1000, height: 700, nodes: 20, avoid: [rect, [700, 0, 300, 200]] });
+    for (const m of multi.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)"/g)) assert.ok(!(Number(m[1]) >= 700 && Number(m[2]) <= 200), "nó na segunda zona");
+    for (const m of svg.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)"/g)) {
+      const x = Number(m[1]), y = Number(m[2]);
+      assert.ok(!(x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3]), `nó dentro da zona: ${x},${y}`);
+    }
+    for (const m of svg.matchAll(/d="M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)) {
+      const [x1, y1, x2, y2] = m.slice(1).map(Number);
+      for (let t = 0; t <= 1; t += 0.02) { const x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t; assert.ok(!(x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3]), "aresta cruza a zona"); }
+    }
+  });
   test("namespaces de ID impedem colisão entre instâncias", () => {
     const a = buildComponent("ringProgress", { idPrefix: "one" }), b = buildComponent("ringProgress", { idPrefix: "two" });
     assert.ok(a.includes("one__g") && b.includes("two__g") && !a.includes("two__"));

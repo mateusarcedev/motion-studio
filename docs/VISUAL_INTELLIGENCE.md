@@ -70,7 +70,7 @@ atribuição visível, mas exigem preservar o aviso nas cópias distribuídas �
 ## Componentes vetoriais (SVG Design Studio)
 
 `waveLayers` (profundidade multicamada, **uma matiz** em rampa — misturar matizes complementares vira lama),
-`networkGraph`, `ringProgress`, `flowArrow`, `orbitRings`, `gridPattern`. Todos: determinísticos (seed),
+`networkGraph` (com `avoid` = zonas silenciosas para o texto), `ringProgress`, `flowArrow`, `orbitRings`, `gridPattern`. Todos: determinísticos (seed),
 cores da paleta derivada dos tokens da marca (`paletteFromTokens`, `roles` opcional no `tokens.json`),
 IDs com namespace, partes animáveis marcadas com `data-layer`/`data-motion-path`.
 `motion svg component waveLayers out.svg --tokens=creative-core/brands/<marca>/tokens.json`.

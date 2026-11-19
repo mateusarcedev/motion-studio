@@ -61,6 +61,9 @@ export function prng(seed) {
   let a = (typeof seed === "string" ? hashString(seed) : seed >>> 0) || 1;
   return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
+const zones = (avoid) => (!avoid ? [] : Array.isArray(avoid[0]) ? avoid : [avoid]);
+const inRect = (p, avoid) => zones(avoid).some(([x, y, w, h]) => p.x >= x && p.x <= x + w && p.y >= y && p.y <= y + h);
+function segmentHitsRect(a, b, avoid) { for (let t = 0; t <= 1; t += 0.02) if (inRect({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }, avoid)) return true; return false; }
 const r2 = (n) => Math.round(n * 100) / 100;
 
 function doc({ viewBox, body, defs = "", title, idPrefix }) {
@@ -90,20 +93,21 @@ export const components = {
     return doc({ viewBox: [0, 0, width, height], body, defs, idPrefix: p });
   },
 
-  /** Seeded node graph with edges that can be stroke-drawn (data-motion-path). */
-  networkGraph({ width = 1200, height = 675, nodes = 14, links = 2, tokens, idPrefix, seed, mode } = {}) {
+  /** Seeded node graph with edges that can be stroke-drawn (data-motion-path). `avoid: [x,y,w,h]` (or a list of them) keeps quiet zones (e.g. where text sits) free of nodes and edges. */
+  networkGraph({ width = 1200, height = 675, nodes = 14, links = 2, avoid, tokens, idPrefix, seed, mode } = {}) {
     const { palette, idPrefix: p, seed: s } = base({ tokens, idPrefix, seed, mode });
     const rnd = prng(s), pts = [];
     const margin = Math.min(width, height) * 0.1;
     // Poisson-ish placement: reject points too close to existing ones (avoids clumps)
     for (let tries = 0; pts.length < nodes && tries < nodes * 60; tries++) {
       const pt = { x: margin + rnd() * (width - 2 * margin), y: margin + rnd() * (height - 2 * margin) };
+      if (avoid && inRect(pt, avoid)) continue;
       if (pts.every((q) => Math.hypot(q.x - pt.x, q.y - pt.y) > Math.min(width, height) * 0.16)) pts.push(pt);
     }
     const edges = new Set();
     pts.forEach((a, i) => pts.map((b, j) => [j, Math.hypot(a.x - b.x, a.y - b.y)]).filter(([j]) => j !== i).sort((x, y) => x[1] - y[1]).slice(0, links).forEach(([j]) => edges.add(i < j ? `${i}-${j}` : `${j}-${i}`)));
     let body = "";
-    [...edges].forEach((e, k) => { const [i, j] = e.split("-").map(Number); body += `<path data-layer="edge" data-motion-path="edge-${k}" d="M${r2(pts[i].x)} ${r2(pts[i].y)} L${r2(pts[j].x)} ${r2(pts[j].y)}" stroke="${palette.muted}" stroke-width="2" fill="none" stroke-linecap="round"/>`; });
+    [...edges].filter((e) => { if (!avoid) return true; const [i, j] = e.split("-").map(Number); return !segmentHitsRect(pts[i], pts[j], avoid); }).forEach((e, k) => { const [i, j] = e.split("-").map(Number); body += `<path data-layer="edge" data-motion-path="edge-${k}" d="M${r2(pts[i].x)} ${r2(pts[i].y)} L${r2(pts[j].x)} ${r2(pts[j].y)}" stroke="${palette.muted}" stroke-width="2" fill="none" stroke-linecap="round"/>`; });
     pts.forEach((pt, i) => { body += `<g data-layer="node" data-node="${i}"><circle cx="${r2(pt.x)}" cy="${r2(pt.y)}" r="${i % 5 === 0 ? 14 : 9}" fill="${i % 5 === 0 ? palette.primary : palette.accent}"/><circle cx="${r2(pt.x)}" cy="${r2(pt.y)}" r="${i % 5 === 0 ? 24 : 16}" fill="none" stroke="${i % 5 === 0 ? palette.primary : palette.accent}" stroke-opacity=".35" stroke-width="2"/></g>`; });
     return doc({ viewBox: [0, 0, width, height], body, idPrefix: p });
   },
