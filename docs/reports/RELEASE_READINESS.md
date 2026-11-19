@@ -26,7 +26,7 @@
 ### Skills e GitHub público
 
 - O manifesto RC4 autoriza **11 Skills**: `3d-scene-director`, `anatomy`, `carousel-studio`, `explainer-motion`, `feed-studio`, `motion-director`, `shorts-director`, `story-studio`, `studio-director`, `thermo-nuclear-code-quality-review` e `web-director`.
-- As outras **40 pastas permanecem no checkout**, mas fora do tarball e da instalação pública: 18 para uso direto da origem sob seus termos; 2 aguardam auditoria de assets; 12 Skills Remotion sem licença; 8 com proveniência/licença insuficiente. [`docs/SKILLS_LICENSE_AUDIT.md`](docs/SKILLS_LICENSE_AUDIT.md) detalha cada grupo.
+- As outras **40 pastas permanecem no checkout**, mas fora do tarball e da instalação pública: 18 para uso direto da origem sob seus termos; 2 aguardam auditoria de assets; 12 Skills Remotion sem licença; 8 com proveniência/licença insuficiente. [`docs/SKILLS_LICENSE_AUDIT.md`](../SKILLS_LICENSE_AUDIT.md) detalha cada grupo.
 - Revisão somente leitura do GitHub `main` confirmou que as 51 pastas ainda estão públicas e que o package manifest remoto continua `motion-studio-skills@1.0.0-rc.3` com `Apache-2.0`. A correção local filtra os tarballs, mas não altera o GitHub remoto; a revisão e atualização dessa superfície seguem pendentes porque não houve autorização de push.
 - `public-skills.json` registra snapshot, origem, licença, atribuição e SHA-256. `npm run skills:verify` passou e o tarball contém somente as 11 entradas do manifesto, com a licença MIT de `anatomy` preservada.
 
@@ -61,7 +61,7 @@
 - Nas outras 21 Skills de origem externa, as licenças identificadas permitem redistribuição sob seus próprios termos; contudo, 18 diretórios não carregam a licença/aviso da origem junto com o conteúdo. `revenue-centric-design` preserva sua licença customizada e a restrição de não uso em apostas/cassino.
 - Entre as 18 Skills sem fonte no lock, `banner-design`, `design` e `design-system` declaram MIT sem registrar origem ou incluir a licença; `ui-styling` declara MIT, mas o `LICENSE.txt` incluso contém Apache-2.0 genérica com campos de copyright em branco. As outras 14 precisam de confirmação de autoria/proveniência sob a licença raiz Apache-2.0.
 - `npm pack --dry-run --json` da versão atual `motion-studio-skills@1.0.0-rc.3` passou: 2.363 arquivos, 27.194.978 bytes compactados e 47.092.226 descompactados. O tarball contém só três licenças upstream identificadas (`anatomy`, `revenue-centric-design`, `video-shotcraft`), além do `LICENSE.txt` contraditório de `ui-styling`; não contém as licenças dos outros 18 diretórios upstream.
-- Inventário, origem, evidências e requisitos de correção: [`docs/SKILLS_LICENSE_AUDIT.md`](docs/SKILLS_LICENSE_AUDIT.md).
+- Inventário, origem, evidências e requisitos de correção: [`docs/SKILLS_LICENSE_AUDIT.md`](../SKILLS_LICENSE_AUDIT.md).
 
 ### Possibilidade de publicação separada
 

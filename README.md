@@ -236,6 +236,21 @@ O ecossistema é modularizado em três pacotes distribuíveis independentes:
 └── packages/motion-cli            # Binário 'motion', subcomandos e scaffolds funcionais
 ```
 
+Mapa do repositório:
+
+```
+packages/        pacotes npm distribuíveis (core, skills, cli)
+creative-core/   motores agnósticos de agente, marcas, presets, galeria local, INTEGRATIONS/THIRD_PARTY
+projects/<slug>/ uma pasta por produção (BRIEF, STYLE, STORYBOARD, src, reviews/findings.md)
+docs/            guias; docs/reports/ guarda relatórios de missões e auditorias
+brand/           voz padrão do estúdio e design system
+tests/ scripts/  suíte de QA e scripts de empacotamento
+CLAUDE.md        manual de operação · pipeline.md contrato de handoff
+```
+
+Renders (`out/`, `productions/`, frames, stills de review, zips de entrega) não são versionados;
+são regenerados a partir do código de cada projeto.
+
 ### O Pipeline de 5 Departamentos
 ```
 Briefing (Linguagem Natural)

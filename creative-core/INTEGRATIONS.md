@@ -54,7 +54,7 @@ Distinção obrigatória: **gratuito** (sem custo, pode ter restrições de uso)
 
 # Lote 3 — Catálogo Incremental (20 ferramentas + 14 referências + extras)
 
-Coletado **2026-10-29** via GitHub API + raw.githubusercontent.com. Fontes: `MOTION_INTEGRACAO_LOTE_03_REFERENCIAS.yaml` + missão. Deduplicados com catálogo base (Remotion, HyperFrames, Three.js, Tone.js, faster-whisper, FFmpeg já presentes).
+Coletado **2026-10-29** via GitHub API + raw.githubusercontent.com. Fontes: `docs/reports/MOTION_INTEGRACAO_LOTE_03_REFERENCIAS.yaml` + missão. Deduplicados com catálogo base (Remotion, HyperFrames, Three.js, Tone.js, faster-whisper, FFmpeg já presentes).
 
 ## Matriz Lote 3 — Ferramentas (20 únicas)
 

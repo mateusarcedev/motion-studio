@@ -114,4 +114,4 @@ The component, safe-zone, determinism, and transition code in this package is or
 
 ## Consumer installation
 
-The public API is packaged through `motion-core` exports (`.`, `./components`, `./transitions`, `./safe-zones`, and `./quality/determinism`) and the CLI binary. See `REUSABLE_MOTION_COMPONENTS_REPORT.md` for the independently installed consumer fixture and exact package-version result. No npm publication is performed by this implementation task.
+The public API is packaged through `motion-core` exports (`.`, `./components`, `./transitions`, `./safe-zones`, and `./quality/determinism`) and the CLI binary. See `docs/reports/REUSABLE_MOTION_COMPONENTS_REPORT.md` for the independently installed consumer fixture and exact package-version result. No npm publication is performed by this implementation task.

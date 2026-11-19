@@ -64,7 +64,7 @@ motion qa determinism composition.html --duration=8 --fps=30
 motion qa safe-zones composition.html --platform=instagram-reels --duration=8
 ```
 
-A referência completa de argumentos e schemas está em [`docs/REUSABLE_MOTION_COMPONENTS.md`](docs/REUSABLE_MOTION_COMPONENTS.md) e [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md).
+A referência completa de argumentos e schemas está em [`docs/REUSABLE_MOTION_COMPONENTS.md`](../REUSABLE_MOTION_COMPONENTS.md) e [`docs/CLI_REFERENCE.md`](../CLI_REFERENCE.md).
 
 ## Produções e evidências
 
@@ -132,7 +132,7 @@ Esse teste comprova a distribuição **local por tarball** do estado empacotado.
 
 ## Licenças e proveniência
 
-O repositório de referência `skeattt/motion-graphics-programatico` indica licença MIT. Seus conceitos foram estudados; não foram copiados arquivos nem arquitetura integral. Os novos componentes, verificadores, presets e integrações são implementação original do MOTION, distribuída sob o licenciamento deste projeto (Apache-2.0). GSAP não é dependência. FFmpeg, Chromium, Playwright, fontes e quaisquer assets externos mantêm suas licenças próprias; ver [`docs/LICENSES.md`](docs/LICENSES.md). As produções desta missão usam dados fictícios e backgrounds sintéticos locais; não redistribuem assets de terceiros.
+O repositório de referência `skeattt/motion-graphics-programatico` indica licença MIT. Seus conceitos foram estudados; não foram copiados arquivos nem arquitetura integral. Os novos componentes, verificadores, presets e integrações são implementação original do MOTION, distribuída sob o licenciamento deste projeto (Apache-2.0). GSAP não é dependência. FFmpeg, Chromium, Playwright, fontes e quaisquer assets externos mantêm suas licenças próprias; ver [`docs/LICENSES.md`](../LICENSES.md). As produções desta missão usam dados fictícios e backgrounds sintéticos locais; não redistribuem assets de terceiros.
 
 ## Limitações conhecidas
 

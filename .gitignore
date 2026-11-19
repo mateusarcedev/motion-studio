@@ -25,8 +25,7 @@ projects/*/frames-full/
 # Render outputs and results are never tracked. They are regenerated from the
 # project source (BRIEF/STYLE/STORYBOARD, code, configs). Critic findings (.md)
 # stay tracked; rendered stills, videos, contact sheets and deliveries do not.
-/out/*
-!/out/*.md
+/out/
 /projects/*/out/
 /projects/*/*/out/
 /projects/*/productions/

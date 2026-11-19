@@ -64,7 +64,7 @@ Other tracked binary types include PNG, JPEG, WebP, MP4, ZIP, PDF, GLB, and exec
 
 Each format directory contains **600 PNGs plus one `contact-sheet.html`**. The two sets contain 1,200 PNG files totaling **571,270,753 bytes / 544.81 MiB**. Their 1,200 unique Git blobs occupy **570,326,859 packed bytes / 543.91 MiB**. The Git tree therefore incurs nearly the full uncompressed frame weight.
 
-The project README documents regeneration using `creative-core/renderers/render_frames.mjs` with the checked-in compositions, 600 frames, 30 FPS, and the two target resolutions; it then documents MP4 assembly. This supports removing only generated frame PNGs from version control. The regeneration instructions are at [projects/carga-01/README.md](projects/carga-01/README.md#L86).
+The project README documents regeneration using `creative-core/renderers/render_frames.mjs` with the checked-in compositions, 600 frames, 30 FPS, and the two target resolutions; it then documents MP4 assembly. This supports removing only generated frame PNGs from version control. The regeneration instructions are at [projects/carga-01/README.md](../../projects/carga-01/README.md#L86).
 
 The existing `assets.manifest.json` and QA records include hashes/references to frame files. They remain unchanged as provenance evidence. A fresh checkout will not have those PNGs until the README render commands are run, so a full manifest verification must regenerate the files first. The two contact sheets also rely on frame images and should be regenerated/previewed after a fresh checkout. Both contact-sheet HTML files remain tracked.
 

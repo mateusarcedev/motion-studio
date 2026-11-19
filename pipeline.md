@@ -5,6 +5,10 @@ Sem contrato escrito, cada papel inventa o formato dele e o próximo perde tempo
 O pipeline completo está em `.agents/skills/motion-director/SKILL.md`; o formato dos artefatos
 segue as regras de `CLAUDE.md`. Em caso de dúvida entre os dois, vale o mais específico._
 
+_Neste repositório, cada produção vive em `projects/<slug>/`: os caminhos das tabelas abaixo
+(`BRIEF.md`, `src/**`, `out/`, `reviews/`…) são relativos a essa pasta, nunca à raiz.
+`out/` e os stills/vídeos de `reviews/` não são versionados._
+
 ## Pista audiovisual (motion-director) — em vigor desde v1
 
 | # | Departamento | Lê | Escreve | Bloqueia o próximo |

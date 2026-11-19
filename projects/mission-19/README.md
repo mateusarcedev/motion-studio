@@ -30,4 +30,4 @@ O teste instala os tarballs locais em um diretório isolado sob `/tmp`, importa 
 - `productions/final/homologation.json`: metadados FFprobe, gates, amostras de alfa, relatórios QA e tempos medidos.
 - `productions/final/assets.manifest.json`: hashes SHA-256 dos arquivos da execução.
 
-O relatório consolidado está em [`REUSABLE_MOTION_COMPONENTS_REPORT.md`](../../REUSABLE_MOTION_COMPONENTS_REPORT.md). O guia de uso está em [`docs/REUSABLE_MOTION_COMPONENTS.md`](../../docs/REUSABLE_MOTION_COMPONENTS.md).
+O relatório consolidado está em [`REUSABLE_MOTION_COMPONENTS_REPORT.md`](../../docs/reports/REUSABLE_MOTION_COMPONENTS_REPORT.md). O guia de uso está em [`docs/REUSABLE_MOTION_COMPONENTS.md`](../../docs/REUSABLE_MOTION_COMPONENTS.md).
