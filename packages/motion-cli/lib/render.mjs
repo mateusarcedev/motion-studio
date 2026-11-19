@@ -19,6 +19,17 @@ try {
   renderComposition = mod.renderComposition;
 }
 
+/** `--sample-frames=0,120,240-250` (aceita também --sampleFrames). Retorna string; validação é do renderer. */
+function sampleFramesOption(options) {
+  const value = options["sample-frames"] ?? options.sampleFrames;
+  return value === undefined ? undefined : String(value);
+}
+
+function optionalAssets(options) {
+  const value = options["optional-assets"] ?? options.optionalAssets;
+  return typeof value === "string" ? value.split(",").map((v) => v.trim()).filter(Boolean) : undefined;
+}
+
 export async function runRender(subcommand, target, out, options = {}, positionals = []) {
   if (!subcommand) {
     console.error("Uso: motion render <static|frames|video|carousel|project> [argumentos...]");
@@ -39,12 +50,14 @@ export async function runRender(subcommand, target, out, options = {}, positiona
       scale: options.scale,
       wait: options.wait,
       frame: options.frame,
+      time: options.time,
       seed: options.seed,
+      optionalAssets: optionalAssets(options),
     });
     console.log(res.stdout || "Render estático concluído com sucesso.");
   } else if (sub === "frames") {
     if (!target || !out) {
-      console.error("Uso: motion render frames <composition.html> <outdir> [--frames=N] [--fps=30]");
+      console.error("Uso: motion render frames <composition.html> <outdir> [--frames=N] [--fps=30] [--sample-frames=0,120,240-250]");
       process.exit(1);
     }
     console.log(`🎬 Renderizando frames determinísticos em lote: ${target} → ${out}`);
@@ -57,6 +70,11 @@ export async function runRender(subcommand, target, out, options = {}, positiona
       seed: options.seed,
       start: options.start,
       end: options.end,
+      sampleFrames: sampleFramesOption(options),
+      transparent: options.transparent === true || options.transparent === "true",
+      inspectBounds: options["inspect-bounds"] === true || options.inspectBounds === true,
+      optionalAssets: optionalAssets(options),
+      allowNoController: options["allow-no-controller"] === true,
     });
     console.log(res.stdout || "Frames renderizados com sucesso.");
   } else if (sub === "video") {

@@ -8,7 +8,7 @@
  * horizontal overflow, small touch targets (mobile), font readiness, WebGL canvas non-empty.
  * Writes <outdir>/report.json and report.md. Exit code 1 if any check fails.
  */
-import { chromium } from "playwright-core"
+import { launchBrowser } from "../lib/browser.mjs"
 import { mkdir, writeFile, stat } from "node:fs/promises"
 import path from "node:path"
 
@@ -37,34 +37,6 @@ const canvasSel = opt.canvas ?? "canvas"
 // --ignore=substr1,substr2 : URLs of host-only resources (e.g. _vercel/insights) not counted as failures
 const ignore = (opt.ignore ?? "").split(",").filter(Boolean)
 const ignored = (u) => ignore.some((i) => u.includes(i))
-
-async function resolveChrome() {
-  if (process.env.CHROME_PATH) {
-    try { await stat(process.env.CHROME_PATH); return process.env.CHROME_PATH; } catch {}
-  }
-  try {
-    const pw = await import("playwright-core");
-    const ep = pw.chromium.executablePath();
-    if (ep) {
-      try { await stat(ep); return ep; } catch {}
-    }
-  } catch {}
-  const cacheBase = `${process.env.HOME}/.cache/ms-playwright`;
-  try {
-    const { readdir } = await import("node:fs/promises");
-    const entries = await readdir(cacheBase);
-    for (const ent of entries) {
-      if (ent.startsWith("chromium-")) {
-        const candidate = path.join(cacheBase, ent, "chrome-linux64", "chrome");
-        try { await stat(candidate); return candidate; } catch {}
-      }
-    }
-  } catch {}
-  for (const sys of ["/usr/bin/google-chrome", "/usr/bin/chromium-browser", "/usr/bin/chromium"]) {
-    try { await stat(sys); return sys; } catch {}
-  }
-  return undefined;
-}
 
 async function checkPage(page) {
   return page.evaluate(async (canvasSel) => {
@@ -100,11 +72,13 @@ async function checkPage(page) {
   }, canvasSel)
 }
 
-const executablePath = await resolveChrome()
-const browser = await chromium.launch({
-  executablePath,
-  args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
-})
+let browser
+try {
+  ;({ browser } = await launchBrowser({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] }))
+} catch (error) {
+  console.error(`❌ [${error.code ?? "MOTION_UNEXPECTED"}] ${error.message}${error.hint ? `\n   → ${error.hint}` : ""}`)
+  process.exit(error.exitCode ?? 1)
+}
 await mkdir(outdir, { recursive: true })
 const results = []
 

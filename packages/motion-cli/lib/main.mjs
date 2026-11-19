@@ -63,6 +63,7 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
     render <modo> ...        Executa renderização real com motores determinísticos
       render static <html_in> <png_out> [--width=W] [--height=H] [--scale=N]
       render frames <comp_in> <outdir> [--frames=N] [--fps=30]
+        --sample-frames=0,120,240-250  Renderiza só estes quadros (índices e intervalos A-B, sem duplicatas)
       render video <frames_dir> <mp4_out> [--fps=30] [--audio=trilha]
       render carousel <slides_dir> <outdir>
       render project <pasta_do_projeto>
@@ -148,8 +149,24 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
         return 1;
     }
   } catch (err) {
-    console.error("\n❌ Erro durante a execução:", err.message);
-    return 1;
+    // Renderers return a structured JSON report; show the actionable part, not a raw process dump.
+    const report = err.report;
+    if (report?.error) {
+      console.error(`\n❌ [${report.error.code}] ${report.error.message}`);
+      if (report.error.hint) console.error(`   → ${report.error.hint}`);
+    } else if (report?.health?.errors?.length) {
+      console.error("\n❌ A renderização foi concluída com falhas e não pode ser aprovada:");
+      for (const e of report.health.errors.slice(0, 8)) {
+        console.error(`   • [${e.code}] ${e.message}${e.frame != null ? ` (quadro ${e.frame})` : ""}`);
+        if (e.hint) console.error(`     → ${e.hint}`);
+      }
+    } else if (err.code && String(err.code).startsWith("MOTION_")) {
+      console.error(`\n❌ [${err.code}] ${err.message}`);
+      if (err.hint) console.error(`   → ${err.hint}`);
+    } else {
+      console.error("\n❌ Erro durante a execução:", err.message);
+    }
+    return err.exitCode && err.exitCode > 1 ? err.exitCode : 1;
   }
 
   return process.exitCode ?? 0;

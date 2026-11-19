@@ -12,6 +12,10 @@ import { createServer } from "node:http";
 import { readFile, stat, mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { launchBrowser } from "../lib/browser.mjs";
+import { ERROR_CODES, MotionError, reportError } from "../lib/errors.mjs";
+import { parseFrameSelection, frameFileName } from "../lib/frames.mjs";
+import { createHealthMonitor, parseOptionalAssets } from "../lib/render-health.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const m = a.match(/^--([^=]+)(?:=(.*))?$/);
@@ -28,7 +32,7 @@ const scale = Number(args.scale ?? 1);
 const seed = Number(args.seed ?? 1);
 const startFrame = Number(args.start ?? 0);
 const endFrame = args.end !== undefined ? Number(args.end) : totalFrames - 1;
-const sampleFrames = args["sample-frames"] === undefined ? null : String(args["sample-frames"]).split(",").map(Number);
+const sampleSpec = args["sample-frames"] ?? args.sampleFrames;
 if (!Number.isInteger(totalFrames) || totalFrames < 1 || !Number.isFinite(fps) || fps <= 0 || !Number.isInteger(width) || width < 1 || !Number.isInteger(height) || height < 1) {
   console.error("frames, fps, width e height devem ser valores positivos válidos.");
   process.exit(2);
@@ -40,34 +44,6 @@ if (!input || !outdir) {
 }
 
 await mkdir(outdir, { recursive: true });
-
-// ---- resolve chromium ----
-async function resolveChrome() {
-  if (process.env.CHROME_PATH) {
-    try { await stat(process.env.CHROME_PATH); return process.env.CHROME_PATH; } catch {}
-  }
-  try {
-    const pw = await import("playwright-core");
-    const execPath = pw.chromium.executablePath();
-    if (execPath) {
-      try { await stat(execPath); return execPath; } catch {}
-    }
-  } catch {}
-  const cacheBase = `${process.env.HOME}/.cache/ms-playwright`;
-  try {
-    const entries = await readdir(cacheBase);
-    for (const ent of entries) {
-      if (ent.startsWith("chromium-")) {
-        const candidate = path.join(cacheBase, ent, "chrome-linux64", "chrome");
-        try { await stat(candidate); return candidate; } catch {}
-      }
-    }
-  } catch {}
-  for (const sys of ["/usr/bin/google-chrome", "/usr/bin/chromium-browser", "/usr/bin/chromium"]) {
-    try { await stat(sys); return sys; } catch {}
-  }
-  return null;
-}
 
 // ---- local server ----
 const inputAbs = path.resolve(input);
@@ -114,140 +90,155 @@ async function handler(req, res) {
 }
 
 const server = createServer(handler);
-await new Promise((r) => server.listen(0, "127.0.0.1", r));
-const port = server.address().port;
 
-const { chromium } = await import("playwright-core");
-const executablePath = await resolveChrome();
-if (!executablePath) {
-  console.error("Chromium não encontrado (defina CHROME_PATH ou instale via npx playwright install chromium).");
-  process.exit(3);
+function failPayload(error) {
+  const exitCode = reportError(error);
+  console.log(JSON.stringify({ status: "FAIL", error: error instanceof MotionError ? error.toJSON() : { code: "MOTION_UNEXPECTED", message: error?.message ?? String(error) } }, null, 2));
+  return exitCode;
 }
 
-const browser = await chromium.launch({
-  executablePath,
-  headless: true,
-  args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
-});
-const browserVersion = browser.version();
-
-const page = await browser.newPage({
-  viewport: { width, height },
-  deviceScaleFactor: scale,
-});
-const pageErrors = [];
-page.on("pageerror", (error) => pageErrors.push(error.message));
-page.on("console", (message) => { if (message.type() === "error") pageErrors.push(message.text()); });
-
-await page.addInitScript((init) => {
-  window.__MOTION_DRIVEN__ = true;
-  window.__MOTION__ = init;
-}, {
-  fps,
-  totalFrames,
-  seed,
-  frame: 0,
-  time: 0,
-  progress: 0,
-});
-
-const url = `http://127.0.0.1:${port}/`;
-await page.goto(url, { waitUntil: "load" });
-
-await page.evaluate(() => Promise.all([
-  document.fonts.ready,
-  Promise.all(Array.from(document.images).map((img) =>
-    img.complete && img.naturalWidth > 0 ? Promise.resolve() :
-    new Promise((res) => { img.onload = img.onerror = res; })))
-]));
-const fontMetadata = await page.evaluate(() => ({
-  status: document.fonts.status,
-  faces: Array.from(document.fonts).map((face) => ({ family: face.family, style: face.style, weight: face.weight, status: face.status })),
-}));
-
-const startTime = Date.now();
-let renderedCount = 0;
-const frameIndexes = sampleFrames ?? Array.from({ length: Math.max(0, endFrame - startFrame + 1) }, (_, i) => startFrame + i);
-if (!frameIndexes.length || frameIndexes.some((f) => !Number.isInteger(f) || f < 0 || f >= totalFrames) || new Set(frameIndexes).size !== frameIndexes.length) {
-  await browser.close(); server.close();
-  console.error(`Amostras devem ser quadros únicos entre 0 e ${totalFrames - 1}.`);
-  process.exit(2);
-}
-
-for (const f of frameIndexes) {
-  const t = f / fps;
-  const progress = totalFrames > 0 ? f / totalFrames : 0;
-  
-  await page.evaluate(async (state) => {
-    window.__MOTION__ = {
-      frame: state.f,
-      time: state.t,
-      progress: state.progress,
-      fps: state.fps,
-      totalFrames: state.totalFrames,
-      seed: state.seed,
-    };
-    if (typeof window.__onFrame__ === "function") await window.__onFrame__(window.__MOTION__);
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-  }, { f, t, progress, fps, totalFrames, seed });
-
-  const frameFileName = `${String(f).padStart(4, "0")}.png`;
-  const framePath = path.join(outdir, frameFileName);
-  await page.screenshot({ path: framePath, omitBackground: Boolean(args.transparent) });
-  if (args["inspect-bounds"]) {
-    const bounds = await page.evaluate((state) => {
-      const elements = Array.from(document.querySelectorAll("[data-motion-important]")).map((element) => {
-        const rect = element.getBoundingClientRect();
-        let opacity = 1;
-        for (let parent = element; parent && parent !== document.documentElement; parent = parent.parentElement) {
-          const value = Number.parseFloat(getComputedStyle(parent).opacity);
-          if (Number.isFinite(value)) opacity *= value;
-        }
-        return {
-          id: element.getAttribute("data-motion-important"),
-          x: rect.x, y: rect.y, width: rect.width, height: rect.height,
-          visible: opacity > 0.02 && rect.width > 0 && rect.height > 0,
-          opacity,
-          alt: element.getAttribute("data-motion-alt") ?? null,
-        };
+async function main() {
+  // ---- frame selection (validated before opening any browser) ----
+  let frameIndexes;
+  if (sampleSpec !== undefined) {
+    frameIndexes = parseFrameSelection(sampleSpec, totalFrames);
+  } else {
+    if (!Number.isInteger(startFrame) || !Number.isInteger(endFrame) || startFrame < 0 || endFrame >= totalFrames || startFrame > endFrame) {
+      throw new MotionError(ERROR_CODES.INVALID_ARGUMENT, `Intervalo de quadros inválido (--start=${startFrame}, --end=${endFrame}, --frames=${totalFrames}).`, {
+        hint: `Use 0 <= start <= end <= ${totalFrames - 1}.`, exitCode: 2,
       });
-      return { frame: state.f, time: state.t, viewport: { width: innerWidth, height: innerHeight }, fonts: { status: document.fonts.status }, elements };
-    }, { f, t, fps });
-    await writeFile(path.join(outdir, `${String(f).padStart(4, "0")}.bounds.json`), JSON.stringify(bounds, null, 2));
+    }
+    frameIndexes = Array.from({ length: endFrame - startFrame + 1 }, (_, i) => startFrame + i);
   }
-  renderedCount++;
 
-  if (renderedCount % 60 === 0 || f === endFrame) {
-    const elapsed = (Date.now() - startTime) / 1000;
-    const fpsRate = (renderedCount / elapsed).toFixed(1);
-    process.stderr.write(`[render_frames] Frame ${f}/${endFrame} (${fpsRate} fps)\r`);
+  await new Promise((r) => server.listen(0, "127.0.0.1", r));
+  const port = server.address().port;
+  const { browser } = await launchBrowser({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
+  try {
+    const browserVersion = browser.version();
+    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
+    const monitor = createHealthMonitor(page, { optionalAssets: parseOptionalAssets(args["optional-assets"]) });
+
+    await page.addInitScript((init) => {
+      window.__MOTION_DRIVEN__ = true;
+      window.__MOTION__ = init;
+    }, { fps, totalFrames, seed, frame: 0, time: 0, progress: 0 });
+
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load" });
+    await page.evaluate(() => Promise.all([
+      document.fonts.ready,
+      Promise.all(Array.from(document.images).map((img) =>
+        img.complete ? Promise.resolve() :
+        new Promise((res) => { img.onload = img.onerror = res; }))),
+    ]));
+    try {
+      await page.evaluate(async () => { if (window.__MOTION_READY__) await window.__MOTION_READY__; });
+    } catch (error) {
+      monitor.addFinding({ severity: "error", code: ERROR_CODES.RENDER_PAGE_ERROR, message: `window.__MOTION_READY__ falhou: ${error.message}` });
+    }
+    const fontMetadata = await page.evaluate(() => ({
+      status: document.fonts.status,
+      faces: Array.from(document.fonts).map((face) => ({ family: face.family, style: face.style, weight: face.weight, status: face.status })),
+    }));
+    for (const face of fontMetadata.faces) {
+      if (face.status === "error") monitor.addFinding({ severity: "warning", code: ERROR_CODES.RENDER_ASSET_FAILED, resourceType: "font", message: `Fonte "${face.family}" não carregou.` });
+    }
+    const requireController = !args["allow-no-controller"];
+    await monitor.inspect({ requireController });
+
+    const startTime = Date.now();
+    const produced = [];
+    if (monitor.errorCount() === 0) {
+      for (const f of frameIndexes) {
+        const t = f / fps;
+        const progress = totalFrames > 0 ? f / totalFrames : 0;
+        monitor.setFrame(f);
+        try {
+          await page.evaluate(async (state) => {
+            window.__MOTION__ = { frame: state.f, time: state.t, progress: state.progress, fps: state.fps, totalFrames: state.totalFrames, seed: state.seed };
+            if (typeof window.__onFrame__ === "function") await window.__onFrame__(window.__MOTION__);
+            await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          }, { f, t, progress, fps, totalFrames, seed });
+        } catch (error) {
+          monitor.addFinding({ severity: "error", code: ERROR_CODES.RENDER_PAGE_ERROR, message: `__onFrame__ falhou no quadro ${f}: ${error.message}`, hint: "Corrija o erro de JavaScript do controlador de animação." });
+        }
+        if (monitor.errorCount() > 0) break; // fail fast: do not spend time rendering a broken composition
+
+        const framePath = path.join(outdir, frameFileName(f));
+        await page.screenshot({ path: framePath, omitBackground: Boolean(args.transparent) });
+        produced.push(f);
+        if (args["inspect-bounds"]) {
+          const bounds = await page.evaluate((state) => {
+            const elements = Array.from(document.querySelectorAll("[data-motion-important]")).map((element) => {
+              const rect = element.getBoundingClientRect();
+              let opacity = 1;
+              for (let parent = element; parent && parent !== document.documentElement; parent = parent.parentElement) {
+                const value = Number.parseFloat(getComputedStyle(parent).opacity);
+                if (Number.isFinite(value)) opacity *= value;
+              }
+              return {
+                id: element.getAttribute("data-motion-important"),
+                x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+                visible: opacity > 0.02 && rect.width > 0 && rect.height > 0,
+                opacity,
+                alt: element.getAttribute("data-motion-alt") ?? null,
+              };
+            });
+            return { frame: state.f, time: state.t, viewport: { width: innerWidth, height: innerHeight }, fonts: { status: document.fonts.status }, elements };
+          }, { f, t, fps });
+          await writeFile(path.join(outdir, `${String(f).padStart(4, "0")}.bounds.json`), JSON.stringify(bounds, null, 2));
+        }
+        if (produced.length % 60 === 0 || f === frameIndexes[frameIndexes.length - 1]) {
+          const elapsed = (Date.now() - startTime) / 1000;
+          process.stderr.write(`[render_frames] Frame ${f} (${(produced.length / elapsed).toFixed(1)} fps)\r`);
+        }
+      }
+      process.stderr.write("\n");
+      // final inspection catches late failures (assets requested during the animation, late errors)
+      monitor.setFrame(null);
+      await monitor.inspect({ requireController: false });
+    }
+
+    // requested vs produced must match exactly
+    const missing = [];
+    for (const f of produced) { try { await stat(path.join(outdir, frameFileName(f))); } catch { missing.push(f); } }
+    const summary = monitor.summary();
+    if (summary.status !== "FAIL" && (produced.length !== frameIndexes.length || missing.length)) {
+      summary.errors.push({ severity: "error", code: ERROR_CODES.RENDER_PAGE_ERROR, message: `Quadros solicitados (${frameIndexes.length}) e produzidos (${produced.length - missing.length}) divergem.` });
+      summary.status = "FAIL";
+    }
+
+    const totalSec = (Date.now() - startTime) / 1000;
+    const payload = {
+      status: summary.status,
+      input: inputAbs,
+      outdir: path.resolve(outdir),
+      framesRendered: produced.length,
+      framesRequested: frameIndexes.length,
+      totalFrames,
+      fps, width, height, scale, seed,
+      browserVersion,
+      fonts: fontMetadata,
+      pageErrors: monitor.pageErrors,
+      health: { errors: summary.errors, warnings: summary.warnings, errorCodes: summary.errorCodes },
+      transparent: Boolean(args.transparent),
+      sampleFrames: sampleSpec !== undefined ? frameIndexes : null,
+      producedFrames: produced,
+      inspectBounds: Boolean(args["inspect-bounds"]),
+      durationSec: totalSec.toFixed(2),
+      renderFps: (produced.length / Math.max(totalSec, 0.001)).toFixed(1),
+    };
+    console.log(JSON.stringify(payload, null, 2));
+    if (summary.status === "FAIL") {
+      for (const e of summary.errors) console.error(`❌ [${e.code}] ${e.message}${e.hint ? `\n   → ${e.hint}` : ""}`);
+      return 4;
+    }
+    return 0;
+  } finally {
+    await browser.close().catch(() => {});
   }
 }
-process.stderr.write("\n");
 
-await browser.close();
-server.close();
-
-const totalSec = (Date.now() - startTime) / 1000;
-const payload = {
-  status: "OK",
-  input: inputAbs,
-  outdir: path.resolve(outdir),
-  framesRendered: renderedCount,
-  totalFrames,
-  fps,
-  width,
-  height,
-  scale,
-  seed,
-  browserVersion,
-  fonts: fontMetadata,
-  pageErrors,
-  transparent: Boolean(args.transparent),
-  sampleFrames: frameIndexes,
-  inspectBounds: Boolean(args["inspect-bounds"]),
-  durationSec: totalSec.toFixed(2),
-  renderFps: (renderedCount / totalSec).toFixed(1),
-};
-
-console.log(JSON.stringify(payload, null, 2));
+let exitCode = 0;
+try { exitCode = await main(); } catch (error) { exitCode = failPayload(error); } finally { server.close(); }
+process.exit(exitCode);

@@ -29,6 +29,9 @@ export const PATHS = {
 };
 
 export { createMotionDriver } from "./design-system/frame.js";
+export { MotionError, ERROR_CODES } from "./lib/errors.mjs";
+export { parseFrameSelection } from "./lib/frames.mjs";
+export { diagnoseBrowser, locateBrowser, smokeTestBrowser } from "./lib/browser.mjs";
 export { listMotionComponents, getMotionComponent, validateComponentConfig, generateComponentHtml, componentSize } from "./components/index.js";
 export { previewMotionComponent, renderMotionComponent, renderComposition } from "./components/render.js";
 export { listTransitions, renderTransition } from "./transitions/index.js";
@@ -60,7 +63,21 @@ function runProcess(cmd, args, options = {}) {
     proc.stderr.on("data", (d) => { stderr += d.toString(); });
     proc.on("close", (code) => {
       if (code === 0) resolve({ code, stdout, stderr });
-      else reject(new Error(`Command ${cmd} ${args.join(" ")} failed with code ${code}\nStderr: ${stderr}\nStdout: ${stdout}`));
+      else {
+        const error = new Error(`Command ${cmd} ${args.join(" ")} failed with code ${code}\nStderr: ${stderr}\nStdout: ${stdout}`);
+        error.exitCode = code;
+        error.stdout = stdout;
+        error.stderr = stderr;
+        // Renderers print a JSON report (status FAIL + structured errors) on stdout.
+        try {
+          const start = stdout.indexOf("{");
+          if (start >= 0) {
+            error.report = JSON.parse(stdout.slice(start));
+            error.code = error.report.error?.code ?? error.report.health?.errorCodes?.[0] ?? undefined;
+          }
+        } catch {}
+        reject(error);
+      }
     });
   });
 }
@@ -76,6 +93,8 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.fps) args.push(`--fps=${options.fps}`);
   if (options.frames) args.push(`--frames=${options.frames}`);
   if (options.time !== undefined) args.push(`--time=${options.time}`);
+  if (options.optionalAssets?.length) args.push(`--optional-assets=${[].concat(options.optionalAssets).join(",")}`);
+  if (options.requireController) args.push("--require-controller");
   return runProcess("node", args);
 }
 
@@ -90,7 +109,12 @@ export async function renderFrames(inputHtml, outdir, options = {}) {
   if (options.start !== undefined) args.push(`--start=${options.start}`);
   if (options.end !== undefined) args.push(`--end=${options.end}`);
   if (options.transparent) args.push("--transparent");
-  if (options.sampleFrames?.length) args.push(`--sample-frames=${options.sampleFrames.join(",")}`);
+  if (options.sampleFrames !== undefined && options.sampleFrames !== null) {
+    const spec = Array.isArray(options.sampleFrames) ? options.sampleFrames.join(",") : String(options.sampleFrames);
+    args.push(`--sample-frames=${spec}`);
+  }
+  if (options.optionalAssets?.length) args.push(`--optional-assets=${[].concat(options.optionalAssets).join(",")}`);
+  if (options.allowNoController) args.push("--allow-no-controller");
   if (options.inspectBounds) args.push("--inspect-bounds");
   return runProcess("node", args);
 }

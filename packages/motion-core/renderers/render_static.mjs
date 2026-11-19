@@ -21,6 +21,9 @@ import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { launchBrowser } from "../lib/browser.mjs";
+import { ERROR_CODES, MotionError, reportError } from "../lib/errors.mjs";
+import { createHealthMonitor, parseOptionalAssets } from "../lib/render-health.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const m = a.match(/^--([^=]+)(?:=(.*))?$/); return m ? [m[1], m[2] ?? true] : [a, true];
@@ -43,34 +46,6 @@ if (!input || !output) {
   process.exit(2);
 }
 
-// ---- resolve chromium (cache do playwright, env, ou padrões do sistema) ----
-async function resolveChrome() {
-  if (process.env.CHROME_PATH) {
-    try { await stat(process.env.CHROME_PATH); return process.env.CHROME_PATH; } catch {}
-  }
-  try {
-    const pw = await import("playwright-core");
-    const execPath = pw.chromium.executablePath();
-    if (execPath) {
-      try { await stat(execPath); return execPath; } catch {}
-    }
-  } catch {}
-  const cacheBase = `${process.env.HOME}/.cache/ms-playwright`;
-  try {
-    const entries = await (await import("node:fs/promises")).readdir(cacheBase);
-    for (const ent of entries) {
-      if (ent.startsWith("chromium-")) {
-        const candidate = path.join(cacheBase, ent, "chrome-linux64", "chrome");
-        try { await stat(candidate); return candidate; } catch {}
-      }
-    }
-  } catch {}
-  for (const sys of ["/usr/bin/google-chrome", "/usr/bin/chromium-browser", "/usr/bin/chromium"]) {
-    try { await stat(sys); return sys; } catch {}
-  }
-  return null;
-}
-
 // ---- servidor local (evita restrições de file:// com assets relativos) ----
 const rootDir = path.dirname(path.resolve(input));
 async function handler(req, res) {
@@ -87,105 +62,121 @@ async function handler(req, res) {
   } catch { res.writeHead(404); res.end("not found"); }
 }
 const server = createServer(handler);
-await new Promise((r) => server.listen(0, "127.0.0.1", r));
-const port = server.address().port;
 
-let { chromium } = await import("playwright-core");
-const executablePath = await resolveChrome();
-if (!executablePath) { console.error("Chromium não encontrado (defina CHROME_PATH)."); process.exit(3); }
+function failPayload(error) {
+  const exitCode = reportError(error);
+  console.log(JSON.stringify({ status: "FAIL", error: error instanceof MotionError ? error.toJSON() : { code: "MOTION_UNEXPECTED", message: error?.message ?? String(error) } }, null, 2));
+  return exitCode;
+}
 
-const browser = await chromium.launch({ executablePath, headless: true });
-const page = await browser.newPage({
-  viewport: { width, height },
-  deviceScaleFactor: scale,
-});
-const fontWaits = [];
-page.on("requestfailed", (r) => {
-  const u = r.url();
-  if (/\.(woff2?|ttf|otf)/.test(u)) fontWaits.push(u);
-});
+async function main() {
+  await new Promise((r) => server.listen(0, "127.0.0.1", r));
+  const port = server.address().port;
+  const { browser } = await launchBrowser();
+  try {
+    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
+    const monitor = createHealthMonitor(page, { optionalAssets: parseOptionalAssets(args["optional-assets"]) });
+    const url = `http://127.0.0.1:${port}/${path.basename(input)}`;
 
-const url = `http://127.0.0.1:${port}/${path.basename(input)}`;
+    // Injeção determinística: injeta estado alvo (frame/time/seed).
+    // A composição NÃO deve auto-chamar __onFrame__ no load (usa window.__MOTION_DRIVEN__).
+    await page.addInitScript((state) => {
+      window.__MOTION__ = state;
+      window.__MOTION__.fps = state.fps ?? 30;
+      window.__MOTION__.progress = (state.frame != null && state.totalFrames) ? state.frame / state.totalFrames : null;
+      window.__MOTION_DRIVEN__ = true;
+    }, {
+      frame: frame ?? 0, time: time ?? null, seed: seed ?? null,
+      fps: args.fps ? Number(args.fps) : 30,
+      totalFrames: args.frames ? Number(args.frames) : undefined,
+      vars: overrides,
+    });
 
-// Injeção determinística: injeta estado alvo (frame/time/seed).
-// Para composições frame-driven, o renderer controla quando __onFrame__ é chamado.
-// A composição NÃO deve auto-chamar __onFrame__ no load (usa window.__MOTION_DRIVEN__).
-const isFrameDriven = frame !== undefined || time !== undefined;
-await page.addInitScript((state) => {
-  window.__MOTION__ = state;
-  window.__MOTION__.fps = state.fps ?? 30;
-  window.__MOTION__.progress = (state.frame != null && state.totalFrames)
-    ? state.frame / state.totalFrames : null;
-  window.__MOTION_DRIVEN__ = true;
-}, {
-  frame: frame ?? 0,
-  time: time ?? null,
-  seed: seed ?? null,
-  fps: args.fps ? Number(args.fps) : 30,
-  totalFrames: args.frames ? Number(args.frames) : undefined,
-  vars: overrides,
-});
+    await page.goto(url, { waitUntil: "load" });
+    await page.evaluate(() => Promise.all([
+      document.fonts.ready,
+      Promise.all(Array.from(document.images).map((img) =>
+        img.complete ? Promise.resolve() :
+        new Promise((res) => { img.onload = img.onerror = res; }))),
+    ]));
+    await page.waitForTimeout(extraWait);
 
-await page.goto(url, { waitUntil: "load" });
-await page.evaluate(() => Promise.all([
-  document.fonts.ready,
-  Promise.all(Array.from(document.images).map((img) =>
-    img.complete && img.naturalWidth > 0 ? Promise.resolve() :
-    new Promise((res) => { img.onload = img.onerror = res; }))),
-]));
-await page.waitForTimeout(extraWait);
-
-// Executar __onFrame__ UMA VEZ com o estado correto
-const motionState = await page.evaluate(async () => {
-  if (window.__MOTION_READY__) await window.__MOTION_READY__;
-  await document.fonts.ready;
-  if (typeof window.__onFrame__ === "function") {
-    await window.__onFrame__(window.__MOTION__);
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    return true;
-  }
-  return false;
-});
-const fontState = await page.evaluate(() => ({ status: document.fonts.status, faces: Array.from(document.fonts).map((face) => ({ family: face.family, style: face.style, weight: face.weight, status: face.status })) }));
-
-// ---- QA: overflow (elementos com data-bleed são sangria decorativa intencional) ----
-const overflow = await page.evaluate(() => {
-  const issues = [];
-  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
-  const isBleed = (el) => el && el.closest("[data-bleed]");
-  const outside = [];
-  for (const el of document.querySelectorAll("*")) {
-    const r = el.getBoundingClientRect();
-    if (r.width === 0 && r.height === 0) continue;
-    if (r.right > vw + 2 || r.bottom > vh + 2 || r.left < -2 || r.top < -2) {
-      if (isBleed(el)) continue;
-      const tag = el.tagName.toLowerCase();
-      const cls = typeof el.className === "string" ? el.className.split(" ")[0] : "";
-      outside.push({ type: "element-outside-frame", detail: { tag, cls, right: Math.round(r.right), bottom: Math.round(r.bottom), left: Math.round(r.left), top: Math.round(r.top) } });
+    // Executar __onFrame__ UMA VEZ com o estado correto
+    let motionState = false;
+    try {
+      motionState = await page.evaluate(async () => {
+        if (window.__MOTION_READY__) await window.__MOTION_READY__;
+        await document.fonts.ready;
+        if (typeof window.__onFrame__ === "function") {
+          await window.__onFrame__(window.__MOTION__);
+          await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          return true;
+        }
+        return false;
+      });
+    } catch (error) {
+      monitor.addFinding({ severity: "error", code: ERROR_CODES.RENDER_PAGE_ERROR, message: `O controlador de animação falhou: ${error.message}`, hint: "Corrija o erro de JavaScript do controlador (window.__onFrame__)." });
     }
-  }
-  issues.push(...outside);
-  // scroll global só importa se houver conteúdo essencial fora do frame (não apenas sangria)
-  if (outside.length > 0 || document.documentElement.scrollWidth > vw + 1) {
-    if (outside.length > 0 && document.documentElement.scrollWidth > vw + 1)
-      issues.push({ type: "horizontal-scroll", detail: { scrollWidth: document.documentElement.scrollWidth, viewport: vw } });
-    if (outside.length > 0 && document.documentElement.scrollHeight > vh + 1)
-      issues.push({ type: "vertical-scroll", detail: { scrollHeight: document.documentElement.scrollHeight, viewport: vh } });
-  }
-  return issues.slice(0, 12);
-});
+    const frameDriven = frame !== undefined || time !== undefined;
+    await monitor.inspect({ requireController: frameDriven || Boolean(args["require-controller"]) });
 
-const absOutput = path.resolve(output);
-await page.screenshot({ path: absOutput, fullPage: Boolean(args["full-page"]) });
-await browser.close();
-server.close();
+    const fontState = await page.evaluate(() => ({ status: document.fonts.status, faces: Array.from(document.fonts).map((face) => ({ family: face.family, style: face.style, weight: face.weight, status: face.status })) }));
 
-const payload = {
-  png: absOutput, width, height, deviceScaleFactor: scale,
-  motion: { frame: frame ?? null, time: time ?? null, seed: seed ?? null, fps: args.fps ? Number(args.fps) : 30, replayed: motionState },
-  overflow,
-  fontIssues: fontWaits,
-  fonts: fontState,
-  status: overflow.length === 0 && fontWaits.length === 0 && fontState.status === "loaded" && fontState.faces.every((face) => face.status === "loaded") ? "OK" : "WARN",
-};
-console.log(JSON.stringify(payload, null, 2));
+    // ---- QA: overflow (elementos com data-bleed são sangria decorativa intencional) ----
+    const overflow = await page.evaluate(() => {
+      const issues = [];
+      const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+      const isBleed = (el) => el && el.closest("[data-bleed]");
+      const outside = [];
+      for (const el of document.querySelectorAll("*")) {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) continue;
+        if (r.right > vw + 2 || r.bottom > vh + 2 || r.left < -2 || r.top < -2) {
+          if (isBleed(el)) continue;
+          const tag = el.tagName.toLowerCase();
+          const cls = typeof el.className === "string" ? el.className.split(" ")[0] : "";
+          outside.push({ type: "element-outside-frame", detail: { tag, cls, right: Math.round(r.right), bottom: Math.round(r.bottom), left: Math.round(r.left), top: Math.round(r.top) } });
+        }
+      }
+      issues.push(...outside);
+      if (outside.length > 0 || document.documentElement.scrollWidth > vw + 1) {
+        if (outside.length > 0 && document.documentElement.scrollWidth > vw + 1)
+          issues.push({ type: "horizontal-scroll", detail: { scrollWidth: document.documentElement.scrollWidth, viewport: vw } });
+        if (outside.length > 0 && document.documentElement.scrollHeight > vh + 1)
+          issues.push({ type: "vertical-scroll", detail: { scrollHeight: document.documentElement.scrollHeight, viewport: vh } });
+      }
+      return issues.slice(0, 12);
+    });
+
+    const summary = monitor.summary();
+    const fontIssues = summary.warnings.filter((w) => w.resourceType === "font" || /\.(woff2?|ttf|otf)/.test(w.url ?? "")).map((w) => w.url ?? w.message);
+    const absOutput = path.resolve(output);
+    await page.screenshot({ path: absOutput, fullPage: Boolean(args["full-page"]) });
+
+    const fontsOk = fontState.status === "loaded" && fontState.faces.every((face) => face.status === "loaded");
+    const status = summary.status === "FAIL" ? "FAIL"
+      : (summary.status === "WARN" || overflow.length || fontIssues.length || !fontsOk) ? "WARN" : "OK";
+    const payload = {
+      png: absOutput, width, height, deviceScaleFactor: scale,
+      motion: { frame: frame ?? null, time: time ?? null, seed: seed ?? null, fps: args.fps ? Number(args.fps) : 30, replayed: motionState },
+      overflow,
+      fontIssues,
+      fonts: fontState,
+      pageErrors: monitor.pageErrors,
+      health: { errors: summary.errors, warnings: summary.warnings, errorCodes: summary.errorCodes },
+      status,
+    };
+    console.log(JSON.stringify(payload, null, 2));
+    if (status === "FAIL") {
+      for (const e of summary.errors) console.error(`❌ [${e.code}] ${e.message}${e.hint ? `\n   → ${e.hint}` : ""}`);
+      return 4;
+    }
+    return 0;
+  } finally {
+    await browser.close().catch(() => {});
+  }
+}
+
+let exitCode = 0;
+try { exitCode = await main(); } catch (error) { exitCode = failPayload(error); } finally { server.close(); }
+process.exit(exitCode);

@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { stat, readdir } from "node:fs/promises";
+import { stat } from "node:fs/promises";
 import path from "node:path";
 
 /** Collects engine diagnostics without printing or exiting. */
@@ -66,61 +66,21 @@ export async function collectDoctor() {
     details: ffmpegStatus === "PASS" ? "Montagem CFR 30fps, áudio e transcodificação" : "Instale ffmpeg via apt ou brew",
   });
 
-  // 4. Playwright & Chromium
-  let chromePath = null;
-  let chromeStatus = "FAIL";
-  if (process.env.CHROME_PATH) {
-    try {
-      await stat(process.env.CHROME_PATH);
-      chromePath = process.env.CHROME_PATH;
-      chromeStatus = "PASS";
-    } catch {}
-  }
-  if (!chromePath) {
-    try {
-      const pw = await import("playwright-core");
-      const ep = pw.chromium.executablePath();
-      if (ep) {
-        await stat(ep);
-        chromePath = ep;
-        chromeStatus = "PASS";
-      }
-    } catch {}
-  }
-  if (!chromePath) {
-    const cacheBase = `${process.env.HOME}/.cache/ms-playwright`;
-    try {
-      const entries = await readdir(cacheBase);
-      for (const ent of entries) {
-        if (ent.startsWith("chromium-")) {
-          const candidate = path.join(cacheBase, ent, "chrome-linux64", "chrome");
-          try {
-            await stat(candidate);
-            chromePath = candidate;
-            chromeStatus = "PASS";
-            break;
-          } catch {}
-        }
-      }
-    } catch {}
-  }
-  if (!chromePath) {
-    for (const sys of ["/usr/bin/google-chrome", "/usr/bin/chromium-browser", "/usr/bin/chromium"]) {
-      try {
-        await stat(sys);
-        chromePath = sys;
-        chromeStatus = "PASS";
-        break;
-      } catch {}
-    }
-  }
-
+  // 4. Playwright & Chromium — real check: pinned revision exists AND a smoke test launches it.
+  let core;
+  try { core = await import("@technomanceer/motion-core"); } catch { core = await import("../../motion-core/index.js"); }
+  const browser = await core.diagnoseBrowser();
+  const browserLine = browser.status === "PASS" || browser.status === "WARN"
+    ? `Chromium ${browser.browserVersion} (Playwright ${browser.playwrightVersion}, revisão ${browser.revision})`
+    : "Não utilizável";
   results.push({
     name: "Chromium (Playwright)",
     required: true,
-    status: chromeStatus,
-    version: chromePath ? path.basename(chromePath) : "Não detectado",
-    details: chromePath ? `Executável: ${chromePath}` : "Execute `npx playwright install chromium`",
+    status: browser.status,
+    code: browser.code ?? null,
+    version: browserLine,
+    details: [browser.message, browser.hint ? `Correção: ${browser.hint}` : null, browser.executablePath ? `Executável: ${browser.executablePath}` : null]
+      .filter(Boolean).join(" | "),
   });
 
   // 5. Three.js (Procedural / 3D)
