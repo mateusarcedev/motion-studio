@@ -14,7 +14,7 @@ Esse é o fluxo oficial. Você não precisa conhecer os pacotes internos (`@tech
 
 | Requisito | Mínimo | Obrigatório | Função |
 |---|---|---|---|
-| **Node.js** | 18 (recomendado 20+) | Sim | Runtime |
+| **Node.js** | 20+ (validado em 20, 22 e 24; Node 18 não é suportado: o Playwright exige ≥ 20) | Sim | Runtime |
 | **Python 3** | 3.9 | Sim | Manifestos SHA-256, contact sheets |
 | **FFmpeg** | 6.0 | Sim | Montagem de vídeo CFR 30fps |
 | **Chromium** | via Playwright | Sim | Captura de frames/stills (`npx playwright install chromium`) |

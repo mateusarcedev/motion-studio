@@ -1,7 +1,7 @@
 # Relatório do release gate — 1.1.0
 
-Gerado por `scripts/release-gate.mjs` em 2026-11-19T22:21:48.946Z (Node v24.16.0, linux 6.6.114.1-microsoft-standard-WSL2).
-**Nada foi publicado.** Veredito: **NOT_TESTED (itens declarados)**
+Gerado por `scripts/release-gate.mjs` em 2026-11-19T22:48:51.697Z (Node v24.16.0, linux 6.6.114.1-microsoft-standard-WSL2).
+**Nada foi publicado.** Veredito: **PASS**
 
 | # | Verificação | Estado | Detalhes |
 |---|---|---|---|
@@ -16,9 +16,9 @@ Gerado por `scripts/release-gate.mjs` em 2026-11-19T22:21:48.946Z (Node v24.16.0
 | R9 | Resolução automática de assets (5 tipos) no consumidor | PASS | icon, logo, character, animated-icon, lottie |
 | R10 | SVG: gerar, validar, rasterizar; malformado reprovado | PASS | component 0, validate 0, rasterize 0, malformado exit 4 |
 | R11 | Render real: PNG estático + 30 frames (svg-motion + Lottie via import map) | PASS | static exit 0, frames exit 0, quadros 30 |
-| R12 | Vídeo MP4 com áudio + QA de mídia (codec/fps/duração/áudio/sync) | PASS | render 0, veredito WARN, falhas: nenhuma |
-| R13 | QA de quadros (animação presente, sem vazios) | PASS | veredito WARN |
+| R12 | Vídeo MP4 com áudio + QA de mídia (codec/fps/duração/áudio/sync) | PASS | render 0, veredito WARN, falhas: nenhuma; avisos: audio.loudness (-32.3 LUFS) |
+| R13 | QA de quadros (animação presente, sem vazios) | PASS | veredito WARN; avisos: blank (1/30 quase uniformes (ex.: 0000.png)), repetition (97% dos quadros têm um gêmeo visual não adjacente; 15 pares adjacentes idênticos) |
 | R14 | Erros estruturados (import quebrado → exit 4; sample-frames inválido → exit 2) | PASS | exit 4 / 2 |
-| R15 | Compatibilidade com Node.js (engines: >=18) | NOT_TESTED | executado apenas em v24.16.0; reproduzir em Node 18/20/22 (ex.: `npx -p node@18 -- node scripts/release-gate.mjs --skip-tests`) |
+| R15 | Compatibilidade com Node.js (suíte nas versões informadas) | PASS | v20.20.2: PASS (121 testes, 0 falhas) · v22.23.5: PASS (121 testes, 0 falhas); engines >=20 (Node 18 não suportado: Playwright exige ≥ 20) |
 | R16 | Autenticação npm | PASS | logado como technomanceer |
 | R17 | Versão ainda não publicada no registro | PASS | @technomanceer/motion-core@1.1.0 livre · @technomanceer/motion-studio-skills@1.1.0 livre · @technomanceer/motion-cli@1.1.0 livre · @technomanceer/motion-studio@1.1.0 livre |

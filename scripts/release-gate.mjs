@@ -20,6 +20,7 @@ const reportPath = path.resolve(root, args.report ?? `docs/reports/RELEASE_${VER
 const results = [];
 const sh = (cmd, a, o = {}) => spawnSync(cmd, a, { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, ...o });
 const step = (id, title, status, details = "", evidence = "") => { results.push({ id, title, status, details, evidence }); console.log(`${{ PASS: "✅", FAIL: "❌", BLOCKED: "⛔", NOT_TESTED: "⚪", WARN: "⚠️" }[status]} ${id} ${title}${details ? ` — ${details}` : ""}`); };
+const warnList = (j) => (j?.checks ?? []).filter((c) => c.status === "WARN").map((c) => `${c.id}${c.details ? ` (${c.details})` : ""}`).join(", ") || "nenhum";
 const sha = (buf) => createHash("sha256").update(buf).digest("hex");
 
 // 1 ── versions & internal deps
@@ -135,11 +136,11 @@ window.__MOTION_READY__ = createLottieMotion(document.getElementById("box"), dat
     const qa = motion(["qa", "media", "out.mp4", "--width=320", "--height=180", "--fps=30", "--duration=1", "--audio", "--json"]);
     let j = null; try { j = JSON.parse(qa.stdout); } catch {}
     const failing = j?.checks?.filter((c) => c.status === "FAIL") ?? [];
-    step("R12", "Vídeo MP4 com áudio + QA de mídia (codec/fps/duração/áudio/sync)", vid.status === 0 && j && failing.length === 0 ? "PASS" : "FAIL", `render ${vid.status}, veredito ${j?.status}, falhas: ${failing.map((c) => c.id).join(",") || "nenhuma"}`);
+    step("R12", "Vídeo MP4 com áudio + QA de mídia (codec/fps/duração/áudio/sync)", vid.status === 0 && j && failing.length === 0 ? "PASS" : "FAIL", `render ${vid.status}, veredito ${j?.status}, falhas: ${failing.map((c) => c.id).join(",") || "nenhuma"}; avisos: ${warnList(j)}`);
   }
   const qf = motion(["qa", "frames", "frames", "--expected=30", "--json"]);
   let qj = null; try { qj = JSON.parse(qf.stdout); } catch {}
-  step("R13", "QA de quadros (animação presente, sem vazios)", qj && !qj.checks.some((c) => c.status === "FAIL") ? "PASS" : "FAIL", `veredito ${qj?.status}`);
+  step("R13", "QA de quadros (animação presente, sem vazios)", qj && !qj.checks.some((c) => c.status === "FAIL") ? "PASS" : "FAIL", `veredito ${qj?.status}; avisos: ${warnList(qj)}`);
 
   await writeFile(path.join(work, "bad.html"), '<!doctype html><script type="module">import "nope-bare";</script>');
   const e1 = motion(["render", "static", "bad.html", "bad.png", "--width=100", "--height=100"]);
@@ -149,8 +150,21 @@ window.__MOTION_READY__ = createLottieMotion(document.getElementById("box"), dat
 
 // 6 ── node versions & registry
 {
-  const nodeV = process.version;
-  step("R15", "Compatibilidade com Node.js (engines: >=18)", "NOT_TESTED", `executado apenas em ${nodeV}; reproduzir em Node 18/20/22 (ex.: \`npx -p node@18 -- node scripts/release-gate.mjs --skip-tests\`)`);
+  const declared = Object.values(manifests).map((m) => m.engines?.node);
+  const bins = (process.env.MOTION_GATE_NODE_BINS ?? "").split(",").filter(Boolean);
+  if (!declared.every((e) => e === ">=20")) step("R15", "Compatibilidade com Node.js", "FAIL", `engines divergentes: ${declared}`);
+  else if (!bins.length) step("R15", "Compatibilidade com Node.js (engines >=20)", "NOT_TESTED", `executado apenas em ${process.version}; informe MOTION_GATE_NODE_BINS=/caminho/node20,/caminho/node22 para validar outras versões`);
+  else {
+    const out = [];
+    for (const bin of bins) {
+      const files = ["reliability", "visual_assets", "providers", "qa_pipeline"].map((f) => `tests/${f}.test.mjs`);
+      const r = sh(bin, ["--test", ...files], { env: { ...process.env, PATH: `${path.dirname(bin)}:${process.env.PATH}` } });
+      const ver = sh(bin, ["-v"]).stdout.trim();
+      const m = (k) => (r.stdout.match(new RegExp(`(?:ℹ|#) ${k} (\\d+)`)) ?? [])[1];
+      out.push({ ver, ok: r.status === 0, tests: m("tests"), fail: m("fail") });
+    }
+    step("R15", "Compatibilidade com Node.js (suíte nas versões informadas)", out.every((o) => o.ok) ? "PASS" : "FAIL", out.map((o) => `${o.ver}: ${o.ok ? "PASS" : "FAIL"} (${o.tests} testes, ${o.fail} falhas)`).join(" · ") + `; engines >=20 (Node 18 não suportado: Playwright exige ≥ 20)`);
+  }
   const who = sh("npm", ["whoami"]);
   step("R16", "Autenticação npm", who.status === 0 ? "PASS" : "BLOCKED", who.status === 0 ? `logado como ${who.stdout.trim()}` : "npm login necessário");
   const free = [];

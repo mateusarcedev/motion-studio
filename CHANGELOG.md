@@ -6,6 +6,9 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 Primeira versão menor após a 1.0.0: reúne a Missão 20 e a Missão 20.1. **Versão proposta 1.1.0** (SemVer: funcionalidades aditivas; contratos de API preservados; a única mudança de comportamento — render com erro deixa de ser "OK" — corrige um falso positivo e tem saídas explícitas).
 
+### Node.js suportado
+- **`engines.node` passa de `>=18` para `>=20`** nos quatro pacotes. O Playwright (`^1.64`) sempre exigiu Node ≥ 20; em Node 18 nenhum render funcionava, então não há regressão real — a declaração é que estava errada. Suíte validada em Node 20.20, 22.23 e 24.16; Node 18.20 reprova (Playwright).
+
 ### Missão 20.1 — Ecossistema visual de terceiros
 - **Visual Asset Provider Registry** (`defineProvider`, `createProviderRegistry`, `createDefaultRegistry`): novos providers sem alterar o resolver. `session.asset()` escolhe o tipo (ícone, ícone animado, logo, personagem, ilustração, Lottie) e a fonte automaticamente; `session.icon()` segue igual.
 - Providers: **Developer Icons** (326 logos, por nome/alias, ciente de marcas), **Humaaans** (10 personagens, atribuição CC-BY registrada), **AnimateIcons** (adapter: formas Lucide + presets determinísticos; componentes React em tempo real não são seekable), **Lottie/dotLottie** (validação sem expressões/assets externos, runtime lottie-web light, render determinístico), **Iconify** (opt-in, licença por coleção, cache com hash), **pacotes locais** (`motion assets import`, ex.: LS Graphics com licença declarada pelo usuário).

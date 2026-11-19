@@ -12,9 +12,9 @@ export async function collectDoctor() {
   results.push({
     name: "Node.js",
     required: true,
-    status: nodeMajor >= 18 ? "PASS" : "FAIL",
+    status: nodeMajor >= 20 ? "PASS" : "FAIL",
     version: nodeVer,
-    details: nodeMajor >= 18 ? "Compatível (>= 18.0.0)" : "Versão mínima 18 exigida",
+    details: nodeMajor >= 20 ? "Compatível (>= 20.0.0)" : "Versão mínima 20 exigida (requisito do Playwright)",
   });
 
   let skillsCatalogStatus = "INFO";

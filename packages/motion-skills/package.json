@@ -47,5 +47,8 @@
   "publishConfig": {
     "access": "public",
     "tag": "next"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -5,7 +5,7 @@
 > **An agent-powered creative development framework for cinematic websites, 3D experiences, motion graphics, videos, and social content.**
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Node: >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
+[![Node: >=20](https://img.shields.io/badge/node-%3E%3D20.0.0-green.svg)](https://nodejs.org/)
 [![Playwright QA](https://img.shields.io/badge/QA-Playwright%205--Viewport-emerald.svg)](https://playwright.dev/)
 [![Engine: CFR 30fps](https://img.shields.io/badge/Video-CFR%2030FPS%20Deterministic-purple.svg)](docs/PRODUCTION_GUIDE.md)
 
@@ -91,7 +91,7 @@ O MOTION foi desenvolvido para operar de forma confiável em ambientes Linux e m
 
 | Componente | Obrigatório | Versão Mínima | Finalidade |
 |---|---|---|---|
-| **Node.js** | Sim | `>= 18.0.0` (recomendado 20+) | Execução da CLI, compilação de templates e scripts ESM |
+| **Node.js** | Sim | `>= 20.0.0` (validado em 20, 22 e 24) | Execução da CLI, compilação de templates e scripts ESM |
 | **Python 3** | Sim | `>= 3.10` | Validação dimensional, manifestos SHA-256 e contact sheets |
 | **FFmpeg** | Sim | `>= 4.4` (com `libx264`) | Codificação determinística CFR 30fps, áudio e vídeo |
 | **Chromium** | Sim | Playwright / Chrome nativo | Captura de frames, render estático 2x e QA multi-viewport |

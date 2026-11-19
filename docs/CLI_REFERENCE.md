@@ -33,7 +33,7 @@ Inicializa a estrutura do MOTION Studio no diretório atual.
 Executa o diagnóstico de saúde do ambiente e checa pré-requisitos de sistema.
 
 - **Verificações executadas:**
-  - `Node.js`: Versão `>= 18.0.0`
+  - `Node.js`: Versão `>= 20.0.0`
   - `Python 3`: Versão `>= 3.9`
   - `FFmpeg`: Versão e presença no PATH
   - `Chromium (Playwright)`: confirma que o executável **da revisão fixada pelo Playwright instalado** existe e executa um *smoke test* real (abre, renderiza, avalia JS). Um diretório `chromium-*` de outra revisão **não** é PASS. Diferencia `MOTION_BROWSER_MISSING`, `MOTION_BROWSER_VERSION_MISMATCH`, `MOTION_BROWSER_SYSTEM_DEPS` e `MOTION_BROWSER_LAUNCH_FAILED`, com a instrução de correção. `CHROME_PATH`/Chrome do sistema funcionam como `WARN`. Nada é instalado automaticamente.

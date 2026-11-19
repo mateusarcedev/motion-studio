@@ -112,8 +112,8 @@ export async function runBootstrap(o = {}) {
     report.versions.expected = expected;
 
     // 0. Preflight
-    if (Number(process.versions.node.split(".")[0]) < 18) {
-      throw new BootstrapError("NODE_TOO_OLD", `Node.js ${process.version} não suportado (mínimo 18).`);
+    if (Number(process.versions.node.split(".")[0]) < 20) {
+      throw new BootstrapError("NODE_TOO_OLD", `Node.js ${process.version} não suportado (mínimo 20, requisito do Playwright).`);
     }
     const pkgPath = path.join(cwd, "package.json");
     let pkgJson = await readJson(pkgPath, "package.json");
