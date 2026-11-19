@@ -11,6 +11,8 @@
 
 *50 Agent Skills · Claude Code · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
 
+🌐 Site: [motion.mateusarce.dev](https://motion.mateusarce.dev) · source: [mateusarcedev/motion-landing](https://github.com/mateusarcedev/motion-landing)
+
 </div>
 
 ---

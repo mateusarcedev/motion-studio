@@ -12,7 +12,9 @@ async function main() {
   const compUrl = "file://" + path.resolve("projects/explainer-state-machine/composition.html");
   await page916.goto(compUrl);
 
-  const actDir = path.resolve("projects/motion-landing/site/assets/state-machines");
+  // Landing lives in its own repo (motion-landing). Point LANDING_ASSETS_DIR at its
+  // site/assets/state-machines to write there directly; default stays inside this project.
+  const actDir = process.env.LANDING_ASSETS_DIR ?? path.resolve("projects/explainer-state-machine/out/site-assets/state-machines");
   await fs.mkdir(actDir, { recursive: true });
 
   const acts = [

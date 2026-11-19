@@ -20,9 +20,9 @@
         "en": "/en/projects/state-machines/"
       },
       "publication": {
-        "video": "../../projects/motion-landing/site/videos/state-machines/state-machine-9x16-v4.mp4",
-        "poster": "../../projects/motion-landing/site/assets/state-machines/poster-9x16.png",
-        "thumbnail": "../../projects/motion-landing/site/assets/state-machines/thumb-16x9.png"
+        "video": "https://motion.mateusarce.dev/videos/state-machines/state-machine-9x16-v4.mp4",
+        "poster": "https://motion.mateusarce.dev/assets/state-machines/poster-9x16.png",
+        "thumbnail": "https://motion.mateusarce.dev/assets/state-machines/thumb-16x9.png"
       },
       "caption": "Uma explicação visual sobre máquinas de estados, eventos, guardas e transições, criada com animações determinísticas e renderização quadro a quadro pelo MOTION Studio.",
       "caption_en": "A visual explanation of state machines, events, guards, and transitions, built with deterministic animations and frame-by-frame rendering by MOTION Studio.",
@@ -40,43 +40,43 @@
       "slides": [
         {
           "n": "thumb-16x9",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/thumb-16x9.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/thumb-16x9.png"
         },
         {
           "n": "poster-9x16",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/poster-9x16.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/poster-9x16.png"
         },
         {
           "n": "contact-sheet",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/contact-sheet.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/contact-sheet.png"
         },
         {
           "n": "act-01-sopa-booleanos",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-01-sopa-booleanos.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-01-sopa-booleanos.png"
         },
         {
           "n": "act-02-estados-finitos",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-02-estados-finitos.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-02-estados-finitos.png"
         },
         {
           "n": "act-03-a-transicao",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-03-a-transicao.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-03-a-transicao.png"
         },
         {
           "n": "act-04-guardas-logicas",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-04-guardas-logicas.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-04-guardas-logicas.png"
         },
         {
           "n": "act-05-evento-invalido",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-05-evento-invalido.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-05-evento-invalido.png"
         },
         {
           "n": "act-06-ciclo-completo",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-06-ciclo-completo.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-06-ciclo-completo.png"
         },
         {
           "n": "act-07-sintese-fsm",
-          "thumb": "../../projects/motion-landing/site/assets/state-machines/act-07-sintese-fsm.png"
+          "thumb": "https://motion.mateusarce.dev/assets/state-machines/act-07-sintese-fsm.png"
         }
       ],
       "files": [
@@ -177,37 +177,6 @@
         {
           "name": "3d-test.mp4",
           "path": "../../projects/example-3d-product/out/test-3d.mp4"
-        }
-      ]
-    },
-    {
-      "id": "motion-landing",
-      "title": "MOTION AI Creative Studio — Landing Page",
-      "format": "landing page (desktop 3840×2160 fold + mobile 2160×full)",
-      "brand": "motion",
-      "date": "2026-10-29",
-      "status": "draft",
-      "brief": "../../projects/motion-landing/BRIEF.md",
-      "source": "../../projects/motion-landing/slides/",
-      "caption": "Landing page do próprio estúdio MOTION, renderizada pela própria infraestrutura.",
-      "slides": [
-        {
-          "n": "desktop-fold",
-          "thumb": "../../projects/motion-landing/out/landing-desktop-fold.png"
-        },
-        {
-          "n": "desktop-full",
-          "thumb": "../../projects/motion-landing/out/landing-desktop.png"
-        },
-        {
-          "n": "mobile-full",
-          "thumb": "../../projects/motion-landing/out/landing-mobile.png"
-        }
-      ],
-      "files": [
-        {
-          "name": "entrega-v1.zip",
-          "path": "../../projects/motion-landing/entrega-v1.zip"
         }
       ]
     },

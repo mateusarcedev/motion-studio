@@ -37,37 +37,6 @@
       ]
     },
     {
-      "id": "motion-landing",
-      "title": "MOTION AI Creative Studio — Landing Page",
-      "format": "landing page (desktop 3840×2160 fold + mobile 2160×full)",
-      "brand": "motion",
-      "date": "2026-10-29",
-      "status": "draft",
-      "brief": "../../projects/motion-landing/BRIEF.md",
-      "source": "../../projects/motion-landing/slides/",
-      "caption": "Landing page do próprio estúdio MOTION, renderizada pela própria infraestrutura.",
-      "slides": [
-        {
-          "n": "desktop-fold",
-          "thumb": "../../projects/motion-landing/out/landing-desktop-fold.png"
-        },
-        {
-          "n": "desktop-full",
-          "thumb": "../../projects/motion-landing/out/landing-desktop.png"
-        },
-        {
-          "n": "mobile-full",
-          "thumb": "../../projects/motion-landing/out/landing-mobile.png"
-        }
-      ],
-      "files": [
-        {
-          "name": "entrega-v1.zip",
-          "path": "../../projects/motion-landing/entrega-v1.zip"
-        }
-      ]
-    },
-    {
       "id": "carousel-nova-identidade",
       "title": "Pequenos detalhes, momentos grandes",
       "brand": "mini-festa-da-rose",

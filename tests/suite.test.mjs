@@ -127,7 +127,6 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     const baseGallery = JSON.parse(await readFile(path.join(__dirname, "..", "creative-core", "gallery", "gallery.json"), "utf-8"));
     const originalIds = [
       "example-3d-product",
-      "motion-landing",
       "carousel-nova-identidade",
       "example-carousel-7",
       "example-post-reflow",
