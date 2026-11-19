@@ -18,7 +18,8 @@ _Neste repositório, cada produção vive em `projects/<slug>/`: os caminhos das
 | 3 | **Storyboard** | `BRIEF.md` + `STYLE.md` | `STORYBOARD.md` (timestamps + frames) | só se filmagem ≥ 60s (ou storyboard pedido) |
 | 4 | **Animador** (produtor roteado) | os 3 artefatos + `public/` | `src/**` (código frame-driven) | não |
 | 5 | **Eng. de Render** | `src/**` + `out/` | `out/previews/*` + `reviews/frames/*` | não |
-| 6 | **Crítico** | **apenas renders + BRIEF.md** (contexto novo/não criar o filme) | `reviews/findings.md` | sim — aprovação da entrega |
+| 5b | **QA automático** | `out/` + `frames/`/`stills/` | `reviews/qa-report.{json,md}` (`motion qa precheck`) | `FAIL`/`BLOCKED` impedem o Crítico de aprovar; `NOT_TESTED` nunca vira `PASS` |
+| 6 | **Crítico** | **apenas renders + BRIEF.md + `qa-report`** (contexto novo/não criar o filme); eixos de `docs/ART_DIRECTION.md` | `reviews/findings.md` | sim — aprovação da entrega |
 | 7 | **Correção** | `findings.md` | patch local em `src/**` + re-render dos frames afetados | não (máx. 2 rodadas/defeito) |
 | 8 | **Delivery** | tudo aprovado | `out/final/*` (16:9, 1:1, 9:16) + poster frames + notas | fim |
 

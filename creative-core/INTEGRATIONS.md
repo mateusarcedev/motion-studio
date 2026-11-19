@@ -201,3 +201,13 @@ Coletado **2026-10-29** via GitHub API. Ferramentas do adendo da Missão 05 não
 3. **gltfjsx / react-three-fiber** → usar quando destino for React; fonte Blender (.blend) **sempre preservada** independentemente do componente React gerado.
 3. **Penpot MPL-2.0** → copyleft fraco; modificações no Penpot devem ser compartilhadas; uso normal OK.
 4. **Spec Kit** → não impor scaffold; usar apenas para orientar especificação (SCENE_SPEC).
+
+## Registro — Missão 20 (Visual Asset Intelligence)
+
+| Nome | URL | Versão | Licença | Categoria | Finalidade | Status | Consumido por |
+|---|---|---|---|---|---|---|---|
+| lucide | https://lucide.dev | 1.76.0 | ISC | icons | pacote offline padrão do resolver de ícones | **integrado** | motion-core (visual-assets), todas as Skills de produção |
+| svgo | https://github.com/svg/svgo | 4.x | MIT | svg/tooling | parse, otimização e sanitização de SVG | **integrado** | motion-core (svg) |
+| tabler-icons / phosphor | https://tabler.io/icons · https://phosphoricons.com | 3.x / 2.x | MIT | icons | pacotes extras no formato Iconify | **suportado, não incluído** | `./.motion/icon-packs/`, `$MOTION_ICON_PACKS` |
+| iconify-api | https://iconify.design | — | por pacote | icons/rede | busca remota opcional, com cache e sanitização | **opt-in** (`createIconifyFetcher`) | nenhum por padrão |
+| simple-icons | https://simpleicons.org | 16.x | CC0 (marcas registradas dos titulares) | logos | — | **não integrado** | logos exigem asset aprovado pelo usuário (regra 2) |

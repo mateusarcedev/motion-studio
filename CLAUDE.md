@@ -27,6 +27,13 @@ em `brand/voice.md` — escrito à mão pelo dono do estúdio._
    concept being broken justifies restarting the design.
 9. **Preserve all editable source.** The deliverable includes code that can re-render the film.
 10. **Never skip an approval gate or weaken a verification to pass a review.**
+11. **A render with `status: "FAIL"` (JS error, broken import, missing animation controller, broken essential
+    asset) is never delivered, reviewed as if good, or "fixed" by silencing the check** — even when a PNG/MP4 exists.
+12. **Visual resources are chosen by the studio, not asked of the user** (icons, SVGs, diagrams) via the shared
+    Visual Asset Intelligence layer; one icon style per production; every asset has recorded provenance/license.
+    Logos and trademarks come only from user-provided assets.
+13. **QA states are honest:** `PASS / WARN / FAIL / BLOCKED / NOT_TESTED`. A check that did not run is never `PASS`;
+    heuristics (contrast, repetition, darkness) are risk signals, not proof of quality.
 
 ## Creative restrictions (avoid everywhere)
 

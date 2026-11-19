@@ -56,3 +56,14 @@ Não substitui os pipelines 3D (`3d-scene-director` / `lemo-opuscar`) nem os tea
 ## Primitivas reutilizáveis do MOTION Core
 
 Para dados já validados e linguagem visual aprovada, `animated-counter`, `timeline-sequence`, `data-callout`, `kinetic-text-reveal`, `comparison-panel` e `progress-gauge` podem compor uma explicação. Consulte os schemas com `motion components list`; configure os parâmetros em vez de alterar o código do componente. Use transições com easing apenas quando ajudarem a explicar continuidade ou mudança de estado. Componentes são opcionais: diagramas causais e cenas customizadas continuam preferíveis quando ensinam melhor. Antes da entrega, use `motion qa determinism` e `motion qa safe-zones` e inspecione as evidências visuais.
+
+## Recursos visuais, SVG e QA automático (infraestrutura compartilhada)
+
+O usuário descreve o resultado em linguagem natural: **você** escolhe os recursos. Nunca peça a ele bibliotecas de ícones, SVG, FFmpeg ou correção de imports.
+
+1. **Ícones/pictogramas:** `motion assets resolve "<conceito>"` (API `createAssetSession` de `@technomanceer/motion-core`). Uma sessão por produção = um único estilo de ícone; conceitos diferentes recebem ícones diferentes. `fallback: true` ou confiança `low` ⇒ troque o conceito ou desenhe um SVG original.
+2. **Fundos, ilustrações e diagramas vetoriais:** `motion svg component <waveLayers|networkGraph|ringProgress|flowArrow|orbitRings|gridPattern> --tokens=<tokens.json da marca>`. SVG de terceiros passa por `motion svg validate` (não confiável ⇒ sanitizado). Cores vêm dos tokens, nunca hard-coded.
+3. **Animação vetorial:** `@technomanceer/motion-core/svg-motion` (`createSvgMotion` + `window.__onFrame__`). Proibido SMIL, CSS keyframes, `requestAnimationFrame` e `Math.random` em vídeo.
+4. **Proveniência:** registre `session.manifest()` no `assets.manifest.json`. Logotipos/marcas só a partir de assets fornecidos pelo usuário — nunca recriar nem recolorir.
+5. **Gates automáticos:** um render com `status: "FAIL"` (erro de JS, import quebrado, imagem essencial quebrada, controlador ausente) **nunca** segue adiante, mesmo que o arquivo exista. Antes do Crítico rode `motion qa precheck projects/<slug>` (gera `reviews/qa-report.{json,md}`; estados PASS/WARN/FAIL/BLOCKED/NOT_TESTED; heurística ≠ prova). O Crítico lê esse relatório **e** os renders.
+6. **Direção de arte:** siga `docs/ART_DIRECTION.md` — ponto focal, dispositivo visual e diferença em relação à cena anterior por cena; sem cenas repetidas, vazias ou com excesso de texto.

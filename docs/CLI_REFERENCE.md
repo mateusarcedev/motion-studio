@@ -36,7 +36,7 @@ Executa o diagnóstico de saúde do ambiente e checa pré-requisitos de sistema.
   - `Node.js`: Versão `>= 18.0.0`
   - `Python 3`: Versão `>= 3.9`
   - `FFmpeg`: Versão e presença no PATH
-  - `Chromium (Playwright)`: Detecção automática em cache ou binários do sistema
+  - `Chromium (Playwright)`: confirma que o executável **da revisão fixada pelo Playwright instalado** existe e executa um *smoke test* real (abre, renderiza, avalia JS). Um diretório `chromium-*` de outra revisão **não** é PASS. Diferencia `MOTION_BROWSER_MISSING`, `MOTION_BROWSER_VERSION_MISMATCH`, `MOTION_BROWSER_SYSTEM_DEPS` e `MOTION_BROWSER_LAUNCH_FAILED`, com a instrução de correção. `CHROME_PATH`/Chrome do sistema funcionam como `WARN`. Nada é instalado automaticamente.
   - `Three.js`: Detecção em `node_modules`
   - `Blender`: Checagem opcional de CLI
   - `Chatterbox TTS`: Checagem opcional de biblioteca Python
@@ -78,7 +78,10 @@ Executa renderizações com motores nativos de código.
 
 #### `render frames <composition.html> <outdir>`
 - Renderiza sequência de frames (`0000.png` ... `NNNN.png`) em uma única instância de navegador.
-- Opções: `--frames=N`, `--fps=30`, `--width=W`, `--height=H`, `--scale=1`, `--seed=1`.
+- Opções: `--frames=N`, `--fps=30`, `--width=W`, `--height=H`, `--scale=1`, `--seed=1`, `--start=`/`--end=`.
+- `--sample-frames=0,120,240-250,899` renderiza **somente** esses quadros (índices e intervalos `A-B`, ordem preservada; duplicatas, valores fora de `0..frames-1` e sintaxe inválida são rejeitados antes de abrir o navegador com `MOTION_INVALID_SAMPLE_FRAMES`). O relatório traz `producedFrames` e confere pedido = produzido.
+- Também: `--transparent`, `--inspect-bounds`, `--optional-assets=padrao*,...`, `--allow-no-controller`.
+- **Falha de verdade**: erro de JavaScript, import de módulo quebrado, controlador `window.__onFrame__` ausente ou imagem/recurso essencial com falha ⇒ `status: "FAIL"`, exit 4 e `health.errors[]` (veja [QA.md](QA.md)).
 
 #### `render video <frames_dir> <output.mp4>`
 - Monta MP4 CFR 30fps YUV420p a partir de uma pasta de frames.
@@ -126,9 +129,22 @@ Verifica:
 - Renderiza tempos selecionados em dois processos Playwright limpos, compara SHA-256 dos PNGs e produz A/B + diff quando divergirem.
 - Registra fontes, Chromium, Playwright, FFmpeg, FFprobe, riscos estáticos e o limite da garantia (sem identidade binária universal de MP4).
 
+#### `motion qa media|frames|precheck`
+- `motion qa media <arquivo.mp4> [--width --height --fps --duration --audio --codec]`: codec, resolução, CFR, duração, decodificação, áudio, sincronismo, silêncio, loudness/clipping, pretos/congelados.
+- `motion qa frames <pasta> [--expected=N]`: quadros vazios/escuros/repetidos (heurísticas) e animação ausente.
+- `motion qa precheck <projeto>`: gera `reviews/qa-report.{json,md}` para o Crítico. Exit 2 = `FAIL`, 3 = `BLOCKED`. Estados e regras em [QA.md](QA.md).
+
 #### `motion qa safe-zones <composition.html>`
 - Use `--platform=instagram-reels|instagram-stories|tiktok|youtube-shorts|youtube-horizontal|feed-4-5|square-1-1` ou `--platform=custom --preset-file=<json>`.
 - Analisa `[data-motion-important]` ao longo da timeline e salva overlays e previews de QA separados do vídeo final. Presets sociais são heurísticas versionadas do MOTION, não especificações oficiais permanentes.
+
+---
+
+### `motion assets` · `motion svg` (agentes e desenvolvedores)
+O usuário final **não precisa** destes comandos: as Skills usam as mesmas APIs. Detalhes em [VISUAL_INTELLIGENCE.md](VISUAL_INTELLIGENCE.md).
+- `motion assets resolve "<intenção>" [--size --stroke --color --svg]`, `motion assets search "<consulta>" [--limit]`, `motion assets packs`.
+- `motion svg validate <arq.svg> [--strict]`, `motion svg optimize <in> <out> [--prefix=ns]`, `motion svg rasterize <in> <out.png> [--width --scale --background]`, `motion svg component <nome> [out.svg] [--seed --tokens]`.
+- `render static ... --qa-visual` acrescenta texto cortado, contraste, texto minúsculo e excesso de texto ao relatório.
 
 ---
 

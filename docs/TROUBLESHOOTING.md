@@ -4,6 +4,25 @@ Soluções para problemas comuns durante instalação, renderização e QA.
 
 ---
 
+## 0. Códigos de erro estruturados (`MOTION_*`)
+
+Toda falha dos renderers/CLI traz um código estável (para agentes e automações) e uma instrução. Principais:
+
+| Código | O que significa | Como resolver |
+|---|---|---|
+| `MOTION_BROWSER_MISSING` | nenhum Chromium | `npx playwright install chromium` |
+| `MOTION_BROWSER_VERSION_MISMATCH` | existe Chromium, mas de outra revisão que a do Playwright instalado | `npx playwright install chromium` |
+| `MOTION_BROWSER_SYSTEM_DEPS` | faltam bibliotecas do sistema | `npx playwright install-deps chromium` |
+| `MOTION_BROWSER_LAUNCH_FAILED` | o navegador não inicia | reinstale ou defina `CHROME_PATH` |
+| `MOTION_INVALID_SAMPLE_FRAMES` | `--sample-frames` inválido (duplicata, fora de faixa, sintaxe) | use `0,120,240-250` dentro de `0..frames-1` |
+| `MOTION_RENDER_MODULE_IMPORT` | `import` não resolveu | use `./arquivo.js` ou `@technomanceer/motion-core/frame` / `/svg-motion` |
+| `MOTION_RENDER_PAGE_ERROR` | erro de JavaScript na composição | corrija o script; o render **não** é aprovado |
+| `MOTION_RENDER_CONTROLLER_MISSING` | sem `window.__onFrame__` | use `createMotionDriver` ou defina `__onFrame__` |
+| `MOTION_RENDER_ASSET_FAILED` | imagem/recurso não carregou | corrija o caminho ou marque `data-optional` |
+| `MOTION_SVG_INVALID` / `MOTION_SVG_UNSAFE` | SVG malformado / conteúdo inseguro removido | `motion svg validate <arquivo>` |
+
+---
+
 ## 1. Chromium Não Encontrado
 
 **Sintoma:** `Chromium não encontrado (defina CHROME_PATH ou instale via npx playwright install chromium)`.  

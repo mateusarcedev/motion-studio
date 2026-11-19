@@ -2,6 +2,33 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [Não lançado] — Missão 20: Production Reliability & Visual Intelligence
+
+Nenhum pacote foi publicado. Mudanças são aditivas; contratos públicos existentes preservados (veja "Compatibilidade").
+
+### Confiabilidade de produção
+- **M-009** `motion doctor` valida a revisão do Chromium fixada pelo Playwright e executa *smoke test* real; diferencia ausente / revisão incompatível / dependências de sistema / falha de inicialização.
+- **M-010** `motion render frames --sample-frames=0,120,240-250` (e `sampleFrames` na API) com validação de índices, intervalos e duplicatas; pedido = produzido.
+- **M-011** imagens e recursos com falha (404, rede, bytes inválidos) são detectados; opcionais via `data-optional`/`--optional-assets`. Corrigido travamento do renderer em imagem já falha (`complete` + largura 0).
+- **M-012** erros de JavaScript, falha de import de módulo, controlador ausente ou lançando exceção ⇒ `status: "FAIL"` (exit 4). Os renderers agora servem `/@motion/` e injetam *import map* para `@technomanceer/motion-core/frame` e `/svg-motion` (causa provável do `Failed to resolve module specifier`).
+- Códigos de erro `MOTION_*` estruturados (`MotionError`, `ERROR_CODES`).
+
+### Visual Asset Intelligence
+- Resolver semântico PT/EN de ícones (`createAssetSession`, `searchIcons`), estilo travado por produção, fallback geométrico, proveniência/licença.
+- Icon Library Manager: Lucide 1.76 (ISC) offline + pacotes Iconify do usuário + fetcher Iconify opcional com cache e sanitização.
+- SVG Design Studio: validação/sanitização (SVGO 4, lista de permissão), otimização com prefixo de IDs, rasterização, 6 componentes vetoriais com tokens da marca.
+- SVG Motion Engine (`@technomanceer/motion-core/svg-motion`): draw, reveal, pop, orbit, parallax, morph, gradient-shift, color — puro e seekable.
+- CLI: `motion assets`, `motion svg`.
+
+### QA automatizado
+- Estados `PASS/WARN/FAIL/BLOCKED/NOT_TESTED` (`createQaReport`); `motion qa media|frames|precheck`; `render static --qa-visual`.
+- Skills (studio-director, motion-director, carousel/story/feed-studio, shorts-director, explainer-motion, web-director) passam a usar a infraestrutura; `docs/ART_DIRECTION.md`, `docs/QA.md`, `docs/VISUAL_INTELLIGENCE.md`.
+
+### Compatibilidade
+- Novas dependências de runtime em `motion-core`: `svgo` (MIT). `lucide-static` é apenas devDependency (gera o pacote offline).
+- Mudança de comportamento intencional: renders com erro de JS / controlador ausente / imagem essencial quebrada deixam de retornar sucesso. Composições estáticas legítimas em `render frames` usam `--allow-no-controller`; imagens decorativas, `data-optional`.
+- `creative-core/renderers/{render_static,render_frames,qa_viewports}.mjs` viram wrappers do código canônico em `packages/motion-core`.
+
 ## [1.0.0] — não publicado (preparado)
 
 Primeira versão estável. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) estão em `1.0.0`, com dependências internas exatas e nenhuma dependência prerelease. Nenhuma RC publicada foi alterada.

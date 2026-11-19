@@ -9,6 +9,8 @@ O que **efetivamente roda** neste repositório hoje. Tudo o mais está no catál
 | Chromium headless | build 1243 (playwright cache) | BSD-family (Chromium) | navegador de render | `~/.cache/ms-playwright/` |
 | FFmpeg | 8.0.1-3ubuntu2 | LGPL/GPL mix por build | montagem MP4, áudio | PATH do sistema — ao *distribuir* um MP4/lib embutida, citar a licença da build usada |
 | Node.js | 24.x (asdf) | MIT | runtime dos renderers | sistema |
+| `svgo` (npm) | 4.x | MIT | parser/otimizador e base do sanitizador de SVG | dependência de `motion-core` |
+| Lucide Icons (pacote `assets/icons/lucide.pack.json`) | 1.76.0 | ISC | ícones offline do Visual Asset Resolver | gerado de `lucide-static` (devDependency); aviso em `assets/icons/LICENSE-lucide.txt` |
 
 Suspensos (verificados, não runtime): ver matriz em `INTEGRATIONS.md`. Regras de
 copywright aplicáveis nesse estado: GPL (blender, pedalboard) = ferramenta isolada;

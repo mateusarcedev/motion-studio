@@ -14,6 +14,17 @@ Motores de produção, QA determinístico e exportação do **MOTION Studio**.
 - **`zip_export.py`**: Empacotamento de ZIP de entrega final com fontes editáveis.
 - **`frame.js`**: Driver matemático determinístico para animações por frame (sem `Math.random` ou CSS keyframes soltos).
 
+## Visual Asset Intelligence, SVG e QA (Missão 20)
+
+- **`visual-assets/`** — resolver semântico PT/EN: `createAssetSession()` escolhe ícones por intenção, trava um estilo, evita repetição e registra proveniência/licença.
+- **`icons/`** — Icon Library Manager: Lucide (ISC) offline em `assets/icons/`, pacotes Iconify do usuário (`.motion/icon-packs/`, `$MOTION_ICON_PACKS`), fetcher remoto opcional com cache.
+- **`svg/`** — `validateSvg` (sanitiza SVG não confiável), `optimizeSvg` (SVGO, prefixo de IDs), `rasterizeSvg`, componentes com tokens da marca.
+- **`design-system/svg-motion.js`** (`@technomanceer/motion-core/svg-motion`) — animação vetorial pura e seekable.
+- **`quality/`** — `createQaReport` (`PASS/WARN/FAIL/BLOCKED/NOT_TESTED`), `qaMedia` (FFprobe/FFmpeg), `qaFrames`, `qaProject`.
+- **`lib/`** — `MotionError`/`ERROR_CODES`, `diagnoseBrowser`, `parseFrameSelection`.
+
+Os renderers falham (`status: "FAIL"`) em erro de JS, import quebrado, controlador ausente ou imagem essencial quebrada. Veja `docs/QA.md` e `docs/VISUAL_INTELLIGENCE.md` no repositório.
+
 ## Uso
 
 ```js

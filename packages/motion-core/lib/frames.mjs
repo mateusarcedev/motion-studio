@@ -22,7 +22,7 @@ export function parseFrameSelection(spec, totalFrames) {
     throw new MotionError(ERROR_CODES.INVALID_ARGUMENT, "O total de quadros (--frames) deve ser um inteiro positivo.", { exitCode: 2 });
   }
   const fail = (message, details) => new MotionError(ERROR_CODES.INVALID_SAMPLE_FRAMES, message, {
-    hint: `Use índices entre 0 e ${totalFrames - 1}, ex.: --sample-frames=0,120,240-250,${totalFrames - 1}`, details, exitCode: 2,
+    hint: `Use índices entre 0 e ${totalFrames - 1}, ex.: --sample-frames=0,${Math.floor(totalFrames / 2)},${totalFrames - 1}`, details, exitCode: 2,
   });
   if (spec === true || (typeof spec === "string" && spec.trim() === "")) throw fail("--sample-frames precisa de uma lista de quadros.");
 

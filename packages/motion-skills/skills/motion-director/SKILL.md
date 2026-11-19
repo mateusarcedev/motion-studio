@@ -61,6 +61,10 @@ For named visual styles, lemo-opuscar's STYLE.md can serve as the base for this 
 
 ## Stage 3 · STORYBOARD — the edit before the animation (STORYBOARD.md)
 
+For every scene record: **focal point**, **visual device** (icon / diagram / SVG / approved image / type), **how it differs from the
+previous scene** (composition + device), **depth plan**, and **words on screen** (≤ 45). Consecutive scenes with the same device
+and composition are rejected before any code (see `docs/ART_DIRECTION.md`).
+
 Convert the story into scenes with timestamps **and frame numbers** at the chosen fps (default 30).
 Every scene: name, frame range, one-line purpose, key event, end state. The end state of one scene
 must be the start state of the next (continuity rule). Example scale: 20s @30fps = frames 0–599;
@@ -102,6 +106,11 @@ timestamp / observation (what is visibly wrong) / why it matters / smallest usef
 **preserve** (what must stay) / **recheck** (frames to verify after repair). Still frames reveal
 layout defects; the moving preview reveals pacing and timing problems — inspect both.
 
+The Critic also reads `reviews/qa-report.{json,md}` (from `motion qa precheck`) as **measured evidence**, and scores art
+direction with `docs/ART_DIRECTION.md` (hierarchy, depth, rhythm, scene variation, legibility). Each defect also names the
+**affected composition** (file/selector). Loop: identify → locate → propose smallest fix → apply (within the repair policy) →
+re-render only affected frames (`--sample-frames`) → compare before/after → record the outcome in findings.md.
+
 ## Stage 7 · CORRECTION — local repair loop
 
 Follow the repair policy in CLAUDE.md: smallest relevant change, preserve approved decisions,
@@ -125,3 +134,14 @@ check — the next film must inherit the correction.
 ## Reusable Creative Core components
 
 After the storyboard and visual direction are set, inspect `motion components list` and select only the primitives that fit the piece. Supply validated production data, identity tokens, aspect ratio, duration, and fps; render through `motion-core` so the existing Playwright frame driver and FFmpeg pipeline remain authoritative. Use a custom composition whenever a primitive constrains the story or visual language. Use `motion render overlay` for real-alpha VP9 overlays, `motion transition` for scene-to-scene FFmpeg transitions, and the two `motion qa` checks for sampled pixel determinism and temporal safe zones. Safe-zone presets are versioned operator heuristics and require visual review in the target app.
+
+## Recursos visuais, SVG e QA automático (infraestrutura compartilhada)
+
+O usuário descreve o resultado em linguagem natural: **você** escolhe os recursos. Nunca peça a ele bibliotecas de ícones, SVG, FFmpeg ou correção de imports.
+
+1. **Ícones/pictogramas:** `motion assets resolve "<conceito>"` (API `createAssetSession` de `@technomanceer/motion-core`). Uma sessão por produção = um único estilo de ícone; conceitos diferentes recebem ícones diferentes. `fallback: true` ou confiança `low` ⇒ troque o conceito ou desenhe um SVG original.
+2. **Fundos, ilustrações e diagramas vetoriais:** `motion svg component <waveLayers|networkGraph|ringProgress|flowArrow|orbitRings|gridPattern> --tokens=<tokens.json da marca>`. SVG de terceiros passa por `motion svg validate` (não confiável ⇒ sanitizado). Cores vêm dos tokens, nunca hard-coded.
+3. **Animação vetorial:** `@technomanceer/motion-core/svg-motion` (`createSvgMotion` + `window.__onFrame__`). Proibido SMIL, CSS keyframes, `requestAnimationFrame` e `Math.random` em vídeo.
+4. **Proveniência:** registre `session.manifest()` no `assets.manifest.json`. Logotipos/marcas só a partir de assets fornecidos pelo usuário — nunca recriar nem recolorir.
+5. **Gates automáticos:** um render com `status: "FAIL"` (erro de JS, import quebrado, imagem essencial quebrada, controlador ausente) **nunca** segue adiante, mesmo que o arquivo exista. Antes do Crítico rode `motion qa precheck projects/<slug>` (gera `reviews/qa-report.{json,md}`; estados PASS/WARN/FAIL/BLOCKED/NOT_TESTED; heurística ≠ prova). O Crítico lê esse relatório **e** os renders.
+6. **Direção de arte:** siga `docs/ART_DIRECTION.md` — ponto focal, dispositivo visual e diferença em relação à cena anterior por cena; sem cenas repetidas, vazias ou com excesso de texto.
