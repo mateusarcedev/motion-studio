@@ -1,0 +1,27 @@
+
+🚀 MOTION Studio — instalação em <diretório-do-projeto>
+
+✅ Catálogo de Skills verificado — 11 Skills públicas (sha256 conferido)
+✅ Gerenciador de pacotes — npm (padrão)
+📦 Instalando CLI, Core e Skills no projeto (devDependencies, sem scripts de terceiros)...
+  npm install --save-dev @technomanceer/motion-cli @technomanceer/motion-core @technomanceer/motion-studio-skills (tentativa 1/3)
+✅ Dependências locais — motion-cli@1.0.0, motion-core@1.0.0, motion-studio-skills@1.0.0
+✅ Skills oficiais — 11 em .agents/skills (novas 11, atualizadas 0, inalteradas 0, conflitos 0)
+✅ Integração Claude Code — .claude/skills (11 links, 0 cópias, 0 inalterados)
+✅ motion.config.json — criado
+✅ Verificação de integridade — 12 verificações
+✅ Diagnóstico de motores — obrigatórios presentes
+   · Blender (Opcional): Opcional (Three.js cobre geração procedural sem Blender)
+   · Chatterbox TTS (Opcional): Opcional (shorts utilizam fallback silencioso com legendas)
+   · Edge-TTS (Opcional): Opcional (pip3 install edge-tts)
+   · Sharp (Opcional): Opcional (contact sheets utilizam Playwright/Pillow nativo)
+
+──────── Relatório ────────
+Modo:        project (npm)
+Skills:      11 oficiais em .agents/skills + .claude/skills
+Agentes:     Claude Code, OpenAI Codex, OpenCode
+Descoberta:  .agents/skills → Codex, Gemini CLI, OpenCode, GitHub Copilot · .claude/skills → Claude Code
+
+🎉 MOTION Studio pronto.
+Próximos passos: `npx motion doctor` · `npx motion create video <nome>`
+Integrações externas opcionais (nunca instaladas automaticamente): veja `npx motion list`.

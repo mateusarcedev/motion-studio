@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MOTION Studio 1.0.0 — lançamento</title>
+<style>
+  :root { --bg:#0F0F0D; --fg:#F2EFE6; --mute:#B5B1A5; --acc:#E5A93B;
+    --mono:"Ubuntu Mono","DejaVu Sans Mono",monospace; --sans:"DejaVu Sans",sans-serif; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { width:1920px; height:1080px; background:var(--bg); color:var(--fg); overflow:hidden; position:relative; font-family:var(--mono); }
+  .abs { position:absolute; left:160px; opacity:0; }
+  .title { font-family:var(--sans); font-weight:700; font-size:104px; line-height:1.1; letter-spacing:-0.01em; top:130px; white-space:nowrap; }
+  #term { top:340px; width:1600px; font-size:36px; line-height:1.4; }
+  #cmd { color:var(--fg); white-space:pre; }
+  #cmd .p { color:var(--acc); }
+  #cmd .cur { display:inline-block; width:0.55em; height:1em; background:var(--acc); vertical-align:-0.12em; margin-left:2px; }
+  .ln { opacity:0; white-space:pre-wrap; margin-top:20px; padding-left:2.2em; text-indent:-2.2em; color:var(--fg); }
+  .ln .ok { color:var(--acc); }
+  .ln .dim { color:var(--mute); }
+  #grid { top:340px; width:1600px; display:grid; grid-template-columns:repeat(2, 800px); grid-auto-flow:column; grid-template-rows:repeat(6, auto); column-gap:0; row-gap:30px; font-size:38px; opacity:1; }
+  #grid div { opacity:0; white-space:nowrap; }
+  #grid div::before { content:"✓ "; color:var(--acc); }
+  #endcmd { top:420px; font-size:56px; color:var(--acc); white-space:pre; }
+</style>
+<script type="module">
+const CMD = "npx @technomanceer/motion-studio init";
+const LINES = ["Catálogo de Skills verificado — 11 Skills públicas (sha256 conferido)", "Dependências locais — motion-cli@1.0.0, motion-core@1.0.0, motion-studio-skills@1.0.0", "Skills oficiais — 11 em .agents/skills (novas 11, atualizadas 0, inalteradas 0, conflitos 0)", "Integração Claude Code — .claude/skills (11 links, 0 cópias, 0 inalterados)", "Verificação de integridade — 12 verificações"];
+const SKILLS = ["3d-scene-director", "anatomy", "carousel-studio", "explainer-motion", "feed-studio", "motion-director", "shorts-director", "story-studio", "studio-director", "thermo-nuclear-code-quality-review", "web-director"];
+const outCubic = (p) => 1 - Math.pow(1 - p, 3);
+const clamp = (v) => Math.min(1, Math.max(0, v));
+// progress of a window [a, b] in frames, eased
+const win = (f, a, b) => outCubic(clamp((f - a) / (b - a)));
+const $ = (s) => document.querySelector(s);
+
+function build() {
+  $('#cmd').innerHTML = '<span class="p">$ </span><span id="typed"></span><span class="cur" id="cur"></span>';
+  $('#lines').innerHTML = LINES.map((t) => {
+    const [head, rest0] = t.split(' — ');
+    const rest = rest0.length > 40 ? rest0.replace(' (', '\n(').replace('motion-core@1.0.0, ', 'motion-core@1.0.0,\n') : rest0;
+    return `<div class="ln"><span class="ok">✓ </span>${head}<span class="dim"> — ${rest}</span></div>`;
+  }).join('');
+  $('#grid').innerHTML = SKILLS.map((n) => `<div>${n}</div>`).join('');
+}
+build();
+
+window.__onFrame__ = (M) => {
+  const f = M.frame;
+  // titles
+  const A = win(f, 6, 22) * (1 - win(f, 264, 276));
+  const B = win(f, 278, 294) * (1 - win(f, 372, 384));
+  const C = win(f, 386, 402);
+  for (const [sel, v] of [['#tA', A], ['#tB', B], ['#tC', C]]) {
+    $(sel).style.opacity = v;
+    $(sel).style.transform = `translateY(${(1 - v) * 18}px)`;
+  }
+  // terminal block
+  const termVis = 1 - win(f, 264, 276);
+  $('#term').style.opacity = f >= 12 ? termVis : 0;
+  const n = Math.max(0, Math.min(CMD.length, Math.floor((f - 12) / 2)));
+  $('#typed').textContent = CMD.slice(0, n);
+  const cursorOn = f < 12 ? false : (n < CMD.length || f < 96) ;
+  $('#cur').style.visibility = cursorOn ? 'visible' : 'hidden';
+  document.querySelectorAll('.ln').forEach((el, i) => {
+    const s = 96 + i * 26;
+    const v = win(f, s, s + 12);
+    el.style.opacity = v;
+    el.style.transform = `translateY(${(1 - v) * 8}px)`;
+  });
+  // grid
+  const gridOut = 1 - win(f, 372, 384);
+  document.querySelectorAll('#grid div').forEach((el, i) => {
+    const s = 284 + i * 3;
+    const v = win(f, s, s + 12) * gridOut;
+    el.style.opacity = v;
+    el.style.transform = `translateY(${(1 - v) * 8}px)`;
+  });
+  // closing
+  const E = win(f, 398, 414);
+  $('#endcmd').style.opacity = E;
+  $('#endcmd').style.transform = `translateY(${(1 - E) * 10}px)`;
+};
+if (!window.__MOTION_DRIVEN__) window.__onFrame__({ frame: 0, fps: 30, totalFrames: 450 });
+</script>
+</head>
+<body>
+  <div class="abs title" id="tA" data-motion-important="titulo-a">Um comando.</div>
+  <div class="abs title" id="tB" data-motion-important="titulo-b">11 Skills. Verificadas.</div>
+  <div class="abs title" id="tC" data-motion-important="titulo-c">MOTION Studio 1.0.0</div>
+  <div class="abs" id="term" data-motion-important="terminal"><div id="cmd"></div><div id="lines"></div></div>
+  <div id="grid" class="abs" data-motion-important="skills"></div>
+  <div class="abs" id="endcmd" data-motion-important="comando-final">$ npx @technomanceer/motion-studio init</div>
+</body>
+</html>
