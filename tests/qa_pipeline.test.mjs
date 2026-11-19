@@ -168,3 +168,22 @@ describe("Riscos visuais no DOM (--qa-visual)", () => {
     assert.equal(JSON.parse(r.stdout).status, "OK");
   });
 });
+
+describe("Regressões da homologação 1.1.0 (showcase)", { skip: !have && "NOT_TESTED: ffmpeg indisponível" }, () => {
+  test("marca escura intencional (fundo #0A0E14) NÃO é 'trecho preto'; preto real continua detectado", async () => {
+    const dir = path.join(tmp, "dark-brand"); await mkdir(dir, { recursive: true });
+    ff(["-f", "lavfi", "-i", "color=c=0x0A0E14:size=320x180:rate=30:duration=2", "-c:v", "libx264", "-pix_fmt", "yuv420p", path.join(dir, "ink.mp4")]);
+    const ink = await qaMedia(path.join(dir, "ink.mp4"), {});
+    assert.equal(ink.checks.find((c) => c.id === "video.black").status, "PASS", "fundo de marca escuro ≠ preto");
+    const black = await qaMedia(path.join(tmp, "black.mp4"), {});
+    assert.equal(black.checks.find((c) => c.id === "video.black").status, "WARN", "preto real segue acusado");
+  });
+  test("qa_viewports não trata ERR_ABORTED de <video preload=metadata> como falha de recurso", async (t) => {
+    const dir = path.join(tmp, "video-page"); await mkdir(dir, { recursive: true });
+    ff(["-f", "lavfi", "-i", "testsrc=size=160x90:rate=30:duration=3", "-c:v", "libx264", "-pix_fmt", "yuv420p", path.join(dir, "v.mp4")]);
+    await writeFile(path.join(dir, "index.html"), '<!doctype html><meta name=viewport content="width=device-width"><body style="margin:0"><video controls preload="metadata" src="v.mp4" style="width:100%"></video><p>ok</p></body>');
+    const r = spawnSync("node", [path.join(root, "packages/motion-core/renderers/qa_viewports.mjs"), path.join(dir, "index.html"), path.join(dir, "out"), "--wait=300"], { encoding: "utf8" });
+    if (/BROWSER/.test(r.stderr)) return t.skip("NOT_TESTED: Chromium indisponível");
+    assert.ok(!/failed requests/.test(r.stdout), r.stdout);
+  });
+});

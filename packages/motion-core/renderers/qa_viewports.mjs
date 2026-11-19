@@ -92,7 +92,8 @@ for (const vp of VIEWPORTS) {
   page.on("console", (m) => { if (m.type() === "error" && !/status of (4|5)\d\d/.test(m.text())) errors.push(m.text()) })
   page.on("pageerror", (e) => errors.push("pageerror: " + e.message))
   page.on("response", (r) => { if (r.status() >= 400 && !ignored(r.url())) failed.push(`${r.status()} ${r.url()}`) })
-  page.on("requestfailed", (r) => { if (!ignored(r.url())) failed.push(`FAILED ${r.url()}`) })
+  // ERR_ABORTED is how Chromium cancels media preloads (<video preload=metadata>) — not a failed asset
+  page.on("requestfailed", (r) => { if (!ignored(r.url()) && !/ERR_ABORTED/.test(r.failure()?.errorText ?? "")) failed.push(`FAILED ${r.url()}`) })
   await page.goto(targetUrl, { waitUntil: "load" })
   await page.waitForTimeout(waitMs)
   // scroll through so scroll-triggered reveals fire before full-page capture

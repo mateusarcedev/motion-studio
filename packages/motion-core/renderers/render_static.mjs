@@ -118,6 +118,7 @@ async function main() {
       for (const el of document.querySelectorAll("*")) {
         const r = el.getBoundingClientRect();
         if (r.width === 0 && r.height === 0) continue;
+    if (el.tagName === "BR" || el.tagName === "WBR") continue; // line-break elements have no visual extent of their own
         if (r.right > vw + 2 || r.bottom > vh + 2 || r.left < -2 || r.top < -2) {
           if (isBleed(el)) continue;
           const tag = el.tagName.toLowerCase();

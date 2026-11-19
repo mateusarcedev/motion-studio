@@ -72,7 +72,8 @@ export function scorePack(pack, tokens, concepts, queryNorm) {
   const expanded = new Map(); // token -> weight, from the concept terms (EN tags match here)
   for (const c of concepts) for (const t of c.termTokens ?? []) expanded.set(t, Math.max(expanded.get(t) ?? 0, 0.5 * c.weight));
   const curated = new Map();
-  for (const c of concepts) c.icons.forEach((icon, i) => curated.set(icon, Math.max(curated.get(icon) ?? 0, c.weight * (14 - i * 1.6)))); // index 0 → 14
+  // the lead concept (highest weight) dominates; secondary concepts count 60% so a trailing word ("…de qualidade") cannot outvote the subject
+  concepts.forEach((c, ci) => c.icons.forEach((icon, i) => curated.set(icon, Math.max(curated.get(icon) ?? 0, (ci === 0 ? 1 : 0.6) * c.weight * (14 - i * 1.6))))); // index 0 → 14
 
   const out = [];
   for (const e of entries) {

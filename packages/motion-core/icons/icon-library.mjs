@@ -11,6 +11,7 @@
  *
  * Brand marks (logos) are never modified or synthesized here: they must come from user-approved assets.
  */
+import { createHash } from "node:crypto";
 import { readFile, readdir, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -120,7 +121,7 @@ export function renderIcon(pack, name, { size = 24, strokeWidth, color = "curren
 /** Provenance record for assets.manifest / credits. */
 export function iconProvenance(pack, name) {
   return {
-    kind: pack.kind ?? "icon", id: `${pack.prefix}:${name}`, pack: pack.name, sha256: pack.icons[name]?.sha ?? null,
+    kind: pack.kind ?? "icon", id: `${pack.prefix}:${name}`, pack: pack.name, sha256: pack.icons[name]?.sha ?? createHash("sha256").update(pack.icons[name]?.body ?? "").digest("hex").slice(0, 16),
     licenseDetail: { spdx: pack.license.spdx, scope: pack.license.scope ?? "assets", attributionRequired: Boolean(pack.license.attributionRequired), attribution: pack.license.attribution ?? null, trademark: Boolean(pack.license.trademark), note: pack.license.assetsNote ?? null }, version: pack.version, homepage: pack.homepage,
     license: pack.license.spdx, licenseUrl: pack.license.url ?? null, attribution: pack.license.attribution ?? null,
     attributionRequired: pack.license.attributionRequired, source: path.relative(process.cwd(), pack.source) || pack.source,

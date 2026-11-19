@@ -37,6 +37,7 @@ laptop | computador, notebook, desktop, laptop, computer, monitor | laptop, moni
 search | pesquisa, busca, buscar, procurar, descoberta, search, discover, explorar | search, scan-search, telescope, compass
 target | objetivo, objetivos, meta, metas, alvo, foco, estrategia, target, goal, strategy | target, crosshair, goal, flag
 check | sucesso, concluido, correto, aprovado, verificar, verificado, check, success, done | check, circle-check, badge-check, square-check
+review | revisao, revisar, revisando, critico, critica, auditoria, auditar, inspecao, inspecionar, conferir, olhar critico, review, audit, inspect | eye, scan-eye, search-check, clipboard-check, badge-check
 notification | notificacao, notificacoes, sino, aviso de mensagem, notification, bell, lembrete, reminder | bell, bell-ring, bell-dot, alarm-clock
 alert | alerta, atencao, risco, aviso, problema, perigo, warning, risk, danger | triangle-alert, octagon-alert, bell-ring, siren
 info | informacao, ajuda, duvida, info, help | info, circle-help, lightbulb

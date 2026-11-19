@@ -53,6 +53,8 @@ export async function runRender(subcommand, target, out, options = {}, positiona
       time: options.time,
       seed: options.seed,
       optionalAssets: optionalAssets(options),
+      qaVisual: options["qa-visual"] === true || options.qaVisual === true,
+      requireController: options["require-controller"] === true,
     });
     console.log(res.stdout || "Render estático concluído com sucesso.");
   } else if (sub === "frames") {

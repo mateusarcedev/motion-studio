@@ -254,3 +254,23 @@ describe("M-012 — erros de JavaScript invalidam o render", () => {
     assert.ok(await exists(path.join(out, "0019.png")));
   });
 });
+
+describe("Regressões da homologação 1.1.0 (showcase)", () => {
+  test("CLI `render static --qa-visual` repassa a flag e devolve o bloco `visual`", async (t) => {
+    if (!browserInstalled) return t.skip("NOT_TESTED: Chromium indisponível");
+    const html = await fixture("cli-qa-visual", page('<p style="color:#bbb;background:#fff;font-size:30px">baixo contraste</p>'));
+    const r = sh("node", [CLI, "render", "static", html, html.replace("index.html", "o.png"), "--width=200", "--height=120", "--scale=1", "--wait=0", "--qa-visual"]);
+    assert.equal(r.status, 0, r.stderr);
+    const rep = json(r);
+    assert.ok(rep.visual, "o relatório deve conter `visual`");
+    assert.equal(rep.visual.lowContrast.length, 1);
+    assert.equal(rep.status, "WARN");
+  });
+  test("overflow não acusa <br> (elemento sem extensão visual); conteúdo realmente fora do quadro continua reportado", async (t) => {
+    if (!browserInstalled) return t.skip("NOT_TESTED: Chromium indisponível");
+    const html = await fixture("br-overflow", page('<div style="margin-left:300px;width:100px">linha<br>outra</div>'));
+    const rep = json(sh("node", [STATIC, html, html.replace("index.html", "o.png"), "--width=200", "--height=120", "--scale=1", "--wait=0"]));
+    assert.ok(rep.overflow.length > 0, "o div fora do quadro deve ser reportado");
+    assert.ok(!rep.overflow.some((o) => o.detail?.tag === "br"), "mas nunca o <br>");
+  });
+});

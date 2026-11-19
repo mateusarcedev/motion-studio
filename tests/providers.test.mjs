@@ -356,3 +356,17 @@ describe("Integração com Skills e regressões", () => {
     assert.equal(validateSvg(buildSvgComponent("flowArrow", {})).status, "PASS");
   });
 });
+
+describe("Regressões da homologação 1.1.0 (showcase)", () => {
+  test('"revisão/crítico" resolvem para olho/inspeção, não para estrela ou gráfico', async () => {
+    for (const q of ["revisão e verificação de qualidade", "olhar crítico observando o resultado", "auditoria do resultado"]) {
+      const s = await createAssetSession({ registry });
+      const a = await s.asset(q, { kinds: ["icon"] });
+      assert.ok(["lucide:eye", "lucide:scan-eye", "lucide:search-check", "lucide:clipboard-check", "lucide:badge-check"].includes(a.id), `${q} → ${a.id}`);
+    }
+  });
+  test("todo asset resolvido (inclusive Lucide) sai com hash de proveniência", async () => {
+    const s = await createAssetSession({ registry });
+    for (const q of ["velocidade", "Docker", "pessoas apresentando"]) assert.match((await s.asset(q)).provenance.sha256, /^[0-9a-f]{16}$/, q);
+  });
+});

@@ -30,7 +30,7 @@ export async function runQA(urlOrHtml, outdir, options = {}) {
     const report = urlOrHtml === "media"
       ? await api.qaMedia(target, { width: num(options.width), height: num(options.height), fps: num(options.fps), durationSec: num(options.duration), audio: options.audio === true ? true : options.audio === "optional" ? "optional" : undefined, codec: typeof options.codec === "string" ? options.codec : undefined })
       : urlOrHtml === "frames"
-        ? await api.qaFrames(target, { expectedFrames: num(options.expected) })
+        ? await api.qaFrames(target, { expectedFrames: num(options.expected), darkMean: num(options["dark-mean"]) })
         : await api.qaProject(target, { width: num(options.width), height: num(options.height), fps: num(options.fps), durationSec: num(options.duration), audio: options.audio === true ? true : undefined });
     if (options.json) console.log(JSON.stringify(report.toJSON(), null, 2)); else console.log(report.toMarkdown());
     const status = report.summary().status;

@@ -113,7 +113,7 @@ export async function qaMedia(file, expect = {}) {
 
   // black / frozen frames
   if (v && expect.checkBlack !== false) {
-    const black = await run("ffmpeg", ["-nostats", "-i", file, "-an", "-vf", "blackdetect=d=0.5:pix_th=0.10", "-f", "null", "-"]);
+    const black = await run("ffmpeg", ["-nostats", "-i", file, "-an", "-vf", "blackdetect=d=0.5:pix_th=0.03", "-f", "null", "-"]);
     if (!black.error) {
       const spans = [...black.stderr.matchAll(/black_start:([\d.]+)\s+black_end:([\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
       report.add({ id: "video.black", title: "Sem trechos pretos inesperados (≥0,5 s)", status: spans.length ? "WARN" : "PASS", details: spans.length ? spans.map(([s, e]) => `${s.toFixed(2)}–${e.toFixed(2)}s`).join(", ") : null, heuristic: true });

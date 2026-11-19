@@ -2,6 +2,17 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [Não lançado] — correções encontradas na homologação pública do 1.1.0
+
+Achados ao produzir a campanha real (`~/testes/motion-showcase`) só com os pacotes npm públicos. **Nenhuma versão nova foi publicada**; candidatas a 1.1.1.
+- `motion render static --qa-visual`: a CLI não repassava a flag (o relatório saía sem `visual`); agora repassa também `--require-controller`.
+- Overflow do render estático deixa de acusar `<br>`/`<wbr>` (sem extensão visual própria).
+- `qa_viewports`: `ERR_ABORTED` de `<video preload="metadata">` não é mais contado como recurso com falha.
+- `qa media`: detector de pretos usa `pix_th=0.03` — fundo escuro de marca (`#0A0E14`) deixa de ser "trecho preto"; preto real segue detectado.
+- Proveniência de ícones Lucide passa a incluir `sha256` (antes `null`).
+- Resolver: o conceito principal domina (conceitos secundários valem 60%): "revisão e verificação de qualidade" resolvia para ⭐ em vez de 👁; léxico ganhou `review` (revisão/crítico/auditoria).
+- `motion qa frames --dark-mean=N` para marcas escuras.
+
 ## [1.1.0] — não publicado (em homologação)
 
 Primeira versão menor após a 1.0.0: reúne a Missão 20 e a Missão 20.1. **Versão proposta 1.1.0** (SemVer: funcionalidades aditivas; contratos de API preservados; a única mudança de comportamento — render com erro deixa de ser "OK" — corrige um falso positivo e tem saídas explícitas).
