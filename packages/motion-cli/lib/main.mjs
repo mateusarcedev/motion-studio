@@ -75,6 +75,8 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
 
     qa <url_ou_html> <outdir> Executa auditoria multi-viewport em 5 telas com Playwright
     qa determinism <html> [--output=<dir>] Verifica hashes em duas sessões independentes
+    qa media <mp4> [--width= --height= --fps= --duration= --audio]   Codec, FPS, duração, áudio, sincronismo, silêncio, loudness, decodificação
+    qa frames <pasta> [--expected=N]   Quadros vazios/escuros/repetidos (heurísticas) · qa precheck <projeto>: relatório para o Crítico
     qa safe-zones <html> [--platform=instagram-reels] [--preset-file=<json>] [--output=<dir>]
 
     components list          Lista componentes reutilizáveis e seus schemas

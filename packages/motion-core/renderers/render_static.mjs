@@ -25,6 +25,7 @@ import { launchBrowser } from "../lib/browser.mjs";
 import { ERROR_CODES, MotionError, reportError } from "../lib/errors.mjs";
 import { createHealthMonitor, parseOptionalAssets } from "../lib/render-health.mjs";
 import { createStaticServer } from "../lib/static-server.mjs";
+import { collectDomChecks } from "../lib/dom-checks.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const m = a.match(/^--([^=]+)(?:=(.*))?$/); return m ? [m[1], m[2] ?? true] : [a, true];
@@ -134,6 +135,7 @@ async function main() {
       return issues.slice(0, 12);
     });
 
+    const visual = args["qa-visual"] ? await collectDomChecks(page) : null;
     const summary = monitor.summary();
     const fontIssues = summary.warnings.filter((w) => w.resourceType === "font" || /\.(woff2?|ttf|otf)/.test(w.url ?? "")).map((w) => w.url ?? w.message);
     const absOutput = path.resolve(output);
@@ -141,7 +143,8 @@ async function main() {
 
     const fontsOk = fontState.status === "loaded" && fontState.faces.every((face) => face.status === "loaded");
     const status = summary.status === "FAIL" ? "FAIL"
-      : (summary.status === "WARN" || overflow.length || fontIssues.length || !fontsOk) ? "WARN" : "OK";
+      : (summary.status === "WARN" || overflow.length || fontIssues.length || !fontsOk
+        || (visual && (visual.clipped.length || visual.lowContrast.length || visual.tiny.length || visual.textOverload))) ? "WARN" : "OK";
     const payload = {
       png: absOutput, width, height, deviceScaleFactor: scale,
       motion: { frame: frame ?? null, time: time ?? null, seed: seed ?? null, fps: args.fps ? Number(args.fps) : 30, replayed: motionState },
@@ -149,6 +152,7 @@ async function main() {
       fontIssues,
       fonts: fontState,
       pageErrors: monitor.pageErrors,
+      visual,
       health: { errors: summary.errors, warnings: summary.warnings, errorCodes: summary.errorCodes },
       status,
     };

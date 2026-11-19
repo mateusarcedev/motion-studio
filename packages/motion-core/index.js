@@ -37,6 +37,10 @@ export { diagnoseBrowser, locateBrowser, smokeTestBrowser } from "./lib/browser.
 export { validateSvg, assertSafeSvg, optimizeSvg, rasterizeSvg, buildComponent as buildSvgComponent, listComponents as listSvgComponents, applyTokens, paletteFromTokens } from "./svg/index.mjs";
 export { loadIconPacks, renderIcon, iconProvenance } from "./icons/index.mjs";
 export { searchIcons, createAssetSession } from "./visual-assets/index.mjs";
+export { QA_STATUS, combineStatuses, createQaReport } from "./quality/qa-status.mjs";
+export { qaMedia } from "./quality/media_qa.mjs";
+export { qaFrames } from "./quality/frame_qa.mjs";
+export { qaProject } from "./quality/qa_project.mjs";
 export * as svgMotion from "./design-system/svg-motion.js";
 export { listMotionComponents, getMotionComponent, validateComponentConfig, generateComponentHtml, componentSize } from "./components/index.js";
 export { previewMotionComponent, renderMotionComponent, renderComposition } from "./components/render.js";
@@ -101,6 +105,7 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.time !== undefined) args.push(`--time=${options.time}`);
   if (options.optionalAssets?.length) args.push(`--optional-assets=${[].concat(options.optionalAssets).join(",")}`);
   if (options.requireController) args.push("--require-controller");
+  if (options.qaVisual) args.push("--qa-visual");
   return runProcess("node", args);
 }
 
