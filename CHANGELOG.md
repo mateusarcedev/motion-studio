@@ -2,6 +2,18 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.0.0] — não publicado (preparado)
+
+Primeira versão estável. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) estão em `1.0.0`, com dependências internas exatas e nenhuma dependência prerelease. Nenhuma RC publicada foi alterada.
+
+### Instalador universal (Missão 19.7–19.9)
+- Novo pacote `@technomanceer/motion-studio` (executável `motion-studio`): `npx @technomanceer/motion-studio init`. (`motion-studio` sem escopo pertence a outro projeto.)
+- Bootstrap único compartilhado em `@technomanceer/motion-cli` (`motion init` e o instalador usam o mesmo código): detecção de gerenciador, instalação local exata sem scripts, Skills (11 oficiais, sha256 verificado), links Claude Code, manifesto `.motion/install.json`, verificação e diagnóstico.
+- CLI passa a depender das Skills (antes: peer opcional, `init` não instalava nenhuma Skill). Perfil padrão agora é `all`.
+- Idempotente, não destrutivo (conflitos preservados), recuperação de instalação interrompida, falha de rede com exit 2.
+- Removido o adaptador duplicado `.opencode/skills` (OpenCode, Copilot e Gemini leem `.agents/skills`).
+- `motion doctor` revalida a instalação.
+
 ## [1.0.0-rc.2] — 2026-10-30
 
 ### Integração Gabriel Greco Skills & Perfil Interactive (Missão 10)

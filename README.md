@@ -105,26 +105,22 @@ O MOTION foi desenvolvido para operar de forma confiável em ambientes Linux e m
 
 Instale o MOTION em qualquer projeto consumidor existente (Next.js, Vite, React, etc.) sem duplicar o monorepo:
 
-### 1. Instalação via NPM
-
-> [!NOTE]
-> **Disponibilidade no NPM:** A versão `1.0.0-rc.4` está preparada, ainda sem publicação. A instalação pública usará `@technomanceer/motion-cli` e `@technomanceer/motion-core`; o catálogo de Skills é opcional e instala somente o conteúdo do manifesto licenciado.
+### 1. Instalação (um comando)
 
 ```bash
-# Instalação padrão pós-publicação
-npm install -D @technomanceer/motion-cli @technomanceer/motion-core
-
-# Opcional: Skills públicas curadas
-npm install @technomanceer/motion-studio-skills
+npx @technomanceer/motion-studio init
 ```
 
-### 2. Inicialização do Estúdio
-```bash
-# Inicializa o estúdio com o perfil essencial 'core'
-npx motion init --brand="MinhaMarca"
+Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **11 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
-# Ou instale o perfil desejado: core, web, motion, social, 3d, blender, all
-npx motion init --brand="MinhaMarca" --profile=web
+> [!NOTE]
+> **Versão estável `1.0.0`.** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
+
+### 2. Opções do `init`
+```bash
+npx @technomanceer/motion-studio init --brand="MinhaMarca"      # nome da marca
+npx @technomanceer/motion-studio init --agents=claude,codex     # agentes explícitos
+npx @technomanceer/motion-studio init --with-package-json       # em pasta vazia, cria package.json mínimo
 ```
 
 ### 3. Diagnóstico do Ambiente

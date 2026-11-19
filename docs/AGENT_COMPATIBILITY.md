@@ -18,9 +18,10 @@ O MOTION Studio adota a especificação aberta **Agent Skills** (`SKILL.md`). Os
 |---|---|---|---|---|---|---|---|
 | **Antigravity (Google DeepMind)** | ✅ `.agents/skills/` | ✅ Terminal bash | ✅ Chromium / FFmpeg | ✅ Multimodal nativo | ✅ Ferramentas MCP | **Totalmente Compatível** | Ambiente de desenvolvimento e validação desta distribuição. |
 | **Claude Code (Anthropic)** | ✅ `.claude/skills/` (symlinks) | ✅ Terminal bash | ✅ Chromium / FFmpeg | ✅ `View` tool | ✅ MCP nativo | **Totalmente Compatível** | Validado no monorepo e no projeto consumidor. |
-| **OpenCode** | ✅ `.opencode/skills/` | ✅ Terminal bash | ✅ Chromium / FFmpeg | ✅ Multimodal | ⚠️ Variável | **Totalmente Compatível** | Testado com sucesso via CLI. |
+| **OpenCode** | ✅ `.agents/skills/` e `.claude/skills/` | ✅ Terminal bash | ✅ Chromium / FFmpeg | ✅ Multimodal | ⚠️ Variável | **Totalmente Compatível** | Testado com sucesso via CLI. |
 | **Codex CLI / Cline** | ✅ `.agents/skills/` | ✅ Terminal | ✅ Via terminal | ✅ Suportado | ⚠️ Depende do client | **Validado** | Roda comandos do studio normalmente. |
-| **Gemini CLI / Copilot CLI** | ✅ `.agents/skills/` | ✅ Terminal | ✅ Via terminal | ⚠️ Variável | ❌ Não suportado | **Operacional** | Opera via shell padrão. |
+| **Google Antigravity (`agy`)** | ✅ `.agents/skills/` | ✅ Terminal | ⚠️ Não testado | ⚠️ Não testado | ⚠️ Não testado | **Descoberta validada** | Descoberta testada em 2026-11-19 com controle negativo; demais níveis não testados. |
+| **Gemini CLI / Copilot CLI** | ⚠️ `.agents/skills/` (só docs oficiais) | ⚠️ Não testado | ⚠️ Não testado | ⚠️ Não testado | ⚠️ Não testado | **Não testado** | Não instalados no ambiente de validação; Gemini CLI possivelmente descontinuado. |
 | **ChatGPT Web / Custom GPT** | ⚠️ Somente colando prompt | ❌ Sem terminal | ❌ Sem acesso local | ✅ Multimodal | ❌ Sem MCP | **Parcial (Somente Roteiro/Crítica)** | Pode escrever `BRIEF.md`, `STYLE.md` e código HTML, mas o render precisa ser executado por um humano ou runner. |
 | **Cowork / OpenBot / Grok** | ⚠️ Manual | ⚠️ Variável | ⚠️ Não testado | ⚠️ Variável | ❌ Não testado | **Não Testado** | Não alegada compatibilidade sem validação em máquina real. |
 

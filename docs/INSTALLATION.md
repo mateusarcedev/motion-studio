@@ -1,88 +1,115 @@
 # Guia de Instalação — MOTION Studio
 
-O MOTION Studio pode ser instalado em qualquer projeto Node.js / TypeScript existente sem a necessidade de clonar o monorepo ou criar links simbólicos secretos.
+```bash
+npx @technomanceer/motion-studio init
+```
+
+Esse é o fluxo oficial. Você não precisa conhecer os pacotes internos (`@technomanceer/motion-core`, `-cli`, `-studio-skills`).
+
+> O nome npm `motion-studio` (sem escopo) pertence a outro projeto (biblioteca Motion). O instalador público é `@technomanceer/motion-studio`; o executável instalado se chama `motion-studio`.
 
 ---
 
-## 1. Pré-Requisitos do Sistema
+## 1. Requisitos
 
-Antes da instalação, certifique-se de que seu ambiente possui:
-
-| Requisito | Versão Mínima | Função | Como Verificar |
+| Requisito | Mínimo | Obrigatório | Função |
 |---|---|---|---|
-| **Node.js** | `>= 18.0.0` (recomendado `>= 20`) | Runtime de execução | `node -v` |
-| **Python 3** | `>= 3.9` | Manifesto SHA-256 e contact sheets | `python3 --version` |
-| **FFmpeg** | `>= 6.0` | Codificação YUV420p CFR 30fps | `ffmpeg -version` |
-| **Chromium** | Via Playwright | Captura de frames e screenshots de alta resolução | Instalado automaticamente ou via `npx playwright install chromium` |
+| **Node.js** | 18 (recomendado 20+) | Sim | Runtime |
+| **Python 3** | 3.9 | Sim | Manifestos SHA-256, contact sheets |
+| **FFmpeg** | 6.0 | Sim | Montagem de vídeo CFR 30fps |
+| **Chromium** | via Playwright | Sim | Captura de frames/stills (`npx playwright install chromium`) |
+| Three.js, Blender, Chatterbox, Edge-TTS, Sharp | — | Não | Recursos opcionais; **nunca** instalados automaticamente |
 
----
+## 2. O que o `init` faz
 
-## 2. Instalação em Projeto Consumidor (Next.js, Vite, etc.)
+1. Verifica o catálogo de Skills (sha256 de cada `SKILL.md` contra `public-skills.json`). Falha explicitamente se faltar alguma Skill.
+2. Detecta o gerenciador de pacotes (`packageManager` do package.json → lockfile → npm).
+3. Instala **CLI, Core e Skills** como `devDependencies` exatas, sem scripts de terceiros (`--ignore-scripts`), nunca globalmente.
+4. Copia as **11 Skills oficiais** para `.agents/skills/` e, para Claude Code, cria links relativos em `.claude/skills/`.
+5. Cria `motion.config.json` e `motion/` (brand, projects, out, gallery).
+6. Grava `.motion/install.json` (versões, hashes, status) e verifica a integridade.
+7. Roda o diagnóstico dos motores e imprime o relatório.
 
-### Via Pacotes Locais (Tarballs)
+As outras Skills do repositório de desenvolvimento **não** são redistribuíveis e não estão no pacote npm. Integrações externas (ex.: `aula-interativa`) continuam opcionais e são instaladas manualmente, respeitando a licença de cada uma (`npx motion list`).
 
-Se você estiver utilizando a distribuição empacotada localmente:
+### Opções
 
-```bash
-# Na raiz do seu projeto consumidor:
-npm install \
-  /caminho/para/mateusarcedev-motion-core-1.0.0-rc.4.tgz \
-  /caminho/para/mateusarcedev-motion-cli-1.0.0-rc.4.tgz
+| Flag | Efeito |
+|---|---|
+| `--brand=<nome>` | Nome da marca (padrão: nome da pasta) |
+| `--agents=claude,codex,gemini,opencode,copilot` | Agentes explícitos (padrão: detecção) |
+| `--profile=<perfil>` | Subconjunto das Skills públicas (padrão: `all` = 11) |
+| `--with-package-json` | Em pasta sem `package.json`, cria um mínimo e instala tudo |
+| `--skip-install` | Não instala dependências; usa os arquivos do pacote em execução |
+| `--force` | Substitui configuração/Skills divergentes, com backup em `.motion/backups` |
+| `--strict` | Exit 3 se algum motor obrigatório faltar (útil em CI) |
+| `--json` | Relatório em JSON |
 
-# Opcional: catálogo curado de Skills públicas
-npm install /caminho/para/mateusarcedev-motion-studio-skills-1.0.0-rc.4.tgz
-```
+### Projeto sem `package.json`
 
-### Via Registro NPM (Quando Publicado)
+Estratégia padrão: **modo standalone**. Só `.agents/skills`, `.claude/skills`, `motion.config.json`, `motion/` e `.motion/` são criados; nenhum `package.json` ou `node_modules` aparece. Os comandos continuam disponíveis via `npx @technomanceer/motion-studio <comando>`. Para ter CLI e Core instalados localmente, use `--with-package-json`.
 
-```bash
-npm install -D @technomanceer/motion-cli @technomanceer/motion-core
-# Opcional: Skills públicas curadas
-npm install @technomanceer/motion-studio-skills
-```
+## 3. Agentes suportados
 
-The public registry is not updated by this mission. Confirm published package versions before using the registry command; the compatibility check here uses an isolated install from the locally packed tarballs documented above.
+Caminhos confirmados nas documentações oficiais de cada agente:
 
----
+| Agente | Descoberta de Skills | Onde o `init` instala |
+|---|---|---|
+| Claude Code | `.claude/skills` | links em `.claude/skills` |
+| OpenAI Codex | `.agents/skills` (segue symlinks) | `.agents/skills` |
+| Google Antigravity | `.agents/skills` (testado) | `.agents/skills` |
+| Gemini CLI (não testado) | `.gemini/skills` ou alias `.agents/skills` | `.agents/skills` |
+| OpenCode | `.opencode/skills`, `.claude/skills`, `.agents/skills` | `.agents/skills` |
+| GitHub Copilot | `.github/skills`, `.claude/skills`, `.agents/skills` | `.agents/skills` |
 
-## 3. Diagnóstico do Ambiente (`doctor`)
+Sem agente detectado, o `init` instala o layout universal (`.agents/skills` + `.claude/skills`). Nada é escrito em `AGENTS.md`, `CLAUDE.md` ou configs dos agentes. Veja o que foi testado de fato em [docs/reports/INSTALLER_COMPATIBILITY_REPORT.md](reports/INSTALLER_COMPATIBILITY_REPORT.md).
 
-Após instalar o pacote, execute o diagnóstico automatizado para confirmar que todos os motores e dependências estão prontos:
+> Skills com `disable-model-invocation: true` (hoje: `thermo-nuclear-code-quality-review`) são de invocação manual; OpenCode e Antigravity não as expõem ao modelo, por design.
+
+## 4. Segurança e idempotência
+
+- Reexecutar o `init` não altera nada que já esteja correto (`inalteradas 11`).
+- Skill ou config sua com conteúdo diferente é **preservada** e reportada como conflito. `--force` substitui com backup.
+- `motion.config.json` inválido: o instalador aborta sem tocar no arquivo.
+- Instalação interrompida (queda, Ctrl+C): `.motion/install.json` fica `in-progress`; reexecute o `init` para retomar e reparar.
+- Falha de rede: 3 tentativas, depois exit 2 sem criar Skills nem config. Reexecute quando a rede voltar.
+- Recusa rodar dentro do próprio repositório do MOTION, dentro de `node_modules` ou de forma recursiva.
+- Versões: o CLI instala exatamente as versões testadas em conjunto; se você já tem uma mais nova, ela é mantida com aviso.
+
+## 5. Diagnóstico
 
 ```bash
 npx motion doctor
 ```
 
-O comando verificará:
-- Versão do Node.js
-- Instalação do Python 3
-- Disponibilidade do FFmpeg no PATH
-- Executável do Chromium no cache do Playwright ou no sistema
-- Dependências opcionais (Three.js, Blender, Chatterbox TTS)
+Mostra os motores e, se o projeto foi instalado pelo `init`, revalida Skills e links (`.motion/install.json`).
 
----
+## 6. Solução de problemas
 
-## 4. Inicialização no Projeto (`init`)
+| Sintoma | Causa provável | Ação |
+|---|---|---|
+| `Falha de rede ao instalar` (exit 2) | Registro inacessível | Verifique rede/proxy/registry e rode de novo |
+| `Pacote de Skills indisponível` | Dependência não instalada/corrompida | `npm i -D @technomanceer/motion-studio-skills` e rode de novo |
+| `Integridade falhou para a Skill` | Pacote adulterado/corrompido | Reinstale o pacote de Skills |
+| `Conflito: '<skill>' já existe` | Skill sua com o mesmo nome | Renomeie a sua ou use `--force` |
+| `motion.config.json não é um JSON válido` | Arquivo editado com erro | Corrija o JSON; o instalador não o sobrescreve |
+| `Este diretório é o próprio pacote` | Rodou no repo do MOTION | Rode em um projeto consumidor |
+| Doctor: FFmpeg/Chromium FAIL | Motor ausente | `apt/brew install ffmpeg`; `npx playwright install chromium` |
+| Agente não vê as Skills | Sessão aberta antes da instalação | Reinicie o agente na raiz do projeto |
 
-Para inicializar a estrutura do MOTION Studio no seu projeto:
+## 7. Atualização
 
 ```bash
-npx motion init --brand="NomeDaSuaMarca"
+npx @technomanceer/motion-studio@latest init
 ```
 
-O que o `motion init` faz:
-1. Cria o arquivo de configuração `motion.config.json`.
-2. Cria os diretórios isolados `motion/brand`, `motion/projects` e `motion/out`.
-3. Gera os tokens iniciais (`motion/brand/tokens.json`) e o perfil de marca (`motion/brand/PROFILE.md`).
-4. Cria a galeria local isolada (`motion/gallery.json`).
-5. Se o pacote opcional de Skills estiver instalado, instala somente o catálogo autorizado em `.agents/skills/` com adaptadores para Claude Code (`.claude/skills`) e OpenCode (`.opencode/skills`). Sem esse pacote, a CLI cria a estrutura e permanece funcional.
-6. **Proteção de sobrescrita:** Não altera arquivos existentes sem a flag `--force`.
+Skills que você não modificou são atualizadas; as modificadas são preservadas como conflito.
 
----
+## 8. Compatibilidade com o fluxo anterior
 
-## 5. Remoção Limpa
+`npx @technomanceer/motion-cli init` continua funcionando e usa o mesmo instalador (desde a 1.0.0 também instala as Skills; na rc.4 não instalava).
 
-Se desejar remover a integração do MOTION sem afetar seu projeto principal:
-1. Remova as dependências: `npm uninstall @technomanceer/motion-cli @technomanceer/motion-core @technomanceer/motion-studio-skills`
-2. Remova as pastas de configuração: `rm -rf motion/ motion.config.json .agents/skills`
-3. O seu projeto continuará funcionando exatamente como antes.
+## 9. Remoção
+
+1. `npm uninstall @technomanceer/motion-cli @technomanceer/motion-core @technomanceer/motion-studio-skills`
+2. `rm -rf motion motion.config.json .motion .agents/skills .claude/skills` (confira antes: remova só o que for do MOTION se você tem outras Skills)
