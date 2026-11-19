@@ -120,3 +120,7 @@ specific scene and re-render.
 **Studio memory:** when the Critic surfaces the same mistake twice, or a production reveals a
 better default, convert it into a new rule in CLAUDE.md, a reusable component, or a new Critic
 check — the next film must inherit the correction.
+
+## Reusable Creative Core components
+
+After the storyboard and visual direction are set, inspect `motion components list` and select only the primitives that fit the piece. Supply validated production data, identity tokens, aspect ratio, duration, and fps; render through `motion-core` so the existing Playwright frame driver and FFmpeg pipeline remain authoritative. Use a custom composition whenever a primitive constrains the story or visual language. Use `motion render overlay` for real-alpha VP9 overlays, `motion transition` for scene-to-scene FFmpeg transitions, and the two `motion qa` checks for sampled pixel determinism and temporal safe zones. Safe-zone presets are versioned operator heuristics and require visual review in the target app.

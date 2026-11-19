@@ -92,6 +92,18 @@ Executa renderizações com motores nativos de código.
 #### `render project <pasta_do_projeto>`
 - Detecta automaticamente se o projeto é vídeo (`composition.html`) ou carrossel (`slides/`) e executa o pipeline completo.
 
+#### `render overlay <composition.html> --output=<overlay.webm>`
+- Exporta um overlay com VP9 e alfa real; opções: `--duration`, `--fps`, `--width`, `--height`, `--scale`, `--seed`.
+
+#### `components list|preview|render`
+- `motion components list` exibe IDs e parâmetros.
+- `motion components preview <id> --config=<json> --output=<poster.png>` gera um preview de frame.
+- `motion components render <id> --config=<json> --output=<video.mp4|overlay.webm>` executa a timeline parametrizada.
+
+#### `transition list|preview|render`
+- Componha duas ou mais cenas com `--kind`, `--duration`, `--offset`, `--direction`, `--easing`, `--softness`, `--accentColor` e `--easingCoefficients`.
+- `preview` usa 640×360 a 15fps por padrão. Transições entre cenas são opacas e separadas do pipeline de overlays transparentes.
+
 ---
 
 ### `motion qa <url_ou_html> <outdir>`
@@ -109,6 +121,14 @@ Verifica:
 - Erros de console e requisições HTTP falhadas
 - Captura screenshots fold e full-page em cada resolução
 - Salva `report.json` e `report.md`
+
+#### `motion qa determinism <composition.html>`
+- Renderiza tempos selecionados em dois processos Playwright limpos, compara SHA-256 dos PNGs e produz A/B + diff quando divergirem.
+- Registra fontes, Chromium, Playwright, FFmpeg, FFprobe, riscos estáticos e o limite da garantia (sem identidade binária universal de MP4).
+
+#### `motion qa safe-zones <composition.html>`
+- Use `--platform=instagram-reels|instagram-stories|tiktok|youtube-shorts|youtube-horizontal|feed-4-5|square-1-1` ou `--platform=custom --preset-file=<json>`.
+- Analisa `[data-motion-important]` ao longo da timeline e salva overlays e previews de QA separados do vídeo final. Presets sociais são heurísticas versionadas do MOTION, não especificações oficiais permanentes.
 
 ---
 

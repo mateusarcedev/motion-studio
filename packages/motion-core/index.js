@@ -3,6 +3,7 @@
  * Programmatic API for MOTION Studio engines.
  */
 import { spawn } from "node:child_process";
+import { mkdir, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -20,9 +21,26 @@ export const PATHS = {
   buildGallery: path.join(__dirname, "gallery", "build_gallery.py"),
   frameDriver: path.join(__dirname, "design-system", "frame.js"),
   presets: path.join(__dirname, "presets.json"),
+  components: path.join(__dirname, "components", "index.js"),
+  renderComposition: path.join(__dirname, "components", "render.js"),
+  transitionRenderer: path.join(__dirname, "transitions", "ffmpeg.py"),
+  verifyDeterminism: path.join(__dirname, "quality", "determinism.mjs"),
+  safeZoneQA: path.join(__dirname, "quality", "safe_zones.mjs"),
 };
 
 export { createMotionDriver } from "./design-system/frame.js";
+export { listMotionComponents, getMotionComponent, validateComponentConfig, generateComponentHtml, componentSize } from "./components/index.js";
+export { previewMotionComponent, renderMotionComponent, renderComposition } from "./components/render.js";
+export { listTransitions, renderTransition } from "./transitions/index.js";
+export { verifyDeterminism } from "./quality/determinism.mjs";
+export {
+  analyzeSafeZones,
+  createSafeZoneOverlaySvg,
+  getSafeZonePreset,
+  listSafeZonePresets,
+  qaSafeZones,
+  validateSafeZonePreset,
+} from "./quality/safe_zones.mjs";
 export {
   classifyCreativeIntent,
   calculateAdaptiveDuration,
@@ -55,6 +73,9 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.wait) args.push(`--wait=${options.wait}`);
   if (options.frame !== undefined) args.push(`--frame=${options.frame}`);
   if (options.seed !== undefined) args.push(`--seed=${options.seed}`);
+  if (options.fps) args.push(`--fps=${options.fps}`);
+  if (options.frames) args.push(`--frames=${options.frames}`);
+  if (options.time !== undefined) args.push(`--time=${options.time}`);
   return runProcess("node", args);
 }
 
@@ -68,6 +89,9 @@ export async function renderFrames(inputHtml, outdir, options = {}) {
   if (options.seed !== undefined) args.push(`--seed=${options.seed}`);
   if (options.start !== undefined) args.push(`--start=${options.start}`);
   if (options.end !== undefined) args.push(`--end=${options.end}`);
+  if (options.transparent) args.push("--transparent");
+  if (options.sampleFrames?.length) args.push(`--sample-frames=${options.sampleFrames.join(",")}`);
+  if (options.inspectBounds) args.push("--inspect-bounds");
   return runProcess("node", args);
 }
 
@@ -76,6 +100,7 @@ export async function assembleVideo(framesDir, outputMp4, options = {}) {
   if (options.fps) args.push("--fps", String(options.fps));
   if (options.audio) args.push("--audio", options.audio);
   if (options.crf) args.push("--crf", String(options.crf));
+  if (options.format) args.push("--format", options.format);
   return runProcess("python3", args);
 }
 
@@ -85,8 +110,16 @@ export async function validateStatic(pngPath, expectedWxH, scale = 2) {
 }
 
 export async function buildContactSheet(framesDir, outputPng, options = {}) {
-  const args = [PATHS.buildContactSheet, framesDir, outputPng];
-  if (options.beats) args.push("--beats", options.beats);
+  const files = (await readdir(framesDir)).filter((file) => /^\d+\.png$/i.test(file)).sort();
+  if (!files.length) throw new Error(`No numbered PNG frames found in ${framesDir}`);
+  const output = path.resolve(outputPng);
+  await mkdir(path.dirname(output), { recursive: true });
+  const args = [PATHS.buildContactSheet, ...files.map((file) => path.join(framesDir, file)), "--out", output];
+  const labels = options.labels || options.beats;
+  if (Array.isArray(labels)) args.push("--labels", labels.join(";"));
+  else if (typeof labels === "string") args.push("--labels", labels);
+  if (options.title) args.push("--title", options.title);
+  if (options.cols) args.push("--cols", String(options.cols));
   return runProcess("python3", args);
 }
 

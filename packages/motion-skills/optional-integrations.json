@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "policy": "Metadata only. These integrations are not included in the public Skills package; installation is fetched directly from each upstream source and remains subject to its current terms.",
+  "integrations": [
+    {
+      "name": "aula-interativa",
+      "title": "Aulas Interativas Determinísticas",
+      "description": "Roteiro pedagógico, simuladores em runtime e exercícios com feedback explicativo.",
+      "profile": "interactive",
+      "repo": "https://github.com/gabrielgreco1/skills",
+      "skillSubpath": "aula-interativa",
+      "author": "Gabriel Greco",
+      "authorUrl": "https://github.com/gabrielgreco1",
+      "sourceVersion": "git:9cf15be76c960c94edddcc78fc5fa237e0778c44",
+      "license": "Custom upstream terms; upstream-only installation, no npm redistribution.",
+      "installCommand": "npx skills add gabrielgreco1/skills --skill aula-interativa"
+    },
+    {
+      "name": "motion-designer",
+      "title": "Teasers Cinéticos & Beat Sync",
+      "description": "Motion design temporal, HUDs geométricos e sincronização no beat.",
+      "profile": "motion",
+      "repo": "https://github.com/gabrielgreco1/skills",
+      "skillSubpath": "motion-designer",
+      "author": "Gabriel Greco",
+      "authorUrl": "https://github.com/gabrielgreco1",
+      "sourceVersion": "git:9cf15be76c960c94edddcc78fc5fa237e0778c44",
+      "license": "Custom upstream terms; upstream-only installation, no npm redistribution.",
+      "installCommand": "npx skills add gabrielgreco1/skills --skill motion-designer"
+    },
+    {
+      "name": "ui-humanizer",
+      "title": "Auditoria Visual Anti-Template",
+      "description": "Auditoria visual para detecção e redução de clichês em interfaces.",
+      "profile": "web",
+      "repo": "https://github.com/gabrielgreco1/skills",
+      "skillSubpath": "ui-humanizer",
+      "author": "Gabriel Greco",
+      "authorUrl": "https://github.com/gabrielgreco1",
+      "sourceVersion": "git:9cf15be76c960c94edddcc78fc5fa237e0778c44",
+      "license": "Custom upstream terms; upstream-only installation, no npm redistribution.",
+      "installCommand": "npx skills add gabrielgreco1/skills --skill ui-humanizer"
+    },
+    {
+      "name": "stageshow",
+      "title": "Showcases de Produto",
+      "description": "Apresentações de produto, UI motion, cursores animados e bento grids.",
+      "profile": "web",
+      "repo": "https://github.com/benjitaylor/skills",
+      "skillSubpath": "stageshow",
+      "author": "Benji Taylor",
+      "authorUrl": "https://github.com/benjitaylor",
+      "sourceVersion": "unversioned; resolve the current upstream revision at install time",
+      "license": "MIT reported in the local audit; recheck upstream LICENSE before installation. No copy is bundled.",
+      "installCommand": "npx skills add benjitaylor/skills --skill stageshow"
+    }
+  ]
+}

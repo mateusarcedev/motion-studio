@@ -10,17 +10,22 @@ import { runPreview } from "../lib/preview.mjs";
 import { runRender } from "../lib/render.mjs";
 import { runExport } from "../lib/export.mjs";
 import { runQA } from "../lib/qa.mjs";
+import { runComponents } from "../lib/components.mjs";
+import { runTransition } from "../lib/transition.mjs";
 
-const VERSION = "1.0.0-rc.3";
+const VERSION = "1.0.0-rc.4";
 
 const rawArgs = process.argv.slice(2);
 const flags = {};
 const posArgs = [];
 
-for (const a of rawArgs) {
+for (let index = 0; index < rawArgs.length; index++) {
+  const a = rawArgs[index];
   if (a.startsWith("--")) {
     const [k, v] = a.slice(2).split("=");
-    flags[k] = v !== undefined ? v : true;
+    if (v !== undefined) flags[k] = v;
+    else if (rawArgs[index + 1] && !rawArgs[index + 1].startsWith("-")) flags[k] = rawArgs[++index];
+    else flags[k] = true;
   } else if (a.startsWith("-") && a.length === 2) {
     flags[a.slice(1)] = true;
   } else {
@@ -57,11 +62,22 @@ Comandos principais:
     render video <frames_dir> <mp4_out> [--fps=30] [--audio=trilha]
     render carousel <slides_dir> <outdir>
     render project <pasta_do_projeto>
+    render overlay <html_in> --output=<webm_out> [--duration=8] [--fps=30] [--width=1080] [--height=1920]
 
   export <pasta> <zip_out> Gera manifesto SHA-256 e empacota entrega final em ZIP
     --gallery              Registra a peça na galeria local (status: draft)
 
   qa <url_ou_html> <outdir> Executa auditoria multi-viewport em 5 telas com Playwright
+  qa determinism <html> [--output=<dir>] Verifica hashes em duas sessões independentes
+  qa safe-zones <html> [--platform=instagram-reels] [--preset-file=<json>] [--output=<dir>]
+
+  components list          Lista componentes reutilizáveis e seus schemas
+  components render <id> --config=<json> --output=<mp4|webm>
+  components preview <id> --config=<json> --output=<png>
+
+  transition list          Lista transições FFmpeg disponíveis
+  transition render <cena1> <cena2> [...] --output=<mp4> [--kind=wipe] [--easing=ease-out]
+  transition preview <cena1> <cena2> [...] --output=<mp4> Renderiza prévia 640×360 a 15fps
 
 Opções globais:
   -v, --version            Exibe a versão do MOTION Studio
@@ -103,7 +119,7 @@ try {
       break;
 
     case "render":
-      await runRender(posArgs[1], posArgs[2], posArgs[3], flags);
+      await runRender(posArgs[1], posArgs[2], posArgs[3], flags, posArgs.slice(2));
       break;
 
     case "export":
@@ -112,6 +128,14 @@ try {
 
     case "qa":
       await runQA(posArgs[1], posArgs[2], flags);
+      break;
+
+    case "components":
+      await runComponents(posArgs[1], posArgs[2], flags);
+      break;
+
+    case "transition":
+      await runTransition(posArgs[1], posArgs.slice(2), flags);
       break;
 
     default:

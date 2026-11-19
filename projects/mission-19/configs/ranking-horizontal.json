@@ -1,0 +1,24 @@
+{
+  "component": "animated-ranking",
+  "instanceId": "tech-ranking-horizontal",
+  "title": "Linguagens · dados fictícios",
+  "max": 100,
+  "items": [
+    { "label": "TypeScript", "value": 95 },
+    { "label": "Python", "value": 90 },
+    { "label": "Rust", "value": 82 },
+    { "label": "Go", "value": 76 },
+    { "label": "SQL", "value": 70 }
+  ],
+  "duration": 5,
+  "fps": 30,
+  "aspectRatio": "16:9",
+  "theme": {
+    "primary": "#35B6FF",
+    "accent": "#F4BA55",
+    "background": "#101827",
+    "surface": "#1A2A40",
+    "text": "#F3F7FB",
+    "muted": "#9DB0C7"
+  }
+}

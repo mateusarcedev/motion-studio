@@ -26,18 +26,22 @@ Se você estiver utilizando a distribuição empacotada localmente:
 ```bash
 # Na raiz do seu projeto consumidor:
 npm install \
-  /caminho/para/motion-core-1.0.0.tgz \
-  /caminho/para/motion-studio-skills-1.0.0.tgz \
-  /caminho/para/motion-cli-1.0.0.tgz
+  /caminho/para/mateusarcedev-motion-core-1.0.0-rc.4.tgz \
+  /caminho/para/mateusarcedev-motion-cli-1.0.0-rc.4.tgz
+
+# Opcional: catálogo curado de Skills públicas
+npm install /caminho/para/mateusarcedev-motion-studio-skills-1.0.0-rc.4.tgz
 ```
 
 ### Via Registro NPM (Quando Publicado)
 
 ```bash
-npm install -D motion-creative-studio
-# ou
-npm install -D motion-cli motion-core motion-studio-skills
+npm install -D @technomanceer/motion-cli @technomanceer/motion-core
+# Opcional: Skills públicas curadas
+npm install @technomanceer/motion-studio-skills
 ```
+
+The public registry is not updated by this mission. Confirm published package versions before using the registry command; the compatibility check here uses an isolated install from the locally packed tarballs documented above.
 
 ---
 
@@ -71,7 +75,7 @@ O que o `motion init` faz:
 2. Cria os diretórios isolados `motion/brand`, `motion/projects` e `motion/out`.
 3. Gera os tokens iniciais (`motion/brand/tokens.json`) e o perfil de marca (`motion/brand/PROFILE.md`).
 4. Cria a galeria local isolada (`motion/gallery.json`).
-5. Instala e configura as 50 **Agent Skills** em `.agents/skills/` com adaptadores para Claude Code (`.claude/skills`) e OpenCode (`.opencode/skills`).
+5. Se o pacote opcional de Skills estiver instalado, instala somente o catálogo autorizado em `.agents/skills/` com adaptadores para Claude Code (`.claude/skills`) e OpenCode (`.opencode/skills`). Sem esse pacote, a CLI cria a estrutura e permanece funcional.
 6. **Proteção de sobrescrita:** Não altera arquivos existentes sem a flag `--force`.
 
 ---
@@ -79,6 +83,6 @@ O que o `motion init` faz:
 ## 5. Remoção Limpa
 
 Se desejar remover a integração do MOTION sem afetar seu projeto principal:
-1. Remova as dependências: `npm uninstall motion-cli motion-core motion-studio-skills`
+1. Remova as dependências: `npm uninstall @technomanceer/motion-cli @technomanceer/motion-core @technomanceer/motion-studio-skills`
 2. Remova as pastas de configuração: `rm -rf motion/ motion.config.json .agents/skills`
 3. O seu projeto continuará funcionando exatamente como antes.

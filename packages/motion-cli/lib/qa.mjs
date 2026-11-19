@@ -1,7 +1,7 @@
-import path from "node:path";
+import { readFile } from "node:fs/promises";
 let qaViewports;
 try {
-  const mod = await import("motion-core");
+  const mod = await import("@technomanceer/motion-core");
   qaViewports = mod.qaViewports;
 } catch {
   const mod = await import("../../motion-core/index.js");
@@ -9,6 +9,34 @@ try {
 }
 
 export async function runQA(urlOrHtml, outdir, options = {}) {
+  if (urlOrHtml === "determinism") {
+    const input = outdir;
+    if (!input) throw new TypeError("Uso: motion qa determinism <composition.html> [--output=<dir>]");
+    const api = await import("@technomanceer/motion-core").catch(() => import("../../motion-core/index.js"));
+    const report = await api.verifyDeterminism(input, {
+      outputDir: options.output || options.outdir, duration: Number(options.duration || 8),
+      fps: Number(options.fps || 30), width: options.width ? Number(options.width) : 1080,
+      height: options.height ? Number(options.height) : 1920, seed: options.seed === undefined ? 1 : Number(options.seed),
+    });
+    console.log(JSON.stringify(report, null, 2));
+    if (!report.passed) process.exitCode = 2;
+    return;
+  }
+  if (urlOrHtml === "safe-zones") {
+    const input = outdir;
+    if (!input) throw new TypeError("Uso: motion qa safe-zones <composition.html> [--platform=instagram-reels]");
+    const api = await import("@technomanceer/motion-core").catch(() => import("../../motion-core/index.js"));
+    const customPreset = options.presetFile ? JSON.parse(await readFile(options.presetFile, "utf8")) : undefined;
+    const report = await api.qaSafeZones(input, {
+      outputDir: options.output || options.outdir, platform: options.platform || "instagram-reels",
+      customPreset,
+      width: options.width ? Number(options.width) : undefined, height: options.height ? Number(options.height) : undefined,
+      duration: Number(options.duration || 8), fps: Number(options.fps || 30), seed: options.seed === undefined ? 1 : Number(options.seed),
+    });
+    console.log(JSON.stringify(report, null, 2));
+    if (!report.passed) process.exitCode = 2;
+    return;
+  }
   if (!urlOrHtml || !outdir) {
     console.error("Uso: motion qa <url_ou_html> <diretorio_de_saida> [--wait=ms]");
     process.exit(1);

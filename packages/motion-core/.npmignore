@@ -1,0 +1,5 @@
+**/__pycache__/**
+**/*.pyc
+renderers/__pycache__/
+quality/__pycache__/
+transitions/__pycache__/

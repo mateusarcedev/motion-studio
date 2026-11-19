@@ -1,0 +1,15 @@
+{
+  "component": "timeline-sequence",
+  "instanceId": "api-request-timeline",
+  "title": "One request, four steps",
+  "events": [
+    { "time": 0.25, "label": "Receive", "detail": "The endpoint accepts the request." },
+    { "time": 1.0, "label": "Validate", "detail": "Shape and permissions are checked." },
+    { "time": 1.85, "label": "Process", "detail": "The service applies its logic." },
+    { "time": 2.8, "label": "Respond", "detail": "A status and payload return." }
+  ],
+  "duration": 3.2,
+  "fps": 24,
+  "aspectRatio": "16:9",
+  "theme": { "primary": "#35B6FF", "accent": "#F4BA55", "background": "#101827", "surface": "#1A2A40", "text": "#F3F7FB", "muted": "#9DB0C7" }
+}

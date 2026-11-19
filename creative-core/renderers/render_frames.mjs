@@ -9,7 +9,7 @@
  *     --frames=450 [--fps=30] [--width=1080] [--height=1920] [--scale=1] [--seed=1]
  */
 import { createServer } from "node:http";
-import { readFile, stat, mkdir, readdir } from "node:fs/promises";
+import { readFile, stat, mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,6 +28,11 @@ const scale = Number(args.scale ?? 1);
 const seed = Number(args.seed ?? 1);
 const startFrame = Number(args.start ?? 0);
 const endFrame = args.end !== undefined ? Number(args.end) : totalFrames - 1;
+const sampleFrames = args["sample-frames"] === undefined ? null : String(args["sample-frames"]).split(",").map(Number);
+if (!Number.isInteger(totalFrames) || totalFrames < 1 || !Number.isFinite(fps) || fps <= 0 || !Number.isInteger(width) || width < 1 || !Number.isInteger(height) || height < 1) {
+  console.error("frames, fps, width e height devem ser valores positivos válidos.");
+  process.exit(2);
+}
 
 if (!input || !outdir) {
   console.error("uso: render_frames.mjs <input.html> <outdir> --frames=N [--fps=30] [--width=W] [--height=H]");
@@ -72,6 +77,11 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../
 async function handler(req, res) {
   try {
     const url = new URL(req.url, "http://localhost");
+    if (url.pathname === "/favicon.ico") {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
     let p;
     if (url.pathname === "/") {
       p = inputAbs;
@@ -119,11 +129,15 @@ const browser = await chromium.launch({
   headless: true,
   args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
 });
+const browserVersion = browser.version();
 
 const page = await browser.newPage({
   viewport: { width, height },
   deviceScaleFactor: scale,
 });
+const pageErrors = [];
+page.on("pageerror", (error) => pageErrors.push(error.message));
+page.on("console", (message) => { if (message.type() === "error") pageErrors.push(message.text()); });
 
 await page.addInitScript((init) => {
   window.__MOTION_DRIVEN__ = true;
@@ -146,15 +160,25 @@ await page.evaluate(() => Promise.all([
     img.complete && img.naturalWidth > 0 ? Promise.resolve() :
     new Promise((res) => { img.onload = img.onerror = res; })))
 ]));
+const fontMetadata = await page.evaluate(() => ({
+  status: document.fonts.status,
+  faces: Array.from(document.fonts).map((face) => ({ family: face.family, style: face.style, weight: face.weight, status: face.status })),
+}));
 
 const startTime = Date.now();
 let renderedCount = 0;
+const frameIndexes = sampleFrames ?? Array.from({ length: Math.max(0, endFrame - startFrame + 1) }, (_, i) => startFrame + i);
+if (!frameIndexes.length || frameIndexes.some((f) => !Number.isInteger(f) || f < 0 || f >= totalFrames) || new Set(frameIndexes).size !== frameIndexes.length) {
+  await browser.close(); server.close();
+  console.error(`Amostras devem ser quadros únicos entre 0 e ${totalFrames - 1}.`);
+  process.exit(2);
+}
 
-for (let f = startFrame; f <= endFrame; f++) {
+for (const f of frameIndexes) {
   const t = f / fps;
   const progress = totalFrames > 0 ? f / totalFrames : 0;
   
-  await page.evaluate((state) => {
+  await page.evaluate(async (state) => {
     window.__MOTION__ = {
       frame: state.f,
       time: state.t,
@@ -163,14 +187,34 @@ for (let f = startFrame; f <= endFrame; f++) {
       totalFrames: state.totalFrames,
       seed: state.seed,
     };
-    if (typeof window.__onFrame__ === "function") {
-      window.__onFrame__(window.__MOTION__);
-    }
+    if (typeof window.__onFrame__ === "function") await window.__onFrame__(window.__MOTION__);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   }, { f, t, progress, fps, totalFrames, seed });
 
   const frameFileName = `${String(f).padStart(4, "0")}.png`;
   const framePath = path.join(outdir, frameFileName);
-  await page.screenshot({ path: framePath });
+  await page.screenshot({ path: framePath, omitBackground: Boolean(args.transparent) });
+  if (args["inspect-bounds"]) {
+    const bounds = await page.evaluate((state) => {
+      const elements = Array.from(document.querySelectorAll("[data-motion-important]")).map((element) => {
+        const rect = element.getBoundingClientRect();
+        let opacity = 1;
+        for (let parent = element; parent && parent !== document.documentElement; parent = parent.parentElement) {
+          const value = Number.parseFloat(getComputedStyle(parent).opacity);
+          if (Number.isFinite(value)) opacity *= value;
+        }
+        return {
+          id: element.getAttribute("data-motion-important"),
+          x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+          visible: opacity > 0.02 && rect.width > 0 && rect.height > 0,
+          opacity,
+          alt: element.getAttribute("data-motion-alt") ?? null,
+        };
+      });
+      return { frame: state.f, time: state.t, viewport: { width: innerWidth, height: innerHeight }, fonts: { status: document.fonts.status }, elements };
+    }, { f, t, fps });
+    await writeFile(path.join(outdir, `${String(f).padStart(4, "0")}.bounds.json`), JSON.stringify(bounds, null, 2));
+  }
   renderedCount++;
 
   if (renderedCount % 60 === 0 || f === endFrame) {
@@ -196,6 +240,12 @@ const payload = {
   height,
   scale,
   seed,
+  browserVersion,
+  fonts: fontMetadata,
+  pageErrors,
+  transparent: Boolean(args.transparent),
+  sampleFrames: frameIndexes,
+  inspectBounds: Boolean(args["inspect-bounds"]),
   durationSec: totalSec.toFixed(2),
   renderFps: (renderedCount / totalSec).toFixed(1),
 };

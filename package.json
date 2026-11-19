@@ -1,6 +1,6 @@
 {
   "name": "motion-studio-monorepo",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0-rc.4",
   "private": true,
   "description": "MOTION Studio — Estúdio criativo multiformato dirigido por código e operado por IA.",
   "type": "module",
@@ -11,12 +11,13 @@
     "render": "node creative-core/renderers/render_static.mjs",
     "test": "node --test tests/**/*.test.mjs",
     "pack:all": "node scripts/pack-all.mjs",
+    "skills:verify": "node scripts/verify-public-skills.mjs",
     "cli": "node packages/motion-cli/bin/motion.mjs"
   },
   "dependencies": {
-    "motion-cli": "file:packages/motion-cli",
-    "motion-core": "file:packages/motion-core",
-    "motion-studio-skills": "file:packages/motion-skills",
+    "@technomanceer/motion-cli": "file:packages/motion-cli",
+    "@technomanceer/motion-core": "file:packages/motion-core",
+    "@technomanceer/motion-studio-skills": "file:packages/motion-skills",
     "playwright-core": "^1.64.1",
     "three": "^0.165.0"
   }

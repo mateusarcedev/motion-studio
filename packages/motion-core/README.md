@@ -17,8 +17,10 @@ Motores de produção, QA determinístico e exportação do **MOTION Studio**.
 ## Uso
 
 ```js
-import { renderFrames, assembleVideo, renderStatic } from "motion-core";
+import { renderFrames, assembleVideo, renderStatic } from "@technomanceer/motion-core";
 
 await renderFrames("composition.html", "./frames", { frames: 450, fps: 30 });
 await assembleVideo("./frames", "./out/video.mp4", { fps: 30 });
 ```
+
+Reusable components, VP9 transparency, FFmpeg transitions, determinism verification, and safe-zone QA are documented in [`docs/REUSABLE_MOTION_COMPONENTS.md`](../../docs/REUSABLE_MOTION_COMPONENTS.md). Their programmatic APIs are exported from `motion-core` and the `./components`, `./transitions`, `./safe-zones`, and `./quality/determinism` subpaths.

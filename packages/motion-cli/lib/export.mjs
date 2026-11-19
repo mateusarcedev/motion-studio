@@ -2,7 +2,7 @@ import { stat, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 let generateManifest, exportZip;
 try {
-  const mod = await import("motion-core");
+  const mod = await import("@technomanceer/motion-core");
   generateManifest = mod.generateManifest;
   exportZip = mod.exportZip;
 } catch {

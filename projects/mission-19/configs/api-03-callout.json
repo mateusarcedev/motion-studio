@@ -1,0 +1,11 @@
+{
+  "component": "data-callout",
+  "instanceId": "api-success-response",
+  "value": "200 OK",
+  "label": "Response delivered",
+  "detail": "A validated result returns to the client.",
+  "duration": 3.2,
+  "fps": 24,
+  "aspectRatio": "16:9",
+  "theme": { "primary": "#35B6FF", "accent": "#F4BA55", "background": "#101827", "surface": "#1A2A40", "text": "#F3F7FB", "muted": "#9DB0C7" }
+}

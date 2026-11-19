@@ -95,3 +95,11 @@ Todos os três entregáveis devem consumir as mesmas variáveis CSS para garanti
    ```bash
    motion export . ./entrega-carrossel.zip --gallery
    ```
+
+---
+
+## 5. Motion reutilizável, alpha e QA
+
+Descubra componentes com `motion components list`, forneça um JSON de parâmetros e renderize MP4 ou WebM transparente sem editar o gerador. Use `motion transition list` para escolher uma transição FFmpeg entre cenas, `motion qa determinism` para comparar duas sessões independentes e `motion qa safe-zones` para revisar elementos importantes ao longo do tempo. Os overlays de safe zone são evidência de QA e não entram no render final.
+
+Leia [`REUSABLE_MOTION_COMPONENTS.md`](REUSABLE_MOTION_COMPONENTS.md) para formatos, limites, campos de geometria, presets editáveis e exemplos completos.

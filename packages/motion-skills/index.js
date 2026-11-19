@@ -3,11 +3,14 @@
  * Catalog and installer for Agent Skills.
  */
 import { readdir, readFile, mkdir, cp, symlink, stat } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const SKILLS_DIR = path.join(__dirname, "skills");
+const PUBLIC_MANIFEST_PATH = path.join(__dirname, "public-skills.json");
+const OPTIONAL_INTEGRATIONS_PATH = path.join(__dirname, "optional-integrations.json");
 
 export const SKILL_PROFILES = {
   core: [
@@ -117,56 +120,16 @@ export const SKILL_PROFILES = {
   all: null,
 };
 
-export const EXTERNAL_INTEGRATIONS = {
-  "aula-interativa": {
-    name: "aula-interativa",
-    profile: "interactive",
-    role: "Especialidade educacional (aulas HTML interativas determinísticas)",
-    repo: "https://github.com/gabrielgreco1/skills",
-    skillSubpath: "aula-interativa",
-    author: "Gabriel Greco",
-    authorUrl: "https://github.com/gabrielgreco1",
-    commitSha: "9cf15be76c960c94edddcc78fc5fa237e0778c44",
-    license: "Custom (uso/modificação permitidos pelo README do autor; sem redistribuição de pacote)",
-    installCommand: "npx skills add gabrielgreco1/skills --skill aula-interativa",
-  },
-  "motion-designer": {
-    name: "motion-designer",
-    profile: "motion",
-    role: "Especialista audiovisual (showreels, teasers, beat edits e legendas sincronizadas)",
-    repo: "https://github.com/gabrielgreco1/skills",
-    skillSubpath: "motion-designer",
-    author: "Gabriel Greco",
-    authorUrl: "https://github.com/gabrielgreco1",
-    commitSha: "9cf15be76c960c94edddcc78fc5fa237e0778c44",
-    license: "Custom (uso/modificação permitidos pelo README do autor; Three.js MIT; sem redistribuição de pacote)",
-    installCommand: "npx skills add gabrielgreco1/skills --skill motion-designer",
-  },
-  "ui-humanizer": {
-    name: "ui-humanizer",
-    profile: "web",
-    role: "Auditor de design (detecção de clichês e 'cara de IA' em interfaces)",
-    repo: "https://github.com/gabrielgreco1/skills",
-    skillSubpath: "ui-humanizer",
-    author: "Gabriel Greco",
-    authorUrl: "https://github.com/gabrielgreco1",
-    commitSha: "9cf15be76c960c94edddcc78fc5fa237e0778c44",
-    license: "Custom (uso/modificação permitidos pelo README do autor; sem redistribuição de pacote)",
-    installCommand: "npx skills add gabrielgreco1/skills --skill ui-humanizer",
-  },
-  "stageshow": {
-    name: "stageshow",
-    profile: "web",
-    role: "Especialista em apresentações de produto, UI motion, cursores animados e bento grids",
-    repo: "https://github.com/benjitaylor/skills",
-    skillSubpath: "stageshow",
-    author: "Benji Taylor",
-    authorUrl: "https://github.com/benjitaylor",
-    commitSha: "audit-v1.0.0",
-    license: "MIT (código e componentes; marcas e logos registrados excluídos)",
-    installCommand: "npx skills add benjitaylor/skills --skill stageshow",
-  },
-};
+export const EXTERNAL_INTEGRATIONS = Object.fromEntries(
+  JSON.parse(readFileSync(OPTIONAL_INTEGRATIONS_PATH, "utf8")).integrations.map((item) => [
+    item.name,
+    {
+      ...item,
+      role: item.description,
+      commitSha: item.sourceVersion.startsWith("git:") ? item.sourceVersion.slice(4) : item.sourceVersion,
+    },
+  ])
+);
 
 export function resolveSkillsForProfile(profile) {
   if (!profile || profile === "all") return null;
@@ -185,7 +148,7 @@ export function resolveSkillsForProfile(profile) {
   return Array.from(skillSet);
 }
 
-export async function listSkills() {
+async function listSkillDirectories() {
   const entries = await readdir(SKILLS_DIR, { withFileTypes: true });
   const skills = [];
 
@@ -210,6 +173,18 @@ export async function listSkills() {
   }
 
   return skills.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/** Lists all files retained in the local catalog, including entries not cleared for npm distribution. */
+export async function listLocalSkills() {
+  return listSkillDirectories();
+}
+
+/** Lists only skills explicitly cleared by public-skills.json. */
+export async function listSkills() {
+  const manifest = JSON.parse(await readFile(PUBLIC_MANIFEST_PATH, "utf8"));
+  const allowedNames = new Set(manifest.skills.map((skill) => skill.name));
+  return (await listSkillDirectories()).filter((skill) => allowedNames.has(skill.name));
 }
 
 export async function installSkills({

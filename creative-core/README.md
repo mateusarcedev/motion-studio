@@ -57,3 +57,7 @@ efetivamente roda está em `THIRD_PARTY.md`.
 
 Toda peça aprovada é registrada em `gallery/gallery.json` (status `approved`) e tem
 decisões de arte copiadas para `brands/<slug>/approved/<data>-<peça>/`.
+
+## Componentes de motion, alpha e QA
+
+O Creative Core continua sendo o motor de frames e montagem. O pacote `motion-core` acrescenta oito componentes parametrizados, exportação WebM VP9 com alpha verificado, transições `xfade` com easing, comparação de hashes em duas sessões e QA temporal de safe zones. Consulte [`docs/REUSABLE_MOTION_COMPONENTS.md`](../docs/REUSABLE_MOTION_COMPONENTS.md) para contratos, comandos e limites. Os renderizadores deste diretório permanecem espelhados com `packages/motion-core/renderers/`.

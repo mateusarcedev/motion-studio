@@ -20,6 +20,24 @@ export async function runDoctor() {
     details: nodeMajor >= 18 ? "Compatível (>= 18.0.0)" : "Versão mínima 18 exigida",
   });
 
+  let skillsCatalogStatus = "INFO";
+  let skillsCatalogDetails = "Opcional; init, list e os comandos de produção funcionam sem este pacote";
+  let skillsCatalogVersion = "Não instalado";
+  try {
+    const catalog = await import("@technomanceer/motion-studio-skills");
+    const skills = await catalog.listSkills();
+    skillsCatalogStatus = "PASS";
+    skillsCatalogVersion = `${skills.length} Skills públicas`;
+    skillsCatalogDetails = "Catálogo público verificado disponível; integrações externas permanecem separadas";
+  } catch {}
+  results.push({
+    name: "MOTION Skills Catalog",
+    required: false,
+    status: skillsCatalogStatus,
+    version: skillsCatalogVersion,
+    details: skillsCatalogDetails,
+  });
+
   // 2. Python 3
   let pyVer = "Não encontrado";
   let pyStatus = "FAIL";

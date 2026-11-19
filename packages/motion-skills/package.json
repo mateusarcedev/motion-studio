@@ -1,6 +1,6 @@
 {
-  "name": "motion-studio-skills",
-  "version": "1.0.0-rc.3",
+  "name": "@technomanceer/motion-studio-skills",
+  "version": "1.0.0-rc.4",
   "description": "Catálogo e instalador de habilidades de agentes para o MOTION Studio",
   "type": "module",
   "main": "./index.js",
@@ -8,6 +8,25 @@
     ".": "./index.js",
     "./skills/*": "./skills/*"
   },
+  "files": [
+    "index.js",
+    "public-skills.json",
+    "optional-integrations.json",
+    "LICENSE",
+    "LICENSES.md",
+    "README.md",
+    "skills/3d-scene-director/**",
+    "skills/anatomy/**",
+    "skills/carousel-studio/**",
+    "skills/explainer-motion/**",
+    "skills/feed-studio/**",
+    "skills/motion-director/**",
+    "skills/shorts-director/**",
+    "skills/story-studio/**",
+    "skills/studio-director/**",
+    "skills/thermo-nuclear-code-quality-review/**",
+    "skills/web-director/**"
+  ],
   "keywords": [
     "motion",
     "agent-skills",
@@ -19,10 +38,14 @@
     "antigravity"
   ],
   "author": "MOTION Studio",
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSES.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/mateusarcedev/motion-studio.git",
     "directory": "packages/motion-skills"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
   }
 }

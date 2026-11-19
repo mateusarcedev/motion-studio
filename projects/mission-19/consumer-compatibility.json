@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "method": "Core+CLI first installed without Skills, then optional curated Skills installed explicitly from local npm tarball; no monorepo node_modules resolution",
+  "consumerDir": "/tmp/motion-mission19-consumer-Du9Jcr",
+  "packageVersions": {
+    "@technomanceer/motion-cli": "1.0.0-rc.4",
+    "@technomanceer/motion-core": "1.0.0-rc.4",
+    "@technomanceer/motion-studio-skills": "1.0.0-rc.4"
+  },
+  "cliWithoutSkills": {
+    "version": "motion v1.0.0-rc.4",
+    "init": "passed",
+    "list": "passed",
+    "doctorOutput": "| **MOTION Skills Catalog** | Não | ℹ️ INFO | Não instalado | Opcional; init, list e os comandos de produção funcionam sem este pacote |",
+    "create": "passed",
+    "renderStatic": "passed",
+    "export": "passed"
+  },
+  "installedPublicSkills": [
+    "3d-scene-director",
+    "anatomy",
+    "carousel-studio",
+    "explainer-motion",
+    "feed-studio",
+    "motion-director",
+    "shorts-director",
+    "story-studio",
+    "studio-director",
+    "thermo-nuclear-code-quality-review",
+    "web-director"
+  ],
+  "componentCount": 8,
+  "transitionCount": 8,
+  "importedCoreFrom": "file:///tmp/motion-mission19-consumer-Du9Jcr/node_modules/@technomanceer/motion-core/index.js",
+  "artifacts": {
+    "mp4": "/tmp/motion-mission19-consumer-Du9Jcr/outputs/component.mp4",
+    "webm": "/tmp/motion-mission19-consumer-Du9Jcr/outputs/overlay.webm",
+    "webmCodec": "vp9",
+    "alphaMode": "1",
+    "overlayCommandWebm": "/tmp/motion-mission19-consumer-Du9Jcr/outputs/overlay-command.webm",
+    "overlayCommandAlphaMode": "1",
+    "transitionMp4": "/tmp/motion-mission19-consumer-Du9Jcr/outputs/transition.mp4",
+    "transitionCodec": "h264",
+    "determinismReport": "outputs/qa-determinism/*/determinism-report.json",
+    "safeZoneReport": "outputs/qa-safe-zones/*/safe-zone-report.json"
+  },
+  "npmTree": {
+    "name": "motion-mission19-consumer",
+    "dependencies": {
+      "@technomanceer/motion-cli": {
+        "version": "1.0.0-rc.4",
+        "resolved": "file:/home/mateusarcedev/projetos/motion-studio/dist/packages/technomanceer-motion-cli-1.0.0-rc.4.tgz",
+        "overridden": false
+      },
+      "@technomanceer/motion-core": {
+        "version": "1.0.0-rc.4",
+        "resolved": "file:/home/mateusarcedev/projetos/motion-studio/dist/packages/technomanceer-motion-core-1.0.0-rc.4.tgz",
+        "overridden": false
+      },
+      "@technomanceer/motion-studio-skills": {
+        "version": "1.0.0-rc.4",
+        "resolved": "file:/home/mateusarcedev/projetos/motion-studio/dist/packages/technomanceer-motion-studio-skills-1.0.0-rc.4.tgz",
+        "overridden": false
+      }
+    }
+  }
+}

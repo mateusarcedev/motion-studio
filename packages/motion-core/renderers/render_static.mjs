@@ -136,13 +136,17 @@ await page.evaluate(() => Promise.all([
 await page.waitForTimeout(extraWait);
 
 // Executar __onFrame__ UMA VEZ com o estado correto
-const motionState = await page.evaluate(() => {
+const motionState = await page.evaluate(async () => {
+  if (window.__MOTION_READY__) await window.__MOTION_READY__;
+  await document.fonts.ready;
   if (typeof window.__onFrame__ === "function") {
-    window.__onFrame__(window.__MOTION__);
+    await window.__onFrame__(window.__MOTION__);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     return true;
   }
   return false;
 });
+const fontState = await page.evaluate(() => ({ status: document.fonts.status, faces: Array.from(document.fonts).map((face) => ({ family: face.family, style: face.style, weight: face.weight, status: face.status })) }));
 
 // ---- QA: overflow (elementos com data-bleed são sangria decorativa intencional) ----
 const overflow = await page.evaluate(() => {
@@ -181,6 +185,7 @@ const payload = {
   motion: { frame: frame ?? null, time: time ?? null, seed: seed ?? null, fps: args.fps ? Number(args.fps) : 30, replayed: motionState },
   overflow,
   fontIssues: fontWaits,
-  status: overflow.length === 0 && fontWaits.length === 0 ? "OK" : "WARN",
+  fonts: fontState,
+  status: overflow.length === 0 && fontWaits.length === 0 && fontState.status === "loaded" && fontState.faces.every((face) => face.status === "loaded") ? "OK" : "WARN",
 };
 console.log(JSON.stringify(payload, null, 2));

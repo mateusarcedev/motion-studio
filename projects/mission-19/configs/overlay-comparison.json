@@ -1,0 +1,15 @@
+{
+  "component": "comparison-panel",
+  "instanceId": "latency-comparison-overlay",
+  "title": "Latency sample · fictional data",
+  "max": 100,
+  "items": [
+    { "label": "Edge", "value": 34 },
+    { "label": "Origin", "value": 81 }
+  ],
+  "duration": 4.5,
+  "fps": 24,
+  "aspectRatio": "16:9",
+  "transparent": true,
+  "theme": { "primary": "#43C7FF", "accent": "#FFCA72", "background": "transparent", "surface": "#162238", "text": "#FFFFFF", "muted": "#D8E3F1" }
+}

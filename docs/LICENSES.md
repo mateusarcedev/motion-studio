@@ -6,7 +6,7 @@ O MOTION Studio segue uma política estrita de segregação de licenças e audit
 
 ## 1. Licença do Código MOTION
 
-Os pacotes do MOTION Studio (`motion-core`, `motion-cli`, `motion-studio-skills`) são distribuídos sob a licença **Apache-2.0**.
+O código original em `@technomanceer/motion-core` e `@technomanceer/motion-cli` é distribuído sob **Apache-2.0**. `@technomanceer/motion-studio-skills` tem licenças mistas: seu tarball inclui somente as Skills do manifesto público, com a licença individual em `packages/motion-skills/LICENSES.md`. As demais pastas permanecem no catálogo do repositório e não são copiadas pelo instalador público. Consulte [`SKILLS_LICENSE_AUDIT.md`](SKILLS_LICENSE_AUDIT.md) para a revisão das 51 Skills. As 12 Skills Remotion seguem bloqueadas porque a origem não identificou licença para redistribuição.
 
 ---
 
@@ -18,6 +18,11 @@ Os pacotes do MOTION Studio (`motion-core`, `motion-cli`, `motion-studio-skills`
 | **`three`** | MIT | Motor 3D procedural e WebGL | Totalmente permissiva. |
 | **`FFmpeg`** | LGPL-2.1+ / GPL-2.0+ (build Ubuntu) | Montagem CFR e codificação YUV420p | Binário de sistema. Não é embutido diretamente nos pacotes npm do MOTION. |
 | **`Python 3`** | PSF License | Runtime de scripts stdlib | Binário de sistema operacional. |
+
+### Pesquisa de referência para motion graphics parametrizados
+- `skeattt/motion-graphics-programatico` declara MIT. Seus arquivos foram estudados para a missão de componentes, `xfade` com easing e comparação de renderizações.
+- Nenhum arquivo ou trecho de código desse projeto foi redistribuído. Os componentes, contratos, expressões e QA adicionados ao MOTION são implementações originais sobre o Creative Core existente.
+- GSAP e assets/fontes de exemplo da referência não foram incluídos como dependências nem copiados. Qualquer asset de produção continua sujeito à licença e atribuição próprias.
 
 ---
 
@@ -51,7 +56,7 @@ Os pacotes do MOTION Studio (`motion-core`, `motion-cli`, `motion-studio-skills`
 - **Status de Licença Upstream:** Custom / Termos expressos no README do autor:
   > *"Use the skills, change them, ship videos with them. The vendored third-party code keeps its own license (Three.js is MIT)."*
 - **Política de Distribuição no MOTION:**
-  - O código-fonte externo **NÃO é embutido diretamente nos pacotes de distribuição npm** (`motion-studio-skills`, `motion-core`, `motion-cli`), preservando a pureza da licença Apache-2.0 do MOTION e evitando qualquer ambiguidade redistributiva.
+  - O conteúdo externo dessas integrações **não é embutido nos pacotes npm** (`@technomanceer/motion-studio-skills`, `@technomanceer/motion-core`, `@technomanceer/motion-cli`). O pacote de Skills mantém apenas metadados e comandos para buscar cada integração diretamente na origem.
   - A integração é puramente arquitetural: o MOTION exporta o perfil `interactive`, documenta as rotas de despacho em seus diretores (`studio-director`, `motion-director`, `web-director`), fornece diagnóstico via `motion doctor`, suporte de scaffold via `motion create lesson`, e orienta os usuários a adicionarem as skills diretamente da fonte upstream:
     ```bash
     npx skills add gabrielgreco1/skills --skill aula-interativa

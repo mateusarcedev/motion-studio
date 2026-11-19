@@ -1,13 +1,15 @@
 import { stat } from "node:fs/promises";
 import path from "node:path";
 
-let listSkills;
+let skillsCatalog;
 try {
-  const mod = await import("motion-studio-skills");
-  listSkills = mod.listSkills;
+  skillsCatalog = await import("@technomanceer/motion-studio-skills");
 } catch {
-  const mod = await import("../../motion-skills/index.js");
-  listSkills = mod.listSkills;
+  try {
+    skillsCatalog = await import("../../motion-skills/index.js");
+  } catch {
+    skillsCatalog = undefined;
+  }
 }
 
 export async function runList() {
@@ -77,48 +79,24 @@ export async function runList() {
   console.log("- **Renderizador Estático**: `motion render static <html_file> <png_out>`");
   console.log("- **Renderizador de Frames**: `motion render frames <comp_file> <out_dir>`");
   console.log("- **Montador CFR 30fps**: `motion render video <frames_dir> <mp4_out>`");
+  console.log("- **Componentes Reutilizáveis**: `motion components list|render|preview`");
+  console.log("- **Overlays Transparentes**: `motion render overlay <html> --output=<overlay.webm>` (VP9 + alpha validado)");
+  console.log("- **Transições FFmpeg**: `motion transition list|render|preview` (xfade com easing)");
+  console.log("- **QA de Determinismo**: `motion qa determinism <html>` (hashes em duas sessões)");
+  console.log("- **QA de Safe Zones**: `motion qa safe-zones <html> --platform=<preset>` (amostrado na timeline)");
   console.log("- **QA Multi-Viewport**: `motion qa <url> <out_dir>`");
   console.log("- **Empacotador & Manifesto**: `motion export <target_dir> <out_zip>`");
   console.log("- **Servidor de Preview**: `motion preview <path>`");
 
-  try {
-    const all = await listSkills();
+  if (skillsCatalog) {
+    const all = await skillsCatalog.listSkills();
     console.log(`\n### Perfis de Instalação de Skills (\`motion init --profile=<perfil>\`)\n`);
-    console.log("- **`core`**: Diretores essenciais (`studio-director`, `motion-director`, `web-director`, `brand`, `design`, `design-system`).");
-    console.log("- **`web`**: Criação de websites e experiências (`core` + `ui-styling`, `ui-ux-pro-max`, `impeccable`, `animate`, `emil-design-eng`, etc.).");
-    console.log("- **`motion`**: Vídeos e animações cinematográficas (`core` + `shorts-director`, `video-shotcraft`, `brag`, `remotion-*`, etc.).");
-    console.log("- **`social`**: Carrosséis e posts sociais (`core` + `carousel-studio`, `story-studio`, `feed-studio`, `banner-design`, `slides`).");
-    console.log("- **`3d`**: Criação de cenas 3D procedurais (`core` + `3d-scene-director`, `anatomy`, `diagram-design`).");
-    console.log("- **`blender`**: Especialistas de modelagem e renderização Blender.");
-    console.log("- **`interactive`**: Aulas guiadas e conteúdo educacional (`core` + `diagram-design`, `slides`).");
-    console.log("- **`all`**: Instalação completa de todas as skills do ecossistema.\n");
-    console.log(`Total de Agent Skills nativas no catálogo: ${all.length} disponíveis.`);
+    console.log(`Catálogo de distribuição: ${all.length} Skills com licença e proveniência registradas.`);
+    console.log("O perfil 'all' instala todas as Skills presentes no pacote público autorizado.\n");
 
-    const commIntegrations = [
-      {
-        name: "aula-interativa",
-        title: "Aulas Interativas Determinísticas",
-        desc: "Roteiro pedagógico, simuladores em runtime, exercícios com feedback explicativo causal e responsividade.",
-        profile: "interactive",
-      },
-      {
-        name: "motion-designer",
-        title: "Teasers Cinéticos & Beat Sync",
-        desc: "Motion design de alta precisão temporal, HUDs geométricos e sincronização no beat.",
-        profile: "motion",
-      },
-      {
-        name: "ui-humanizer",
-        title: "Auditoria Visual Anti-Template",
-        desc: "Auditoria heurística para detecção e eliminação de clichês e 'cara de IA' em interfaces.",
-        profile: "web",
-      },
-    ];
-
-    console.log(`\n### Integrações Externas da Comunidade (Gabriel Greco)\n`);
-    console.log("ℹ️ Estas especialidades são mantidas no repositório upstream (commit 9cf15be) sob licença Custom e devem ser adicionadas sob demanda (sem redistribuição em pacotes npm):\n");
-
-    for (const ci of commIntegrations) {
+    const integrations = Object.values(skillsCatalog.EXTERNAL_INTEGRATIONS ?? {});
+    if (integrations.length) console.log("### Integrações externas (metadados; instaladas diretamente da origem)\n");
+    for (const ci of integrations) {
       let isInstalled = false;
       for (const p of [
         path.join(process.cwd(), ".agents", "skills", ci.name),
@@ -131,10 +109,14 @@ export async function runList() {
         } catch {}
       }
       const statusBadge = isInstalled ? "✅ INSTALADA LOCALMENTE" : "⚪ DISPONÍVEL (NÃO INSTALADA)";
-      console.log(`- **\`${ci.name}\`** (${ci.title}) — [${statusBadge}]`);
-      console.log(`  - *Escopo:* ${ci.desc}`);
-      console.log(`  - *Perfil recomendado:* \`${ci.profile}\``);
-      console.log(`  - *Comando para adicionar:* \`npx skills add gabrielgreco1/skills --skill ${ci.name}\`\n`);
+      console.log(`- **\`${ci.name}\`** — [${statusBadge}]`);
+      console.log(`  - *Origem:* ${ci.repo}`);
+      console.log(`  - *Especialidade:* ${ci.description} (perfil: \`${ci.profile}\`)`);
+      console.log(`  - *Licença/redistribuição:* ${ci.license}`);
+      if (ci.installCommand) console.log(`  - *Comando:* \`${ci.installCommand}\`\n`);
     }
-  } catch {}
+  } else {
+    console.log("\nCatálogo público opcional não instalado. Os comandos de produção continuam disponíveis.");
+    console.log("Instale @technomanceer/motion-studio-skills para consultar e adicionar as Skills liberadas.");
+  }
 }

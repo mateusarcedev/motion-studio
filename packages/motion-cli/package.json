@@ -1,6 +1,6 @@
 {
-  "name": "motion-cli",
-  "version": "1.0.0-rc.3",
+  "name": "@technomanceer/motion-cli",
+  "version": "1.0.0-rc.4",
   "description": "CLI unificada de execução e gerenciamento do MOTION Studio",
   "type": "module",
   "bin": {
@@ -13,9 +13,16 @@
     "README.md"
   ],
   "dependencies": {
-    "motion-core": "1.0.0-rc.3",
-    "motion-studio-skills": "1.0.0-rc.3",
+    "@technomanceer/motion-core": "1.0.0-rc.4",
     "playwright-core": "^1.64.1"
+  },
+  "peerDependencies": {
+    "@technomanceer/motion-studio-skills": "1.0.0-rc.4"
+  },
+  "peerDependenciesMeta": {
+    "@technomanceer/motion-studio-skills": {
+      "optional": true
+    }
   },
   "keywords": [
     "motion",
@@ -30,5 +37,9 @@
     "type": "git",
     "url": "https://github.com/mateusarcedev/motion-studio.git",
     "directory": "packages/motion-cli"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
   }
 }

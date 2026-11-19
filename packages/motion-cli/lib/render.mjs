@@ -1,13 +1,14 @@
 import { stat, readdir, mkdir } from "node:fs/promises";
 import path from "node:path";
-let renderStatic, renderFrames, assembleVideo, buildContactSheet, validateStatic;
+let renderStatic, renderFrames, assembleVideo, buildContactSheet, validateStatic, renderComposition;
 try {
-  const mod = await import("motion-core");
+  const mod = await import("@technomanceer/motion-core");
   renderStatic = mod.renderStatic;
   renderFrames = mod.renderFrames;
   assembleVideo = mod.assembleVideo;
   buildContactSheet = mod.buildContactSheet;
   validateStatic = mod.validateStatic;
+  renderComposition = mod.renderComposition;
 } catch {
   const mod = await import("../../motion-core/index.js");
   renderStatic = mod.renderStatic;
@@ -15,9 +16,10 @@ try {
   assembleVideo = mod.assembleVideo;
   buildContactSheet = mod.buildContactSheet;
   validateStatic = mod.validateStatic;
+  renderComposition = mod.renderComposition;
 }
 
-export async function runRender(subcommand, target, out, options = {}) {
+export async function runRender(subcommand, target, out, options = {}, positionals = []) {
   if (!subcommand) {
     console.error("Uso: motion render <static|frames|video|carousel|project> [argumentos...]");
     process.exit(1);
@@ -69,6 +71,15 @@ export async function runRender(subcommand, target, out, options = {}) {
       crf: options.crf,
     });
     console.log(res.stdout || "Vídeo montado com sucesso.");
+  } else if (sub === "overlay") {
+    if (!target || !options.output) throw new TypeError("Uso: motion render overlay <composition.html> --output=<overlay.webm> [--duration=8] [--fps=30]");
+    const result = await renderComposition(target, options.output, {
+      duration: Number(options.duration || 8), fps: Number(options.fps || 30),
+      width: options.width ? Number(options.width) : 1080, height: options.height ? Number(options.height) : 1920,
+      scale: options.scale ? Number(options.scale) : 1, seed: options.seed === undefined ? 1 : Number(options.seed),
+      transparent: path.extname(options.output).toLowerCase() === ".webm",
+    });
+    console.log(result.stdout || JSON.stringify({ output: options.output, transparent: options.output.endsWith(".webm") }));
   } else if (sub === "carousel") {
     if (!target || !out) {
       console.error("Uso: motion render carousel <pasta_de_slides> <outdir>");

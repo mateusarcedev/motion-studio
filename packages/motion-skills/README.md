@@ -1,23 +1,22 @@
-# motion-studio-skills
+# @technomanceer/motion-studio-skills
 
-Catálogo completo de Agent Skills para o ecossistema **MOTION Studio**.
+Catálogo público curado de Agent Skills para o ecossistema **MOTION Studio**.
 
-## Skills Principais
+O pacote contém somente as Skills indicadas em [`public-skills.json`](./public-skills.json), com origem, versão de snapshot, licença, atribuição e hash SHA-256. A distribuição npm não inclui todo o catálogo local de 51 pastas.
 
-- **`studio-director`**: Ponto central de triagem e coordenação multiformato (vídeo, site, carrossel, story, post, shorts).
-- **`web-director`**: Direção de experiências web, landing pages e componentes interativos 3D com QA multi-viewport.
-- **`motion-director`**: Direção cinematográfica para filmes e animações em código determinístico (CFR 30fps).
-- **`carousel-studio`**: Carrosséis editoriais de 5 a 10 slides (1080×1350 e 2160×2700).
-- **`story-studio`**: Stories estáticos e animados (1080×1920) com safe-zones e presets.
-- **`feed-studio`**: Peças de feed social (1:1 e 4:5).
-- **`shorts-director`**: Vídeos verticais narrados com legendas por palavra/beat.
-- **`3d-scene-director`**: Composição e exportação 3D (Three.js/R3F/Blender).
+## Skills incluídas
+
+- `3d-scene-director`, `carousel-studio`, `explainer-motion`, `feed-studio`, `motion-director`, `shorts-director`, `story-studio`, `studio-director`, `thermo-nuclear-code-quality-review`, `web-director` e `anatomy`.
+
+As Skills não estão todas sob a mesma licença. Consulte [`LICENSES.md`](./LICENSES.md) e o manifesto antes de redistribuir ou modificar o conteúdo.
 
 ## Uso
 
 ```js
-import { listSkills, installSkills } from "motion-studio-skills";
+import { listSkills, installSkills } from "@technomanceer/motion-studio-skills";
 
 const skills = await listSkills();
 await installSkills({ targetDir: process.cwd(), agents: ["agents", "claude", "opencode"] });
 ```
+
+`listSkills()` e `installSkills()` operam apenas sobre o catálogo público autorizado. O checkout mantém as demais Skills locais, mas elas não são copiadas por esse instalador.

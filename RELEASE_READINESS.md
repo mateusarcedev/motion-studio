@@ -1,10 +1,82 @@
 # MOTION Studio — Relatório de Prontidão de Release (Release Readiness Report)
 
-> **Documento:** `RELEASE_READINESS.md`  
-> **Data:** 30 de Outubro de 2026  
-> **Responsável:** Engenheiro de Distribuição e Release Candidate  
-> **Status de Prontidão:** **READY WITH WARNINGS**  
-> **Versão Avaliada:** `1.0.0-rc.2`
+## Atualização da Missão 19.6 — 18 de novembro de 2026
+
+> **Migração de Namespace para `@technomanceer` e Preparação Final da RC4.** A conta pessoal oficial no npm é `technomanceer`. O namespace `@technomanceer` substitui definitivamente o namespace `@mateusarcedev`. Os três pacotes foram migrados para `@technomanceer/*` na versão `1.0.0-rc.4` com `publishConfig` (`access: "public"`, tag: `next`). As URLs do GitHub (`mateusarcedev/motion-studio`) e as atribuições autorais permanecem inalteradas.
+
+### Pacotes migrados
+
+- `@technomanceer/motion-core@1.0.0-rc.4`
+- `@technomanceer/motion-cli@1.0.0-rc.4`
+- `@technomanceer/motion-studio-skills@1.0.0-rc.4`
+- A CLI exige `@technomanceer/motion-core`; o catálogo `@technomanceer/motion-studio-skills` é peer opcional.
+
+---
+
+## Histórico da Missão 19.5 — 17 de novembro de 2026
+
+> **RC4 preparada, publicação npm aguardando acesso de escrita.** A identidade npm anterior era `mateusarcestr`. A decisão definitiva da Missão 19.6 definiu a conta `technomanceer` e o escopo `@technomanceer`.
+
+### Pacotes e permissões (Histórico 19.5)
+
+- Os três manifests usavam `@technomanceer/*` (após migração 19.6), estão em `1.0.0-rc.4` e declaram `publishConfig` público com tag `next`.
+- `npm run pack:all` preparou localmente Core, Skills e CLI. Nenhum pacote foi publicado.
+- A CLI exige `@technomanceer/motion-core`; o catálogo `@technomanceer/motion-studio-skills` é peer opcional. Core e CLI podem ser publicados sem depender do bundle completo de Skills.
+
+### Skills e GitHub público
+
+- O manifesto RC4 autoriza **11 Skills**: `3d-scene-director`, `anatomy`, `carousel-studio`, `explainer-motion`, `feed-studio`, `motion-director`, `shorts-director`, `story-studio`, `studio-director`, `thermo-nuclear-code-quality-review` e `web-director`.
+- As outras **40 pastas permanecem no checkout**, mas fora do tarball e da instalação pública: 18 para uso direto da origem sob seus termos; 2 aguardam auditoria de assets; 12 Skills Remotion sem licença; 8 com proveniência/licença insuficiente. [`docs/SKILLS_LICENSE_AUDIT.md`](docs/SKILLS_LICENSE_AUDIT.md) detalha cada grupo.
+- Revisão somente leitura do GitHub `main` confirmou que as 51 pastas ainda estão públicas e que o package manifest remoto continua `motion-studio-skills@1.0.0-rc.3` com `Apache-2.0`. A correção local filtra os tarballs, mas não altera o GitHub remoto; a revisão e atualização dessa superfície seguem pendentes porque não houve autorização de push.
+- `public-skills.json` registra snapshot, origem, licença, atribuição e SHA-256. `npm run skills:verify` passou e o tarball contém somente as 11 entradas do manifesto, com a licença MIT de `anatomy` preservada.
+
+### Verificação
+
+- `npm test`: **31/31 testes passaram**.
+- `node projects/mission-19/test-consumer-install.mjs`: passou em clean-room. `init`, `list`, `doctor`, `create`, `render static` e `export` funcionaram sem o pacote de Skills; depois, a instalação opcional adicionou as 11 entradas permitidas.
+- `npm run pack:all` e `npm run skills:verify`: passaram.
+
+### Proposta final para publicação
+
+### Histórico da proposta anterior (Superada pela Missão 19.6)
+
+1. A tentativa anterior de publicação sob `@mateusarcedev` foi descartada; a migração definitiva para `@technomanceer` foi concluída na Missão 19.6.
+2. Com a autenticação `technomanceer` verificada, a ordem de publicação é: Core (`@technomanceer/motion-core@1.0.0-rc.4`) → Skills (`@technomanceer/motion-studio-skills@1.0.0-rc.4`) → CLI (`@technomanceer/motion-cli@1.0.0-rc.4`).
+3. Core e CLI são tecnicamente independentes do catálogo completo de Skills.
+
+**Não houve `npm publish`, commit, push ou deploy.** Os tarballs RC4 são locais e aguardam revisão/autorização.
+
+## Registro Histórico — Diagnóstico do namespace anterior (Superado)
+
+> **Contexto da migração:** O namespace `@mateusarcedev` pertencia a uma organização externa e não estava acessível. Isso motivou a decisão executiva da Missão 19.6 de migrar definitivamente para a conta pessoal do proprietário: `technomanceer` e escopo `@technomanceer`.
+
+- `npm whoami --registry=https://registry.npmjs.org/` retornou `technomanceer` (confirmado na Missão 19.6).
+- Os três manifests foram migrados para `@technomanceer/*` e declaram `publishConfig` (`access: public`, `tag: next`).
+- Dry-run do pacote atual `motion-core@1.0.0-rc.3` passou: 26 arquivos, 55.124 bytes compactados e 189.199 descompactados. O artefato não contém Skills.
+
+### Auditoria das Skills
+
+- Foram contados **51 diretórios de Skills** no pacote. `skills-lock.json` tem 68 entradas, mas somente 33 correspondem às Skills atualmente empacotadas; as outras 18 não têm fonte registrada ali. As entradas não fixam SHA de commit upstream.
+- **12 Skills Remotion estão bloqueadas**: o repositório upstream não declara licença nem no `package.json` nem nas Skills. A issue upstream #31 continua aberta pedindo licença, e a #28 foi fechada sem resposta de maintainer. Repositório público e licença do runtime Remotion não autorizam por si só redistribuir essas Skills.
+- Nas outras 21 Skills de origem externa, as licenças identificadas permitem redistribuição sob seus próprios termos; contudo, 18 diretórios não carregam a licença/aviso da origem junto com o conteúdo. `revenue-centric-design` preserva sua licença customizada e a restrição de não uso em apostas/cassino.
+- Entre as 18 Skills sem fonte no lock, `banner-design`, `design` e `design-system` declaram MIT sem registrar origem ou incluir a licença; `ui-styling` declara MIT, mas o `LICENSE.txt` incluso contém Apache-2.0 genérica com campos de copyright em branco. As outras 14 precisam de confirmação de autoria/proveniência sob a licença raiz Apache-2.0.
+- `npm pack --dry-run --json` da versão atual `motion-studio-skills@1.0.0-rc.3` passou: 2.363 arquivos, 27.194.978 bytes compactados e 47.092.226 descompactados. O tarball contém só três licenças upstream identificadas (`anatomy`, `revenue-centric-design`, `video-shotcraft`), além do `LICENSE.txt` contraditório de `ui-styling`; não contém as licenças dos outros 18 diretórios upstream.
+- Inventário, origem, evidências e requisitos de correção: [`docs/SKILLS_LICENSE_AUDIT.md`](docs/SKILLS_LICENSE_AUDIT.md).
+
+### Possibilidade de publicação separada
+
+- **`motion-core`: separável tecnicamente.** Não depende do pacote de Skills; pode ser preparado e publicado sozinho sob o escopo `@technomanceer/motion-core`, na versão `1.0.0-rc.4`.
+- **`motion-cli`: não é separável no estado atual.** Declara `motion-studio-skills` como dependência obrigatória e seus comandos `list` e `init` a importam. Se Skills ficar retido, a instalação pública da CLI também falha ao resolver a dependência. Só publicar a CLI após liberar um pacote de Skills compatível ou alterar a CLI para não exigir esse pacote, com os comandos dependentes tratados e testados.
+- **`motion-studio-skills`: não publicar até fechar os bloqueios de direitos e avisos.** Opções: obter licença/permissão expressa para as 12 Skills Remotion ou removê-las do bundle; acrescentar avisos/licenças para as 18 Skills upstream restantes; resolver a origem e a contradição de `ui-styling`; fixar revisões upstream e alinhar o lock com as 51 Skills.
+
+### Conclusão e Resolução na Missão 19.6
+
+1. O escopo definitivo `@technomanceer` foi configurado nos 3 manifests.
+2. A suíte completa (31/31 testes) e a instalação clean-room comprovaram a integridade e independência dos pacotes.
+
+**Nesta Missão 19.5 não houve `npm publish`, commit, push ou deploy.** Os manifests continuam em `1.0.0-rc.3`; não foram preparados tarballs `rc.4`. As alterações foram documentais, portanto nenhum teste funcional foi necessário. Os dry-runs de Core e Skills serviram à auditoria e não geraram arquivos de publicação.
+
+> **Bloco histórico:** avaliação original de 30 de outubro de 2026 (Missões 01–08), versão `1.0.0-rc.2`, classificada então como **READY WITH WARNINGS**. Foi substituída para decisões atuais pela atualização da Missão 19.5 acima.
 
 ---
 

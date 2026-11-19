@@ -20,9 +20,51 @@ projects/*/web/dist/
 projects/*/frames/
 projects/*/frames-debug/
 projects/*/frames-full/
+/projects/*/frames-*/
+
+# Render outputs and results are never tracked. They are regenerated from the
+# project source (BRIEF/STYLE/STORYBOARD, code, configs). Critic findings (.md)
+# stay tracked; rendered stills, videos, contact sheets and deliveries do not.
+/out/*
+!/out/*.md
+/projects/*/out/
+/projects/*/*/out/
+/projects/*/productions/
+/projects/*/screenshots/
+/projects/*/entrega-*.zip
+/reviews/**/*.png
+/reviews/**/*.jpg
+/reviews/**/*.jpeg
+/reviews/**/*.webp
+/reviews/**/*.gif
+/reviews/**/*.mp4
+/reviews/**/*.webm
+/reviews/**/*.mov
+/projects/*/reviews/**/*.png
+/projects/*/reviews/**/*.jpg
+/projects/*/reviews/**/*.jpeg
+/projects/*/reviews/**/*.webp
+/projects/*/reviews/**/*.gif
+/projects/*/reviews/**/*.mp4
+/projects/*/reviews/**/*.webm
+/projects/*/reviews/**/*.mov
+/projects/*/reviews/**/*.html
 
 # Test artifacts
 tests/tmp/
+
+# Tool caches and reports that can be rebuilt from source.
+**/.cache/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.next/
+**/.vite/
+**/coverage/
+*.pyo
+
+# Optional local consumer fixtures; the Mission 19 consumer uses /tmp.
+/projects/*/.consumer-install/
 
 # Distribution packages
 dist/packages/*.tgz

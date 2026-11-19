@@ -52,3 +52,7 @@ Não substitui os pipelines 3D (`3d-scene-director` / `lemo-opuscar`) nem os tea
 - **Taxa de Quadros:** 30 FPS CFR (Constant Frame Rate).
 - **Driver de Quadro:** Função pura dependente exclusivamente do número absoluto do frame via `window.__onFrame__(frame, totalFrames, fps)`.
 - **Zero Dependência Externa:** Fontes locais/embutidas, sem chamadas de rede externas, renderização instantânea em Chromium headless.
+
+## Primitivas reutilizáveis do MOTION Core
+
+Para dados já validados e linguagem visual aprovada, `animated-counter`, `timeline-sequence`, `data-callout`, `kinetic-text-reveal`, `comparison-panel` e `progress-gauge` podem compor uma explicação. Consulte os schemas com `motion components list`; configure os parâmetros em vez de alterar o código do componente. Use transições com easing apenas quando ajudarem a explicar continuidade ou mudança de estado. Componentes são opcionais: diagramas causais e cenas customizadas continuam preferíveis quando ensinam melhor. Antes da entrega, use `motion qa determinism` e `motion qa safe-zones` e inspecione as evidências visuais.

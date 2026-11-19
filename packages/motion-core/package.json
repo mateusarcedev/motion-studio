@@ -1,6 +1,6 @@
 {
-  "name": "motion-core",
-  "version": "1.0.0-rc.3",
+  "name": "@technomanceer/motion-core",
+  "version": "1.0.0-rc.4",
   "description": "Engines de produção, QA determinístico e exportação do MOTION Studio",
   "type": "module",
   "main": "./index.js",
@@ -11,16 +11,28 @@
     "./renderers/render_static.mjs": "./renderers/render_static.mjs",
     "./renderers/render_frames.mjs": "./renderers/render_frames.mjs",
     "./renderers/assemble_video.py": "./renderers/assemble_video.py",
-    "./renderers/qa_viewports.mjs": "./renderers/qa_viewports.mjs"
+    "./renderers/qa_viewports.mjs": "./renderers/qa_viewports.mjs",
+    "./components": "./components/index.js",
+    "./transitions": "./transitions/index.js",
+    "./safe-zones": "./quality/safe_zones.mjs",
+    "./quality/determinism": "./quality/determinism.mjs"
   },
   "files": [
     "index.js",
-    "intent/**/*",
-    "renderers/**/*",
-    "quality/**/*",
-    "exporters/**/*",
-    "design-system/**/*",
-    "gallery/**/*",
+    "intent/*.js",
+    "renderers/*.mjs",
+    "renderers/*.py",
+    "quality/*.mjs",
+    "quality/*.py",
+    "exporters/*.py",
+    "design-system/*.js",
+    "gallery/*.py",
+    "gallery/*.json",
+    "gallery/*.html",
+    "components/*.js",
+    "transitions/*.js",
+    "transitions/*.py",
+    "safe-zones/*.json",
     "presets.json",
     "LICENSE",
     "README.md"
@@ -43,5 +55,9 @@
     "type": "git",
     "url": "https://github.com/mateusarcedev/motion-studio.git",
     "directory": "packages/motion-core"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
   }
 }

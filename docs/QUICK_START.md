@@ -10,7 +10,10 @@ Dentro da pasta do seu projeto existente (ou de um novo projeto):
 
 ```bash
 # 1. Instale o MOTION
-npm install -D motion-cli motion-core motion-studio-skills
+npm install -D @technomanceer/motion-cli @technomanceer/motion-core
+
+# Optional: add the curated public Skills catalog
+npm install @technomanceer/motion-studio-skills
 
 # 2. Inicialize a marca
 npx motion init --brand="Aurora"
@@ -21,7 +24,7 @@ Saída esperada:
 🚀 Inicializando MOTION Studio para a marca: "Aurora"...
 ✅ Configuração criada: motion.config.json
 ✅ Tokens de marca criados: motion/brand/tokens.json
-✅ 50 skills configuradas em .agents/skills
+✅ Skills autorizadas configuradas em .agents/skills (quando o catálogo opcional está instalado)
 ```
 
 ---

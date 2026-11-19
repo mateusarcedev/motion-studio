@@ -31,7 +31,7 @@ echo "✅ Teaser finalizado em: $PROJECT_DIR/final.mp4"
 ## Exemplo 2: Renderização de Carrossel com Validação Dupla
 
 ```javascript
-import { renderStatic, validateStatic } from "motion-core";
+import { renderStatic, validateStatic } from "@technomanceer/motion-core";
 
 const slides = ["01.html", "02.html", "03.html", "04.html", "05.html"];
 
@@ -57,7 +57,7 @@ for (const s of slides) {
 ## Exemplo 3: Auditoria Programática de Landing Page
 
 ```javascript
-import { qaViewports } from "motion-core";
+import { qaViewports } from "@technomanceer/motion-core";
 
 const report = await qaViewports("http://localhost:3000", "./qa-evidence");
 console.log(report.stdout);

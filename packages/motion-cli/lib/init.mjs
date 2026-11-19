@@ -2,11 +2,15 @@ import { stat, writeFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 let installSkills;
 try {
-  const mod = await import("motion-studio-skills");
+  const mod = await import("@technomanceer/motion-studio-skills");
   installSkills = mod.installSkills;
 } catch {
-  const mod = await import("../../motion-skills/index.js");
-  installSkills = mod.installSkills;
+  try {
+    const mod = await import("../../motion-skills/index.js");
+    installSkills = mod.installSkills;
+  } catch {
+    installSkills = undefined;
+  }
 }
 
 export async function runInit(options = {}) {
@@ -47,7 +51,7 @@ export async function runInit(options = {}) {
     skills: {
       profile,
     },
-    version: "1.0.0-rc.3",
+    version: "1.0.0-rc.4",
   };
 
   await mkdir(path.join(cwd, "motion", "brand"), { recursive: true });
@@ -115,13 +119,18 @@ export async function runInit(options = {}) {
   }
 
   // Install Agent Skills
-  console.log(`\n📦 Instalando Agent Skills (Perfil selecionado: '${profile}')...`);
-  const skillRes = await installSkills({
-    targetDir: cwd,
-    agents: ["agents", "claude", "opencode"],
-    profile,
-  });
-  console.log(`✅ ${skillRes.installed.length} skills configuradas em .agents/skills (e adaptadores .claude / .opencode).`);
+  if (installSkills) {
+    console.log(`\n📦 Instalando Skills liberadas para distribuição (perfil: '${profile}')...`);
+    const skillRes = await installSkills({
+      targetDir: cwd,
+      agents: ["agents", "claude", "opencode"],
+      profile,
+    });
+    console.log(`✅ ${skillRes.installed.length} skills autorizadas configuradas em .agents/skills (e adaptadores .claude / .opencode).`);
+  } else {
+    console.log("\nℹ️ Catálogo de Skills opcional não instalado; a estrutura e os comandos da CLI continuam disponíveis.");
+    console.log("   Para adicionar as Skills públicas do MOTION: npm install @technomanceer/motion-studio-skills@1.0.0-rc.4");
+  }
 
   if (profile === "interactive") {
     console.log(`\nℹ️ [Perfil Interactive]: Habilidades nativas essenciais instaladas.`);

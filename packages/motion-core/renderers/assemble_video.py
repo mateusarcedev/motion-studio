@@ -52,6 +52,8 @@ def main():
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--audio", type=Path)
     ap.add_argument("--crf", type=int, default=18)
+    ap.add_argument("--format", choices=("mp4", "webm"), default="mp4",
+                    help="mp4 mantém H.264 yuv420p; webm exporta VP9 com alpha decodificável")
     ap.add_argument("--even-dims", action="store_true", default=True,
                     help="força dimensões pares (yuv420p exige; 1080/1920 já são)")
     a = ap.parse_args()
@@ -65,27 +67,71 @@ def main():
     cmd = ["ffmpeg", "-y", "-framerate", str(a.fps), "-i", str(a.frames_dir / "%04d.png")]
     if a.audio:
         cmd += ["-i", str(a.audio)]
-        # grade temporal do áudio: começa em t=0 do frame 0; trunca no final do vídeo
-        cmd += ["-shortest"]
-    cmd += [
-        "-vf", f"fps={a.fps}",
-        "-c:v", "libx264", "-crf", str(a.crf), "-pix_fmt", "yuv420p",
-        "-c:a", "aac" if a.audio else "anull",
-    ] + (["-b:a", "192k", "-shortest"] if a.audio else []) + [
-        "-movflags", "+faststart",
-        str(a.out),
-    ]
+    if a.format == "webm":
+        cmd += ["-vf", f"fps={a.fps},format=yuva420p", "-c:v", "libvpx-vp9", "-lossless", "1",
+                "-auto-alt-ref", "0", "-metadata:s:v:0", "alpha_mode=1", "-an"]
+        if a.audio:
+            cmd += ["-c:a", "libopus", "-shortest"]
+    else:
+        # Preserve the existing MP4 path and encoding defaults.
+        cmd += ["-vf", f"fps={a.fps}", "-c:v", "libx264", "-crf", str(a.crf), "-pix_fmt", "yuv420p",
+                "-c:a", "aac" if a.audio else "anull"]
+        if a.audio:
+            cmd += ["-b:a", "192k", "-shortest"]
+        cmd += ["-movflags", "+faststart"]
+    cmd += [str(a.out)]
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
         print(r.stderr[-2000:], file=sys.stderr)
         raise SystemExit("ffmpeg falhou")
     dur = len(frames) / a.fps
-    print(json.dumps({
-        "mp4": str(a.out), "frames": len(frames), "fps": a.fps,
+    result = {
+        "frames": len(frames), "fps": a.fps,
         "seconds": round(dur, 2), "size": f"{w}x{h}",
         "audio": str(a.audio) if a.audio else None,
         "note": "CFR: frame N = N/fps s; contact sheet antes disso = portão do Crítico",
-    }, ensure_ascii=False))
+    }
+    if a.format == "webm":
+        result.update(validate_webm_alpha(a.out, len(frames), a.fps))
+        result["webm"] = str(a.out)
+    else:
+        result["mp4"] = str(a.out)
+    print(json.dumps(result, ensure_ascii=False))
+
+def validate_webm_alpha(output: Path, frame_count: int, fps: int):
+    """Prove VP9 alpha signaling and inspect decoded alpha in beginning/middle/end frames."""
+    probe = subprocess.run([
+        "ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json", str(output),
+    ], capture_output=True, text=True)
+    if probe.returncode:
+        raise SystemExit("ffprobe não conseguiu ler o WebM: " + probe.stderr[-1000:])
+    data = json.loads(probe.stdout)
+    video = next((stream for stream in data.get("streams", []) if stream.get("codec_type") == "video"), None)
+    if not video or video.get("codec_name") != "vp9":
+        raise SystemExit("WebM não contém uma stream de vídeo VP9")
+    tags = {str(k).lower(): str(v) for k, v in video.get("tags", {}).items()}
+    if tags.get("alpha_mode") != "1":
+        raise SystemExit("VP9 WebM não sinalizou alpha_mode=1 nos metadados")
+
+    sample_frames = sorted(set([0, frame_count // 2, max(0, frame_count - 1)]))
+    alpha_samples = []
+    partial_pixels = 0
+    for frame in sample_frames:
+        decoded = subprocess.run([
+            "ffmpeg", "-v", "error", "-c:v", "libvpx-vp9", "-ss", f"{frame / fps:.6f}", "-i", str(output),
+            "-frames:v", "1", "-vf", "alphaextract", "-f", "rawvideo", "-pix_fmt", "gray", "pipe:1",
+        ], capture_output=True)
+        if decoded.returncode or not decoded.stdout:
+            raise SystemExit("não foi possível decodificar o canal alfa do WebM no frame %d: %s" % (frame, decoded.stderr[-500:].decode(errors="replace")))
+        alpha = decoded.stdout
+        partial = sum(0 < pixel < 255 for pixel in alpha)
+        partial_pixels += partial
+        alpha_samples.append({"frame": frame, "min": min(alpha), "max": max(alpha), "partialPixels": partial})
+    if not any(sample["min"] == 0 for sample in alpha_samples):
+        raise SystemExit("os quadros amostrados não contêm pixels totalmente transparentes")
+    if partial_pixels == 0:
+        raise SystemExit("os quadros amostrados não preservam bordas com alpha parcial")
+    return {"format": "webm", "codec": "vp9", "alphaMode": tags["alpha_mode"], "alphaSamples": alpha_samples}
 
 if __name__ == "__main__":
     main()

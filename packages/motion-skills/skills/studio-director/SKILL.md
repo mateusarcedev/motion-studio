@@ -153,3 +153,7 @@ Toda produção do MOTION Studio obedece ao fluxo de portões de qualidade:
 5. **Portão 5 — Prévia & Contact Sheet:** Validação visual de stills antes do render de vídeo completo.
 6. **Portão 6 — Crítico Independente:** Auditoria de continuidade, legibilidade, tempo de leitura e conformidade técnica (30 FPS CFR, 0px overflow).
 7. **Portão 7 — Entrega & Manifesto:** Geração de MP4/PNG, `assets.manifest.json` com SHA-256 e pacote ZIP.
+
+## Capacidades de motion reutilizável
+
+Depois de definir intenção, narrativa e direção visual, o diretor roteia a produção para o especialista audiovisual. O especialista pode consultar `motion components list` e escolher componentes compatíveis; componentes não são templates obrigatórios e não substituem composição customizada. Para overlays, determinismo e zonas seguras, use `docs/REUSABLE_MOTION_COMPONENTS.md` e os comandos `motion render overlay`, `motion qa determinism` e `motion qa safe-zones`. Os presets de plataforma são heurísticas versionadas, então a revisão visual no app de destino permanece necessária.

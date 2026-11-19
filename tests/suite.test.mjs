@@ -15,7 +15,7 @@ import {
   exportZip,
   createMotionDriver
 } from "../packages/motion-core/index.js";
-import { listSkills, SKILL_PROFILES, resolveSkillsForProfile, EXTERNAL_INTEGRATIONS } from "../packages/motion-skills/index.js";
+import { listSkills, listLocalSkills, SKILL_PROFILES, resolveSkillsForProfile, EXTERNAL_INTEGRATIONS } from "../packages/motion-skills/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tmpDir = path.join(__dirname, "tmp");
@@ -23,7 +23,9 @@ const tmpDir = path.join(__dirname, "tmp");
 describe("MOTION Studio — Suite de QA e Regressão", () => {
   test("1. Descoberta de Skills", async () => {
     const skills = await listSkills();
-    assert.ok(skills.length >= 50, `Esperado pelo menos 50 skills, encontrado ${skills.length}`);
+    const localSkills = await listLocalSkills();
+    assert.equal(skills.length, 11, `Esperado o catálogo público de 11 skills, encontrado ${skills.length}`);
+    assert.ok(localSkills.length >= 50, `Esperado preservar ao menos 50 skills locais, encontrado ${localSkills.length}`);
     const names = skills.map((s) => s.name);
     assert.ok(names.includes("studio-director"), "studio-director ausente");
     assert.ok(names.includes("motion-director"), "motion-director ausente");
@@ -155,16 +157,17 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
   test("9. Auditoria dos Pacotes Distribuíveis (Tarballs em dist/packages/)", async () => {
     const pkgJson = JSON.parse(await readFile(path.join(__dirname, "..", "packages", "motion-core", "package.json"), "utf-8"));
     const ver = pkgJson.version;
-    const coreTar = path.join(__dirname, "..", "dist", "packages", `motion-core-${ver}.tgz`);
-    const skillsTar = path.join(__dirname, "..", "dist", "packages", `motion-studio-skills-${ver}.tgz`);
-    const cliTar = path.join(__dirname, "..", "dist", "packages", `motion-cli-${ver}.tgz`);
+    const pkgFile = (name) => `${name.replace(/^@/, "").replaceAll("/", "-")}-${ver}.tgz`;
+    const coreTar = path.join(__dirname, "..", "dist", "packages", pkgFile("@technomanceer/motion-core"));
+    const skillsTar = path.join(__dirname, "..", "dist", "packages", pkgFile("@technomanceer/motion-studio-skills"));
+    const cliTar = path.join(__dirname, "..", "dist", "packages", pkgFile("@technomanceer/motion-cli"));
 
     const cStat = await stat(coreTar);
     const sStat = await stat(skillsTar);
     const clStat = await stat(cliTar);
 
     assert.ok(cStat.size > 5000, "motion-core tarball corrompido");
-    assert.ok(sStat.size > 50000, "motion-studio-skills tarball corrompido");
+    assert.ok(sStat.size > 5000, "motion-studio-skills tarball corrompido");
     assert.ok(clStat.size > 5000, "motion-cli tarball corrompido");
   });
 
