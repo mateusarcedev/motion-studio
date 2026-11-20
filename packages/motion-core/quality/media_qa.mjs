@@ -22,10 +22,22 @@ function run(cmd, args, { timeoutMs = 300000 } = {}) {
 const frac = (s) => { const [a, b] = String(s).split("/").map(Number); return b ? a / b : a; };
 const REPRODUCE_TOOLS = "Instale FFmpeg (apt install ffmpeg | brew install ffmpeg) e rode: motion qa media <arquivo>";
 
+function contextForSpan(context, start, end, allowedKinds) {
+  const scenes = Array.isArray(context) ? context : context?.scenes ?? [];
+  return scenes.find((scene) => {
+    const kinds = [scene.kind, scene.intent, ...(Array.isArray(scene.tags) ? scene.tags : [])];
+    if (!allowedKinds.some((kind) => kinds.includes(kind))) return false;
+    const from = Number(scene.startSec ?? scene.start ?? 0), to = Number(scene.endSec ?? scene.end ?? from);
+    const overlap = Math.max(0, Math.min(end, to) - Math.max(start, from));
+    const duration = Math.max(0.001, end - start);
+    return overlap / duration >= 0.5 || (duration <= 0.001 && start >= from && start <= to);
+  }) ?? null;
+}
+
 /**
  * @param {string} file
  * @param {{width?:number,height?:number,fps?:number,durationSec?:number,durationTolerance?:number,codec?:string,audio?:boolean|"optional",
- *          maxSilenceRatio?:number,minLufs?:number,maxLufs?:number,maxPeakDb?:number, checkBlack?:boolean}} [expect]
+ *          maxSilenceRatio?:number,minLufs?:number,maxLufs?:number,maxPeakDb?:number, checkBlack?:boolean, sceneContext?:Array}} [expect]
  */
 export async function qaMedia(file, expect = {}) {
   const report = createQaReport({ subject: path.basename(file), kind: "media" });
@@ -116,12 +128,20 @@ export async function qaMedia(file, expect = {}) {
     const black = await run("ffmpeg", ["-nostats", "-i", file, "-an", "-vf", "blackdetect=d=0.5:pix_th=0.03", "-f", "null", "-"]);
     if (!black.error) {
       const spans = [...black.stderr.matchAll(/black_start:([\d.]+)\s+black_end:([\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
-      report.add({ id: "video.black", title: "Sem trechos pretos inesperados (≥0,5 s)", status: spans.length ? "WARN" : "PASS", details: spans.length ? spans.map(([s, e]) => `${s.toFixed(2)}–${e.toFixed(2)}s`).join(", ") : null, heuristic: true });
+      const tagged = spans.map(([s, e]) => ({ s, e, scene: contextForSpan(expect.sceneContext, s, e, ["intentional-dark", "blackout", "fade-to-black"]) }));
+      const unexpected = tagged.filter((x) => !x.scene);
+      const note = tagged.map((x) => `${x.s.toFixed(2)}–${x.e.toFixed(2)}s${x.scene ? ` (${x.scene.label ?? x.scene.kind ?? x.scene.intent}: intencional)` : ""}`).join(", ");
+      report.add({ id: "video.black", title: "Sem trechos pretos inesperados (≥0,5 s)", status: unexpected.length ? "WARN" : "PASS", details: spans.length ? note : null, heuristic: true });
     }
     const freeze = await run("ffmpeg", ["-nostats", "-i", file, "-an", "-vf", "freezedetect=n=-60dB:d=1.5", "-f", "null", "-"]);
     if (!freeze.error) {
-      const spans = [...freeze.stderr.matchAll(/freeze_start:\s*([\d.]+)/g)].map((m) => Number(m[1]));
-      report.add({ id: "video.frozen", title: "Sem quadros congelados longos (≥1,5 s)", status: spans.length ? "WARN" : "PASS", details: spans.length ? `início em ${spans.map((s) => s.toFixed(2)).join(", ")}s` : null, heuristic: true });
+      const starts = [...freeze.stderr.matchAll(/freeze_start:\s*([\d.]+)/g)].map((m) => Number(m[1]));
+      const durations = [...freeze.stderr.matchAll(/freeze_duration:\s*([\d.]+)/g)].map((m) => Number(m[1]));
+      const spans = starts.map((s, i) => ({ s, e: s + (durations[i] ?? 1.5) }));
+      const tagged = spans.map((span) => ({ ...span, scene: contextForSpan(expect.sceneContext, span.s, span.e, ["reading-pause", "static-end-card", "planned-pause", "final-hold"]) }));
+      const unexpected = tagged.filter((x) => !x.scene);
+      const note = tagged.map((x) => `${x.s.toFixed(2)}–${x.e.toFixed(2)}s${x.scene ? ` (${x.scene.label ?? x.scene.kind ?? x.scene.intent}: pausa planejada)` : ""}`).join(", ");
+      report.add({ id: "video.frozen", title: "Sem cenas congeladas sem justificativa (≥1,5 s)", status: unexpected.length ? "WARN" : "PASS", details: spans.length ? note : null, heuristic: true });
     }
   }
   return report;

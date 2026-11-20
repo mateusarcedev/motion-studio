@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "package": {
     "name": "@technomanceer/motion-studio-skills",
-    "version": "1.1.0"
+    "version": "1.1.1"
   },
   "integrity": {
     "algorithm": "sha256",
@@ -41,7 +41,7 @@
     {
       "name": "carousel-studio",
       "path": "skills/carousel-studio/SKILL.md",
-      "version": "snapshot-4a0e313f9889",
+      "version": "snapshot-7aa124c3c8b2",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -50,7 +50,7 @@
       },
       "license": { "spdx": "Apache-2.0", "file": "LICENSE" },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "4a0e313f9889005d77a56ad298ad6d08602a9f0bb336e41315abd766ec363d32"
+      "sha256": "7aa124c3c8b26e45a0d0b5365aefed53520b77f5c81b204063e2ea246f288208"
     },
     {
       "name": "explainer-motion",
@@ -83,7 +83,7 @@
     {
       "name": "motion-director",
       "path": "skills/motion-director/SKILL.md",
-      "version": "snapshot-aa6e8d17a2a1",
+      "version": "snapshot-6d113950eb9d",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -92,12 +92,12 @@
       },
       "license": { "spdx": "Apache-2.0", "file": "LICENSE" },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "aa6e8d17a2a16ed1583ebaecae4995911706cf4da876b0a14bfbc0e9c283318d"
+      "sha256": "6d113950eb9d4cdb4b37371d1bd52750665c9c7d61038c9d73f504e50e65301c"
     },
     {
       "name": "shorts-director",
       "path": "skills/shorts-director/SKILL.md",
-      "version": "snapshot-0d8f86c2dbae",
+      "version": "snapshot-a0c52b181c97",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -106,7 +106,7 @@
       },
       "license": { "spdx": "Apache-2.0", "file": "LICENSE" },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "0d8f86c2dbae47ec6221e9578480ba693e27fb647bc9eb8301189843e6dd7dd1"
+      "sha256": "a0c52b181c9769a20f8210977538e47cadba0e7e4b80fb1bbfb4c4bb41a7e43c"
     },
     {
       "name": "story-studio",
@@ -125,7 +125,7 @@
     {
       "name": "studio-director",
       "path": "skills/studio-director/SKILL.md",
-      "version": "snapshot-69a69fd6f5e4",
+      "version": "snapshot-ccfeddcfc703",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -134,7 +134,7 @@
       },
       "license": { "spdx": "Apache-2.0", "file": "LICENSE" },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "69a69fd6f5e4d23570daa33d4ccf19ab154ad9187a05927c910c3a0ed165829f"
+      "sha256": "ccfeddcfc703eaa891864a9ab8fe420b66264f0eaedd226a5da1622ae16f30e2"
     },
     {
       "name": "thermo-nuclear-code-quality-review",

@@ -1,6 +1,6 @@
 {
   "name": "@technomanceer/motion-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "CLI unificada de execução e gerenciamento do MOTION Studio",
   "type": "module",
   "bin": {
@@ -13,8 +13,8 @@
     "README.md"
   ],
   "dependencies": {
-    "@technomanceer/motion-core": "1.1.0",
-    "@technomanceer/motion-studio-skills": "1.1.0",
+    "@technomanceer/motion-core": "1.1.1",
+    "@technomanceer/motion-studio-skills": "1.1.1",
     "playwright-core": "^1.64.1"
   },
   "keywords": [

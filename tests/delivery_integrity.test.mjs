@@ -266,3 +266,12 @@ test("metadata symlinks cannot overwrite outside files and malformed metadata re
   assert.match(allOutput(invalidContract), /contrato inválido/);
   assert.doesNotMatch(allOutput(invalidContract), /Traceback/);
 });
+
+test("all packages declare Node 20+ and exact internal release versions", async () => {
+  const dirs = ["motion-core", "motion-skills", "motion-cli", "motion-studio"];
+  const packages = await Promise.all(dirs.map(async (name) => JSON.parse(await readFile(path.join(root, "packages", name, "package.json"), "utf8"))));
+  const version = packages[0].version;
+  assert.match(version, /^1\.1\.1$/);
+  for (const pkg of packages) assert.ok(Number(pkg.engines.node.match(/\d+/)[0]) >= 20, `${pkg.name} Node engine`);
+  for (const pkg of packages) for (const [name, v] of Object.entries(pkg.dependencies ?? {})) if (name.startsWith("@technomanceer/")) assert.equal(v, version, `${pkg.name} -> ${name}`);
+});

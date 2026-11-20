@@ -136,7 +136,13 @@ async function main() {
       return issues.slice(0, 12);
     });
 
-    const visual = args["qa-visual"] ? await collectDomChecks(page) : null;
+    const qaContext = args["qa-context"] || "graphic";
+    const safeZone = qaContext === "story-vertical"
+      ? { top: height * 0.12, right: width * 0.05, bottom: height * 0.18, left: width * 0.05 }
+      : qaContext === "video-vertical"
+        ? { top: height * 0.15, right: width * 0.05, bottom: height * 0.2, left: width * 0.05 }
+        : null;
+    const visual = args["qa-visual"] ? await collectDomChecks(page, { context: qaContext, safeZone }) : null;
     const summary = monitor.summary();
     const fontIssues = summary.warnings.filter((w) => w.resourceType === "font" || /\.(woff2?|ttf|otf)/.test(w.url ?? "")).map((w) => w.url ?? w.message);
     const absOutput = path.resolve(output);
@@ -145,7 +151,7 @@ async function main() {
     const fontsOk = fontState.status === "loaded" && fontState.faces.every((face) => face.status === "loaded");
     const status = summary.status === "FAIL" ? "FAIL"
       : (summary.status === "WARN" || overflow.length || fontIssues.length || !fontsOk
-        || (visual && (visual.clipped.length || visual.lowContrast.length || visual.tiny.length || visual.textOverload))) ? "WARN" : "OK";
+        || (visual && (visual.clipped.length || visual.lowContrast.length || visual.tiny.length || visual.secondaryTiny.length || visual.overlap.length || visual.outsideSafeZone.length || visual.textOverload))) ? "WARN" : "OK";
     const payload = {
       png: absOutput, width, height, deviceScaleFactor: scale,
       motion: { frame: frame ?? null, time: time ?? null, seed: seed ?? null, fps: args.fps ? Number(args.fps) : 30, replayed: motionState },

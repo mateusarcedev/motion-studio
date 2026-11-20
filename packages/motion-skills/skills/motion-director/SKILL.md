@@ -65,6 +65,13 @@ For every scene record: **focal point**, **visual device** (icon / diagram / SVG
 previous scene** (composition + device), **depth plan**, and **words on screen** (≤ 45). Consecutive scenes with the same device
 and composition are rejected before any code (see `docs/ART_DIRECTION.md`).
 
+For a product or process piece, consider a concrete arc from the audience's request or problem,
+through the relevant work, to a visible result. Use it only when it serves the brief. Vary scale,
+alignment, density, focal point, and visual device by scene; preserve one brand system without
+reusing the same large-title composition throughout. Use icons when they explain or identify content.
+Mark planned reading holds, final cards, and intentional dark scenes with time ranges in
+`temporal-context.json` so QA can distinguish them from accidental freezes or black frames.
+
 Convert the story into scenes with timestamps **and frame numbers** at the chosen fps (default 30).
 Every scene: name, frame range, one-line purpose, key event, end state. The end state of one scene
 must be the start state of the next (continuity rule). Example scale: 20s @30fps = frames 0–599;
@@ -92,6 +99,8 @@ named the style or tool explicitly, honor it and skip routing.
 ## Stage 5 · RENDER ENGINEER — stills before finals
 
 Before any full render: confirm resolution, fps, duration; check fonts load and all assets exist;
+run mobile legibility/overflow checks using the matching `--qa-context` (`web`, `story-vertical`,
+or `video-vertical`) when applicable;
 render **representative stills** of the main story (opening / action / result / closing); render a
 low-cost **motion preview** of the key interaction interval; report runtime errors. Do not modify
 the creative direction. Do not render final deliverables until the preview passes review.
@@ -142,6 +151,6 @@ O usuário descreve o resultado em linguagem natural: **você** escolhe os recur
 1. **Recursos visuais (ícones, ícones animados, logos de tecnologias, personagens, ilustrações, Lottie):** `motion assets pick "<conceito>"` (API `createAssetSession().asset()` de `@technomanceer/motion-core`). O registry de providers decide o tipo e a fonte; você decide **quando** usar cada tipo (ícone para ideia abstrata, logo só quando a tecnologia é citada, personagem quando pessoas fazem sentido, ícone animado/Lottie quando o movimento comunica). Uma sessão por produção = um estilo de ícone; assets diferentes para intenções diferentes. `fallback: true`, confiança `low` ou candidatos `blocked` (licença) ⇒ troque o conceito ou crie um SVG original. Ao entregar, inclua `session.credits().markdown` (atribuições obrigatórias, ex.: Humaaans CC-BY, marcas de tecnologias).
 2. **Fundos, ilustrações e diagramas vetoriais:** `motion svg component <waveLayers|networkGraph|ringProgress|flowArrow|orbitRings|gridPattern> --tokens=<tokens.json da marca>`. SVG de terceiros passa por `motion svg validate` (não confiável ⇒ sanitizado). Cores vêm dos tokens, nunca hard-coded.
 3. **Animação vetorial:** `@technomanceer/motion-core/svg-motion` (`createSvgMotion` + `window.__onFrame__`). Proibido SMIL, CSS keyframes, `requestAnimationFrame` e `Math.random` em vídeo.
-4. **Proveniência:** registre `session.manifest()` no `assets.manifest.json`. Logotipos/marcas só a partir de assets fornecidos pelo usuário — nunca recriar nem recolorir.
+4. **Proveniência:** registre `session.manifest()` nos créditos/manifesto de entrega. Empacote com `motion export` e confirme com `motion qa delivery --project <pasta> --zip <zip>`; não use o exportador ZIP direto. Logotipos/marcas só a partir de assets fornecidos pelo usuário — nunca recriar nem recolorir.
 5. **Gates automáticos:** um render com `status: "FAIL"` (erro de JS, import quebrado, imagem essencial quebrada, controlador ausente) **nunca** segue adiante, mesmo que o arquivo exista. Antes do Crítico rode `motion qa precheck projects/<slug>` (gera `reviews/qa-report.{json,md}`; estados PASS/WARN/FAIL/BLOCKED/NOT_TESTED; heurística ≠ prova). O Crítico lê esse relatório **e** os renders.
 6. **Direção de arte:** siga `docs/ART_DIRECTION.md` — ponto focal, dispositivo visual e diferença em relação à cena anterior por cena; sem cenas repetidas, vazias ou com excesso de texto.

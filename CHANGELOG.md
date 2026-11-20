@@ -2,6 +2,17 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.1.1] — candidata de estabilização (não publicada)
+
+Correção patch, compatível com a API existente. Os quatro pacotes são preparados juntos em `1.1.1`; a versão publicada `1.1.0` continua como `latest` até autorização explícita.
+
+- **Delivery Integrity v1:** contrato por projeto (`delivery.contract.json`), manifesto versionado com SHA-256 integral, metadados de mídia e status por arquivo; pacote ZIP64 validado em disco (inventário, CRC, tamanhos, hashes, caminhos seguros e conteúdos omitidos). Metadados simbólicos e estruturas inválidas falham em JSON estruturado.
+- **CLI:** `motion export` gera e valida a mesma entrega; `motion qa delivery --project <pasta> --zip <arquivo>` reabre e compara o pacote real. Arquivos obrigatórios ausentes causam `FAIL`; opcionais continuam opcionais.
+- **Portabilidade:** verificação de recursos locais referenciados, fontes ausentes e metadados de licença/origem; fontes continuam dentro do projeto, sem aumento dos pacotes npm.
+- **QA criativo:** contexto de mídia web/social para texto secundário, colisão e safe zones; contexto temporal opcional para pausas de leitura, cartelas estáticas e cenas escuras intencionais, sem desligar os detectores.
+- **Skills e documentação:** narrativa demonstra resultado quando o brief pede; direção alterna hierarquia e composição de forma controlada. Atualizados guias de entrega, direção de arte e fontes.
+- **Homologação/release:** não publicar, criar tag ou alterar `latest` automaticamente. Resultado e limitações serão registrados no relatório `RELEASE_1_1_1_REPORT.md`.
+
 ## [Não lançado] — correções encontradas na homologação pública do 1.1.0
 
 Achados ao produzir a campanha real (`~/testes/motion-showcase`) só com os pacotes npm públicos. **Nenhuma versão nova foi publicada**; candidatas a 1.1.1.
@@ -13,7 +24,7 @@ Achados ao produzir a campanha real (`~/testes/motion-showcase`) só com os paco
 - Resolver: o conceito principal domina (conceitos secundários valem 60%): "revisão e verificação de qualidade" resolvia para ⭐ em vez de 👁; léxico ganhou `review` (revisão/crítico/auditoria).
 - `motion qa frames --dark-mean=N` para marcas escuras.
 
-## [1.1.0] — não publicado (em homologação)
+## [1.1.0] — publicada no npm (latest)
 
 Primeira versão menor após a 1.0.0: reúne a Missão 20 e a Missão 20.1. **Versão proposta 1.1.0** (SemVer: funcionalidades aditivas; contratos de API preservados; a única mudança de comportamento — render com erro deixa de ser "OK" — corrige um falso positivo e tem saídas explícitas).
 

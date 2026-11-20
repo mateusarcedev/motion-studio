@@ -80,7 +80,7 @@ python3 creative-core/renderers/assemble_video.py frames/ out/short.mp4 \
 ```
 
 - CFR 30fps, yuv420p, `-shortest` alinha áudio na grade.
-- Gera `assets.manifest.json` (sha256, papéis, renditions) + `entrega-v1.zip` (frames, HTML, STORYBOARD, BRIEF, caption.srt, manifest, MP4).
+- Declare MP4, legenda, arquivos-fonte necessários e notas em `delivery.contract.json`; rode `motion export <projeto> <zip>` e `motion qa delivery --project <projeto> --zip <zip>`.
 
 ## 8 · Galeria & Memória (S8)
 
@@ -93,7 +93,7 @@ python3 creative-core/renderers/assemble_video.py frames/ out/short.mp4 \
 |---|---|---|
 | `chatterbox` | não instalada / model card não auditado | **fallback textual**: exporta sem áudio, legenda `.srt` com timestamps estimados (duração total / palavras), relatório `AUDIO_FALLBACK=true` |
 | `gl-transitions` / `animejs` / etc. | não instaladas | transições/código escritos **manual** no `composition.html` (sem vendor); drivers puros `frame.js` |
-| Fontes Noto/emoji | não no Chromium | avisar no QA (contact sheet acusa); fallback `system-ui` |
+| Fontes Noto/emoji | não no Chromium | declarar uma fonte livre e licenciada no projeto ou reportar fallback; `system-ui` não garante métricas iguais entre máquinas |
 
 ## Exemplo de uso (agente)
 
@@ -128,7 +128,7 @@ O `studio-director` despacha para `shorts-director`; este executa o pipeline aci
 | Contact sheet (portão Crítico) | `build_contact_sheet.py` → 6 beats gerados em `reviews/contact-sheet.png` |
 | Montagem MP4 CFR | `assemble_video.py` → `out/short-v1.mp4` 20.000s, 600 frames, h264 30/1 |
 | Legenda SRT por beat (fallback textual) | `caption.srt` com timestamps estimados (duração/palavras) |
-| Manifest + ZIP | `manifest.py` + `zip_export.py` → `entrega-v1.zip` (607 arquivos) |
+| Manifest + ZIP | contrato e CLI de delivery → `entrega-v1.zip`, pacote verificado contra manifest e CRC |
 | Galeria + memória | Item `example-short-original` registrado em `gallery.json` status `draft` |
 | Reflow 9:16 (safe zones preset story) | Safe zones 22/16/7% aplicadas, decos com `data-bleed` |
 

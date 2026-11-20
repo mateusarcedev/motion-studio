@@ -15,7 +15,7 @@ test("public Skills manifest identifies exactly the installable catalog", async 
   const publicSkills = await listSkills();
   const localSkills = await listLocalSkills();
 
-  assert.equal(manifest.package.version, "1.1.0");
+  assert.equal(manifest.package.version, "1.1.1");
   assert.equal(publicSkills.length, manifest.skills.length);
   assert.equal(localSkills.length, 51, "the complete local catalog remains intact");
   assert.deepEqual(publicSkills.map(({ name }) => name).sort(), manifest.skills.map(({ name }) => name).sort());

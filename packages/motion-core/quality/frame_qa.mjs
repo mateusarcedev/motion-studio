@@ -27,6 +27,20 @@ export function stats(px) {
 export function averageHash(px) { const { mean } = stats(px); return Uint8Array.from(px, (v) => (v >= mean ? 1 : 0)); }
 export function hamming(a, b) { let d = 0; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) d++; return d / a.length; }
 
+const INTENTIONAL_STATIC = new Set(["reading-pause", "static-end-card", "planned-pause", "final-hold"]);
+function sceneHas(scene, kinds) { return Boolean(scene && kinds.some((kind) => [scene.kind, scene.intent, ...(Array.isArray(scene.tags) ? scene.tags : [])].includes(kind))); }
+function sceneAt(file, context, fps = 30) {
+  const scenes = Array.isArray(context) ? context : context?.scenes ?? [];
+  const frame = Number((file.match(/\d+/) ?? [])[0]);
+  if (!Number.isFinite(frame)) return null;
+  const sec = frame / fps;
+  return scenes.find((scene) => {
+    const from = Number(scene.startSec ?? scene.start ?? (scene.startFrame !== undefined ? scene.startFrame / fps : 0));
+    const to = Number(scene.endSec ?? scene.end ?? (scene.endFrame !== undefined ? scene.endFrame / fps : from));
+    return sec >= from && sec <= to;
+  }) ?? null;
+}
+
 async function pool(items, size, fn) {
   const out = new Array(items.length); let i = 0;
   await Promise.all(Array.from({ length: Math.min(size, items.length) }, async () => { while (i < items.length) { const k = i++; out[k] = await fn(items[k], k); } }));
@@ -35,7 +49,7 @@ async function pool(items, size, fn) {
 
 /**
  * @param {string} dir directory of PNG frames/stills (numbered or named)
- * @param {{maxFrames?:number, expectedFrames?:number, blankStd?:number, darkMean?:number, similar?:number}} [opts]
+ * @param {{maxFrames?:number, expectedFrames?:number, blankStd?:number, darkMean?:number, similar?:number, fps?:number, sceneContext?:Array}} [opts]
  */
 export async function qaFrames(dir, opts = {}) {
   const report = createQaReport({ subject: path.basename(path.resolve(dir)), kind: "frames" });
@@ -62,22 +76,33 @@ export async function qaFrames(dir, opts = {}) {
     details: blank.length ? `${blank.length}/${data.length} quase uniformes (ex.: ${blank.slice(0, 4).map((d) => d.file).join(", ")})` : null, evidence: blank.slice(0, 10).map((d) => d.file) });
 
   const dark = data.filter((d) => d.s.mean < (opts.darkMean ?? 25));
+  const unexplainedDark = dark.filter((d) => !sceneHas(sceneAt(d.file, opts.sceneContext, opts.fps), ["intentional-dark", "dark-background"]));
   const darkRatio = dark.length / data.length;
-  report.add({ id: "dark", title: "Escuridão sob controle (cena escura precisa de intenção)", status: darkRatio > 0.6 ? "WARN" : "PASS", heuristic: true, details: `${(darkRatio * 100).toFixed(0)}% dos quadros com luminância média < ${opts.darkMean ?? 25}/255` });
+  const unexplainedRatio = unexplainedDark.length / data.length;
+  report.add({ id: "dark", title: "Escuridão sob controle (cena escura precisa de intenção)", status: unexplainedRatio > 0.6 ? "WARN" : "PASS", heuristic: true, details: `${(darkRatio * 100).toFixed(0)}% escuros; ${(unexplainedDark.length / Math.max(1, dark.length) * 100).toFixed(0)}% sem contexto intencional; luminância < ${opts.darkMean ?? 25}/255` });
 
   const lowContrast = data.filter((d) => d.s.std < 12 && d.s.std >= (opts.blankStd ?? 2));
   report.add({ id: "contrast.global", title: "Contraste global (variação tonal)", status: lowContrast.length / data.length > 0.5 ? "WARN" : "PASS", heuristic: true, details: `${lowContrast.length}/${data.length} com variação tonal baixa` });
 
   // repetition: identical neighbours and near-duplicate pairs across the film
-  let identicalRuns = 0;
-  for (let i = 1; i < data.length; i++) if (hamming(data[i].h, data[i - 1].h) === 0 && Math.abs(data[i].s.mean - data[i - 1].s.mean) < 0.5) identicalRuns++;
+  let identicalRuns = 0, unexplainedIdenticalRuns = 0;
+  for (let i = 1; i < data.length; i++) {
+    if (hamming(data[i].h, data[i - 1].h) !== 0 || Math.abs(data[i].s.mean - data[i - 1].s.mean) >= 0.5) continue;
+    identicalRuns++;
+    const a = sceneAt(data[i - 1].file, opts.sceneContext, opts.fps), b = sceneAt(data[i].file, opts.sceneContext, opts.fps);
+    if (!(a && b && a === b && sceneHas(a, [...INTENTIONAL_STATIC]))) unexplainedIdenticalRuns++;
+  }
   const sim = opts.similar ?? 0.05;
   let withTwin = 0;
-  for (let i = 0; i < data.length; i++) if (data.some((o, j) => Math.abs(i - j) > 1 && hamming(data[i].h, o.h) <= sim && Math.abs(data[i].s.mean - o.s.mean) < 6)) withTwin++;
+  for (let i = 0; i < data.length; i++) if (data.some((o, j) => {
+    if (Math.abs(i - j) <= 1 || hamming(data[i].h, o.h) > sim || Math.abs(data[i].s.mean - o.s.mean) >= 6) return false;
+    const a = sceneAt(data[i].file, opts.sceneContext, opts.fps), b = sceneAt(o.file, opts.sceneContext, opts.fps);
+    return !(a && b && a === b && sceneHas(a, [...INTENTIONAL_STATIC]));
+  })) withTwin++;
   const twinRatio = data.length > 3 ? withTwin / data.length : 0;
   report.add({ id: "repetition", title: "Variedade entre cenas (sem repetição excessiva)", heuristic: true,
-    status: twinRatio > 0.6 ? "WARN" : "PASS", details: `${(twinRatio * 100).toFixed(0)}% dos quadros têm um gêmeo visual não adjacente; ${identicalRuns} pares adjacentes idênticos` });
-  if (data.length >= 6 && identicalRuns / (data.length - 1) > 0.9) report.add({ id: "static", title: "Animação presente (quadros mudam)", status: "FAIL", details: "praticamente todos os quadros são idênticos — controlador de animação provavelmente não executou" });
+    status: twinRatio > 0.6 ? "WARN" : "PASS", details: `${(twinRatio * 100).toFixed(0)}% dos quadros têm um gêmeo visual não adjacente; ${unexplainedIdenticalRuns}/${identicalRuns} pares adjacentes idênticos sem pausa marcada` });
+  if (data.length >= 6 && unexplainedIdenticalRuns / (data.length - 1) > 0.9) report.add({ id: "static", title: "Animação presente (quadros mudam)", status: "FAIL", details: "praticamente todos os quadros são idênticos fora de pausas planejadas — controlador pode não ter executado" });
   else if (data.length >= 6) report.add({ id: "static", title: "Animação presente (quadros mudam)", status: "PASS" });
   return report;
 }

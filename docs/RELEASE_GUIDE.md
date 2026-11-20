@@ -6,7 +6,7 @@ Ordem obrigatória: **core → skills → cli → studio** (cada um depende do a
 ```bash
 node scripts/release-gate.mjs        # testes, tarballs + SHA-256, auditoria de conteúdo, consumidor limpo, doctor, assets, SVG, render, vídeo+áudio, QA, erros estruturados
 ```
-Gera `docs/reports/RELEASE_<versão>_REPORT.md`. Estados: PASS/WARN/FAIL/BLOCKED/NOT_TESTED. **FAIL ou BLOCKED impedem publicar.** `NOT_TESTED` precisa ser declarado ao aprovador (hoje: Node 18/20/22 — rode `node --test tests/*.test.mjs` em cada versão).
+Gera `docs/reports/RELEASE_<versão>_REPORT.md`. Estados: PASS/WARN/FAIL/BLOCKED/NOT_TESTED. **FAIL ou BLOCKED impedem publicar.** `NOT_TESTED` precisa ser declarado ao aprovador. A matriz-alvo é Node 20, 22 e 24; o gate executa as versões disponíveis e informa as ausentes. Para indicar binários adicionais: `MOTION_GATE_NODE_BINS=/caminho/node20,/caminho/node22 node scripts/release-gate.mjs`.
 
 ## 2. Versão
 SemVer: correção → patch; funcionalidade aditiva → minor; quebra de contrato público → major. Mudança de comportamento que corrige um falso positivo conta como minor se documentada no CHANGELOG com opt-out. Atualize: `package.json` (raiz + 4 pacotes), deps internas exatas, `public-skills.json` (`package.version`), `scripts/pack-all.mjs`, `scripts/verify-public-skills.mjs`, `tests/skills_distribution.test.mjs`, CHANGELOG, README.

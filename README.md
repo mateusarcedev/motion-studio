@@ -114,7 +114,7 @@ npx @technomanceer/motion-studio init
 Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **11 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
 > [!NOTE]
-> **Versão estável `1.0.0` (próxima: `1.1.0`, em homologação).** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
+> **Versão estável `1.1.0` (candidata `1.1.1`, em homologação; ainda não publicada).** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
 
 ### 2. Opções do `init`
 ```bash

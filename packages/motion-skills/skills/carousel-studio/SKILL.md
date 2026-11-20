@@ -34,6 +34,7 @@ contraste. Uma direção só; slides irmãos compartilham o mesmo sistema.
 - Tokens da marca entram como variáveis CSS no `<style>` de cada slide.
 - Tipografia: fontes locais (`@font-face`) ou Google Fonts — o renderer espera `document.fonts.ready`.
 - Título ≤ 5 palavras; texto por bloco ≤ 3 linhas; nada essencial fora das safe-zones (presets).
+- Alterne escala, alinhamento, densidade e dispositivo visual conforme a mensagem. Títulos grandes e ícones decorativos não são defaults.
 
 ## 4 · Render (contrato técnico, não negociável)
 
@@ -58,7 +59,8 @@ Máximo **duas rodadas por defeito** (regra do CLAUDE.md).
 ## 6 · Exportação e galeria
 
 ```
-python3 creative-core/exporters/zip_export.py projects/<p>/ entrega-<v>.zip
+motion export projects/<p> entrega-<v>.zip
+motion qa delivery --project projects/<p> --zip entrega-<v>.zip
 python3 creative-core/gallery/build_gallery.py          # registra + regenera index.html
 ```
 
@@ -85,6 +87,6 @@ O usuário descreve o resultado em linguagem natural: **você** escolhe os recur
 1. **Recursos visuais (ícones, ícones animados, logos de tecnologias, personagens, ilustrações, Lottie):** `motion assets pick "<conceito>"` (API `createAssetSession().asset()` de `@technomanceer/motion-core`). O registry de providers decide o tipo e a fonte; você decide **quando** usar cada tipo (ícone para ideia abstrata, logo só quando a tecnologia é citada, personagem quando pessoas fazem sentido, ícone animado/Lottie quando o movimento comunica). Uma sessão por produção = um estilo de ícone; assets diferentes para intenções diferentes. `fallback: true`, confiança `low` ou candidatos `blocked` (licença) ⇒ troque o conceito ou crie um SVG original. Ao entregar, inclua `session.credits().markdown` (atribuições obrigatórias, ex.: Humaaans CC-BY, marcas de tecnologias).
 2. **Fundos, ilustrações e diagramas vetoriais:** `motion svg component <waveLayers|networkGraph|ringProgress|flowArrow|orbitRings|gridPattern> --tokens=<tokens.json da marca>`. SVG de terceiros passa por `motion svg validate` (não confiável ⇒ sanitizado). Cores vêm dos tokens, nunca hard-coded.
 3. **Animação vetorial:** `@technomanceer/motion-core/svg-motion` (`createSvgMotion` + `window.__onFrame__`). Proibido SMIL, CSS keyframes, `requestAnimationFrame` e `Math.random` em vídeo.
-4. **Proveniência:** registre `session.manifest()` no `assets.manifest.json`. Logotipos/marcas só a partir de assets fornecidos pelo usuário — nunca recriar nem recolorir.
+4. **Proveniência:** registre `session.manifest()` nos créditos/manifesto de entrega. Empacote com `motion export projects/<p> entrega-<v>.zip` e confirme com `motion qa delivery --project projects/<p> --zip entrega-<v>.zip`. Logotipos/marcas só a partir de assets fornecidos pelo usuário — nunca recriar nem recolorir.
 5. **Gates automáticos:** um render com `status: "FAIL"` (erro de JS, import quebrado, imagem essencial quebrada, controlador ausente) **nunca** segue adiante, mesmo que o arquivo exista. Antes do Crítico rode `motion qa precheck projects/<slug>` (gera `reviews/qa-report.{json,md}`; estados PASS/WARN/FAIL/BLOCKED/NOT_TESTED; heurística ≠ prova). O Crítico lê esse relatório **e** os renders.
 6. **Direção de arte:** siga `docs/ART_DIRECTION.md` — ponto focal, dispositivo visual e diferença em relação à cena anterior por cena; sem cenas repetidas, vazias ou com excesso de texto.

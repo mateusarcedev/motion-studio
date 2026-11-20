@@ -146,6 +146,14 @@ describe("QA de quadros e do projeto", { skip: !have && "NOT_TESTED: ffmpeg indi
     assert.match(await readFile(path.join(proj, "reviews", "qa-report.md"), "utf8"), /QA automatizado/);
     assert.ok(r.summary().status !== "PASS" || json.checks.every((c) => c.status === "PASS" || !c.required));
   });
+  test("qaProject aplica contexto de cena específico por arquivo do storyboard", async () => {
+    const proj = path.join(tmp, "scoped-context"), out = path.join(proj, "out/final"); await mkdir(out, { recursive: true });
+    const video = path.join(out, "intentional-dark.mp4");
+    ff(["-f", "lavfi", "-i", "color=c=0x0A0E14:size=160x90:rate=10:duration=2", "-c:v", "libx264", "-pix_fmt", "yuv420p", video]);
+    await writeFile(path.join(proj, "temporal-context.json"), JSON.stringify({ videos: { "intentional-dark.mp4": { scenes: [{ startSec: 0, endSec: 2, kind: "intentional-dark", label: "fundo da marca" }] } } }));
+    const report = await qaProject(proj, { write: false });
+    assert.equal(report.checks.find((c) => c.id === "media(intentional-dark.mp4).video.black").status, "PASS");
+  });
 });
 
 describe("Riscos visuais no DOM (--qa-visual)", () => {

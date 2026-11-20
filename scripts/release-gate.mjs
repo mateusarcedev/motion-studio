@@ -38,9 +38,14 @@ const sha = (buf) => createHash("sha256").update(buf).digest("hex");
 
 // 3 ── tarballs
 const dist = path.join(root, "dist", "packages");
-await rm(dist, { recursive: true, force: true });
+// Preserve tarballs from earlier versions while preparing the candidate.
+for (const name of await readdir(dist).catch(() => [])) {
+  if (name.endsWith(`-${VERSION}.tgz`) || name === `SHA256SUMS-${VERSION}.txt`) {
+    await rm(path.join(dist, name), { force: true });
+  }
+}
 const pack = sh("node", ["scripts/pack-all.mjs"]);
-const tarballs = (await readdir(dist).catch(() => [])).filter((f) => f.endsWith(".tgz")).sort();
+const tarballs = (await readdir(dist).catch(() => [])).filter((f) => f.endsWith(`-${VERSION}.tgz`)).sort();
 if (pack.status !== 0 || tarballs.length !== 4) step("R4", "Geração de tarballs", "FAIL", pack.stderr.slice(0, 300));
 else {
   const sums = [];
@@ -74,7 +79,7 @@ else {
     for (const bin of Object.values(pj.bin ?? {})) if (!list.includes(`package/${bin.replace(/^\.\//, "")}`)) problems.push(`${pj.name}: bin ausente ${bin}`);
   }
   const core = sh("tar", ["-tzf", path.join(dist, tarballs.find((t) => t.includes("motion-core")) ?? "")]).stdout;
-  for (const must of ["design-system/svg-motion.js", "design-system/lottie-motion.js", "assets/vendor/lottie_light.min.js", "assets/vendor/LICENSE-lottie-web.md", "assets/icons/lucide.pack.json", "assets/icons/LICENSE-lucide.txt", "assets/packs/developer-icons.pack.json", "assets/packs/humaaans.pack.json", "assets/lottie/check-pop.json", "lib/static-server.mjs", "visual-assets/providers/registry.mjs"]) if (!core.includes(`package/${must}`)) problems.push(`motion-core sem ${must}`);
+  for (const must of ["design-system/svg-motion.js", "design-system/lottie-motion.js", "assets/vendor/lottie_light.min.js", "assets/vendor/LICENSE-lottie-web.md", "assets/icons/lucide.pack.json", "assets/icons/LICENSE-lucide.txt", "assets/packs/developer-icons.pack.json", "assets/packs/humaaans.pack.json", "assets/lottie/check-pop.json", "lib/static-server.mjs", "visual-assets/providers/registry.mjs", "exporters/delivery.py"]) if (!core.includes(`package/${must}`)) problems.push(`motion-core sem ${must}`);
   step("R5", "Conteúdo dos tarballs (sem lixo, bins, assets e licenças presentes)", problems.length ? "FAIL" : "PASS", problems.join("; ") || info.join(" · "));
 }
 
@@ -151,19 +156,23 @@ window.__MOTION_READY__ = createLottieMotion(document.getElementById("box"), dat
 // 6 ── node versions & registry
 {
   const declared = Object.values(manifests).map((m) => m.engines?.node);
-  const bins = (process.env.MOTION_GATE_NODE_BINS ?? "").split(",").filter(Boolean);
+  const bins = [...new Set([process.execPath, ...(process.env.MOTION_GATE_NODE_BINS ?? "").split(",").filter(Boolean)])];
+  const requiredMajors = [20, 22, 24];
   if (!declared.every((e) => e === ">=20")) step("R15", "Compatibilidade com Node.js", "FAIL", `engines divergentes: ${declared}`);
-  else if (!bins.length) step("R15", "Compatibilidade com Node.js (engines >=20)", "NOT_TESTED", `executado apenas em ${process.version}; informe MOTION_GATE_NODE_BINS=/caminho/node20,/caminho/node22 para validar outras versões`);
   else {
     const out = [];
     for (const bin of bins) {
-      const files = ["reliability", "visual_assets", "providers", "qa_pipeline"].map((f) => `tests/${f}.test.mjs`);
+      const files = ["reliability", "visual_assets", "providers", "qa_pipeline", "delivery_integrity", "qa_creative_context", "skills_distribution"].map((f) => `tests/${f}.test.mjs`);
       const r = sh(bin, ["--test", ...files], { env: { ...process.env, PATH: `${path.dirname(bin)}:${process.env.PATH}` } });
       const ver = sh(bin, ["-v"]).stdout.trim();
       const m = (k) => (r.stdout.match(new RegExp(`(?:ℹ|#) ${k} (\\d+)`)) ?? [])[1];
       out.push({ ver, ok: r.status === 0, tests: m("tests"), fail: m("fail") });
     }
-    step("R15", "Compatibilidade com Node.js (suíte nas versões informadas)", out.every((o) => o.ok) ? "PASS" : "FAIL", out.map((o) => `${o.ver}: ${o.ok ? "PASS" : "FAIL"} (${o.tests} testes, ${o.fail} falhas)`).join(" · ") + `; engines >=20 (Node 18 não suportado: Playwright exige ≥ 20)`);
+    const covered = new Set(out.map((o) => Number(o.ver.match(/^v?(\d+)/)?.[1])).filter(Number.isFinite));
+    const missing = requiredMajors.filter((major) => !covered.has(major));
+    const state = out.some((o) => !o.ok) ? "FAIL" : missing.length ? "NOT_TESTED" : "PASS";
+    const detail = out.map((o) => `${o.ver}: ${o.ok ? "PASS" : "FAIL"} (${o.tests} testes, ${o.fail} falhas)`).join(" · ");
+    step("R15", "Compatibilidade com Node.js 20, 22 e 24", state, `${detail}${missing.length ? ` · faltam Node ${missing.join(", ")}` : ""}; engines >=20`);
   }
   const who = sh("npm", ["whoami"]);
   step("R16", "Autenticação npm", who.status === 0 ? "PASS" : "BLOCKED", who.status === 0 ? `logado como ${who.stdout.trim()}` : "npm login necessário");

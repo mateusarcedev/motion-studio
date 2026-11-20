@@ -54,6 +54,7 @@ export async function runRender(subcommand, target, out, options = {}, positiona
       seed: options.seed,
       optionalAssets: optionalAssets(options),
       qaVisual: options["qa-visual"] === true || options.qaVisual === true,
+      qaContext: options["qa-context"],
       requireController: options["require-controller"] === true,
     });
     console.log(res.stdout || "Render estático concluído com sucesso.");
