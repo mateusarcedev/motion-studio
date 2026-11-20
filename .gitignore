@@ -67,6 +67,7 @@ tests/tmp/
 
 # Distribution packages
 dist/packages/*.tgz
+dist/packages/SHA512SUMS-*.txt
 
 # Vercel CLI
 .vercel/
