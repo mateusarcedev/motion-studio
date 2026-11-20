@@ -1,9 +1,10 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { execSync } from "node:child_process";
-import { stat, readFile, mkdir, rm } from "node:fs/promises";
+import { stat, readFile, mkdir, rm, mkdtemp, writeFile } from "node:fs/promises";
 import crypto from "node:crypto";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -111,16 +112,24 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
   });
 
   test("7. Manifesto Criptográfico SHA-256 e Exportação ZIP", async () => {
-    const manifestPath = path.join(tmpDir, "assets.manifest.json");
-    await generateManifest(tmpDir, manifestPath);
-    const manData = JSON.parse(await readFile(manifestPath, "utf-8"));
-    assert.ok(manData.files.length > 0, "Manifesto não incluiu arquivos");
-    assert.ok(manData.files[0].sha256.length >= 16, "Hash SHA-256 truncado ou inválido");
+    const projectDir = await mkdtemp(path.join(os.tmpdir(), "motion-suite-delivery-"));
+    try {
+      await mkdir(path.join(projectDir, "out"), { recursive: true });
+      await writeFile(path.join(projectDir, "out", "credits.txt"), "Delivery fixture.\n");
+      const manifestPath = path.join(projectDir, "assets.manifest.json");
+      await generateManifest(projectDir, manifestPath);
+      const manData = JSON.parse(await readFile(manifestPath, "utf-8"));
+      assert.equal(manData.validation.status, "PASS");
+      assert.equal(manData.files.length, 1, "Manifesto deve conter apenas o fixture deste projeto");
+      assert.equal(manData.files[0].sha256.length, 64, "Hash SHA-256 deve conter 64 caracteres");
 
-    const zipPath = path.join(tmpDir, "test-export.zip");
-    await exportZip(tmpDir, zipPath);
-    const zipStat = await stat(zipPath);
-    assert.ok(zipStat.size > 500, "Arquivo ZIP gerado está vazio");
+      const zipPath = path.join(projectDir, "test-export.zip");
+      await exportZip(projectDir, zipPath);
+      const zipStat = await stat(zipPath);
+      assert.ok(zipStat.size > 500, "Arquivo ZIP gerado está vazio");
+    } finally {
+      await rm(projectDir, { recursive: true, force: true });
+    }
   });
 
   test("8. Isolamento de Marcas e Galeria Base", async () => {
@@ -153,14 +162,17 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     }
   });
 
-  test("9. Auditoria dos Pacotes Distribuíveis (Tarballs em dist/packages/)", async () => {
+  test("9. Auditoria dos Pacotes Distribuíveis (npm pack --dry-run)", async () => {
     const pkgs = { "motion-core": "@technomanceer/motion-core", "motion-skills": "@technomanceer/motion-studio-skills", "motion-cli": "@technomanceer/motion-cli", "motion-studio": "@technomanceer/motion-studio" };
     for (const [dir, name] of Object.entries(pkgs)) {
-      const pkgJson = JSON.parse(await readFile(path.join(__dirname, "..", "packages", dir, "package.json"), "utf-8"));
+      const pkgDir = path.join(__dirname, "..", "packages", dir);
+      const pkgJson = JSON.parse(await readFile(path.join(pkgDir, "package.json"), "utf-8"));
       assert.equal(pkgJson.name, name);
-      const tar = path.join(__dirname, "..", "dist", "packages", `${name.replace(/^@/, "").replaceAll("/", "-")}-${pkgJson.version}.tgz`);
-      const st = await stat(tar);
-      assert.ok(st.size > 3000, `${name} tarball corrompido`);
+      const packed = JSON.parse(execSync("npm pack --dry-run --json", { cwd: pkgDir, encoding: "utf-8" }))[0];
+      assert.equal(packed.name, name);
+      assert.equal(packed.version, pkgJson.version);
+      assert.ok(packed.size > 3000, `${name} pacote vazio`);
+      assert.ok(packed.files.some((f) => f.path === "package.json"), `${name} pacote não contém package.json`);
     }
   });
 

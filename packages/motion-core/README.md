@@ -10,8 +10,7 @@ Motores de produção, QA determinístico e exportação do **MOTION Studio**.
 - **`qa_viewports.mjs`**: Verificação multi-viewport (mobile-s, mobile, tablet, desktop, wide) com detecção de tela em branco, touch targets pequenos (<44px) e overflow horizontal.
 - **`validate_static.py`**: Validador de dimensões e fator de escala PNG.
 - **`build_contact_sheet.py`**: Montagem de folha de contato para portão de crítica pré-render.
-- **`manifest.py`**: Manifesto de entrega com hashes SHA-256 e proveniência de assets.
-- **`zip_export.py`**: Empacotamento de ZIP de entrega final com fontes editáveis.
+- **`exporters/delivery.py`**: Contrato v1, manifesto completo, empacotamento ZIP64 e verificação do conteúdo real do pacote.
 - **`frame.js`**: Driver matemático determinístico para animações por frame (sem `Math.random` ou CSS keyframes soltos).
 
 ## Visual Asset Intelligence, SVG e QA (Missão 20)
@@ -21,6 +20,8 @@ Motores de produção, QA determinístico e exportação do **MOTION Studio**.
 - **`svg/`** — `validateSvg` (sanitiza SVG não confiável), `optimizeSvg` (SVGO, prefixo de IDs), `rasterizeSvg`, componentes com tokens da marca.
 - **`design-system/svg-motion.js`** (`@technomanceer/motion-core/svg-motion`) — animação vetorial pura e seekable.
 - **`quality/`** — `createQaReport` (`PASS/WARN/FAIL/BLOCKED/NOT_TESTED`), `qaMedia` (FFprobe/FFmpeg), `qaFrames`, `qaProject`.
+- **Delivery Integrity** — `exportDelivery`/`verifyDelivery` e `motion qa delivery` validam arquivos obrigatórios, manifesto, CRC, caminhos e SHA-256. Veja [`DELIVERY_INTEGRITY.md`](../../docs/DELIVERY_INTEGRITY.md).
+- **Fonts** — fontes ficam no projeto consumidor, com arquivo, origem, licença e redistribuição declarados no contrato; nenhuma fonte cresce os tarballs do Core. Veja [`FONTS.md`](../../docs/FONTS.md).
 - **`lib/`** — `MotionError`/`ERROR_CODES`, `diagnoseBrowser`, `parseFrameSelection`.
 
 Os renderers falham (`status: "FAIL"`) em erro de JS, import quebrado, controlador ausente ou imagem essencial quebrada. Veja `docs/QA.md` e `docs/VISUAL_INTELLIGENCE.md` no repositório.

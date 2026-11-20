@@ -42,6 +42,7 @@ motion qa http://localhost:3000 ./qa-report
 
 # Exportação com manifesto SHA-256 e ZIP
 motion export ./meu-projeto entrega.zip --gallery
+motion qa delivery --project ./meu-projeto --zip entrega.zip
 ```
 
 The complete contracts, presets, limitations, and validation workflow live in [`docs/REUSABLE_MOTION_COMPONENTS.md`](../../docs/REUSABLE_MOTION_COMPONENTS.md).

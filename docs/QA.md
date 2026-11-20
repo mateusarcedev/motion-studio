@@ -44,3 +44,22 @@ Determinismo: `motion qa determinism`. Áreas seguras: `motion qa safe-zones`.
 
 ## Projeto → Crítico — `motion qa precheck projects/<slug>`
 Gera `reviews/qa-report.json` e `.md`. Itens sem vídeo/quadros viram `NOT_TESTED`, nunca `PASS`.
+
+## Integridade da entrega
+
+`motion export <projeto> <zip>` é o caminho único para manifesto + ZIP. O export termina com
+verificação do arquivo ZIP real e só reporta sucesso se o contrato, os arquivos, CRCs e SHA-256
+passarem. `motion qa delivery --project <projeto> --zip <zip>` revalida um pacote já produzido.
+O contrato por projeto está documentado em [DELIVERY_INTEGRITY.md](DELIVERY_INTEGRITY.md).
+
+## Texto em mídia e intenção temporal
+
+`motion render static --qa-visual --qa-context=web|story-vertical|video-vertical` ajusta o limite de
+texto secundário e, em formatos verticais, verifica áreas seguras. Sobreposição intencional pode
+ser marcada com `data-motion-overlap="intentional"`; o resultado continua sendo uma heurística para
+revisão visual.
+
+`motion qa media` e `motion qa frames` aceitam `--context=<temporal-context.json>`. O arquivo pode
+anotar cenas `reading-pause`, `static-end-card`, `final-hold` e `intentional-dark`. Um sinal coberto
+pela cena anotada fica explicado no relatório, mas os detectores continuam contando e registrando
+os trechos. Sem contexto, congelamentos e escuridão permanecem como avisos para o Crítico.

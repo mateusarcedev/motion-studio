@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
-"""MOTION — zip_export.py  (exportador ZIP puro stdlib)
-
-Uso: python3 creative-core/exporters/zip_export.py <pasta_fonte> <saida.zip> [--ext png,html,json,...]
-Empacota a entrega final (PNGs exportados, HTML fonte editável, legenda, metadados).
-"""
-import argparse, zipfile, sys
+"""Compatibility entry point routed through the canonical delivery pipeline."""
+import argparse
+import json
+import sys
 from pathlib import Path
+from delivery import export
+
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("source", type=Path)
     ap.add_argument("outzip", type=Path)
-    ap.add_argument("--ext", default="")
-    a = ap.parse_args()
+    ap.add_argument("--ext", default="", help="legacy filter used only when no explicit project contract exists")
+    args = ap.parse_args()
+    extensions = {x.strip().lower().lstrip(".") for x in args.ext.split(",") if x.strip()} or None
+    report = export(args.source.resolve(), args.outzip.resolve(), extensions)
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0 if report["status"] == "PASS" else 3 if report["status"] == "BLOCKED" else 2
 
-    exts = {e.strip().lower().lstrip(".") for e in a.ext.split(",") if e.strip()} \
-        if a.ext else {"png", "html", "css", "json", "md", "jpg", "jpeg", "webp", "svg"}
-    files = sorted(p for p in a.source.rglob("*")
-                   if p.is_file() and p.suffix.lstrip(".").lower() in exts and ".git" not in p.parts)
-    with zipfile.ZipFile(a.outzip, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in files:
-            z.write(f, f.relative_to(a.source))
-    print(f"ZIP: {a.outzip} ({len(files)} arquivos)")
-    return 0
 
 if __name__ == "__main__":
     sys.exit(main())

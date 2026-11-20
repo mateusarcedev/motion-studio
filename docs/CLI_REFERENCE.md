@@ -144,12 +144,21 @@ Verifica:
 O usuário final **não precisa** destes comandos: as Skills usam as mesmas APIs. Detalhes em [VISUAL_INTELLIGENCE.md](VISUAL_INTELLIGENCE.md).
 - `motion assets resolve "<intenção>" [--size --stroke --color --svg]`, `motion assets search "<consulta>" [--limit]`, `motion assets packs`.
 - `motion svg validate <arq.svg> [--strict]`, `motion svg optimize <in> <out> [--prefix=ns]`, `motion svg rasterize <in> <out.png> [--width --scale --background]`, `motion svg component <nome> [out.svg] [--seed --tokens]`.
-- `render static ... --qa-visual` acrescenta texto cortado, contraste, texto minúsculo e excesso de texto ao relatório.
+- `render static ... --qa-visual` acrescenta corte, contraste, texto pequeno/secundário, colisões e excesso de texto ao relatório. `--qa-context=web|story-vertical|video-vertical` aplica limites conforme a mídia.
 
 ---
 
 ### `motion export <pasta> <saida.zip>`
 Gera a entrega final do projeto:
-1. Calcula somas de verificação criptográficas SHA-256 e gera `assets.manifest.json`.
-2. Empacota fontes editáveis, imagens, vídeos e metadados no arquivo ZIP.
-3. Se passado `--gallery`, registra o item na galeria local com status `draft`.
+1. Lê `delivery.contract.json` (ou cria contrato de compatibilidade para um projeto antigo).
+2. Gera manifesto v1 com SHA-256 integral, tipo, tamanho, dimensões/metadados, papel e status.
+3. Empacota só os artefatos declarados e valida conteúdo real, caminhos, CRC, tamanho e hashes do ZIP.
+4. Se passado `--gallery`, registra o item na galeria local com status `draft`.
+
+O contrato por projeto e os formatos aceitos estão em [DELIVERY_INTEGRITY.md](DELIVERY_INTEGRITY.md).
+
+### `motion qa delivery --project <pasta> --zip <arquivo.zip>`
+Reabre um ZIP já produzido, valida o contrato/manifesto e compara cada entrada com a pasta de produção. Saída JSON com `--json`; `FAIL` retorna código 2 e verificação bloqueada retorna 3.
+
+### Contexto de cena para QA temporal
+`motion qa media <arquivo.mp4> --context=temporal-context.json` e `motion qa frames <pasta> --context=temporal-context.json` mantêm detectores ativos e anotam pausas de leitura/escenas escuras declaradas no contexto. Formato em [DELIVERY_INTEGRITY.md](DELIVERY_INTEGRITY.md).

@@ -34,6 +34,9 @@ em `brand/voice.md` — escrito à mão pelo dono do estúdio._
     Logos and trademarks come only from user-provided assets.
 13. **QA states are honest:** `PASS / WARN / FAIL / BLOCKED / NOT_TESTED`. A check that did not run is never `PASS`;
     heuristics (contrast, repetition, darkness) are risk signals, not proof of quality.
+14. **Delivery is checked from the ZIP itself:** declare required/optional outputs in
+    `delivery.contract.json`, export with `motion export`, and require `motion qa delivery` to pass
+    before calling a package delivered. A successful render is not a successful delivery.
 
 ## Creative restrictions (avoid everywhere)
 

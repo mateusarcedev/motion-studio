@@ -18,6 +18,7 @@ export const PATHS = {
   buildContactSheet: path.join(__dirname, "quality", "build_contact_sheet.py"),
   manifest: path.join(__dirname, "exporters", "manifest.py"),
   zipExport: path.join(__dirname, "exporters", "zip_export.py"),
+  delivery: path.join(__dirname, "exporters", "delivery.py"),
   buildGallery: path.join(__dirname, "gallery", "build_gallery.py"),
   frameDriver: path.join(__dirname, "design-system", "frame.js"),
   presets: path.join(__dirname, "presets.json"),
@@ -106,6 +107,7 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.optionalAssets?.length) args.push(`--optional-assets=${[].concat(options.optionalAssets).join(",")}`);
   if (options.requireController) args.push("--require-controller");
   if (options.qaVisual) args.push("--qa-visual");
+  if (options.qaContext) args.push(`--qa-context=${options.qaContext}`);
   return runProcess("node", args);
 }
 
@@ -159,15 +161,34 @@ export async function buildContactSheet(framesDir, outputPng, options = {}) {
 }
 
 export async function generateManifest(folder, outputPath = null) {
-  const args = [PATHS.manifest, folder];
-  if (outputPath) args.push("-o", outputPath);
-  return runProcess("python3", args);
+  const args = [PATHS.delivery, "manifest", folder];
+  if (outputPath) args.push("--out", outputPath);
+  const result = await runProcess("python3", args);
+  try { result.report = JSON.parse(result.stdout); } catch {}
+  return result;
 }
 
-export async function exportZip(sourceDir, outputZip, extensions = "") {
-  const args = [PATHS.zipExport, sourceDir, outputZip];
+async function runDelivery(action, projectDir, zipPath, extensions = "") {
+  const args = [PATHS.delivery, action, projectDir, zipPath];
   if (extensions) args.push("--ext", extensions);
-  return runProcess("python3", args);
+  const result = await runProcess("python3", args);
+  try { result.report = JSON.parse(result.stdout); } catch {}
+  return result;
+}
+
+/** Build a versioned delivery manifest, package its declared files, then verify the real ZIP. */
+export async function exportDelivery(projectDir, outputZip) {
+  return runDelivery("export", projectDir, outputZip);
+}
+
+/** Verify the project contract, source hashes, ZIP inventory, CRCs and archived hashes. */
+export async function verifyDelivery(projectDir, zipPath) {
+  return runDelivery("verify", projectDir, zipPath);
+}
+
+/** Backward-compatible export name; now uses the delivery contract and validates its ZIP. */
+export async function exportZip(sourceDir, outputZip, extensions = "") {
+  return runDelivery("export", sourceDir, outputZip, extensions);
 }
 
 export async function qaViewports(url, outdir, options = {}) {

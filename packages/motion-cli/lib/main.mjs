@@ -62,7 +62,7 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
       --port=<num>           Porta HTTP (padrão: 3300)
 
     render <modo> ...        Executa renderização real com motores determinísticos
-      render static <html_in> <png_out> [--width=W] [--height=H] [--scale=N]
+      render static <html_in> <png_out> [--width=W] [--height=H] [--scale=N] [--qa-visual --qa-context=web|story-vertical|video-vertical]
       render frames <comp_in> <outdir> [--frames=N] [--fps=30]
         --sample-frames=0,120,240-250  Renderiza só estes quadros (índices e intervalos A-B, sem duplicatas)
       render video <frames_dir> <mp4_out> [--fps=30] [--audio=trilha]
@@ -70,13 +70,14 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
       render project <pasta_do_projeto>
       render overlay <html_in> --output=<webm_out> [--duration=8] [--fps=30] [--width=1080] [--height=1920]
 
-    export <pasta> <zip_out> Gera manifesto SHA-256 e empacota entrega final em ZIP
+    export <pasta> <zip_out> Gera contrato/manifesto, empacota e valida o ZIP final
       --gallery              Registra a peça na galeria local (status: draft)
 
     qa <url_ou_html> <outdir> Executa auditoria multi-viewport em 5 telas com Playwright
     qa determinism <html> [--output=<dir>] Verifica hashes em duas sessões independentes
-    qa media <mp4> [--width= --height= --fps= --duration= --audio]   Codec, FPS, duração, áudio, sincronismo, silêncio, loudness, decodificação
-    qa frames <pasta> [--expected=N] [--dark-mean=25]   Quadros vazios/escuros/repetidos (heurísticas) · qa precheck <projeto>: relatório para o Crítico
+    qa media <mp4> [--width= --height= --fps= --duration= --audio --context=temporal-context.json]   Codec, FPS, duração, áudio, sincronismo, silêncio, loudness, decodificação
+    qa frames <pasta> [--expected=N] [--dark-mean=25 --context=temporal-context.json]   Quadros vazios/escuros/repetidos (heurísticas) · qa precheck <projeto>: relatório para o Crítico
+    qa delivery --project <pasta> --zip <entrega.zip>   Verifica contrato, manifesto, hashes e o conteúdo real do ZIP
     qa safe-zones <html> [--platform=instagram-reels] [--preset-file=<json>] [--output=<dir>]
 
     components list          Lista componentes reutilizáveis e seus schemas
@@ -169,7 +170,9 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
   } catch (err) {
     // Renderers return a structured JSON report; show the actionable part, not a raw process dump.
     const report = err.report;
-    if (report?.error) {
+    if (report?.schemaVersion === 1 && Array.isArray(report.findings)) {
+      console.error(JSON.stringify(report, null, 2));
+    } else if (report?.error) {
       console.error(`\n❌ [${report.error.code}] ${report.error.message}`);
       if (report.error.hint) console.error(`   → ${report.error.hint}`);
     } else if (report?.health?.errors?.length) {

@@ -1,14 +1,12 @@
 import { stat, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-let generateManifest, exportZip;
+let exportDelivery;
 try {
   const mod = await import("@technomanceer/motion-core");
-  generateManifest = mod.generateManifest;
-  exportZip = mod.exportZip;
+  exportDelivery = mod.exportDelivery;
 } catch {
   const mod = await import("../../motion-core/index.js");
-  generateManifest = mod.generateManifest;
-  exportZip = mod.exportZip;
+  exportDelivery = mod.exportDelivery;
 }
 
 export async function runExport(targetDir, outZip, options = {}) {
@@ -22,16 +20,16 @@ export async function runExport(targetDir, outZip, options = {}) {
 
   console.log(`📦 Preparando pacote de entrega para: ${absTarget}`);
 
-  // 1. Generate Manifest
-  const manifestPath = path.join(absTarget, "assets.manifest.json");
-  console.log("1. Gerando manifesto com somas de verificação SHA-256...");
-  await generateManifest(absTarget, manifestPath);
-  console.log(`   ✓ Manifesto salvo em ${manifestPath}`);
-
-  // 2. Generate ZIP
-  console.log(`2. Empacotando arquivos no arquivo ZIP: ${absZip}...`);
-  await exportZip(absTarget, absZip, options.ext || "");
-  console.log(`   ✓ Pacote ZIP gerado com sucesso.`);
+  // One delivery pipeline owns contract validation, manifest, ZIP creation and ZIP verification.
+  console.log(`📦 Gerando manifesto, empacotando e verificando o ZIP real: ${absZip}...`);
+  const result = await exportDelivery(absTarget, absZip);
+  const report = result.report;
+  if (report?.status !== "PASS") {
+    console.error(JSON.stringify(report ?? { status: "FAIL", error: result.stderr || result.stdout }, null, 2));
+    process.exitCode = report?.status === "BLOCKED" ? 3 : 2;
+    return;
+  }
+  console.log(`✓ Entrega verificada: ${report.files} arquivos; SHA-256 e CRC conferidos.`);
 
   // 3. Optional local gallery registration
   if (options.gallery) {
