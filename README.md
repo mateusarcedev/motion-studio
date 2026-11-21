@@ -9,7 +9,7 @@
 [![Playwright QA](https://img.shields.io/badge/QA-Playwright%205--Viewport-emerald.svg)](https://playwright.dev/)
 [![Engine: CFR 30fps](https://img.shields.io/badge/Video-CFR%2030FPS%20Deterministic-purple.svg)](docs/PRODUCTION_GUIDE.md)
 
-*50 Agent Skills · Claude Code · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
+*51 local Agent Skills · 11 public Skills · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
 
 🌐 Site: [motion.mateusarce.dev](https://motion.mateusarce.dev) · source: [mateusarcedev/motion-landing](https://github.com/mateusarcedev/motion-landing)
 
@@ -81,6 +81,8 @@ Carrossel editorial com roteiro, tipografia calibrada, legendas e pacote ZIP de 
 - **📱 Shorts Narrados (`shorts-director`)**: Vídeos verticais 9:16 com sincronia por frame, suporte a narração com timestamps e legendas animadas em beat.
 - **🎠 Estúdio Social (`carousel-studio`, `story-studio`, `feed-studio`)**: Carrosséis de 5 a 10 slides, stories respeitando safe-zones de Instagram e WhatsApp, e posts em proporções 1:1, 4:5 e 16:9 sem distorção ou corte cego.
 - **🧊 3D Procedural (`3d-scene-director`)**: Modelagem procedural Three.js, pipeline de assets GLB otimizados e integração de ferramentas externas (Blender opcional).
+- **🧩 Assets Visuais & SVG**: Resolver por intenção para ícones e ilustrações, com estilo consistente e origem/licença registradas; ferramentas para validar, sanitizar, otimizar e animar SVGs de forma determinística.
+- **✅ QA & Integridade de Entrega**: Relatórios de qualidade para projetos e mídia, contratos de entrega, manifesto SHA-256 e verificação do conteúdo real do ZIP antes de concluir a exportação.
 - **🔒 Isolamento de Marcas & Memória Visual**: Cada projeto consumidor possui seus próprios tokens (`tokens.json`), tom de voz (`PROFILE.md`) e galeria local isolada.
 
 ---
@@ -114,7 +116,7 @@ npx @technomanceer/motion-studio init
 Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **11 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
 > [!NOTE]
-> **Versão estável `1.1.0` (candidata `1.1.1`, em homologação; ainda não publicada).** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
+> **Versão estável publicada `1.1.1`.** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
 
 ### 2. Opções do `init`
 ```bash
@@ -188,17 +190,18 @@ Comandos:
 
 ## 🎯 Skill Distribution & Selective Profiles / Perfis de Skills
 
-Para evitar sobrecarregar projetos consumidores com 50 skills de uma só vez, o MOTION suporta **distribuição seletiva de perfis**:
+O monorepo mantém 51 pastas de Skills; o pacote npm distribui somente as 11 autorizadas no `public-skills.json`. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote público. Sem `--profile`, o padrão `all` instala as 11 Skills públicas.
 
 | Perfil | Skills Instaladas | Foco |
 |---|---|---|
-| **`core`** *(padrão)* | `studio-director`, `motion-director`, `web-director`, `brand`, `design`, `design-system` | Diretores de estúdio e contratos de marca compartilhados. Ideal para projetos leves. |
-| **`web`** | `core` + `ui-styling`, `ui-ux-pro-max`, `impeccable`, `animate`, `emil-design-eng`, `apple-design`, `prototype`, `revenue-centric-design` | Websites, landing pages e engenharia de design frontend. |
-| **`motion`** | `core` + `shorts-director`, `video-shotcraft`, `brag`, `lemo-opuscar`, `media-use`, `hyperframes`, `remotion-*` (12 skills) | Vídeos promocionais, motion graphics e animações CFR. |
-| **`social`** | `core` + `carousel-studio`, `story-studio`, `feed-studio`, `banner-design`, `slides` | Carrosséis de alta resolução, stories verticais e posts de feed. |
-| **`3d`** | `core` + `3d-scene-director`, `anatomy`, `diagram-design` | Cenas 3D procedurais WebGL e diagramação isométrica. |
-| **`blender`** | `3d` + instruções e automações para pipelines Blender. | Especialistas de renderização e modelagem externa. |
-| **`all`** | Todas as 50 Agent Skills do ecossistema. | Instalação completa e irrestrita. |
+| **`core`** | 3 públicas: `studio-director`, `motion-director`, `web-director` | Direção de estúdio, motion e web. |
+| **`web`** | 3 públicas: `studio-director`, `motion-director`, `web-director` | Websites e engenharia de design frontend. As Skills web adicionais do catálogo local não são redistribuídas pelo pacote npm. |
+| **`motion`** | 5 públicas: `studio-director`, `motion-director`, `web-director`, `shorts-director`, `explainer-motion` | Vídeos promocionais, motion graphics e animações CFR. |
+| **`social`** | 6 públicas: `studio-director`, `motion-director`, `web-director`, `carousel-studio`, `story-studio`, `feed-studio` | Carrosséis, stories verticais e posts de feed. |
+| **`3d`** | 5 públicas: `studio-director`, `motion-director`, `web-director`, `3d-scene-director`, `anatomy` | Cenas 3D procedurais WebGL e anatomia visual. |
+| **`blender`** | As mesmas 5 Skills públicas de `3d` | Pipelines com Blender opcional. |
+| **`interactive`** | 4 públicas: `studio-director`, `motion-director`, `web-director`, `explainer-motion` | Experiências e conteúdo explicativo interativo. |
+| **`all`** *(padrão)* | Todas as 11 Skills públicas | Instalação completa do catálogo autorizado para distribuição. |
 
 Para selecionar o perfil na inicialização:
 ```bash
@@ -228,7 +231,7 @@ O ecossistema é modularizado em três pacotes distribuíveis independentes:
 ```
 @motion-studio/
 ├── packages/motion-core           # Motores de render, QA Playwright, FFmpeg CFR, validadores
-├── packages/motion-skills         # Catálogo de 50 skills e instalador de perfis
+├── packages/motion-skills         # Catálogo local de 51 Skills; pacote público com 11 autorizadas
 └── packages/motion-cli            # Binário 'motion', subcomandos e scaffolds funcionais
 ```
 
