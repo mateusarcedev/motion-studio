@@ -324,6 +324,17 @@ export function applyCorrections(transcript, corrections = []) {
     if (!c.reason || !c.by) throw reelError(REEL_ERRORS.INPUT_INVALID, "Toda correção precisa de 'reason' e 'by' (proveniência).");
     const first = t.words[idx[0]], last = t.words[idx.at(-1)];
     const before = idx.map((i) => t.words[i].text).join(" ");
+    const timed = c.start !== undefined || c.end !== undefined;
+    if (timed && !(Number.isFinite(c.start) && c.end > c.start)) throw reelError(REEL_ERRORS.INPUT_INVALID, `Correção de tempo precisa de start < end: ${ids.join(",")}`);
+    if (timed && (c.end <= (t.words[idx[0] - 1]?.start ?? -1) || c.start >= (t.words[idx.at(-1) + 1]?.end ?? Infinity))) throw reelError(REEL_ERRORS.INPUT_INVALID, `Correção de tempo sai da ordem da fala: ${ids.join(",")}`);
+    if (c.text === undefined) {
+      // timing only: the recognized text keeps its confidence and stays listed for review
+      if (!timed || idx.length !== 1) throw reelError(REEL_ERRORS.INPUT_INVALID, `Correção sem text só vale para o tempo de uma palavra: ${ids.join(",")}`);
+      t.corrections.push({ before, after: before, wordIds: ids, start: c.start, end: c.end, from: [first.start, first.end], reason: c.reason, by: c.by, evidence: c.evidence ?? null });
+      t.words[idx[0]] = { ...first, start: c.start, end: c.end, timingCorrected: true };
+      continue;
+    }
+    if (timed) { first.start = c.start; last.end = c.end; }
     const tokens = String(c.text).split(/\s+/).filter(Boolean);
     const span = last.end - first.start;
     const replacement = tokens.map((tok, k) => ({

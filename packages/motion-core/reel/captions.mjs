@@ -64,8 +64,11 @@ export function buildPages(words, styleIn = {}) {
   const disp = usable.map((w) => displayWord(w.text, style));
   const budget = style.maxCharsPerLine * style.maxLines;
   const hardMax = Math.max(style.maxWordsPerPage, Math.min(5, style.maxWordsPerPage + 2));
+  const ids = (list) => new Set(list ?? []);
+  const forced = ids(style.breakBefore), glued = ids(style.noBreakBefore);
   const breakCost = (j) => { // break between usable[j-1] and usable[j]
     if (j >= n) return 0;
+    if (glued.has(usable[j].id)) return 100; // operator: keep with the previous word
     const prev = usable[j - 1], next = usable[j];
     if (next.afterCut) return -0.5; // the picture changes here anyway
     if (/[.!?…]$/u.test(prev.text)) return -0.5;
@@ -82,6 +85,7 @@ export function buildPages(words, styleIn = {}) {
     const k = j - i;
     if (k > hardMax) return Infinity;
     if (disp.slice(i, j).join(" ").length > budget && k > 1) return Infinity;
+    for (let x = i + 1; x < j; x++) if (forced.has(usable[x].id)) return Infinity; // operator: page starts here
     for (let x = i; x < j - 1; x++) {
       const gap = usable[x + 1].start - usable[x].end;
       // a leaning word (article, quantifier…) may bridge a slightly longer pause to stay with its noun

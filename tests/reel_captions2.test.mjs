@@ -32,6 +32,26 @@ describe("Remapeamento por energia (corte conhecido: 2,0–3,0 s)", () => {
     const r = R.remapWords([{ id: "w", text: "resto", start: 1.5, end: 2.9 }], segs(), { energy: energy([[1.95, 2.85]]) });
     assert.equal(r.words.length, 0); assert.equal(r.lost[0].lostReason, "energy-cut");
   });
+  test("corte dentro da palavra: uma legenda só, no trecho onde soa mais; replay do gancho continua valendo", () => {
+    const r = R.remapWords([{ id: "w", text: "quando", start: 1.6, end: 3.6 }], R.computeDst([{ id: "a", src: [0, 2] }, { id: "b", src: [3, 5] }], 30), { energy: energy([[1.6, 2], [3, 3.6]]) });
+    assert.deepEqual(r.words.map((w) => [w.id, w.segment]), [["w", "b"]]);
+    const replay = R.computeDst([{ id: "h", src: [1, 2] }, { id: "a", src: [0, 2] }], 30);
+    assert.equal(R.remapWords([{ id: "w", text: "gancho", start: 1.2, end: 1.8 }], replay, { energy: energy([[1.2, 1.8]]) }).words.length, 2);
+  });
+  test("correção só de tempo mantém texto e confiança; fora de ordem é recusada", () => {
+    const tr = { words: [{ id: "a", text: "mas", start: 0, end: 0.02, confidence: 0.3 }, { id: "b", text: "quando", start: 0.02, end: 1, confidence: 0.9 }], segments: [{ wordIds: ["a", "b"] }], corrections: [], review: [] };
+    const c = { wordIds: ["a"], start: 0, end: 0.3, reason: "energia", by: "operator" };
+    const t = R.applyCorrections(tr, [c]);
+    assert.deepEqual([t.words[0].end, t.words[0].text, t.words[0].confidence], [0.3, "mas", 0.3]);
+    assert.throws(() => R.applyCorrections(tr, [{ ...c, start: 2, end: 3 }]), /ordem/);
+    assert.throws(() => R.applyCorrections(tr, [{ ...c, start: 1, end: 0.5 }]), /start < end/);
+  });
+  test("breakBefore e noBreakBefore do operador mandam na paginação", () => {
+    const ws = ["se", "você", "dev", "vai", "longe"].map((text, i) => ({ id: `w${i}`, text, start: i * 0.4, end: i * 0.4 + 0.4 }));
+    const starts = (s) => R.buildPages(ws, s).map((p) => p.words[0].id);
+    assert.ok(starts({ breakBefore: ["w1"] }).includes("w1"));
+    assert.ok(!starts({ noBreakBefore: ["w2", "w3"] }).some((id) => ["w2", "w3"].includes(id)));
+  });
   test("inteira: tempo exato; zoom cut (trechos contíguos) não recorta a palavra", () => {
     const z = R.computeDst([{ id: "a", src: [0, 2] }, { id: "b", src: [2, 4] }], 30);
     const r = R.remapWords([{ id: "w", text: "inteira", start: 1.8, end: 2.4 }], z, { energy: energy([[1.8, 2.4]]) });
@@ -116,6 +136,10 @@ describe("BRIEF: glossário e abertura", () => {
     const last = proposed.opening.proposals.find((x) => x.src[0] > 2) ?? proposed.opening.proposals[0];
     const ok = await plan({ opening: "strongest-line", openingParams: { minSec: 0.3, breakGapSec: 0.3 }, openingApproval: { by: "dono", at: "2026-11-23", src: last.src } });
     assert.equal(ok.opening.applied, true); assert.equal(ok.segments[0].reason, "hook");
+    const played = ok.segments.map((x) => x.src).sort((x, y) => x[0] - y[0]);
+    for (let i = 1; i < played.length; i++) assert.ok(played[i][0] >= played[i - 1][1] - 1e-6, "nenhum quadro da fonte toca duas vezes");
+    const end = ok.segments[0].dst[1];
+    for (const p of ok.captions.pages) assert.ok(!p.words.some((w) => w.start < end - 1e-6) || p.words.every((w) => w.start < end + 1e-6), "página não mistura abertura e sequência");
     await assert.rejects(plan({ opening: "strongest-line", openingApproval: { by: "dono", at: "2026-11-23", src: [0.1, 0.2] } }), /não corresponde/);
     await assert.rejects(plan({ opening: "strongest-line", openingApproval: { src: last.src } }), /by, at/);
     await assert.rejects(plan({ opening: "custom", openingText: "nunca dito" }), /não foi dito/);

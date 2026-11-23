@@ -93,7 +93,11 @@ export function remapWords(words, segments, { excluded = [], energy = null, para
     const places = runs.map((r) => ({ r, kept: clip(region, r.src[0], r.src[1]) })).filter((x) => x.kept.length);
     const chosen = places.filter((x) => len(x.kept) >= P.minAudibleRatio * total - 1e-6 && len(x.kept) >= Math.min(P.minAudibleSec, total) - 1e-6);
     if (!chosen.length) { lost.push({ ...w, lostReason: places.length ? "energy-cut" : "removed", audibleRatio: round(len(places.flatMap((x) => x.kept)) / total, 2) }); continue; }
-    chosen.forEach(({ r, kept }, k) => {
+    // A replay (same source heard again) is a new occurrence; the rest of a word split by a cut is
+    // not: the word is captioned once, where most of it is heard.
+    const overlaps = (x, y) => x.kept.some(([a, b]) => y.kept.some(([c, d]) => Math.min(b, d) - Math.max(a, c) > 1e-6));
+    const once = chosen.filter((x) => !chosen.some((y) => y !== x && !overlaps(x, y) && (len(y.kept) > len(x.kept) + 1e-9 || (Math.abs(len(y.kept) - len(x.kept)) <= 1e-9 && chosen.indexOf(y) < chosen.indexOf(x)))));
+    once.forEach(({ r, kept }, k) => {
       const a = kept[0][0], b = kept.at(-1)[1], at = (t) => round(r.dst[0] + (t - r.src[0]), 3);
       out.push({ ...w, id: k ? `${w.id}#${k + 1}` : w.id, srcStart: w.start, srcEnd: w.end, start: at(a), end: at(b), segment: (r.segments.find((s) => a >= s.src[0] - 1e-6 && a < s.src[1] - 1e-6) ?? r.segments[0]).id,
         clipped: len(kept) < total - 1e-3, retimed: measured && (Math.abs(a - w.start) > 0.02 || Math.abs(b - w.end) > 0.02) });

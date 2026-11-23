@@ -115,7 +115,7 @@
     {
       "name": "reel-editor",
       "path": "skills/reel-editor/SKILL.md",
-      "version": "snapshot-49c74e6dc2a2",
+      "version": "snapshot-b7a20aff9c28",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -127,7 +127,7 @@
         "file": "LICENSE"
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "49c74e6dc2a213a52059f96e19f178afeec3fafc25327e0c6613e6a8d5076ab2"
+      "sha256": "b7a20aff9c286ee239c2d8e022ef2bcbfc543ebab8f2a1ec37b5fc693ccb8350"
     },
     {
       "name": "shorts-director",

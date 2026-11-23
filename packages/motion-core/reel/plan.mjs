@@ -283,17 +283,24 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     opt.hook = [words[i].start, words[i + n - 1].end]; opt.hookReason = "abertura definida no BRIEF (custom)"; opening.applied = true;
   }
 
+  const sourceCuts = (analysis.video?.sourceCuts ?? []).map((c) => Math.round(c.t * fps) / fps);
+  const speechIn = (x, y) => speech.some((sp) => sp.end > x + 0.005 && sp.start < y - 0.005);
+  const toGrid = ([a, b]) => [Math.floor(a * fps + 1e-6) / fps, Math.min(Math.ceil(b * fps - 1e-6) / fps, Math.floor(dur * fps) / fps)];
   // hook (moved to the front)
   let hookRange = null;
   if (opt.hook) {
     hookRange = words.length ? snapRangeToWords(opt.hook[0], opt.hook[1], words, pads) : [...opt.hook];
     hookRange = [Math.max(0, hookRange[0]), Math.min(dur, hookRange[1])];
+    // on the frame grid before it leaves its place, so no frame plays twice; a recording jump near
+    // its end closes it when nothing is said in between
+    hookRange = toGrid(hookRange);
+    const jump = sourceCuts.filter((c) => c < hookRange[1] - 1e-6 && hookRange[1] - c <= cut.snapToSourceCutSec && c > hookRange[0]).at(-1);
+    if (jump !== undefined && !speechIn(jump, hookRange[1])) hookRange[1] = jump;
     kept = subtract(kept, [hookRange]);
     decisions.push({ what: `gancho: ${round(hookRange[0], 2)}–${round(hookRange[1], 2)}s abre o vídeo`, why: opt.hookReason ?? "frase mais forte como abertura", by: "operator" });
   }
 
   // frame grid: expand outward (never shave speech), drop slivers without speech
-  const toGrid = ([a, b]) => [Math.floor(a * fps + 1e-6) / fps, Math.min(Math.ceil(b * fps - 1e-6) / fps, Math.floor(dur * fps) / fps)];
   let ranges = kept.map(toGrid);
   // slivers (shorter than minSegment) survive only if they hold most of a recognized word
   const holdsWord = ([a, b]) => refineWordTiming(words, speech).some((w) => Math.min(b, w.end) - Math.max(a, w.start) >= 0.6 * Math.max(0.02, w.end - w.start));
@@ -314,8 +321,6 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   // Source discontinuities (splices/jumps already in the recording): a boundary within 0.7 s
   // of one snaps onto it when the frames given up carry no speech, so no orphan frame or
   // micro-shot survives next to a cut the recording already has.
-  const sourceCuts = (analysis.video?.sourceCuts ?? []).map((c) => Math.round(c.t * fps) / fps);
-  const speechIn = (x, y) => speech.some((sp) => sp.end > x + 0.005 && sp.start < y - 0.005);
   const snaps = [];
   for (const r of ranges) {
     const nearEnd = sourceCuts.filter((c) => c < r[1] - 1e-6 && r[1] - c <= cut.snapToSourceCutSec && c - r[0] >= minShot).at(-1);
@@ -324,7 +329,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     if (nearStart !== undefined && !speechIn(r[0], nearStart)) { snaps.push({ from: r[0], to: nearStart, edge: "start" }); r[0] = nearStart; }
   }
   if (snaps.length) decisions.push({ what: `${snaps.length} borda(s) de corte encaixada(s) em saltos já existentes na fonte (${snaps.map((x) => `${round(x.from, 3)}→${round(x.to, 3)}s`).join(", ")})`, why: "evitar quadro órfão/micro-plano junto a emenda do celular", by: "engine" });
-  if (hookRange) ranges.unshift(toGrid(hookRange));
+  if (hookRange) ranges.unshift(hookRange);
   if (!ranges.length) throw reelError(REEL_ERRORS.INPUT_INVALID, "Nenhum trecho com fala foi encontrado para manter.", { hint: "Confira se o áudio tem fala audível ou ajuste --cut." });
 
   // segments + zoom plan. Long shots get "zoom cuts": contiguous splits (no time removed)
@@ -442,7 +447,10 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   visibleWords.forEach((w, i) => { const prev = visibleWords[i - 1]; w.afterCut = Boolean(prev && prev.segment !== w.segment && segById.get(w.segment)?.cutBefore); });
   const mainWords = visibleWords.filter((w) => !inBurned(w));
   const burnedWords = visibleWords.filter((w) => inBurned(w));
-  const pages = mainWords.length ? buildPages(mainWords, capStyle) : [];
+  // a moved opening never shares a caption page with what follows it
+  const hookSegments = new Set(segments.filter((sg) => hookRange && sg.src[0] >= hookRange[0] - 1e-6 && sg.src[1] <= hookRange[1] + 1e-6).map((sg) => sg.id));
+  const afterHook = hookRange && mainWords.find((w) => !hookSegments.has(w.segment));
+  const pages = mainWords.length ? buildPages(mainWords, afterHook ? { ...capStyle, breakBefore: [...(capStyle.breakBefore ?? []), afterHook.id] } : capStyle) : [];
   for (const b of burned) for (const p of pages) if (p.end > b.dst[0] && p.start < b.dst[0]) p.end = round(b.dst[0], 3);
   if (burnedWords.length) {
     const lineH = (capStyle.fontSize * 0.95) / height;

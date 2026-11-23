@@ -51,7 +51,8 @@ motion export . entrega.zip && motion qa delivery --project . --zip entrega.zip
 | `exclude` + `excludeReasons` | trechos a remover (tomada recomeçada, final ruim). O motor ajusta às bordas das palavras |
 | `hook` | trecho movido para o início (só se a história pedir) |
 | `emphasis` | `[{match:"frase", zoom:1.2}]` punch-in na frase-chave |
-| `corrections` | `[{wordIds, text, reason, by, evidence}]` correções do ASR com proveniência |
+| `corrections` | `[{wordIds, text, reason, by, evidence}]` correções do ASR com proveniência; com `start`/`end` corrige também o tempo (sem `text`, só o tempo de uma palavra, que continua na lista de revisão) |
+| `captions.breakBefore` / `captions.noBreakBefore` | ids de palavras que abrem uma página / que ficam com a palavra anterior |
 | `overlays` | cards `title` · `label` (chips) · `list` · `cta`, ancorados em `{match:"palavras ditas"}` com `steps` progressivos |
 | `captions` / `overlayStyle` | fontes do projeto (`fontsDir`, licença no contrato), cores, palavras-chave |
 | `audio` | `{preset, overrides, denoiser, music:{path, gainDb, duck}}` |
