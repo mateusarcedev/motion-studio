@@ -1,0 +1,47 @@
+# QA automatizado — reel.mp4
+
+**Veredito: ⚠️ WARN** (35 PASS, 6 WARN, 2 NOT_TESTED)
+
+- ✅ **Arquivo de mídia legível** [PASS] — mov,mp4,m4a,3gp,3g2,mj2, 53.10s
+- ✅ **Stream de vídeo presente** [PASS] — h264 yuv420p
+- ✅ **Codec de vídeo = h264** [PASS] — encontrado h264
+- ✅ **Resolução 1080×1920** [PASS] — encontrado 1080×1920
+- ✅ **Taxa de quadros 30 fps (CFR)** [PASS] — média 30.000 fps, nominal 30.000 fps
+- ✅ **Duração ≈ 53.1s** [PASS] — encontrado 53.100s (±0.05s)
+- ✅ **Contagem de quadros = 1593** [PASS] — encontrado 1593
+- ✅ **Decodificação completa sem erros** [PASS]
+- ✅ **Stream de áudio presente** [PASS] — aac 48000Hz 2ch
+- ✅ **Sincronismo áudio/vídeo (duração)** [PASS] _(heurística)_ — diferença 0.000s
+- ✅ **Início alinhado (t=0 = frame 0)** [PASS] — offset 0.000s
+- ✅ **Silêncio inesperado** [PASS] _(heurística)_ — 0% abaixo de −50 dB
+- ✅ **Loudness integrado entre -16 e -12 LUFS** [PASS] _(heurística)_ — -14.1 LUFS
+- ✅ **Sem clipping (true peak)** [PASS] — pico -4.6 dBFS
+- ✅ **Sem trechos pretos inesperados (≥0,5 s)** [PASS] _(heurística)_
+- ✅ **Sem cenas congeladas sem justificativa (≥1,5 s)** [PASS] _(heurística)_
+- ✅ **Arquivo medido (SHA-256)** [PASS] — 5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3
+- ✅ **Áudio AAC** [PASS] — aac 48000 Hz 2ch
+- ✅ **yuv420p (compatível com redes sociais)** [PASS] — yuv420p
+- ✅ **Vertical 9:16** [PASS] — 1080×1920
+- ✅ **Loudness -14 LUFS ±1 LU (EBU R128)** [PASS] — -14.15 LUFS, LRA 1.2 LU
+- ✅ **True peak ≤ -1.5 dBTP após AAC (sem clipping)** [PASS] — -4.55 dBTP
+- ✅ **Quadros = timeline (1593)** [PASS] — 1593 no MP4
+- ✅ **Arquivo original preservado (SHA-256)** [PASS] — a62139faf67b6271…
+- ✅ **Sem planos de 1–2 quadros (cortes + saltos da fonte)** [PASS] — 21 planos visuais; 18 saltos da fonte considerados
+- ⚠️ **Planos visuais ≥ 0,7 s** [WARN] _(heurística)_ — 16.57–17.23s (20 q), 52.47–53.1s (19 q)
+- ✅ **Cortes de silêncio não removem fala (VAD na fonte)** [PASS] — 11 cortes de pausa verificados
+- ⚠️ **Fala removida por decisão editorial (repetição/hesitação/operador)** [WARN] — 9.05s em 3 trechos — confirmar na revisão: repeated-phrase 8.54–9.93; operator 0–8.54; operator 24.68–26.83
+- ⚠️ **Pontos de corte em silêncio (±20 ms abaixo do limiar de fala)** [WARN] _(heurística)_ — com energia de fala: 18.37s
+- ✅ **Legendas sincronizadas com a fala do vídeo final (±120 ms)** [PASS] — 153/153 palavras sobre fala detectada no áudio final (100%)
+- ✅ **Legendas dentro da duração final** [PASS] — 44 páginas
+- ✅ **Sem páginas de legenda sobrepostas** [PASS]
+- ✅ **Toda palavra falada tem página de legenda (exceto ocultas por decisão)** [PASS] — 1 oculta(s) por decisão registrada
+- ⚠️ **Palavras com duração plausível (≤ 1 s)** [WARN] _(heurística)_ — possíveis palavras não reconhecidas: "2022" 1.07s @4.867s, "faça" 1.66s @47.08s
+- ⚠️ **Palavras de baixa confiança revisadas** [WARN] — 10 palavras < 0,5 sem revisão: "E"@8.44s, "logo"@8.54s, "o"@10.42s, "Mas"@16.44s, "utilizar"@17.233s, "te"@18.16s, "e"@39.393s, "mas"@41.333s…
+- ✅ **Legendas dentro da zona segura Instagram Reels (medido no render do ASS)** [PASS] — 44 páginas medidas; faixa vertical 1298–1465 px
+- ✅ **Legendas não cobrem olhos/boca (faixa do rosto declarado)** [PASS] _(heurística)_ — 0 páginas sobre a faixa 931–1267 px; rosto declarado pelo operador a partir dos stills; zoom pode deslocar o rosto
+- ✅ **Cards: fontes carregadas e sem overflow** [PASS] — 15 camadas
+- ⚠️ **Cards: zona segura, contraste e tamanho de texto (DOM, heurística genérica video-vertical: topo 15%)** [WARN] _(heurística)_ — tese: fora da safe zone genérica (div.tl topo 220px) | opcional: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | ferramentas#-1: fora da safe zone genérica (div.eyebrow topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#-1: fora da safe zone genérica (div.eyebrow topo 220px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#2: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | problema: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px)
+- ✅ **Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)** [PASS] — desvio 0 ms (correlação 0.9991)
+- ✅ **Render reprodutível (hash de quadros/amostras decodificados)** [PASS] — idêntico ao segundo render
+- ⚪ **Revisão auditiva humana (naturalidade, artefatos, fonemas)** [NOT_TESTED] — obrigatória antes de declarar qualidade de áudio
+- ⚪ **Crítico independente (contact sheet + prévia em movimento)** [NOT_TESTED] — aprovação não é automática

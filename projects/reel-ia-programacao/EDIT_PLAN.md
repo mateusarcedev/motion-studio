@@ -1,0 +1,55 @@
+# EDIT PLAN (storyboard de edição) — Reel "IA na programação"
+
+Equivalente ao STORYBOARD para edição de material real: escrito **antes** do config/código.
+Tempos em segundos do **bruto** (`reels-motion.mp4`); os tempos finais saem da timeline.
+
+## Decisões do operador (registradas em `edit.config.json` → `decisions` da timeline)
+
+| # | Trecho do bruto | Decisão | Por quê |
+|---|---|---|---|
+| 1 | 0,00–8,50 "Então, eu gostaria de falar sobre a importância de utilizar a IA na programação hoje em dia" | excluir | tomada recomeçada (o motor detecta o recomeço em 24,68 s); abertura lenta; contém o texto queimado "ESCUTA ISSO" |
+| 2 | 8,56–9,94 primeira ocorrência de "Já é uma realidade" | excluir (automático) | frase repetida em sequência (falso começo) |
+| 3 | 24,68–26,89 "Então, eu gostaria de falar que" | excluir | muleta de recomeço; a frase-chave começa em "se você dev…" |
+| 4 | 52,88–54,18 "refinar, refinar, refinar, refinar" | **manter** | repetição enfática (o motor classifica sequências ≥ 3 do mesmo termo como ênfase, não como falso começo) |
+| 5 | 63,90–66,40 (texto queimado "E VOCÊ, O QUE ACHA?") | **manter** o trecho; legenda cede a base ao CTA do autor (≈ 2,5 s legível); card do cliente segue no topo e acende "ambos" | reparo 1 do Crítico (B1): a versão anterior cortava o fim e deixava o CTA 0,87 s empilhado sob a legenda; a palavra final irreconhecível fica sem legenda |
+| 6 | pausas > 0,32 s | remover (automático) | ritmo; sempre com 90 ms antes / 130 ms depois da fala |
+
+Estrutura final (cronológica — **não** reproduz o gancho invertido da referência):
+
+| Bloco | Fala | Visual |
+|---|---|---|
+| Abertura | "já é uma realidade, não temos para onde fugir" | card título "Utilizar IA / já é realidade" (palavras ditas no vídeo) |
+| Contexto | "não é mais algo opcional como era ali em 2022 quando o ChatGPT surgiu" | card `// 2022 · ChatGPT` "Não é mais opcional" |
+| Ferramentas | "como o Antigravity, Codex, o próprio Claude Code da Anthropic" | card `// e logo vieram` com chips revelados na fala |
+| Virada | "se você dev não está utilizando, você está ficando para trás" | punch-in 1,20 cobrindo a frase inteira, sem card |
+| Benefícios | "utilizar IA te traz muitos benefícios…" | legenda |
+| Foco | "não somente em código, mas também na regra de negócio… no produto" | lista `// seu foco passa a ser` 1 código · 2 regra de negócio · 3 produto |
+| Problema | "nós desenvolvedores… a gente foca muito na tecnologia" | card `// nosso problema` "foca muito na tecnologia" |
+| Cliente | "o que ele quer, o sistema funcionando… economizar dinheiro, ou tempo, ou ambos" | card `// o que o cliente quer` "o sistema funcionando" + chips dinheiro · tempo · ambos |
+
+## Correções de reconhecimento (com evidência)
+
+Evidência: `legendas.srt` é a legenda humana da versão editada, cortada **deste mesmo take**
+(correlação do envelope de áudio entre referência e bruto ≥ 0,90 na maioria das janelas de 1 s, com deslocamentos constantes por trecho). Usada só para
+confirmar/corrigir palavras do ASR — nunca como transcrição do bruto nem fonte de tempos.
+
+| Palavra(s) ASR | Corrigido | Evidência |
+|---|---|---|
+| "deve" | "dev" | SRT: "se você dev não está utilizando" |
+| "AdGravity," | "Antigravity," | SRT: "como o Antigravity Codex" |
+| "o Claude Code, Anthropic" | "o próprio Claude Code da Anthropic" | SRT idem |
+| "muitas" (possibilidades) | "traz muitas" | SRT: "traz muitas possibilidades" (ASR omitiu "traz"; o Crítico apontou 3,3 s de fala com 3 palavras) |
+| "muito" (rapidez) | "traz muita" | SRT: "traz muita rapidez" |
+| "para o pro -aroclente" | "pro próprio cliente" | SRT: "Mas quando pro próprio cliente" |
+| "ChatGPT", "IA" (baixa confiança) | confirmados | SRT contém as mesmas palavras |
+
+Ficam para revisão humana (sem evidência ou com divergência que só a escuta resolve): "te" em "IA te traz",
+"Mas" (29,44 s), "e quer", "não temos para onde fugir" × SRT "não ter mais pra onde fugir",
+"faça ele economizar" × SRT "faça e economize". A SRT humana da referência é editada e não prova a fala.
+
+## Rosto (declarado pelo operador a partir dos stills da análise)
+
+Caixa da cabeça (topo do cabelo → queixo): x 0,18 · y 0,31 · w 0,62 · h 0,50 → faixa
+olhos→boca 0,485–0,66 → legenda abaixo da boca.
+
+Áudio: preset `noisy-room` (recomendado pela análise: SNR ~18 dB, zumbido de 60 Hz).

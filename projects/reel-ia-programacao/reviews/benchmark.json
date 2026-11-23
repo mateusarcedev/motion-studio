@@ -1,0 +1,148 @@
+{
+  "generatedBy": "projects/reel-ia-programacao/benchmark.mjs",
+  "files": {
+    "original": {
+      "path": "out/source/reels-motion.mp4",
+      "sha256": "a62139faf67b6271142ecfcf1791324d4ecce9da5c548283a185320d73750824",
+      "durationSec": 66.401,
+      "video": "1080×1920 h264 30fps",
+      "audio": "aac 48000Hz 2ch",
+      "loudness": {
+        "integratedLufs": -16.17,
+        "truePeakDbtp": -1.16,
+        "lraLu": 2.4
+      },
+      "speechSec": 57.43,
+      "speechRatio": 0.865,
+      "pausesOver300ms": 13,
+      "pauseSecOver300ms": 5.69,
+      "speechToPauseDb": 12.3,
+      "noiseFloorDb": -31.9,
+      "sceneCuts": 13
+    },
+    "motion": {
+      "path": "out/final/reel.mp4",
+      "sha256": "5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3",
+      "durationSec": 53.1,
+      "video": "1080×1920 h264 30fps",
+      "audio": "aac 48000Hz 2ch",
+      "loudness": {
+        "integratedLufs": -14.15,
+        "truePeakDbtp": -4.55,
+        "lraLu": 1.2
+      },
+      "speechSec": 49.38,
+      "speechRatio": 0.93,
+      "pausesOver300ms": 2,
+      "pauseSecOver300ms": 0.63,
+      "speechToPauseDb": 10.7,
+      "noiseFloorDb": -26.9,
+      "sceneCuts": 19
+    },
+    "reference": {
+      "path": "out/source/reel-ia-programacao.mp4",
+      "sha256": "f6f40a01690426c90dc56299e31a28f874856676514d429778bfdd96bc17f3fd",
+      "durationSec": 52.799,
+      "video": "1080×1920 h264 30fps",
+      "audio": "aac 48000Hz 2ch",
+      "loudness": {
+        "integratedLufs": -14.22,
+        "truePeakDbtp": -1.28,
+        "lraLu": 2.1
+      },
+      "speechSec": 48.38,
+      "speechRatio": 0.916,
+      "pausesOver300ms": 6,
+      "pauseSecOver300ms": 2.67,
+      "speechToPauseDb": 11.6,
+      "noiseFloorDb": -28.9,
+      "sceneCuts": 16
+    }
+  },
+  "asr": {
+    "referenceVsHumanSrt": {
+      "wer": 0.19463087248322147,
+      "edits": 29,
+      "refWords": 149,
+      "model": {
+        "name": "small",
+        "computeType": "int8",
+        "device": "cpu",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "path": "~/.local/share/motion/stt/models/models--Systran--faster-whisper-small/snapshots/536b0662742c02347bc0e980a01041f333bce120"
+      },
+      "language": "pt",
+      "note": "WER do faster-whisper small (glossário) sobre o áudio da referência contra a legenda humana dela; a legenda humana omite/normaliza palavras, então o valor é um limite superior do erro."
+    },
+    "raw": {
+      "words": 177,
+      "lowConfidence": 23,
+      "language": "pt",
+      "languageProbability": 0.9849,
+      "transcribeSec": 35.49,
+      "durationSec": 66.304
+    }
+  },
+  "captions": {
+    "motion": {
+      "overSpeech": 1,
+      "items": 44,
+      "medianOnsetOffsetSec": -0.0030000000000001137,
+      "pages": 44,
+      "words": 153,
+      "source": "páginas da timeline (ASR revisado)"
+    },
+    "reference": {
+      "overSpeech": 1,
+      "items": 59,
+      "medianOnsetOffsetSec": 0.06,
+      "pages": 59,
+      "source": "legendas.srt (humana)"
+    }
+  },
+  "edit": {
+    "removedSec": 13.301,
+    "cuts": 5,
+    "zoomCuts": 10,
+    "overlays": 6,
+    "decisions": [
+      {
+        "what": "remover primeira ocorrência de \"Já é uma realidade,\" (8.56–9.94s)",
+        "why": "frase repetida em sequência (falso começo)",
+        "by": "engine"
+      },
+      {
+        "what": "excluir 0–8.5s",
+        "why": "tomada recomeçada (recomeço detectado em 24,68 s); abertura lenta; contém o texto queimado 'ESCUTA ISSO'",
+        "by": "operator"
+      },
+      {
+        "what": "excluir 24.68–26.9s",
+        "why": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'",
+        "by": "operator"
+      },
+      {
+        "what": "2 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s, 50.333→50.3s)",
+        "why": "evitar quadro órfão/micro-plano junto a emenda do celular",
+        "by": "engine"
+      },
+      {
+        "what": "ênfase (zoom 1.2) em \"se você dev não está utilizando … ficando para trás\" (s05)",
+        "why": "frase de virada do argumento",
+        "by": "operator"
+      },
+      {
+        "what": "palavra w0177 sem legenda",
+        "why": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado",
+        "by": "operator"
+      },
+      {
+        "what": "7 palavra(s) legendada(s) em linha única (y 0.696) enquanto o texto queimado está na base",
+        "why": "manter a fala legendada sem colidir com o texto do autor",
+        "by": "engine"
+      }
+    ],
+    "wordsLostUnexpected": 0
+  }
+}

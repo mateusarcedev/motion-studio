@@ -1,0 +1,7272 @@
+{
+  "schema": "motion.timeline",
+  "schemaVersion": 1,
+  "preset": "talking-head",
+  "source": {
+    "path": "out/source/reels-motion.mp4",
+    "sha256": "a62139faf67b6271142ecfcf1791324d4ecce9da5c548283a185320d73750824",
+    "bytes": 39510896,
+    "durationSec": 66.401,
+    "probe": {
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "pixFmt": "yuv420p",
+        "codedWidth": 1080,
+        "codedHeight": 1920,
+        "width": 1080,
+        "height": 1920,
+        "rotation": 0,
+        "fps": 30,
+        "nominalFps": 30,
+        "vfr": false,
+        "frames": 1992,
+        "bitRate": 4589540,
+        "colorSpace": "bt709",
+        "colorTransfer": "bt709",
+        "startTime": 0
+      },
+      "audio": {
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "channelLayout": "stereo",
+        "bitRate": 161773,
+        "startTime": 0,
+        "durationSec": 66.401
+      },
+      "container": "mov,mp4,m4a,3gp,3g2,mj2"
+    },
+    "sourceCuts": [
+      0.13333333333333333,
+      7.8,
+      8.766666666666667,
+      12.1,
+      18.366666666666667,
+      24.833333333333332,
+      25.033333333333335,
+      29.566666666666666,
+      30.233333333333334,
+      32.53333333333333,
+      33.6,
+      36.6,
+      39.3,
+      41.8,
+      48,
+      50.3,
+      64.66666666666667,
+      65.76666666666667
+    ]
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationSec": 53.1,
+    "frames": 1593,
+    "aspect": "1080:1920"
+  },
+  "burnedText": [
+    {
+      "src": [
+        63.9,
+        66.401
+      ],
+      "region": "bottom",
+      "text": "E VOCÊ, O QUE ACHA?",
+      "dst": [
+        50.6,
+        53.1
+      ]
+    }
+  ],
+  "framing": {
+    "faceBox": {
+      "x": 0.18,
+      "y": 0.31,
+      "w": 0.62,
+      "h": 0.5
+    },
+    "faceBoxSource": "operator",
+    "reframe": "cover"
+  },
+  "segments": [
+    {
+      "id": "s01",
+      "src": [
+        10.033333,
+        13.266667
+      ],
+      "reason": "speech",
+      "zoomCut": false,
+      "frames": 97,
+      "dst": [
+        0,
+        3.233333
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s02",
+      "src": [
+        13.266667,
+        18.366667
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 153,
+      "dst": [
+        3.233333,
+        8.333333
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s03",
+      "src": [
+        18.633333,
+        22.233333
+      ],
+      "reason": "speech",
+      "zoomCut": false,
+      "frames": 108,
+      "dst": [
+        8.333333,
+        11.933333
+      ],
+      "cutBefore": true,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s04",
+      "src": [
+        22.833333,
+        24.7
+      ],
+      "reason": "speech",
+      "zoomCut": false,
+      "frames": 56,
+      "dst": [
+        11.933333,
+        13.8
+      ],
+      "cutBefore": true,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s05",
+      "src": [
+        26.8,
+        30.233333
+      ],
+      "reason": "speech",
+      "zoomCut": false,
+      "frames": 103,
+      "dst": [
+        13.8,
+        17.233333
+      ],
+      "cutBefore": true,
+      "zoom": {
+        "from": 1.2,
+        "to": 1.2,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      },
+      "emphasis": "se você dev não está utilizando"
+    },
+    {
+      "id": "s06",
+      "src": [
+        30.233333,
+        32.533333
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 69,
+      "dst": [
+        17.233333,
+        19.533333
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s07",
+      "src": [
+        32.533333,
+        36.6
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 122,
+      "dst": [
+        19.533333,
+        23.6
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s08",
+      "src": [
+        36.6,
+        39.3
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 81,
+      "dst": [
+        23.6,
+        26.3
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s09",
+      "src": [
+        39.3,
+        41.8
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 75,
+      "dst": [
+        26.3,
+        28.8
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s10",
+      "src": [
+        41.8,
+        44.7
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 87,
+      "dst": [
+        28.8,
+        31.7
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s11",
+      "src": [
+        44.7,
+        48
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 99,
+      "dst": [
+        31.7,
+        35
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s12",
+      "src": [
+        48,
+        50.3
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 69,
+      "dst": [
+        35,
+        37.3
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s13",
+      "src": [
+        50.466667,
+        54.866667
+      ],
+      "reason": "speech",
+      "zoomCut": false,
+      "frames": 132,
+      "dst": [
+        37.3,
+        41.7
+      ],
+      "cutBefore": true,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s14",
+      "src": [
+        55,
+        58.2
+      ],
+      "reason": "speech",
+      "zoomCut": false,
+      "frames": 96,
+      "dst": [
+        41.7,
+        44.9
+      ],
+      "cutBefore": true,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s15",
+      "src": [
+        58.2,
+        63.133333
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 148,
+      "dst": [
+        44.9,
+        49.833333
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1,
+        "to": 1,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    },
+    {
+      "id": "s16",
+      "src": [
+        63.133333,
+        66.4
+      ],
+      "reason": "speech",
+      "zoomCut": true,
+      "frames": 98,
+      "dst": [
+        49.833333,
+        53.1
+      ],
+      "cutBefore": false,
+      "zoom": {
+        "from": 1.12,
+        "to": 1.12,
+        "cx": 0.49,
+        "cy": 0.535,
+        "easeInFrames": 0
+      }
+    }
+  ],
+  "removed": [
+    {
+      "src": [
+        0,
+        0.12
+      ],
+      "reason": "leading-silence",
+      "confidence": 1
+    },
+    {
+      "src": [
+        2.69,
+        2.98
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.51
+    },
+    {
+      "src": [
+        6.29,
+        6.5
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.43
+    },
+    {
+      "src": [
+        7.83,
+        8.08
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.47
+    },
+    {
+      "src": [
+        9.92,
+        10.04
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.34
+    },
+    {
+      "src": [
+        18.37,
+        18.65
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.5
+    },
+    {
+      "src": [
+        22.23,
+        22.86
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.85
+    },
+    {
+      "src": [
+        24.74,
+        25.06
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.54
+    },
+    {
+      "src": [
+        25.74,
+        25.88
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.36
+    },
+    {
+      "src": [
+        50.32,
+        50.48
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.38
+    },
+    {
+      "src": [
+        54.86,
+        55.02
+      ],
+      "reason": "pause",
+      "confidence": 0.95,
+      "pauseSec": 0.38
+    },
+    {
+      "src": [
+        8.54,
+        9.93
+      ],
+      "reason": "repeated-phrase",
+      "confidence": 0.75,
+      "text": "Já é uma realidade, já é uma realidade,",
+      "needsReview": true,
+      "boundaryRefined": {
+        "from": [
+          8.55,
+          9.93
+        ],
+        "by": "energy-minimum ±80 ms"
+      }
+    },
+    {
+      "src": [
+        0,
+        8.54
+      ],
+      "reason": "operator",
+      "confidence": 1,
+      "requested": [
+        0,
+        8.5
+      ],
+      "boundaryRefined": {
+        "from": [
+          0,
+          8.5
+        ],
+        "by": "energy-minimum ±80 ms"
+      }
+    },
+    {
+      "src": [
+        24.68,
+        26.83
+      ],
+      "reason": "operator",
+      "confidence": 1,
+      "requested": [
+        24.68,
+        26.89
+      ],
+      "boundaryRefined": {
+        "from": [
+          24.68,
+          26.9
+        ],
+        "by": "energy-minimum ±80 ms"
+      }
+    }
+  ],
+  "transcript": {
+    "provider": {
+      "id": "faster-whisper",
+      "model": {
+        "name": "small",
+        "computeType": "int8",
+        "device": "cpu",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "path": "~/.local/share/motion/stt/models/models--Systran--faster-whisper-small/snapshots/536b0662742c02347bc0e980a01041f333bce120"
+      },
+      "versions": {
+        "faster_whisper": "1.2.1",
+        "ctranslate2": "4.9.1",
+        "numpy": "2.5.5",
+        "python": "3.14.4"
+      },
+      "decoding": {
+        "beamSize": 5,
+        "temperature": [
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8,
+          1
+        ],
+        "seed": 1,
+        "compressionRatioThreshold": 2.4,
+        "logProbThreshold": -1,
+        "wordTimestamps": true,
+        "vadFilter": false,
+        "conditionOnPreviousText": false,
+        "hotwords": "IA, ChatGPT, Claude Code, Anthropic, Codex, Antigravity, dev, programação",
+        "initialPrompt": null
+      },
+      "timing": {
+        "loadSec": 2.21,
+        "transcribeSec": 35.49
+      }
+    },
+    "language": "pt",
+    "languageProbability": 0.9849,
+    "scope": "full-media",
+    "coverage": {
+      "fromSec": 0,
+      "toSec": 66.28,
+      "ratio": 1
+    },
+    "corrections": [
+      {
+        "before": "deve",
+        "after": "dev",
+        "wordIds": [
+          "w0068"
+        ],
+        "start": 27.48,
+        "end": 27.76,
+        "reason": "termo do glossário reconhecido como 'deve'",
+        "by": "operator",
+        "evidence": "legendas.srt (legenda humana do mesmo take): 'se você dev não está utilizando'"
+      },
+      {
+        "before": "AdGravity,",
+        "after": "Antigravity,",
+        "wordIds": [
+          "w0054"
+        ],
+        "start": 20.84,
+        "end": 21.58,
+        "reason": "nome de produto reconhecido como 'AdGravity'",
+        "by": "operator",
+        "evidence": "legendas.srt: 'como o Antigravity Codex'"
+      },
+      {
+        "before": "o Claude Code, Anthropic",
+        "after": "o próprio Claude Code da Anthropic",
+        "wordIds": [
+          "w0056",
+          "w0057",
+          "w0058",
+          "w0059"
+        ],
+        "start": 22.86,
+        "end": 24.68,
+        "reason": "ASR omitiu 'próprio' e 'da'",
+        "by": "operator",
+        "evidence": "legendas.srt: 'o próprio Claude Code da Anthropic'"
+      },
+      {
+        "before": "para o pro -aroclente",
+        "after": "pro próprio cliente",
+        "wordIds": [
+          "w0143",
+          "w0144",
+          "w0145",
+          "w0146"
+        ],
+        "start": 55.34,
+        "end": 56.26,
+        "reason": "trecho irreconhecível 'para o pro -aroclente'",
+        "by": "operator",
+        "evidence": "legendas.srt: 'Mas quando pro próprio cliente aquilo não é importante'"
+      },
+      {
+        "before": "ChatGPT",
+        "after": "ChatGPT",
+        "wordIds": [
+          "w0043"
+        ],
+        "start": 17.18,
+        "end": 17.7,
+        "reason": "confirmação de palavra de baixa confiança (0,10)",
+        "by": "operator",
+        "evidence": "legendas.srt: 'quando o ChatGPT surgiu'"
+      },
+      {
+        "before": "IA",
+        "after": "IA",
+        "wordIds": [
+          "w0079"
+        ],
+        "start": 30.86,
+        "end": 31.16,
+        "reason": "confirmação de palavra de baixa confiança (0,06)",
+        "by": "operator",
+        "evidence": "legendas.srt: 'Utilizar IA traz muitos benefícios'"
+      },
+      {
+        "before": "muitas",
+        "after": "traz muitas",
+        "wordIds": [
+          "w0084"
+        ],
+        "start": 33.68,
+        "end": 34.02,
+        "reason": "ASR omitiu 'traz' (fala contínua de 3,3 s com só 3 palavras reconhecidas)",
+        "by": "operator",
+        "evidence": "legendas.srt (legenda humana do mesmo take): 'traz muitas possibilidades'"
+      },
+      {
+        "before": "muito",
+        "after": "traz muita",
+        "wordIds": [
+          "w0086"
+        ],
+        "start": 35.02,
+        "end": 35.68,
+        "reason": "ASR omitiu 'traz' e reconheceu 'muito' (confiança 0,20)",
+        "by": "operator",
+        "evidence": "legendas.srt: 'traz muita rapidez'"
+      }
+    ],
+    "words": [
+      {
+        "id": "w0001",
+        "text": "Então,",
+        "start": 0,
+        "end": 0.46,
+        "confidence": 0.7113,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0002",
+        "text": "eu",
+        "start": 0.58,
+        "end": 0.7,
+        "confidence": 0.966,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0003",
+        "text": "gostaria",
+        "start": 0.7,
+        "end": 1.18,
+        "confidence": 0.9967,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0004",
+        "text": "de",
+        "start": 1.18,
+        "end": 1.42,
+        "confidence": 0.9925,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0005",
+        "text": "falar",
+        "start": 1.42,
+        "end": 1.72,
+        "confidence": 0.9911,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0006",
+        "text": "sobre",
+        "start": 1.72,
+        "end": 2.46,
+        "confidence": 0.9861,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0007",
+        "text": "a",
+        "start": 2.46,
+        "end": 3.16,
+        "confidence": 0.9791,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0008",
+        "text": "importância",
+        "start": 3.16,
+        "end": 4,
+        "confidence": 0.9803,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0009",
+        "text": "de",
+        "start": 4,
+        "end": 4.36,
+        "confidence": 0.9881,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0010",
+        "text": "utilizar",
+        "start": 4.36,
+        "end": 4.86,
+        "confidence": 0.8809,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0011",
+        "text": "a",
+        "start": 4.86,
+        "end": 5.14,
+        "confidence": 0.5381,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0012",
+        "text": "IA",
+        "start": 5.14,
+        "end": 5.18,
+        "confidence": 0.0187,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0013",
+        "text": "na",
+        "start": 5.18,
+        "end": 5.36,
+        "confidence": 0.0331,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0014",
+        "text": "programação",
+        "start": 5.36,
+        "end": 6,
+        "confidence": 0.8973,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0015",
+        "text": "hoje",
+        "start": 6,
+        "end": 6.88,
+        "confidence": 0.4783,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0016",
+        "text": "em",
+        "start": 6.88,
+        "end": 7.1,
+        "confidence": 0.9849,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0017",
+        "text": "dia",
+        "start": 7.1,
+        "end": 7.6,
+        "confidence": 0.9982,
+        "timing": "word",
+        "segment": 0
+      },
+      {
+        "id": "w0018",
+        "text": "Já",
+        "start": 8.56,
+        "end": 9.04,
+        "confidence": 0.1683,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0019",
+        "text": "é",
+        "start": 9.04,
+        "end": 9.14,
+        "confidence": 0.9617,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0020",
+        "text": "uma",
+        "start": 9.14,
+        "end": 9.28,
+        "confidence": 0.994,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0021",
+        "text": "realidade,",
+        "start": 9.28,
+        "end": 9.76,
+        "confidence": 0.9958,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0022",
+        "text": "já",
+        "start": 9.94,
+        "end": 10.24,
+        "confidence": 0.7302,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0023",
+        "text": "é",
+        "start": 10.24,
+        "end": 10.36,
+        "confidence": 0.8718,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0024",
+        "text": "uma",
+        "start": 10.36,
+        "end": 10.4,
+        "confidence": 0.9929,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0025",
+        "text": "realidade,",
+        "start": 10.4,
+        "end": 10.8,
+        "confidence": 0.9968,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0026",
+        "text": "não",
+        "start": 10.94,
+        "end": 11.06,
+        "confidence": 0.6013,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0027",
+        "text": "temos",
+        "start": 11.06,
+        "end": 11.24,
+        "confidence": 0.8595,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0028",
+        "text": "para",
+        "start": 11.24,
+        "end": 11.46,
+        "confidence": 0.5276,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0029",
+        "text": "onde",
+        "start": 11.46,
+        "end": 11.58,
+        "confidence": 0.964,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0030",
+        "text": "fugir",
+        "start": 11.58,
+        "end": 12.04,
+        "confidence": 0.9933,
+        "timing": "word",
+        "segment": 1
+      },
+      {
+        "id": "w0031",
+        "text": "Não",
+        "start": 12.04,
+        "end": 12.34,
+        "confidence": 0.5655,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0032",
+        "text": "é",
+        "start": 12.34,
+        "end": 12.58,
+        "confidence": 0.9889,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0033",
+        "text": "mais",
+        "start": 12.58,
+        "end": 13.28,
+        "confidence": 0.9654,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0034",
+        "text": "algo",
+        "start": 13.28,
+        "end": 13.52,
+        "confidence": 0.9762,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0035",
+        "text": "opcional",
+        "start": 13.52,
+        "end": 13.9,
+        "confidence": 0.9846,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0036",
+        "text": "como",
+        "start": 13.9,
+        "end": 14.26,
+        "confidence": 0.9017,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0037",
+        "text": "era",
+        "start": 14.26,
+        "end": 14.56,
+        "confidence": 0.9118,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0038",
+        "text": "ali",
+        "start": 14.56,
+        "end": 14.8,
+        "confidence": 0.5824,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0039",
+        "text": "em",
+        "start": 14.8,
+        "end": 14.9,
+        "confidence": 0.9785,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0040",
+        "text": "2022",
+        "start": 14.9,
+        "end": 16.1,
+        "confidence": 0.982,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0041",
+        "text": "quando",
+        "start": 16.1,
+        "end": 16.88,
+        "confidence": 0.6138,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0042",
+        "text": "o",
+        "start": 16.88,
+        "end": 17.18,
+        "confidence": 0.8293,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0043",
+        "text": "ChatGPT",
+        "start": 17.18,
+        "end": 17.7,
+        "confidence": null,
+        "timing": "word",
+        "segment": 2,
+        "corrected": true
+      },
+      {
+        "id": "w0044",
+        "text": "surgiu",
+        "start": 17.7,
+        "end": 18.7,
+        "confidence": 0.9831,
+        "timing": "word",
+        "segment": 2
+      },
+      {
+        "id": "w0045",
+        "text": "E",
+        "start": 18.7,
+        "end": 18.84,
+        "confidence": 0.329,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0046",
+        "text": "logo",
+        "start": 18.84,
+        "end": 18.98,
+        "confidence": 0.2813,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0047",
+        "text": "após",
+        "start": 18.98,
+        "end": 19.26,
+        "confidence": 0.9668,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0048",
+        "text": "isso",
+        "start": 19.26,
+        "end": 19.44,
+        "confidence": 0.9951,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0049",
+        "text": "vieram",
+        "start": 19.44,
+        "end": 19.8,
+        "confidence": 0.6627,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0050",
+        "text": "outras",
+        "start": 19.8,
+        "end": 20.04,
+        "confidence": 0.8031,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0051",
+        "text": "ferramentas,",
+        "start": 20.04,
+        "end": 20.58,
+        "confidence": 0.9812,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0052",
+        "text": "como",
+        "start": 20.66,
+        "end": 20.72,
+        "confidence": 0.9167,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0053",
+        "text": "o",
+        "start": 20.72,
+        "end": 20.84,
+        "confidence": 0.3049,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0054",
+        "text": "Antigravity,",
+        "start": 20.84,
+        "end": 21.58,
+        "confidence": null,
+        "timing": "word",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0055",
+        "text": "Codex,",
+        "start": 21.64,
+        "end": 22.86,
+        "confidence": 0.7591,
+        "timing": "word",
+        "segment": 3
+      },
+      {
+        "id": "w0056",
+        "text": "o",
+        "start": 22.86,
+        "end": 23.163,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0056.1",
+        "text": "próprio",
+        "start": 23.163,
+        "end": 23.467,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0056.2",
+        "text": "Claude",
+        "start": 23.467,
+        "end": 23.77,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0056.3",
+        "text": "Code",
+        "start": 23.77,
+        "end": 24.073,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0056.4",
+        "text": "da",
+        "start": 24.073,
+        "end": 24.377,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0056.5",
+        "text": "Anthropic",
+        "start": 24.377,
+        "end": 24.68,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 3,
+        "corrected": true
+      },
+      {
+        "id": "w0060",
+        "text": "Então,",
+        "start": 24.68,
+        "end": 25.44,
+        "confidence": 0.8537,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0061",
+        "text": "eu",
+        "start": 25.64,
+        "end": 26.04,
+        "confidence": 0.9866,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0062",
+        "text": "gostaria",
+        "start": 26.04,
+        "end": 26.26,
+        "confidence": 0.9993,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0063",
+        "text": "de",
+        "start": 26.26,
+        "end": 26.38,
+        "confidence": 0.9934,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0064",
+        "text": "falar",
+        "start": 26.38,
+        "end": 26.54,
+        "confidence": 0.9925,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0065",
+        "text": "que",
+        "start": 26.54,
+        "end": 26.9,
+        "confidence": 0.8611,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0066",
+        "text": "se",
+        "start": 26.9,
+        "end": 27.28,
+        "confidence": 0.801,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0067",
+        "text": "você",
+        "start": 27.28,
+        "end": 27.48,
+        "confidence": 0.9967,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0068",
+        "text": "dev",
+        "start": 27.48,
+        "end": 27.76,
+        "confidence": null,
+        "timing": "word",
+        "segment": 4,
+        "corrected": true
+      },
+      {
+        "id": "w0069",
+        "text": "não",
+        "start": 27.76,
+        "end": 27.94,
+        "confidence": 0.8049,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0070",
+        "text": "está",
+        "start": 27.94,
+        "end": 28.18,
+        "confidence": 0.5868,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0071",
+        "text": "utilizando,",
+        "start": 28.18,
+        "end": 28.66,
+        "confidence": 0.994,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0072",
+        "text": "você",
+        "start": 28.76,
+        "end": 28.84,
+        "confidence": 0.9497,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0073",
+        "text": "está",
+        "start": 28.84,
+        "end": 28.96,
+        "confidence": 0.8927,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0074",
+        "text": "ficando",
+        "start": 28.96,
+        "end": 29.12,
+        "confidence": 0.8989,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0075",
+        "text": "para",
+        "start": 29.12,
+        "end": 29.24,
+        "confidence": 0.7393,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0076",
+        "text": "trás",
+        "start": 29.24,
+        "end": 29.44,
+        "confidence": 0.9832,
+        "timing": "word",
+        "segment": 4
+      },
+      {
+        "id": "w0077",
+        "text": "Mas",
+        "start": 29.44,
+        "end": 30.06,
+        "confidence": 0.0516,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0078",
+        "text": "utilizar",
+        "start": 30.06,
+        "end": 30.86,
+        "confidence": 0.4695,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0079",
+        "text": "IA",
+        "start": 30.86,
+        "end": 31.16,
+        "confidence": null,
+        "timing": "word",
+        "segment": 5,
+        "corrected": true
+      },
+      {
+        "id": "w0080",
+        "text": "te",
+        "start": 31.16,
+        "end": 31.36,
+        "confidence": 0.084,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0081",
+        "text": "traz",
+        "start": 31.36,
+        "end": 31.6,
+        "confidence": 0.9904,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0082",
+        "text": "muitos",
+        "start": 31.6,
+        "end": 32.06,
+        "confidence": 0.7565,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0083",
+        "text": "benefícios,",
+        "start": 32.06,
+        "end": 33.42,
+        "confidence": 0.9772,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0084",
+        "text": "traz",
+        "start": 33.68,
+        "end": 33.85,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 5,
+        "corrected": true
+      },
+      {
+        "id": "w0084.1",
+        "text": "muitas",
+        "start": 33.85,
+        "end": 34.02,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 5,
+        "corrected": true
+      },
+      {
+        "id": "w0085",
+        "text": "possibilidades,",
+        "start": 34.02,
+        "end": 34.64,
+        "confidence": 0.9981,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0086",
+        "text": "traz",
+        "start": 35.02,
+        "end": 35.35,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 5,
+        "corrected": true
+      },
+      {
+        "id": "w0086.1",
+        "text": "muita",
+        "start": 35.35,
+        "end": 35.68,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 5,
+        "corrected": true
+      },
+      {
+        "id": "w0087",
+        "text": "rapidez",
+        "start": 35.68,
+        "end": 37.28,
+        "confidence": 0.7097,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0088",
+        "text": "nas",
+        "start": 37.28,
+        "end": 37.48,
+        "confidence": 0.9517,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0089",
+        "text": "suas",
+        "start": 37.48,
+        "end": 37.62,
+        "confidence": 0.9722,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0090",
+        "text": "entregas.",
+        "start": 37.62,
+        "end": 38.12,
+        "confidence": 0.9836,
+        "timing": "word",
+        "segment": 5
+      },
+      {
+        "id": "w0091",
+        "text": "Você",
+        "start": 38.28,
+        "end": 38.38,
+        "confidence": 0.9791,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0092",
+        "text": "passa",
+        "start": 38.38,
+        "end": 38.58,
+        "confidence": 0.9809,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0093",
+        "text": "a",
+        "start": 38.58,
+        "end": 38.8,
+        "confidence": 0.9852,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0094",
+        "text": "focar",
+        "start": 38.8,
+        "end": 39.12,
+        "confidence": 0.9941,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0095",
+        "text": "não",
+        "start": 39.12,
+        "end": 39.52,
+        "confidence": 0.6492,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0096",
+        "text": "somente",
+        "start": 39.52,
+        "end": 39.92,
+        "confidence": 0.9116,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0097",
+        "text": "em",
+        "start": 39.92,
+        "end": 40.04,
+        "confidence": 0.9883,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0098",
+        "text": "código,",
+        "start": 40.04,
+        "end": 40.3,
+        "confidence": 0.9712,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0099",
+        "text": "mas",
+        "start": 40.54,
+        "end": 40.58,
+        "confidence": 0.9907,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0100",
+        "text": "também",
+        "start": 40.58,
+        "end": 40.88,
+        "confidence": 0.8987,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0101",
+        "text": "na",
+        "start": 40.88,
+        "end": 41.52,
+        "confidence": 0.8661,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0102",
+        "text": "regra",
+        "start": 41.52,
+        "end": 42.24,
+        "confidence": 0.8746,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0103",
+        "text": "de",
+        "start": 42.24,
+        "end": 42.38,
+        "confidence": 0.9795,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0104",
+        "text": "negócio",
+        "start": 42.38,
+        "end": 42.76,
+        "confidence": 0.9267,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0105",
+        "text": "e",
+        "start": 42.76,
+        "end": 43.26,
+        "confidence": 0.5075,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0106",
+        "text": "muito",
+        "start": 43.26,
+        "end": 43.58,
+        "confidence": 0.9261,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0107",
+        "text": "mais",
+        "start": 43.58,
+        "end": 43.84,
+        "confidence": 0.9981,
+        "timing": "word",
+        "segment": 6
+      },
+      {
+        "id": "w0108",
+        "text": "do",
+        "start": 43.84,
+        "end": 44,
+        "confidence": 0.9763,
+        "timing": "word",
+        "segment": 7
+      },
+      {
+        "id": "w0109",
+        "text": "que",
+        "start": 44,
+        "end": 44.14,
+        "confidence": 0.9995,
+        "timing": "word",
+        "segment": 7
+      },
+      {
+        "id": "w0110",
+        "text": "isso.",
+        "start": 44.14,
+        "end": 44.54,
+        "confidence": 0.9846,
+        "timing": "word",
+        "segment": 7
+      },
+      {
+        "id": "w0111",
+        "text": "Você",
+        "start": 44.74,
+        "end": 45.06,
+        "confidence": 0.9867,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0112",
+        "text": "passa",
+        "start": 45.06,
+        "end": 45.36,
+        "confidence": 0.9927,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0113",
+        "text": "a",
+        "start": 45.36,
+        "end": 45.66,
+        "confidence": 0.9904,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0114",
+        "text": "focar",
+        "start": 45.66,
+        "end": 46,
+        "confidence": 0.99,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0115",
+        "text": "no",
+        "start": 46,
+        "end": 46.26,
+        "confidence": 0.9891,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0116",
+        "text": "produto",
+        "start": 46.26,
+        "end": 46.76,
+        "confidence": 0.9969,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0117",
+        "text": "e",
+        "start": 46.76,
+        "end": 46.98,
+        "confidence": 0.6812,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0118",
+        "text": "não",
+        "start": 46.98,
+        "end": 47.04,
+        "confidence": 0.5359,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0119",
+        "text": "na",
+        "start": 47.04,
+        "end": 47.16,
+        "confidence": 0.9664,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0120",
+        "text": "tecnologia.",
+        "start": 47.16,
+        "end": 47.62,
+        "confidence": 0.9982,
+        "timing": "word",
+        "segment": 8
+      },
+      {
+        "id": "w0121",
+        "text": "Nós",
+        "start": 48.06,
+        "end": 48.14,
+        "confidence": 0.8881,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0122",
+        "text": "desenvolvedores",
+        "start": 48.14,
+        "end": 48.66,
+        "confidence": 0.9247,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0123",
+        "text": "geralmente",
+        "start": 48.66,
+        "end": 49.06,
+        "confidence": 0.8962,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0124",
+        "text": "temos",
+        "start": 49.06,
+        "end": 49.24,
+        "confidence": 0.9474,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0125",
+        "text": "esse",
+        "start": 49.24,
+        "end": 49.44,
+        "confidence": 0.942,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0126",
+        "text": "problema",
+        "start": 49.44,
+        "end": 49.74,
+        "confidence": 0.9966,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0127",
+        "text": "de",
+        "start": 49.74,
+        "end": 50.04,
+        "confidence": 0.9352,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0128",
+        "text": "que",
+        "start": 50.04,
+        "end": 50.94,
+        "confidence": 0.7908,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0129",
+        "text": "a",
+        "start": 50.94,
+        "end": 51.4,
+        "confidence": 0.9306,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0130",
+        "text": "gente",
+        "start": 51.4,
+        "end": 51.52,
+        "confidence": 0.9997,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0131",
+        "text": "foca",
+        "start": 51.52,
+        "end": 51.78,
+        "confidence": 0.9701,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0132",
+        "text": "muito",
+        "start": 51.78,
+        "end": 51.96,
+        "confidence": 0.9717,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0133",
+        "text": "na",
+        "start": 51.96,
+        "end": 52.08,
+        "confidence": 0.9454,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0134",
+        "text": "tecnologia",
+        "start": 52.08,
+        "end": 52.56,
+        "confidence": 0.9979,
+        "timing": "word",
+        "segment": 9
+      },
+      {
+        "id": "w0135",
+        "text": "e",
+        "start": 52.56,
+        "end": 52.78,
+        "confidence": 0.2452,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0136",
+        "text": "quer",
+        "start": 52.78,
+        "end": 52.88,
+        "confidence": 0.911,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0137",
+        "text": "refinar,",
+        "start": 52.88,
+        "end": 53.22,
+        "confidence": 0.8105,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0138",
+        "text": "refinar,",
+        "start": 53.34,
+        "end": 53.56,
+        "confidence": 0.9768,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0139",
+        "text": "refinar,",
+        "start": 53.66,
+        "end": 53.88,
+        "confidence": 0.9841,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0140",
+        "text": "refinar,",
+        "start": 53.92,
+        "end": 54.18,
+        "confidence": 0.7133,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0141",
+        "text": "mas",
+        "start": 54.5,
+        "end": 54.52,
+        "confidence": 0.3088,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0142",
+        "text": "quando",
+        "start": 54.5,
+        "end": 55.34,
+        "confidence": 0.856,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0143",
+        "text": "pro",
+        "start": 55.34,
+        "end": 55.647,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 10,
+        "corrected": true
+      },
+      {
+        "id": "w0143.1",
+        "text": "próprio",
+        "start": 55.647,
+        "end": 55.953,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 10,
+        "corrected": true
+      },
+      {
+        "id": "w0143.2",
+        "text": "cliente",
+        "start": 55.953,
+        "end": 56.26,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": 10,
+        "corrected": true
+      },
+      {
+        "id": "w0147",
+        "text": "aquilo",
+        "start": 56.26,
+        "end": 56.52,
+        "confidence": 0.899,
+        "timing": "word",
+        "segment": 10
+      },
+      {
+        "id": "w0148",
+        "text": "não",
+        "start": 56.52,
+        "end": 56.68,
+        "confidence": 0.461,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0149",
+        "text": "é",
+        "start": 56.68,
+        "end": 56.76,
+        "confidence": 0.9543,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0150",
+        "text": "importante",
+        "start": 56.76,
+        "end": 57.16,
+        "confidence": 0.9883,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0151",
+        "text": "porque",
+        "start": 57.16,
+        "end": 57.52,
+        "confidence": 0.8569,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0152",
+        "text": "o",
+        "start": 57.52,
+        "end": 57.64,
+        "confidence": 0.9316,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0153",
+        "text": "que",
+        "start": 57.64,
+        "end": 57.68,
+        "confidence": 0.7702,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0154",
+        "text": "ele",
+        "start": 57.68,
+        "end": 57.84,
+        "confidence": 0.8417,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0155",
+        "text": "quer,",
+        "start": 57.84,
+        "end": 58.08,
+        "confidence": 0.9867,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0156",
+        "text": "o",
+        "start": 58.34,
+        "end": 58.44,
+        "confidence": 0.9671,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0157",
+        "text": "sistema",
+        "start": 58.44,
+        "end": 58.66,
+        "confidence": 0.9925,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0158",
+        "text": "funcionando,",
+        "start": 58.66,
+        "end": 59.34,
+        "confidence": 0.9599,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0159",
+        "text": "ele",
+        "start": 59.5,
+        "end": 59.58,
+        "confidence": 0.937,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0160",
+        "text": "quer",
+        "start": 59.58,
+        "end": 59.76,
+        "confidence": 0.9934,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0161",
+        "text": "que",
+        "start": 59.76,
+        "end": 59.88,
+        "confidence": 0.9132,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0162",
+        "text": "o",
+        "start": 59.88,
+        "end": 59.94,
+        "confidence": 0.95,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0163",
+        "text": "sistema",
+        "start": 59.94,
+        "end": 60.38,
+        "confidence": 0.9988,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0164",
+        "text": "faça",
+        "start": 60.38,
+        "end": 62.04,
+        "confidence": 0.9526,
+        "timing": "word",
+        "segment": 11
+      },
+      {
+        "id": "w0165",
+        "text": "ele",
+        "start": 62.04,
+        "end": 62.12,
+        "confidence": 0.667,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0166",
+        "text": "economizar",
+        "start": 62.12,
+        "end": 62.54,
+        "confidence": 0.933,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0167",
+        "text": "dinheiro,",
+        "start": 62.54,
+        "end": 62.96,
+        "confidence": 0.9904,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0168",
+        "text": "ou",
+        "start": 63.28,
+        "end": 63.300000000000004,
+        "confidence": 0.7035,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0169",
+        "text": "tempo,",
+        "start": 63.28,
+        "end": 63.66,
+        "confidence": 0.9728,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0170",
+        "text": "ou",
+        "start": 64,
+        "end": 64.14,
+        "confidence": 0.9967,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0171",
+        "text": "ambos,",
+        "start": 64.14,
+        "end": 64.48,
+        "confidence": 0.9776,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0172",
+        "text": "então",
+        "start": 64.82,
+        "end": 65.2,
+        "confidence": 0.9642,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0173",
+        "text": "esse",
+        "start": 65.2,
+        "end": 65.98,
+        "confidence": 0.644,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0174",
+        "text": "é",
+        "start": 65.98,
+        "end": 66.06,
+        "confidence": 0.9465,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0175",
+        "text": "o",
+        "start": 66.06,
+        "end": 66.08,
+        "confidence": 0.7546,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0176",
+        "text": "meu",
+        "start": 66.08,
+        "end": 66.14,
+        "confidence": 0.9804,
+        "timing": "word",
+        "segment": 12
+      },
+      {
+        "id": "w0177",
+        "text": "ruim.",
+        "start": 66.14,
+        "end": 66.28,
+        "confidence": 0.0769,
+        "timing": "word",
+        "segment": 12
+      }
+    ],
+    "segments": [
+      {
+        "index": 0,
+        "start": 0,
+        "end": 7.6,
+        "text": "Então, eu gostaria de falar sobre a importância de utilizar a IA na programação hoje em dia",
+        "avgLogprob": -0.3033,
+        "noSpeechProb": 0.029,
+        "compressionRatio": 1.59,
+        "wordIds": [
+          "w0001",
+          "w0002",
+          "w0003",
+          "w0004",
+          "w0005",
+          "w0006",
+          "w0007",
+          "w0008",
+          "w0009",
+          "w0010",
+          "w0011",
+          "w0012",
+          "w0013",
+          "w0014",
+          "w0015",
+          "w0016",
+          "w0017"
+        ]
+      },
+      {
+        "index": 1,
+        "start": 8.56,
+        "end": 12.04,
+        "text": "Já é uma realidade, já é uma realidade, não temos para onde fugir",
+        "avgLogprob": -0.3033,
+        "noSpeechProb": 0.029,
+        "compressionRatio": 1.59,
+        "wordIds": [
+          "w0018",
+          "w0019",
+          "w0020",
+          "w0021",
+          "w0022",
+          "w0023",
+          "w0024",
+          "w0025",
+          "w0026",
+          "w0027",
+          "w0028",
+          "w0029",
+          "w0030"
+        ]
+      },
+      {
+        "index": 2,
+        "start": 12.04,
+        "end": 18.7,
+        "text": "Não é mais algo opcional como era ali em 2022 quando o ChatGPT surgiu",
+        "avgLogprob": -0.3033,
+        "noSpeechProb": 0.029,
+        "compressionRatio": 1.59,
+        "wordIds": [
+          "w0031",
+          "w0032",
+          "w0033",
+          "w0034",
+          "w0035",
+          "w0036",
+          "w0037",
+          "w0038",
+          "w0039",
+          "w0040",
+          "w0041",
+          "w0042",
+          "w0043",
+          "w0044"
+        ]
+      },
+      {
+        "index": 3,
+        "start": 18.7,
+        "end": 24.68,
+        "text": "E logo após isso vieram outras ferramentas, como o Antigravity, Codex, o próprio Claude Code da Anthropic",
+        "avgLogprob": -0.3033,
+        "noSpeechProb": 0.029,
+        "compressionRatio": 1.59,
+        "wordIds": [
+          "w0045",
+          "w0046",
+          "w0047",
+          "w0048",
+          "w0049",
+          "w0050",
+          "w0051",
+          "w0052",
+          "w0053",
+          "w0054",
+          "w0055",
+          "w0056",
+          "w0056.1",
+          "w0056.2",
+          "w0056.3",
+          "w0056.4",
+          "w0056.5"
+        ]
+      },
+      {
+        "index": 4,
+        "start": 24.68,
+        "end": 29.44,
+        "text": "Então, eu gostaria de falar que se você dev não está utilizando, você está ficando para trás",
+        "avgLogprob": -0.3033,
+        "noSpeechProb": 0.029,
+        "compressionRatio": 1.59,
+        "wordIds": [
+          "w0060",
+          "w0061",
+          "w0062",
+          "w0063",
+          "w0064",
+          "w0065",
+          "w0066",
+          "w0067",
+          "w0068",
+          "w0069",
+          "w0070",
+          "w0071",
+          "w0072",
+          "w0073",
+          "w0074",
+          "w0075",
+          "w0076"
+        ]
+      },
+      {
+        "index": 5,
+        "start": 29.44,
+        "end": 38.12,
+        "text": "Mas utilizar IA te traz muitos benefícios, traz muitas possibilidades, traz muita rapidez nas suas entregas.",
+        "avgLogprob": -0.3273,
+        "noSpeechProb": 0.6165,
+        "compressionRatio": 1.7,
+        "wordIds": [
+          "w0077",
+          "w0078",
+          "w0079",
+          "w0080",
+          "w0081",
+          "w0082",
+          "w0083",
+          "w0084",
+          "w0084.1",
+          "w0085",
+          "w0086",
+          "w0086.1",
+          "w0087",
+          "w0088",
+          "w0089",
+          "w0090"
+        ]
+      },
+      {
+        "index": 6,
+        "start": 38.28,
+        "end": 43.84,
+        "text": "Você passa a focar não somente em código, mas também na regra de negócio e muito mais",
+        "avgLogprob": -0.3273,
+        "noSpeechProb": 0.6165,
+        "compressionRatio": 1.7,
+        "wordIds": [
+          "w0091",
+          "w0092",
+          "w0093",
+          "w0094",
+          "w0095",
+          "w0096",
+          "w0097",
+          "w0098",
+          "w0099",
+          "w0100",
+          "w0101",
+          "w0102",
+          "w0103",
+          "w0104",
+          "w0105",
+          "w0106",
+          "w0107"
+        ]
+      },
+      {
+        "index": 7,
+        "start": 43.84,
+        "end": 44.54,
+        "text": "do que isso.",
+        "avgLogprob": -0.3273,
+        "noSpeechProb": 0.6165,
+        "compressionRatio": 1.7,
+        "wordIds": [
+          "w0108",
+          "w0109",
+          "w0110"
+        ]
+      },
+      {
+        "index": 8,
+        "start": 44.74,
+        "end": 47.62,
+        "text": "Você passa a focar no produto e não na tecnologia.",
+        "avgLogprob": -0.3273,
+        "noSpeechProb": 0.6165,
+        "compressionRatio": 1.7,
+        "wordIds": [
+          "w0111",
+          "w0112",
+          "w0113",
+          "w0114",
+          "w0115",
+          "w0116",
+          "w0117",
+          "w0118",
+          "w0119",
+          "w0120"
+        ]
+      },
+      {
+        "index": 9,
+        "start": 48.06,
+        "end": 52.56,
+        "text": "Nós desenvolvedores geralmente temos esse problema de que a gente foca muito na tecnologia",
+        "avgLogprob": -0.3273,
+        "noSpeechProb": 0.6165,
+        "compressionRatio": 1.7,
+        "wordIds": [
+          "w0121",
+          "w0122",
+          "w0123",
+          "w0124",
+          "w0125",
+          "w0126",
+          "w0127",
+          "w0128",
+          "w0129",
+          "w0130",
+          "w0131",
+          "w0132",
+          "w0133",
+          "w0134"
+        ]
+      },
+      {
+        "index": 10,
+        "start": 52.56,
+        "end": 56.52,
+        "text": "e quer refinar, refinar, refinar, refinar, mas quando pro próprio cliente aquilo",
+        "avgLogprob": -0.3273,
+        "noSpeechProb": 0.6165,
+        "compressionRatio": 1.7,
+        "wordIds": [
+          "w0135",
+          "w0136",
+          "w0137",
+          "w0138",
+          "w0139",
+          "w0140",
+          "w0141",
+          "w0142",
+          "w0143",
+          "w0143.1",
+          "w0143.2",
+          "w0147"
+        ]
+      },
+      {
+        "index": 11,
+        "start": 56.52,
+        "end": 62.04,
+        "text": "não é importante porque o que ele quer, o sistema funcionando, ele quer que o sistema faça",
+        "avgLogprob": -0.3531,
+        "noSpeechProb": 0.1436,
+        "compressionRatio": 1.387,
+        "wordIds": [
+          "w0148",
+          "w0149",
+          "w0150",
+          "w0151",
+          "w0152",
+          "w0153",
+          "w0154",
+          "w0155",
+          "w0156",
+          "w0157",
+          "w0158",
+          "w0159",
+          "w0160",
+          "w0161",
+          "w0162",
+          "w0163",
+          "w0164"
+        ]
+      },
+      {
+        "index": 12,
+        "start": 62.04,
+        "end": 66.28,
+        "text": "ele economizar dinheiro, ou tempo, ou ambos, então esse é o meu ruim.",
+        "avgLogprob": -0.3531,
+        "noSpeechProb": 0.1436,
+        "compressionRatio": 1.387,
+        "wordIds": [
+          "w0165",
+          "w0166",
+          "w0167",
+          "w0168",
+          "w0169",
+          "w0170",
+          "w0171",
+          "w0172",
+          "w0173",
+          "w0174",
+          "w0175",
+          "w0176",
+          "w0177"
+        ]
+      }
+    ]
+  },
+  "audio": {
+    "preset": "noisy-room",
+    "overrides": {},
+    "denoiser": "auto",
+    "music": null
+  },
+  "captions": {
+    "enabled": true,
+    "style": {
+      "fontFamily": "Inter",
+      "fontWeight": 700,
+      "fontSize": 96,
+      "uppercase": true,
+      "color": "#FFFFFF",
+      "activeColor": "#2EE6A6",
+      "keywordColor": "#2EE6A6",
+      "outlineColor": "#000000",
+      "outlineWidth": 6,
+      "shadow": 2,
+      "shadowColor": "#000000",
+      "maxWordsPerPage": 3,
+      "maxCharsPerLine": 14,
+      "maxLines": 2,
+      "minPageSec": 0.65,
+      "maxGapSec": 0.45,
+      "advanceEm": 0.47,
+      "holdSec": 0.25,
+      "punctuation": "minimal",
+      "animation": "pop",
+      "keywords": [
+        "trás"
+      ],
+      "platform": "instagram-reels",
+      "fontsDir": "fonts",
+      "hideWords": [
+        {
+          "wordId": "w0177",
+          "reason": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado"
+        }
+      ]
+    },
+    "placement": {
+      "y": 0.722,
+      "maxWidthPx": 675,
+      "reason": "abaixo da boca, dentro da área segura",
+      "safe": {
+        "top": 0.08,
+        "bottom": 0.81,
+        "side": 0.8200000000000001
+      },
+      "blockH": 0.09499999999999999,
+      "faceBand": [
+        0.485,
+        0.6599999999999999
+      ]
+    },
+    "pages": [
+      {
+        "index": 0,
+        "start": 0.097,
+        "end": 0.907,
+        "lines": [
+          3,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0022",
+            "text": "já",
+            "display": "JÁ",
+            "start": 0.097,
+            "end": 0.207,
+            "keyword": false,
+            "confidence": 0.7302
+          },
+          {
+            "id": "w0023",
+            "text": "é",
+            "display": "É",
+            "start": 0.207,
+            "end": 0.327,
+            "keyword": false,
+            "confidence": 0.8718
+          },
+          {
+            "id": "w0024",
+            "text": "uma",
+            "display": "UMA",
+            "start": 0.327,
+            "end": 0.367,
+            "keyword": false,
+            "confidence": 0.9929
+          },
+          {
+            "id": "w0025",
+            "text": "realidade,",
+            "display": "REALIDADE",
+            "start": 0.367,
+            "end": 0.767,
+            "keyword": false,
+            "confidence": 0.9968
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "start": 0.907,
+        "end": 2.137,
+        "lines": [
+          3,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0026",
+            "text": "não",
+            "display": "NÃO",
+            "start": 0.907,
+            "end": 1.027,
+            "keyword": false,
+            "confidence": 0.6013
+          },
+          {
+            "id": "w0027",
+            "text": "temos",
+            "display": "TEMOS",
+            "start": 1.027,
+            "end": 1.207,
+            "keyword": false,
+            "confidence": 0.8595
+          },
+          {
+            "id": "w0028",
+            "text": "para",
+            "display": "PARA",
+            "start": 1.207,
+            "end": 1.427,
+            "keyword": false,
+            "confidence": 0.5276
+          },
+          {
+            "id": "w0029",
+            "text": "onde",
+            "display": "ONDE",
+            "start": 1.427,
+            "end": 1.547,
+            "keyword": false,
+            "confidence": 0.964
+          },
+          {
+            "id": "w0030",
+            "text": "fugir",
+            "display": "FUGIR",
+            "start": 1.547,
+            "end": 1.957,
+            "keyword": false,
+            "confidence": 0.9933
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "start": 2.137,
+        "end": 3.487,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0031",
+            "text": "Não",
+            "display": "NÃO",
+            "start": 2.137,
+            "end": 2.307,
+            "keyword": false,
+            "confidence": 0.5655
+          },
+          {
+            "id": "w0032",
+            "text": "é",
+            "display": "É",
+            "start": 2.307,
+            "end": 2.547,
+            "keyword": false,
+            "confidence": 0.9889
+          },
+          {
+            "id": "w0033",
+            "text": "mais",
+            "display": "MAIS",
+            "start": 2.547,
+            "end": 3.233,
+            "keyword": false,
+            "confidence": 0.9654
+          },
+          {
+            "id": "w0034",
+            "text": "algo",
+            "display": "ALGO",
+            "start": 3.247,
+            "end": 3.487,
+            "keyword": false,
+            "confidence": 0.9762
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "start": 3.487,
+        "end": 4.527,
+        "lines": [
+          1,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0035",
+            "text": "opcional",
+            "display": "OPCIONAL",
+            "start": 3.487,
+            "end": 3.867,
+            "keyword": false,
+            "confidence": 0.9846
+          },
+          {
+            "id": "w0036",
+            "text": "como",
+            "display": "COMO",
+            "start": 3.867,
+            "end": 4.227,
+            "keyword": false,
+            "confidence": 0.9017
+          },
+          {
+            "id": "w0037",
+            "text": "era",
+            "display": "ERA",
+            "start": 4.227,
+            "end": 4.527,
+            "keyword": false,
+            "confidence": 0.9118
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "start": 4.527,
+        "end": 6.167,
+        "lines": [
+          3
+        ],
+        "words": [
+          {
+            "id": "w0038",
+            "text": "ali",
+            "display": "ALI",
+            "start": 4.527,
+            "end": 4.767,
+            "keyword": false,
+            "confidence": 0.5824
+          },
+          {
+            "id": "w0039",
+            "text": "em",
+            "display": "EM",
+            "start": 4.767,
+            "end": 4.867,
+            "keyword": false,
+            "confidence": 0.9785
+          },
+          {
+            "id": "w0040",
+            "text": "2022",
+            "display": "2022",
+            "start": 4.867,
+            "end": 5.937,
+            "keyword": false,
+            "confidence": 0.982
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "start": 6.167,
+        "end": 8.44,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0041",
+            "text": "quando",
+            "display": "QUANDO",
+            "start": 6.167,
+            "end": 6.847,
+            "keyword": false,
+            "confidence": 0.6138
+          },
+          {
+            "id": "w0042",
+            "text": "o",
+            "display": "O",
+            "start": 6.847,
+            "end": 7.147,
+            "keyword": false,
+            "confidence": 0.8293
+          },
+          {
+            "id": "w0043",
+            "text": "ChatGPT",
+            "display": "CHATGPT",
+            "start": 7.147,
+            "end": 7.667,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0044",
+            "text": "surgiu",
+            "display": "SURGIU",
+            "start": 7.667,
+            "end": 8.207,
+            "keyword": false,
+            "confidence": 0.9831
+          }
+        ]
+      },
+      {
+        "index": 6,
+        "start": 8.44,
+        "end": 9.14,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0045",
+            "text": "E",
+            "display": "E",
+            "start": 8.44,
+            "end": 8.54,
+            "keyword": false,
+            "confidence": 0.329
+          },
+          {
+            "id": "w0046",
+            "text": "logo",
+            "display": "LOGO",
+            "start": 8.54,
+            "end": 8.68,
+            "keyword": false,
+            "confidence": 0.2813
+          },
+          {
+            "id": "w0047",
+            "text": "após",
+            "display": "APÓS",
+            "start": 8.68,
+            "end": 8.96,
+            "keyword": false,
+            "confidence": 0.9668
+          },
+          {
+            "id": "w0048",
+            "text": "isso",
+            "display": "ISSO",
+            "start": 8.96,
+            "end": 9.14,
+            "keyword": false,
+            "confidence": 0.9951
+          }
+        ]
+      },
+      {
+        "index": 7,
+        "start": 9.14,
+        "end": 10.36,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0049",
+            "text": "vieram",
+            "display": "VIERAM",
+            "start": 9.14,
+            "end": 9.5,
+            "keyword": false,
+            "confidence": 0.6627
+          },
+          {
+            "id": "w0050",
+            "text": "outras",
+            "display": "OUTRAS",
+            "start": 9.5,
+            "end": 9.74,
+            "keyword": false,
+            "confidence": 0.8031
+          },
+          {
+            "id": "w0051",
+            "text": "ferramentas,",
+            "display": "FERRAMENTAS",
+            "start": 9.74,
+            "end": 10.28,
+            "keyword": false,
+            "confidence": 0.9812
+          }
+        ]
+      },
+      {
+        "index": 8,
+        "start": 10.36,
+        "end": 12.05,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0052",
+            "text": "como",
+            "display": "COMO",
+            "start": 10.36,
+            "end": 10.42,
+            "keyword": false,
+            "confidence": 0.9167
+          },
+          {
+            "id": "w0053",
+            "text": "o",
+            "display": "O",
+            "start": 10.42,
+            "end": 10.54,
+            "keyword": false,
+            "confidence": 0.3049
+          },
+          {
+            "id": "w0054",
+            "text": "Antigravity,",
+            "display": "ANTIGRAVITY",
+            "start": 10.54,
+            "end": 11.2,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0055",
+            "text": "Codex,",
+            "display": "CODEX",
+            "start": 11.42,
+            "end": 11.8,
+            "keyword": false,
+            "confidence": 0.7591
+          }
+        ]
+      },
+      {
+        "index": 9,
+        "start": 12.05,
+        "end": 13.173,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0056",
+            "text": "o",
+            "display": "O",
+            "start": 12.05,
+            "end": 12.263,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0056.1",
+            "text": "próprio",
+            "display": "PRÓPRIO",
+            "start": 12.263,
+            "end": 12.567,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0056.2",
+            "text": "Claude",
+            "display": "CLAUDE",
+            "start": 12.567,
+            "end": 12.87,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0056.3",
+            "text": "Code",
+            "display": "CODE",
+            "start": 12.87,
+            "end": 13.173,
+            "keyword": false,
+            "confidence": null
+          }
+        ]
+      },
+      {
+        "index": 10,
+        "start": 13.173,
+        "end": 13.9,
+        "lines": [
+          2
+        ],
+        "words": [
+          {
+            "id": "w0056.4",
+            "text": "da",
+            "display": "DA",
+            "start": 13.173,
+            "end": 13.477,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0056.5",
+            "text": "Anthropic",
+            "display": "ANTHROPIC",
+            "start": 13.477,
+            "end": 13.71,
+            "keyword": false,
+            "confidence": null
+          }
+        ]
+      },
+      {
+        "index": 11,
+        "start": 13.9,
+        "end": 14.76,
+        "lines": [
+          3
+        ],
+        "words": [
+          {
+            "id": "w0066",
+            "text": "se",
+            "display": "SE",
+            "start": 13.9,
+            "end": 14.28,
+            "keyword": false,
+            "confidence": 0.801
+          },
+          {
+            "id": "w0067",
+            "text": "você",
+            "display": "VOCÊ",
+            "start": 14.28,
+            "end": 14.48,
+            "keyword": false,
+            "confidence": 0.9967
+          },
+          {
+            "id": "w0068",
+            "text": "dev",
+            "display": "DEV",
+            "start": 14.48,
+            "end": 14.76,
+            "keyword": false,
+            "confidence": null
+          }
+        ]
+      },
+      {
+        "index": 12,
+        "start": 14.76,
+        "end": 15.76,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0069",
+            "text": "não",
+            "display": "NÃO",
+            "start": 14.76,
+            "end": 14.94,
+            "keyword": false,
+            "confidence": 0.8049
+          },
+          {
+            "id": "w0070",
+            "text": "está",
+            "display": "ESTÁ",
+            "start": 14.94,
+            "end": 15.18,
+            "keyword": false,
+            "confidence": 0.5868
+          },
+          {
+            "id": "w0071",
+            "text": "utilizando,",
+            "display": "UTILIZANDO",
+            "start": 15.18,
+            "end": 15.66,
+            "keyword": false,
+            "confidence": 0.994
+          }
+        ]
+      },
+      {
+        "index": 13,
+        "start": 15.76,
+        "end": 16.44,
+        "lines": [
+          2,
+          3
+        ],
+        "words": [
+          {
+            "id": "w0072",
+            "text": "você",
+            "display": "VOCÊ",
+            "start": 15.76,
+            "end": 15.84,
+            "keyword": false,
+            "confidence": 0.9497
+          },
+          {
+            "id": "w0073",
+            "text": "está",
+            "display": "ESTÁ",
+            "start": 15.84,
+            "end": 15.96,
+            "keyword": false,
+            "confidence": 0.8927
+          },
+          {
+            "id": "w0074",
+            "text": "ficando",
+            "display": "FICANDO",
+            "start": 15.96,
+            "end": 16.12,
+            "keyword": false,
+            "confidence": 0.8989
+          },
+          {
+            "id": "w0075",
+            "text": "para",
+            "display": "PARA",
+            "start": 16.12,
+            "end": 16.24,
+            "keyword": false,
+            "confidence": 0.7393
+          },
+          {
+            "id": "w0076",
+            "text": "trás",
+            "display": "TRÁS",
+            "start": 16.24,
+            "end": 16.44,
+            "keyword": true,
+            "confidence": 0.9832
+          }
+        ]
+      },
+      {
+        "index": 14,
+        "start": 16.44,
+        "end": 18.16,
+        "lines": [
+          1,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0077",
+            "text": "Mas",
+            "display": "MAS",
+            "start": 16.44,
+            "end": 17.06,
+            "keyword": false,
+            "confidence": 0.0516
+          },
+          {
+            "id": "w0078",
+            "text": "utilizar",
+            "display": "UTILIZAR",
+            "start": 17.233,
+            "end": 17.86,
+            "keyword": false,
+            "confidence": 0.4695
+          },
+          {
+            "id": "w0079",
+            "text": "IA",
+            "display": "IA",
+            "start": 17.86,
+            "end": 18.16,
+            "keyword": false,
+            "confidence": null
+          }
+        ]
+      },
+      {
+        "index": 15,
+        "start": 18.16,
+        "end": 20.6,
+        "lines": [
+          3,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0080",
+            "text": "te",
+            "display": "TE",
+            "start": 18.16,
+            "end": 18.36,
+            "keyword": false,
+            "confidence": 0.084
+          },
+          {
+            "id": "w0081",
+            "text": "traz",
+            "display": "TRAZ",
+            "start": 18.36,
+            "end": 18.6,
+            "keyword": false,
+            "confidence": 0.9904
+          },
+          {
+            "id": "w0082",
+            "text": "muitos",
+            "display": "MUITOS",
+            "start": 18.6,
+            "end": 19.06,
+            "keyword": false,
+            "confidence": 0.7565
+          },
+          {
+            "id": "w0083",
+            "text": "benefícios,",
+            "display": "BENEFÍCIOS",
+            "start": 19.533,
+            "end": 20.35,
+            "keyword": false,
+            "confidence": 0.9772
+          }
+        ]
+      },
+      {
+        "index": 16,
+        "start": 20.68,
+        "end": 21.89,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0084",
+            "text": "traz",
+            "display": "TRAZ",
+            "start": 20.68,
+            "end": 20.85,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0084.1",
+            "text": "muitas",
+            "display": "MUITAS",
+            "start": 20.85,
+            "end": 21.02,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0085",
+            "text": "possibilidades,",
+            "display": "POSSIBILIDADES",
+            "start": 21.02,
+            "end": 21.64,
+            "keyword": false,
+            "confidence": 0.9981
+          }
+        ]
+      },
+      {
+        "index": 17,
+        "start": 22.02,
+        "end": 23.85,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0086",
+            "text": "traz",
+            "display": "TRAZ",
+            "start": 22.02,
+            "end": 22.35,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0086.1",
+            "text": "muita",
+            "display": "MUITA",
+            "start": 22.35,
+            "end": 22.68,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0087",
+            "text": "rapidez",
+            "display": "RAPIDEZ",
+            "start": 22.68,
+            "end": 23.6,
+            "keyword": false,
+            "confidence": 0.7097
+          }
+        ]
+      },
+      {
+        "index": 18,
+        "start": 24.28,
+        "end": 25.28,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0088",
+            "text": "nas",
+            "display": "NAS",
+            "start": 24.28,
+            "end": 24.48,
+            "keyword": false,
+            "confidence": 0.9517
+          },
+          {
+            "id": "w0089",
+            "text": "suas",
+            "display": "SUAS",
+            "start": 24.48,
+            "end": 24.62,
+            "keyword": false,
+            "confidence": 0.9722
+          },
+          {
+            "id": "w0090",
+            "text": "entregas.",
+            "display": "ENTREGAS",
+            "start": 24.62,
+            "end": 25.12,
+            "keyword": false,
+            "confidence": 0.9836
+          }
+        ]
+      },
+      {
+        "index": 19,
+        "start": 25.28,
+        "end": 26.3,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0091",
+            "text": "Você",
+            "display": "VOCÊ",
+            "start": 25.28,
+            "end": 25.38,
+            "keyword": false,
+            "confidence": 0.9791
+          },
+          {
+            "id": "w0092",
+            "text": "passa",
+            "display": "PASSA",
+            "start": 25.38,
+            "end": 25.58,
+            "keyword": false,
+            "confidence": 0.9809
+          },
+          {
+            "id": "w0093",
+            "text": "a",
+            "display": "A",
+            "start": 25.58,
+            "end": 25.8,
+            "keyword": false,
+            "confidence": 0.9852
+          },
+          {
+            "id": "w0094",
+            "text": "focar",
+            "display": "FOCAR",
+            "start": 25.8,
+            "end": 26.12,
+            "keyword": false,
+            "confidence": 0.9941
+          }
+        ]
+      },
+      {
+        "index": 20,
+        "start": 26.3,
+        "end": 26.92,
+        "lines": [
+          2
+        ],
+        "words": [
+          {
+            "id": "w0095",
+            "text": "não",
+            "display": "NÃO",
+            "start": 26.3,
+            "end": 26.52,
+            "keyword": false,
+            "confidence": 0.6492
+          },
+          {
+            "id": "w0096",
+            "text": "somente",
+            "display": "SOMENTE",
+            "start": 26.52,
+            "end": 26.92,
+            "keyword": false,
+            "confidence": 0.9116
+          }
+        ]
+      },
+      {
+        "index": 21,
+        "start": 26.92,
+        "end": 27.88,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0097",
+            "text": "em",
+            "display": "EM",
+            "start": 26.92,
+            "end": 27.04,
+            "keyword": false,
+            "confidence": 0.9883
+          },
+          {
+            "id": "w0098",
+            "text": "código,",
+            "display": "CÓDIGO",
+            "start": 27.04,
+            "end": 27.3,
+            "keyword": false,
+            "confidence": 0.9712
+          },
+          {
+            "id": "w0099",
+            "text": "mas",
+            "display": "MAS",
+            "start": 27.54,
+            "end": 27.58,
+            "keyword": false,
+            "confidence": 0.9907
+          },
+          {
+            "id": "w0100",
+            "text": "também",
+            "display": "TAMBÉM",
+            "start": 27.58,
+            "end": 27.88,
+            "keyword": false,
+            "confidence": 0.8987
+          }
+        ]
+      },
+      {
+        "index": 22,
+        "start": 27.88,
+        "end": 29.76,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0101",
+            "text": "na",
+            "display": "NA",
+            "start": 27.88,
+            "end": 28.52,
+            "keyword": false,
+            "confidence": 0.8661
+          },
+          {
+            "id": "w0102",
+            "text": "regra",
+            "display": "REGRA",
+            "start": 28.8,
+            "end": 29.24,
+            "keyword": false,
+            "confidence": 0.8746
+          },
+          {
+            "id": "w0103",
+            "text": "de",
+            "display": "DE",
+            "start": 29.24,
+            "end": 29.38,
+            "keyword": false,
+            "confidence": 0.9795
+          },
+          {
+            "id": "w0104",
+            "text": "negócio",
+            "display": "NEGÓCIO",
+            "start": 29.38,
+            "end": 29.76,
+            "keyword": false,
+            "confidence": 0.9267
+          }
+        ]
+      },
+      {
+        "index": 23,
+        "start": 29.76,
+        "end": 30.84,
+        "lines": [
+          3
+        ],
+        "words": [
+          {
+            "id": "w0105",
+            "text": "e",
+            "display": "E",
+            "start": 29.76,
+            "end": 30.26,
+            "keyword": false,
+            "confidence": 0.5075
+          },
+          {
+            "id": "w0106",
+            "text": "muito",
+            "display": "MUITO",
+            "start": 30.26,
+            "end": 30.58,
+            "keyword": false,
+            "confidence": 0.9261
+          },
+          {
+            "id": "w0107",
+            "text": "mais",
+            "display": "MAIS",
+            "start": 30.58,
+            "end": 30.84,
+            "keyword": false,
+            "confidence": 0.9981
+          }
+        ]
+      },
+      {
+        "index": 24,
+        "start": 30.84,
+        "end": 31.79,
+        "lines": [
+          3
+        ],
+        "words": [
+          {
+            "id": "w0108",
+            "text": "do",
+            "display": "DO",
+            "start": 30.84,
+            "end": 31,
+            "keyword": false,
+            "confidence": 0.9763
+          },
+          {
+            "id": "w0109",
+            "text": "que",
+            "display": "QUE",
+            "start": 31,
+            "end": 31.14,
+            "keyword": false,
+            "confidence": 0.9995
+          },
+          {
+            "id": "w0110",
+            "text": "isso.",
+            "display": "ISSO",
+            "start": 31.14,
+            "end": 31.54,
+            "keyword": false,
+            "confidence": 0.9846
+          }
+        ]
+      },
+      {
+        "index": 25,
+        "start": 31.83,
+        "end": 33,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0111",
+            "text": "Você",
+            "display": "VOCÊ",
+            "start": 31.83,
+            "end": 32.06,
+            "keyword": false,
+            "confidence": 0.9867
+          },
+          {
+            "id": "w0112",
+            "text": "passa",
+            "display": "PASSA",
+            "start": 32.06,
+            "end": 32.36,
+            "keyword": false,
+            "confidence": 0.9927
+          },
+          {
+            "id": "w0113",
+            "text": "a",
+            "display": "A",
+            "start": 32.36,
+            "end": 32.66,
+            "keyword": false,
+            "confidence": 0.9904
+          },
+          {
+            "id": "w0114",
+            "text": "focar",
+            "display": "FOCAR",
+            "start": 32.66,
+            "end": 33,
+            "keyword": false,
+            "confidence": 0.99
+          }
+        ]
+      },
+      {
+        "index": 26,
+        "start": 33,
+        "end": 33.76,
+        "lines": [
+          2
+        ],
+        "words": [
+          {
+            "id": "w0115",
+            "text": "no",
+            "display": "NO",
+            "start": 33,
+            "end": 33.26,
+            "keyword": false,
+            "confidence": 0.9891
+          },
+          {
+            "id": "w0116",
+            "text": "produto",
+            "display": "PRODUTO",
+            "start": 33.26,
+            "end": 33.76,
+            "keyword": false,
+            "confidence": 0.9969
+          }
+        ]
+      },
+      {
+        "index": 27,
+        "start": 33.76,
+        "end": 34.87,
+        "lines": [
+          3,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0117",
+            "text": "e",
+            "display": "E",
+            "start": 33.76,
+            "end": 33.98,
+            "keyword": false,
+            "confidence": 0.6812
+          },
+          {
+            "id": "w0118",
+            "text": "não",
+            "display": "NÃO",
+            "start": 33.98,
+            "end": 34.04,
+            "keyword": false,
+            "confidence": 0.5359
+          },
+          {
+            "id": "w0119",
+            "text": "na",
+            "display": "NA",
+            "start": 34.04,
+            "end": 34.16,
+            "keyword": false,
+            "confidence": 0.9664
+          },
+          {
+            "id": "w0120",
+            "text": "tecnologia.",
+            "display": "TECNOLOGIA",
+            "start": 34.16,
+            "end": 34.62,
+            "keyword": false,
+            "confidence": 0.9982
+          }
+        ]
+      },
+      {
+        "index": 28,
+        "start": 35.06,
+        "end": 35.66,
+        "lines": [
+          1,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0121",
+            "text": "Nós",
+            "display": "NÓS",
+            "start": 35.06,
+            "end": 35.14,
+            "keyword": false,
+            "confidence": 0.8881
+          },
+          {
+            "id": "w0122",
+            "text": "desenvolvedores",
+            "display": "DESENVOLVEDORES",
+            "start": 35.14,
+            "end": 35.66,
+            "keyword": false,
+            "confidence": 0.9247
+          }
+        ]
+      },
+      {
+        "index": 29,
+        "start": 35.66,
+        "end": 36.24,
+        "lines": [
+          1,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0123",
+            "text": "geralmente",
+            "display": "GERALMENTE",
+            "start": 35.66,
+            "end": 36.06,
+            "keyword": false,
+            "confidence": 0.8962
+          },
+          {
+            "id": "w0124",
+            "text": "temos",
+            "display": "TEMOS",
+            "start": 36.06,
+            "end": 36.24,
+            "keyword": false,
+            "confidence": 0.9474
+          }
+        ]
+      },
+      {
+        "index": 30,
+        "start": 36.24,
+        "end": 37.29,
+        "lines": [
+          1,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0125",
+            "text": "esse",
+            "display": "ESSE",
+            "start": 36.24,
+            "end": 36.44,
+            "keyword": false,
+            "confidence": 0.942
+          },
+          {
+            "id": "w0126",
+            "text": "problema",
+            "display": "PROBLEMA",
+            "start": 36.44,
+            "end": 36.74,
+            "keyword": false,
+            "confidence": 0.9966
+          },
+          {
+            "id": "w0127",
+            "text": "de",
+            "display": "DE",
+            "start": 36.74,
+            "end": 37.04,
+            "keyword": false,
+            "confidence": 0.9352
+          }
+        ]
+      },
+      {
+        "index": 31,
+        "start": 37.3,
+        "end": 38.353,
+        "lines": [
+          3
+        ],
+        "words": [
+          {
+            "id": "w0128",
+            "text": "que",
+            "display": "QUE",
+            "start": 37.3,
+            "end": 37.773,
+            "keyword": false,
+            "confidence": 0.7908
+          },
+          {
+            "id": "w0129",
+            "text": "a",
+            "display": "A",
+            "start": 37.773,
+            "end": 38.233,
+            "keyword": false,
+            "confidence": 0.9306
+          },
+          {
+            "id": "w0130",
+            "text": "gente",
+            "display": "GENTE",
+            "start": 38.233,
+            "end": 38.353,
+            "keyword": false,
+            "confidence": 0.9997
+          }
+        ]
+      },
+      {
+        "index": 32,
+        "start": 38.353,
+        "end": 39.393,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0131",
+            "text": "foca",
+            "display": "FOCA",
+            "start": 38.353,
+            "end": 38.613,
+            "keyword": false,
+            "confidence": 0.9701
+          },
+          {
+            "id": "w0132",
+            "text": "muito",
+            "display": "MUITO",
+            "start": 38.613,
+            "end": 38.793,
+            "keyword": false,
+            "confidence": 0.9717
+          },
+          {
+            "id": "w0133",
+            "text": "na",
+            "display": "NA",
+            "start": 38.793,
+            "end": 38.913,
+            "keyword": false,
+            "confidence": 0.9454
+          },
+          {
+            "id": "w0134",
+            "text": "tecnologia",
+            "display": "TECNOLOGIA",
+            "start": 38.913,
+            "end": 39.393,
+            "keyword": false,
+            "confidence": 0.9979
+          }
+        ]
+      },
+      {
+        "index": 33,
+        "start": 39.393,
+        "end": 40.493,
+        "lines": [
+          3,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0135",
+            "text": "e",
+            "display": "E",
+            "start": 39.393,
+            "end": 39.613,
+            "keyword": false,
+            "confidence": 0.2452
+          },
+          {
+            "id": "w0136",
+            "text": "quer",
+            "display": "QUER",
+            "start": 39.613,
+            "end": 39.713,
+            "keyword": false,
+            "confidence": 0.911
+          },
+          {
+            "id": "w0137",
+            "text": "refinar,",
+            "display": "REFINAR",
+            "start": 39.713,
+            "end": 40.053,
+            "keyword": false,
+            "confidence": 0.8105
+          },
+          {
+            "id": "w0138",
+            "text": "refinar,",
+            "display": "REFINAR",
+            "start": 40.173,
+            "end": 40.393,
+            "keyword": false,
+            "confidence": 0.9768
+          }
+        ]
+      },
+      {
+        "index": 34,
+        "start": 40.493,
+        "end": 41.95,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0139",
+            "text": "refinar,",
+            "display": "REFINAR",
+            "start": 40.493,
+            "end": 40.713,
+            "keyword": false,
+            "confidence": 0.9841
+          },
+          {
+            "id": "w0140",
+            "text": "refinar,",
+            "display": "REFINAR",
+            "start": 40.753,
+            "end": 41.013,
+            "keyword": false,
+            "confidence": 0.7133
+          },
+          {
+            "id": "w0141",
+            "text": "mas",
+            "display": "MAS",
+            "start": 41.333,
+            "end": 41.353,
+            "keyword": false,
+            "confidence": 0.3088
+          },
+          {
+            "id": "w0142",
+            "text": "quando",
+            "display": "QUANDO",
+            "start": 41.333,
+            "end": 41.7,
+            "keyword": false,
+            "confidence": 0.856
+          }
+        ]
+      },
+      {
+        "index": 35,
+        "start": 42.04,
+        "end": 42.96,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0143",
+            "text": "pro",
+            "display": "PRO",
+            "start": 42.04,
+            "end": 42.347,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0143.1",
+            "text": "próprio",
+            "display": "PRÓPRIO",
+            "start": 42.347,
+            "end": 42.653,
+            "keyword": false,
+            "confidence": null
+          },
+          {
+            "id": "w0143.2",
+            "text": "cliente",
+            "display": "CLIENTE",
+            "start": 42.653,
+            "end": 42.96,
+            "keyword": false,
+            "confidence": null
+          }
+        ]
+      },
+      {
+        "index": 36,
+        "start": 42.96,
+        "end": 43.86,
+        "lines": [
+          2,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0147",
+            "text": "aquilo",
+            "display": "AQUILO",
+            "start": 42.96,
+            "end": 43.22,
+            "keyword": false,
+            "confidence": 0.899
+          },
+          {
+            "id": "w0148",
+            "text": "não",
+            "display": "NÃO",
+            "start": 43.22,
+            "end": 43.38,
+            "keyword": false,
+            "confidence": 0.461
+          },
+          {
+            "id": "w0149",
+            "text": "é",
+            "display": "É",
+            "start": 43.38,
+            "end": 43.46,
+            "keyword": false,
+            "confidence": 0.9543
+          },
+          {
+            "id": "w0150",
+            "text": "importante",
+            "display": "IMPORTANTE",
+            "start": 43.46,
+            "end": 43.86,
+            "keyword": false,
+            "confidence": 0.9883
+          }
+        ]
+      },
+      {
+        "index": 37,
+        "start": 43.86,
+        "end": 45.03,
+        "lines": [
+          2,
+          3
+        ],
+        "words": [
+          {
+            "id": "w0151",
+            "text": "porque",
+            "display": "PORQUE",
+            "start": 43.86,
+            "end": 44.22,
+            "keyword": false,
+            "confidence": 0.8569
+          },
+          {
+            "id": "w0152",
+            "text": "o",
+            "display": "O",
+            "start": 44.22,
+            "end": 44.34,
+            "keyword": false,
+            "confidence": 0.9316
+          },
+          {
+            "id": "w0153",
+            "text": "que",
+            "display": "QUE",
+            "start": 44.34,
+            "end": 44.38,
+            "keyword": false,
+            "confidence": 0.7702
+          },
+          {
+            "id": "w0154",
+            "text": "ele",
+            "display": "ELE",
+            "start": 44.38,
+            "end": 44.54,
+            "keyword": false,
+            "confidence": 0.8417
+          },
+          {
+            "id": "w0155",
+            "text": "quer,",
+            "display": "QUER",
+            "start": 44.54,
+            "end": 44.78,
+            "keyword": false,
+            "confidence": 0.9867
+          }
+        ]
+      },
+      {
+        "index": 38,
+        "start": 45.04,
+        "end": 46.2,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0156",
+            "text": "o",
+            "display": "O",
+            "start": 45.04,
+            "end": 45.14,
+            "keyword": false,
+            "confidence": 0.9671
+          },
+          {
+            "id": "w0157",
+            "text": "sistema",
+            "display": "SISTEMA",
+            "start": 45.14,
+            "end": 45.36,
+            "keyword": false,
+            "confidence": 0.9925
+          },
+          {
+            "id": "w0158",
+            "text": "funcionando,",
+            "display": "FUNCIONANDO",
+            "start": 45.36,
+            "end": 46.04,
+            "keyword": false,
+            "confidence": 0.9599
+          }
+        ]
+      },
+      {
+        "index": 39,
+        "start": 46.2,
+        "end": 47.08,
+        "lines": [
+          3,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0159",
+            "text": "ele",
+            "display": "ELE",
+            "start": 46.2,
+            "end": 46.28,
+            "keyword": false,
+            "confidence": 0.937
+          },
+          {
+            "id": "w0160",
+            "text": "quer",
+            "display": "QUER",
+            "start": 46.28,
+            "end": 46.46,
+            "keyword": false,
+            "confidence": 0.9934
+          },
+          {
+            "id": "w0161",
+            "text": "que",
+            "display": "QUE",
+            "start": 46.46,
+            "end": 46.58,
+            "keyword": false,
+            "confidence": 0.9132
+          },
+          {
+            "id": "w0162",
+            "text": "o",
+            "display": "O",
+            "start": 46.58,
+            "end": 46.64,
+            "keyword": false,
+            "confidence": 0.95
+          },
+          {
+            "id": "w0163",
+            "text": "sistema",
+            "display": "SISTEMA",
+            "start": 46.64,
+            "end": 47.08,
+            "keyword": false,
+            "confidence": 0.9988
+          }
+        ]
+      },
+      {
+        "index": 40,
+        "start": 47.08,
+        "end": 49.24,
+        "lines": [
+          2,
+          1
+        ],
+        "words": [
+          {
+            "id": "w0164",
+            "text": "faça",
+            "display": "FAÇA",
+            "start": 47.08,
+            "end": 48.74,
+            "keyword": false,
+            "confidence": 0.9526
+          },
+          {
+            "id": "w0165",
+            "text": "ele",
+            "display": "ELE",
+            "start": 48.74,
+            "end": 48.82,
+            "keyword": false,
+            "confidence": 0.667
+          },
+          {
+            "id": "w0166",
+            "text": "economizar",
+            "display": "ECONOMIZAR",
+            "start": 48.82,
+            "end": 49.24,
+            "keyword": false,
+            "confidence": 0.933
+          }
+        ]
+      },
+      {
+        "index": 41,
+        "start": 49.24,
+        "end": 50.6,
+        "lines": [
+          1,
+          2
+        ],
+        "words": [
+          {
+            "id": "w0167",
+            "text": "dinheiro,",
+            "display": "DINHEIRO",
+            "start": 49.24,
+            "end": 49.66,
+            "keyword": false,
+            "confidence": 0.9904
+          },
+          {
+            "id": "w0168",
+            "text": "ou",
+            "display": "OU",
+            "start": 49.98,
+            "end": 50,
+            "keyword": false,
+            "confidence": 0.7035
+          },
+          {
+            "id": "w0169",
+            "text": "tempo,",
+            "display": "TEMPO",
+            "start": 49.98,
+            "end": 50.36,
+            "keyword": false,
+            "confidence": 0.9728
+          }
+        ]
+      },
+      {
+        "index": 42,
+        "start": 50.7,
+        "end": 51.9,
+        "lines": [
+          3
+        ],
+        "words": [
+          {
+            "id": "w0170",
+            "text": "ou",
+            "display": "OU",
+            "start": 50.7,
+            "end": 50.84,
+            "keyword": false,
+            "confidence": 0.9967
+          },
+          {
+            "id": "w0171",
+            "text": "ambos,",
+            "display": "AMBOS",
+            "start": 50.84,
+            "end": 51.18,
+            "keyword": false,
+            "confidence": 0.9776
+          },
+          {
+            "id": "w0172",
+            "text": "então",
+            "display": "ENTÃO",
+            "start": 51.52,
+            "end": 51.9,
+            "keyword": false,
+            "confidence": 0.9642
+          }
+        ],
+        "y": 0.696,
+        "reason": "acima do texto queimado do autor"
+      },
+      {
+        "index": 43,
+        "start": 51.9,
+        "end": 53.09,
+        "lines": [
+          4
+        ],
+        "words": [
+          {
+            "id": "w0173",
+            "text": "esse",
+            "display": "ESSE",
+            "start": 51.9,
+            "end": 52.68,
+            "keyword": false,
+            "confidence": 0.644
+          },
+          {
+            "id": "w0174",
+            "text": "é",
+            "display": "É",
+            "start": 52.68,
+            "end": 52.76,
+            "keyword": false,
+            "confidence": 0.9465
+          },
+          {
+            "id": "w0175",
+            "text": "o",
+            "display": "O",
+            "start": 52.76,
+            "end": 52.78,
+            "keyword": false,
+            "confidence": 0.7546
+          },
+          {
+            "id": "w0176",
+            "text": "meu",
+            "display": "MEU",
+            "start": 52.78,
+            "end": 52.84,
+            "keyword": false,
+            "confidence": 0.9804
+          }
+        ],
+        "y": 0.696,
+        "reason": "acima do texto queimado do autor"
+      }
+    ],
+    "words": [
+      {
+        "id": "w0022",
+        "text": "já",
+        "start": 0.097,
+        "end": 0.207,
+        "confidence": 0.7302,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 10.13,
+        "srcEnd": 10.24,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0023",
+        "text": "é",
+        "start": 0.207,
+        "end": 0.327,
+        "confidence": 0.8718,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 10.24,
+        "srcEnd": 10.36,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0024",
+        "text": "uma",
+        "start": 0.327,
+        "end": 0.367,
+        "confidence": 0.9929,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 10.36,
+        "srcEnd": 10.4,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0025",
+        "text": "realidade,",
+        "start": 0.367,
+        "end": 0.767,
+        "confidence": 0.9968,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 10.4,
+        "srcEnd": 10.8,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0026",
+        "text": "não",
+        "start": 0.907,
+        "end": 1.027,
+        "confidence": 0.6013,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 10.94,
+        "srcEnd": 11.06,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0027",
+        "text": "temos",
+        "start": 1.027,
+        "end": 1.207,
+        "confidence": 0.8595,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 11.06,
+        "srcEnd": 11.24,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0028",
+        "text": "para",
+        "start": 1.207,
+        "end": 1.427,
+        "confidence": 0.5276,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 11.24,
+        "srcEnd": 11.46,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0029",
+        "text": "onde",
+        "start": 1.427,
+        "end": 1.547,
+        "confidence": 0.964,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 11.46,
+        "srcEnd": 11.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0030",
+        "text": "fugir",
+        "start": 1.547,
+        "end": 1.957,
+        "confidence": 0.9933,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 11.58,
+        "srcEnd": 11.99,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0031",
+        "text": "Não",
+        "start": 2.137,
+        "end": 2.307,
+        "confidence": 0.5655,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 12.17,
+        "srcEnd": 12.34,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0032",
+        "text": "é",
+        "start": 2.307,
+        "end": 2.547,
+        "confidence": 0.9889,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 12.34,
+        "srcEnd": 12.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0033",
+        "text": "mais",
+        "start": 2.547,
+        "end": 3.233,
+        "confidence": 0.9654,
+        "timing": "word",
+        "segment": "s01",
+        "refined": true,
+        "srcStart": 12.58,
+        "srcEnd": 13.28,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0034",
+        "text": "algo",
+        "start": 3.247,
+        "end": 3.487,
+        "confidence": 0.9762,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 13.28,
+        "srcEnd": 13.52,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0035",
+        "text": "opcional",
+        "start": 3.487,
+        "end": 3.867,
+        "confidence": 0.9846,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 13.52,
+        "srcEnd": 13.9,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0036",
+        "text": "como",
+        "start": 3.867,
+        "end": 4.227,
+        "confidence": 0.9017,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 13.9,
+        "srcEnd": 14.26,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0037",
+        "text": "era",
+        "start": 4.227,
+        "end": 4.527,
+        "confidence": 0.9118,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 14.26,
+        "srcEnd": 14.56,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0038",
+        "text": "ali",
+        "start": 4.527,
+        "end": 4.767,
+        "confidence": 0.5824,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 14.56,
+        "srcEnd": 14.8,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0039",
+        "text": "em",
+        "start": 4.767,
+        "end": 4.867,
+        "confidence": 0.9785,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 14.8,
+        "srcEnd": 14.9,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0040",
+        "text": "2022",
+        "start": 4.867,
+        "end": 5.937,
+        "confidence": 0.982,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 14.9,
+        "srcEnd": 15.97,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0041",
+        "text": "quando",
+        "start": 6.167,
+        "end": 6.847,
+        "confidence": 0.6138,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 16.2,
+        "srcEnd": 16.88,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0042",
+        "text": "o",
+        "start": 6.847,
+        "end": 7.147,
+        "confidence": 0.8293,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 16.88,
+        "srcEnd": 17.18,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0043",
+        "text": "ChatGPT",
+        "start": 7.147,
+        "end": 7.667,
+        "confidence": null,
+        "timing": "word",
+        "segment": "s02",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 17.18,
+        "srcEnd": 17.7,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0044",
+        "text": "surgiu",
+        "start": 7.667,
+        "end": 8.207,
+        "confidence": 0.9831,
+        "timing": "word",
+        "segment": "s02",
+        "refined": true,
+        "srcStart": 17.7,
+        "srcEnd": 18.24,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0045",
+        "text": "E",
+        "start": 8.44,
+        "end": 8.54,
+        "confidence": 0.329,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 18.74,
+        "srcEnd": 18.84,
+        "clipped": false,
+        "afterCut": true
+      },
+      {
+        "id": "w0046",
+        "text": "logo",
+        "start": 8.54,
+        "end": 8.68,
+        "confidence": 0.2813,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 18.84,
+        "srcEnd": 18.98,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0047",
+        "text": "após",
+        "start": 8.68,
+        "end": 8.96,
+        "confidence": 0.9668,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 18.98,
+        "srcEnd": 19.26,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0048",
+        "text": "isso",
+        "start": 8.96,
+        "end": 9.14,
+        "confidence": 0.9951,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 19.26,
+        "srcEnd": 19.44,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0049",
+        "text": "vieram",
+        "start": 9.14,
+        "end": 9.5,
+        "confidence": 0.6627,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 19.44,
+        "srcEnd": 19.8,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0050",
+        "text": "outras",
+        "start": 9.5,
+        "end": 9.74,
+        "confidence": 0.8031,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 19.8,
+        "srcEnd": 20.04,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0051",
+        "text": "ferramentas,",
+        "start": 9.74,
+        "end": 10.28,
+        "confidence": 0.9812,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 20.04,
+        "srcEnd": 20.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0052",
+        "text": "como",
+        "start": 10.36,
+        "end": 10.42,
+        "confidence": 0.9167,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 20.66,
+        "srcEnd": 20.72,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0053",
+        "text": "o",
+        "start": 10.42,
+        "end": 10.54,
+        "confidence": 0.3049,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 20.72,
+        "srcEnd": 20.84,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0054",
+        "text": "Antigravity,",
+        "start": 10.54,
+        "end": 11.2,
+        "confidence": null,
+        "timing": "word",
+        "segment": "s03",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 20.84,
+        "srcEnd": 21.5,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0055",
+        "text": "Codex,",
+        "start": 11.42,
+        "end": 11.8,
+        "confidence": 0.7591,
+        "timing": "word",
+        "segment": "s03",
+        "refined": true,
+        "srcStart": 21.72,
+        "srcEnd": 22.1,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0056",
+        "text": "o",
+        "start": 12.05,
+        "end": 12.263,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s04",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 22.95,
+        "srcEnd": 23.163,
+        "clipped": false,
+        "afterCut": true
+      },
+      {
+        "id": "w0056.1",
+        "text": "próprio",
+        "start": 12.263,
+        "end": 12.567,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s04",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 23.163,
+        "srcEnd": 23.467,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0056.2",
+        "text": "Claude",
+        "start": 12.567,
+        "end": 12.87,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s04",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 23.467,
+        "srcEnd": 23.77,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0056.3",
+        "text": "Code",
+        "start": 12.87,
+        "end": 13.173,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s04",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 23.77,
+        "srcEnd": 24.073,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0056.4",
+        "text": "da",
+        "start": 13.173,
+        "end": 13.477,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s04",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 24.073,
+        "srcEnd": 24.377,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0056.5",
+        "text": "Anthropic",
+        "start": 13.477,
+        "end": 13.71,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s04",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 24.377,
+        "srcEnd": 24.61,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0066",
+        "text": "se",
+        "start": 13.9,
+        "end": 14.28,
+        "confidence": 0.801,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 26.9,
+        "srcEnd": 27.28,
+        "clipped": false,
+        "afterCut": true
+      },
+      {
+        "id": "w0067",
+        "text": "você",
+        "start": 14.28,
+        "end": 14.48,
+        "confidence": 0.9967,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 27.28,
+        "srcEnd": 27.48,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0068",
+        "text": "dev",
+        "start": 14.48,
+        "end": 14.76,
+        "confidence": null,
+        "timing": "word",
+        "segment": "s05",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 27.48,
+        "srcEnd": 27.76,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0069",
+        "text": "não",
+        "start": 14.76,
+        "end": 14.94,
+        "confidence": 0.8049,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 27.76,
+        "srcEnd": 27.94,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0070",
+        "text": "está",
+        "start": 14.94,
+        "end": 15.18,
+        "confidence": 0.5868,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 27.94,
+        "srcEnd": 28.18,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0071",
+        "text": "utilizando,",
+        "start": 15.18,
+        "end": 15.66,
+        "confidence": 0.994,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 28.18,
+        "srcEnd": 28.66,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0072",
+        "text": "você",
+        "start": 15.76,
+        "end": 15.84,
+        "confidence": 0.9497,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 28.76,
+        "srcEnd": 28.84,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0073",
+        "text": "está",
+        "start": 15.84,
+        "end": 15.96,
+        "confidence": 0.8927,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 28.84,
+        "srcEnd": 28.96,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0074",
+        "text": "ficando",
+        "start": 15.96,
+        "end": 16.12,
+        "confidence": 0.8989,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 28.96,
+        "srcEnd": 29.12,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0075",
+        "text": "para",
+        "start": 16.12,
+        "end": 16.24,
+        "confidence": 0.7393,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 29.12,
+        "srcEnd": 29.24,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0076",
+        "text": "trás",
+        "start": 16.24,
+        "end": 16.44,
+        "confidence": 0.9832,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 29.24,
+        "srcEnd": 29.44,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0077",
+        "text": "Mas",
+        "start": 16.44,
+        "end": 17.06,
+        "confidence": 0.0516,
+        "timing": "word",
+        "segment": "s05",
+        "refined": true,
+        "srcStart": 29.44,
+        "srcEnd": 30.06,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0078",
+        "text": "utilizar",
+        "start": 17.233,
+        "end": 17.86,
+        "confidence": 0.4695,
+        "timing": "word",
+        "segment": "s06",
+        "refined": true,
+        "srcStart": 30.06,
+        "srcEnd": 30.86,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0079",
+        "text": "IA",
+        "start": 17.86,
+        "end": 18.16,
+        "confidence": null,
+        "timing": "word",
+        "segment": "s06",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 30.86,
+        "srcEnd": 31.16,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0080",
+        "text": "te",
+        "start": 18.16,
+        "end": 18.36,
+        "confidence": 0.084,
+        "timing": "word",
+        "segment": "s06",
+        "refined": true,
+        "srcStart": 31.16,
+        "srcEnd": 31.36,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0081",
+        "text": "traz",
+        "start": 18.36,
+        "end": 18.6,
+        "confidence": 0.9904,
+        "timing": "word",
+        "segment": "s06",
+        "refined": true,
+        "srcStart": 31.36,
+        "srcEnd": 31.6,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0082",
+        "text": "muitos",
+        "start": 18.6,
+        "end": 19.06,
+        "confidence": 0.7565,
+        "timing": "word",
+        "segment": "s06",
+        "refined": true,
+        "srcStart": 31.6,
+        "srcEnd": 32.06,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0083",
+        "text": "benefícios,",
+        "start": 19.533,
+        "end": 20.35,
+        "confidence": 0.9772,
+        "timing": "word",
+        "segment": "s07",
+        "refined": true,
+        "srcStart": 32.06,
+        "srcEnd": 33.35,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0084",
+        "text": "traz",
+        "start": 20.68,
+        "end": 20.85,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s07",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 33.68,
+        "srcEnd": 33.85,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0084.1",
+        "text": "muitas",
+        "start": 20.85,
+        "end": 21.02,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s07",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 33.85,
+        "srcEnd": 34.02,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0085",
+        "text": "possibilidades,",
+        "start": 21.02,
+        "end": 21.64,
+        "confidence": 0.9981,
+        "timing": "word",
+        "segment": "s07",
+        "refined": true,
+        "srcStart": 34.02,
+        "srcEnd": 34.64,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0086",
+        "text": "traz",
+        "start": 22.02,
+        "end": 22.35,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s07",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 35.02,
+        "srcEnd": 35.35,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0086.1",
+        "text": "muita",
+        "start": 22.35,
+        "end": 22.68,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s07",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 35.35,
+        "srcEnd": 35.68,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0087",
+        "text": "rapidez",
+        "start": 22.68,
+        "end": 23.6,
+        "confidence": 0.7097,
+        "timing": "word",
+        "segment": "s07",
+        "refined": true,
+        "srcStart": 35.68,
+        "srcEnd": 37.28,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0088",
+        "text": "nas",
+        "start": 24.28,
+        "end": 24.48,
+        "confidence": 0.9517,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 37.28,
+        "srcEnd": 37.48,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0089",
+        "text": "suas",
+        "start": 24.48,
+        "end": 24.62,
+        "confidence": 0.9722,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 37.48,
+        "srcEnd": 37.62,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0090",
+        "text": "entregas.",
+        "start": 24.62,
+        "end": 25.12,
+        "confidence": 0.9836,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 37.62,
+        "srcEnd": 38.12,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0091",
+        "text": "Você",
+        "start": 25.28,
+        "end": 25.38,
+        "confidence": 0.9791,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 38.28,
+        "srcEnd": 38.38,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0092",
+        "text": "passa",
+        "start": 25.38,
+        "end": 25.58,
+        "confidence": 0.9809,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 38.38,
+        "srcEnd": 38.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0093",
+        "text": "a",
+        "start": 25.58,
+        "end": 25.8,
+        "confidence": 0.9852,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 38.58,
+        "srcEnd": 38.8,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0094",
+        "text": "focar",
+        "start": 25.8,
+        "end": 26.12,
+        "confidence": 0.9941,
+        "timing": "word",
+        "segment": "s08",
+        "refined": true,
+        "srcStart": 38.8,
+        "srcEnd": 39.12,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0095",
+        "text": "não",
+        "start": 26.3,
+        "end": 26.52,
+        "confidence": 0.6492,
+        "timing": "word",
+        "segment": "s09",
+        "refined": true,
+        "srcStart": 39.12,
+        "srcEnd": 39.52,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0096",
+        "text": "somente",
+        "start": 26.52,
+        "end": 26.92,
+        "confidence": 0.9116,
+        "timing": "word",
+        "segment": "s09",
+        "refined": true,
+        "srcStart": 39.52,
+        "srcEnd": 39.92,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0097",
+        "text": "em",
+        "start": 26.92,
+        "end": 27.04,
+        "confidence": 0.9883,
+        "timing": "word",
+        "segment": "s09",
+        "refined": true,
+        "srcStart": 39.92,
+        "srcEnd": 40.04,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0098",
+        "text": "código,",
+        "start": 27.04,
+        "end": 27.3,
+        "confidence": 0.9712,
+        "timing": "word",
+        "segment": "s09",
+        "refined": true,
+        "srcStart": 40.04,
+        "srcEnd": 40.3,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0099",
+        "text": "mas",
+        "start": 27.54,
+        "end": 27.58,
+        "confidence": 0.9907,
+        "timing": "word",
+        "segment": "s09",
+        "srcStart": 40.54,
+        "srcEnd": 40.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0100",
+        "text": "também",
+        "start": 27.58,
+        "end": 27.88,
+        "confidence": 0.8987,
+        "timing": "word",
+        "segment": "s09",
+        "refined": true,
+        "srcStart": 40.58,
+        "srcEnd": 40.88,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0101",
+        "text": "na",
+        "start": 27.88,
+        "end": 28.52,
+        "confidence": 0.8661,
+        "timing": "word",
+        "segment": "s09",
+        "refined": true,
+        "srcStart": 40.88,
+        "srcEnd": 41.52,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0102",
+        "text": "regra",
+        "start": 28.8,
+        "end": 29.24,
+        "confidence": 0.8746,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 41.52,
+        "srcEnd": 42.24,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0103",
+        "text": "de",
+        "start": 29.24,
+        "end": 29.38,
+        "confidence": 0.9795,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 42.24,
+        "srcEnd": 42.38,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0104",
+        "text": "negócio",
+        "start": 29.38,
+        "end": 29.76,
+        "confidence": 0.9267,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 42.38,
+        "srcEnd": 42.76,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0105",
+        "text": "e",
+        "start": 29.76,
+        "end": 30.26,
+        "confidence": 0.5075,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 42.76,
+        "srcEnd": 43.26,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0106",
+        "text": "muito",
+        "start": 30.26,
+        "end": 30.58,
+        "confidence": 0.9261,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 43.26,
+        "srcEnd": 43.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0107",
+        "text": "mais",
+        "start": 30.58,
+        "end": 30.84,
+        "confidence": 0.9981,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 43.58,
+        "srcEnd": 43.84,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0108",
+        "text": "do",
+        "start": 30.84,
+        "end": 31,
+        "confidence": 0.9763,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 43.84,
+        "srcEnd": 44,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0109",
+        "text": "que",
+        "start": 31,
+        "end": 31.14,
+        "confidence": 0.9995,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 44,
+        "srcEnd": 44.14,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0110",
+        "text": "isso.",
+        "start": 31.14,
+        "end": 31.54,
+        "confidence": 0.9846,
+        "timing": "word",
+        "segment": "s10",
+        "refined": true,
+        "srcStart": 44.14,
+        "srcEnd": 44.54,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0111",
+        "text": "Você",
+        "start": 31.83,
+        "end": 32.06,
+        "confidence": 0.9867,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 44.83,
+        "srcEnd": 45.06,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0112",
+        "text": "passa",
+        "start": 32.06,
+        "end": 32.36,
+        "confidence": 0.9927,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 45.06,
+        "srcEnd": 45.36,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0113",
+        "text": "a",
+        "start": 32.36,
+        "end": 32.66,
+        "confidence": 0.9904,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 45.36,
+        "srcEnd": 45.66,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0114",
+        "text": "focar",
+        "start": 32.66,
+        "end": 33,
+        "confidence": 0.99,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 45.66,
+        "srcEnd": 46,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0115",
+        "text": "no",
+        "start": 33,
+        "end": 33.26,
+        "confidence": 0.9891,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 46,
+        "srcEnd": 46.26,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0116",
+        "text": "produto",
+        "start": 33.26,
+        "end": 33.76,
+        "confidence": 0.9969,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 46.26,
+        "srcEnd": 46.76,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0117",
+        "text": "e",
+        "start": 33.76,
+        "end": 33.98,
+        "confidence": 0.6812,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 46.76,
+        "srcEnd": 46.98,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0118",
+        "text": "não",
+        "start": 33.98,
+        "end": 34.04,
+        "confidence": 0.5359,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 46.98,
+        "srcEnd": 47.04,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0119",
+        "text": "na",
+        "start": 34.04,
+        "end": 34.16,
+        "confidence": 0.9664,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 47.04,
+        "srcEnd": 47.16,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0120",
+        "text": "tecnologia.",
+        "start": 34.16,
+        "end": 34.62,
+        "confidence": 0.9982,
+        "timing": "word",
+        "segment": "s11",
+        "refined": true,
+        "srcStart": 47.16,
+        "srcEnd": 47.62,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0121",
+        "text": "Nós",
+        "start": 35.06,
+        "end": 35.14,
+        "confidence": 0.8881,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 48.06,
+        "srcEnd": 48.14,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0122",
+        "text": "desenvolvedores",
+        "start": 35.14,
+        "end": 35.66,
+        "confidence": 0.9247,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 48.14,
+        "srcEnd": 48.66,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0123",
+        "text": "geralmente",
+        "start": 35.66,
+        "end": 36.06,
+        "confidence": 0.8962,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 48.66,
+        "srcEnd": 49.06,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0124",
+        "text": "temos",
+        "start": 36.06,
+        "end": 36.24,
+        "confidence": 0.9474,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 49.06,
+        "srcEnd": 49.24,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0125",
+        "text": "esse",
+        "start": 36.24,
+        "end": 36.44,
+        "confidence": 0.942,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 49.24,
+        "srcEnd": 49.44,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0126",
+        "text": "problema",
+        "start": 36.44,
+        "end": 36.74,
+        "confidence": 0.9966,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 49.44,
+        "srcEnd": 49.74,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0127",
+        "text": "de",
+        "start": 36.74,
+        "end": 37.04,
+        "confidence": 0.9352,
+        "timing": "word",
+        "segment": "s12",
+        "refined": true,
+        "srcStart": 49.74,
+        "srcEnd": 50.04,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0128",
+        "text": "que",
+        "start": 37.3,
+        "end": 37.773,
+        "confidence": 0.7908,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 50.04,
+        "srcEnd": 50.94,
+        "clipped": true,
+        "afterCut": true
+      },
+      {
+        "id": "w0129",
+        "text": "a",
+        "start": 37.773,
+        "end": 38.233,
+        "confidence": 0.9306,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 50.94,
+        "srcEnd": 51.4,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0130",
+        "text": "gente",
+        "start": 38.233,
+        "end": 38.353,
+        "confidence": 0.9997,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 51.4,
+        "srcEnd": 51.52,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0131",
+        "text": "foca",
+        "start": 38.353,
+        "end": 38.613,
+        "confidence": 0.9701,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 51.52,
+        "srcEnd": 51.78,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0132",
+        "text": "muito",
+        "start": 38.613,
+        "end": 38.793,
+        "confidence": 0.9717,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 51.78,
+        "srcEnd": 51.96,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0133",
+        "text": "na",
+        "start": 38.793,
+        "end": 38.913,
+        "confidence": 0.9454,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 51.96,
+        "srcEnd": 52.08,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0134",
+        "text": "tecnologia",
+        "start": 38.913,
+        "end": 39.393,
+        "confidence": 0.9979,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 52.08,
+        "srcEnd": 52.56,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0135",
+        "text": "e",
+        "start": 39.393,
+        "end": 39.613,
+        "confidence": 0.2452,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 52.56,
+        "srcEnd": 52.78,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0136",
+        "text": "quer",
+        "start": 39.613,
+        "end": 39.713,
+        "confidence": 0.911,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 52.78,
+        "srcEnd": 52.88,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0137",
+        "text": "refinar,",
+        "start": 39.713,
+        "end": 40.053,
+        "confidence": 0.8105,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 52.88,
+        "srcEnd": 53.22,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0138",
+        "text": "refinar,",
+        "start": 40.173,
+        "end": 40.393,
+        "confidence": 0.9768,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 53.34,
+        "srcEnd": 53.56,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0139",
+        "text": "refinar,",
+        "start": 40.493,
+        "end": 40.713,
+        "confidence": 0.9841,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 53.66,
+        "srcEnd": 53.88,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0140",
+        "text": "refinar,",
+        "start": 40.753,
+        "end": 41.013,
+        "confidence": 0.7133,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 53.92,
+        "srcEnd": 54.18,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0141",
+        "text": "mas",
+        "start": 41.333,
+        "end": 41.353,
+        "confidence": 0.3088,
+        "timing": "word",
+        "segment": "s13",
+        "srcStart": 54.5,
+        "srcEnd": 54.52,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0142",
+        "text": "quando",
+        "start": 41.333,
+        "end": 41.7,
+        "confidence": 0.856,
+        "timing": "word",
+        "segment": "s13",
+        "refined": true,
+        "srcStart": 54.5,
+        "srcEnd": 55.34,
+        "clipped": true,
+        "afterCut": false
+      },
+      {
+        "id": "w0143",
+        "text": "pro",
+        "start": 42.04,
+        "end": 42.347,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s14",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 55.34,
+        "srcEnd": 55.647,
+        "clipped": false,
+        "afterCut": true
+      },
+      {
+        "id": "w0143.1",
+        "text": "próprio",
+        "start": 42.347,
+        "end": 42.653,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s14",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 55.647,
+        "srcEnd": 55.953,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0143.2",
+        "text": "cliente",
+        "start": 42.653,
+        "end": 42.96,
+        "confidence": null,
+        "timing": "interpolated",
+        "segment": "s14",
+        "corrected": true,
+        "refined": true,
+        "srcStart": 55.953,
+        "srcEnd": 56.26,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0147",
+        "text": "aquilo",
+        "start": 42.96,
+        "end": 43.22,
+        "confidence": 0.899,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 56.26,
+        "srcEnd": 56.52,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0148",
+        "text": "não",
+        "start": 43.22,
+        "end": 43.38,
+        "confidence": 0.461,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 56.52,
+        "srcEnd": 56.68,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0149",
+        "text": "é",
+        "start": 43.38,
+        "end": 43.46,
+        "confidence": 0.9543,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 56.68,
+        "srcEnd": 56.76,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0150",
+        "text": "importante",
+        "start": 43.46,
+        "end": 43.86,
+        "confidence": 0.9883,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 56.76,
+        "srcEnd": 57.16,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0151",
+        "text": "porque",
+        "start": 43.86,
+        "end": 44.22,
+        "confidence": 0.8569,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 57.16,
+        "srcEnd": 57.52,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0152",
+        "text": "o",
+        "start": 44.22,
+        "end": 44.34,
+        "confidence": 0.9316,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 57.52,
+        "srcEnd": 57.64,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0153",
+        "text": "que",
+        "start": 44.34,
+        "end": 44.38,
+        "confidence": 0.7702,
+        "timing": "word",
+        "segment": "s14",
+        "srcStart": 57.64,
+        "srcEnd": 57.68,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0154",
+        "text": "ele",
+        "start": 44.38,
+        "end": 44.54,
+        "confidence": 0.8417,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 57.68,
+        "srcEnd": 57.84,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0155",
+        "text": "quer,",
+        "start": 44.54,
+        "end": 44.78,
+        "confidence": 0.9867,
+        "timing": "word",
+        "segment": "s14",
+        "refined": true,
+        "srcStart": 57.84,
+        "srcEnd": 58.08,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0156",
+        "text": "o",
+        "start": 45.04,
+        "end": 45.14,
+        "confidence": 0.9671,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 58.34,
+        "srcEnd": 58.44,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0157",
+        "text": "sistema",
+        "start": 45.14,
+        "end": 45.36,
+        "confidence": 0.9925,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 58.44,
+        "srcEnd": 58.66,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0158",
+        "text": "funcionando,",
+        "start": 45.36,
+        "end": 46.04,
+        "confidence": 0.9599,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 58.66,
+        "srcEnd": 59.34,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0159",
+        "text": "ele",
+        "start": 46.2,
+        "end": 46.28,
+        "confidence": 0.937,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 59.5,
+        "srcEnd": 59.58,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0160",
+        "text": "quer",
+        "start": 46.28,
+        "end": 46.46,
+        "confidence": 0.9934,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 59.58,
+        "srcEnd": 59.76,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0161",
+        "text": "que",
+        "start": 46.46,
+        "end": 46.58,
+        "confidence": 0.9132,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 59.76,
+        "srcEnd": 59.88,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0162",
+        "text": "o",
+        "start": 46.58,
+        "end": 46.64,
+        "confidence": 0.95,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 59.88,
+        "srcEnd": 59.94,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0163",
+        "text": "sistema",
+        "start": 46.64,
+        "end": 47.08,
+        "confidence": 0.9988,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 59.94,
+        "srcEnd": 60.38,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0164",
+        "text": "faça",
+        "start": 47.08,
+        "end": 48.74,
+        "confidence": 0.9526,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 60.38,
+        "srcEnd": 62.04,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0165",
+        "text": "ele",
+        "start": 48.74,
+        "end": 48.82,
+        "confidence": 0.667,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 62.04,
+        "srcEnd": 62.12,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0166",
+        "text": "economizar",
+        "start": 48.82,
+        "end": 49.24,
+        "confidence": 0.933,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 62.12,
+        "srcEnd": 62.54,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0167",
+        "text": "dinheiro,",
+        "start": 49.24,
+        "end": 49.66,
+        "confidence": 0.9904,
+        "timing": "word",
+        "segment": "s15",
+        "refined": true,
+        "srcStart": 62.54,
+        "srcEnd": 62.96,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0168",
+        "text": "ou",
+        "start": 49.98,
+        "end": 50,
+        "confidence": 0.7035,
+        "timing": "word",
+        "segment": "s16",
+        "srcStart": 63.28,
+        "srcEnd": 63.300000000000004,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0169",
+        "text": "tempo,",
+        "start": 49.98,
+        "end": 50.36,
+        "confidence": 0.9728,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 63.28,
+        "srcEnd": 63.66,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0170",
+        "text": "ou",
+        "start": 50.7,
+        "end": 50.84,
+        "confidence": 0.9967,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 64,
+        "srcEnd": 64.14,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0171",
+        "text": "ambos,",
+        "start": 50.84,
+        "end": 51.18,
+        "confidence": 0.9776,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 64.14,
+        "srcEnd": 64.48,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0172",
+        "text": "então",
+        "start": 51.52,
+        "end": 51.9,
+        "confidence": 0.9642,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 64.82,
+        "srcEnd": 65.2,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0173",
+        "text": "esse",
+        "start": 51.9,
+        "end": 52.68,
+        "confidence": 0.644,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 65.2,
+        "srcEnd": 65.98,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0174",
+        "text": "é",
+        "start": 52.68,
+        "end": 52.76,
+        "confidence": 0.9465,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 65.98,
+        "srcEnd": 66.06,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0175",
+        "text": "o",
+        "start": 52.76,
+        "end": 52.78,
+        "confidence": 0.7546,
+        "timing": "word",
+        "segment": "s16",
+        "srcStart": 66.06,
+        "srcEnd": 66.08,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0176",
+        "text": "meu",
+        "start": 52.78,
+        "end": 52.84,
+        "confidence": 0.9804,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 66.08,
+        "srcEnd": 66.14,
+        "clipped": false,
+        "afterCut": false
+      },
+      {
+        "id": "w0177",
+        "text": "ruim.",
+        "start": 52.84,
+        "end": 52.98,
+        "confidence": 0.0769,
+        "timing": "word",
+        "segment": "s16",
+        "refined": true,
+        "srcStart": 66.14,
+        "srcEnd": 66.28,
+        "clipped": false
+      }
+    ],
+    "hiddenWords": [
+      "w0177"
+    ],
+    "fontsDir": "fonts"
+  },
+  "overlays": [
+    {
+      "id": "tese",
+      "kind": "title",
+      "at": {
+        "dst": 0
+      },
+      "durationSec": 2.6,
+      "leadSec": 0,
+      "lines": [
+        {
+          "text": "IA na programação",
+          "accent": true
+        }
+      ],
+      "dst": [
+        0,
+        2.033333
+      ],
+      "anchor": {
+        "t": 0,
+        "how": "dst"
+      }
+    },
+    {
+      "id": "opcional",
+      "kind": "label",
+      "at": {
+        "match": "não é mais algo opcional"
+      },
+      "until": {
+        "match": "e logo após isso"
+      },
+      "eyebrow": "// 2022 · ChatGPT",
+      "title": "Não é mais opcional",
+      "dst": [
+        2.033333,
+        8.433333
+      ],
+      "anchor": {
+        "t": 2.137,
+        "how": "match",
+        "word": "w0031",
+        "endWordIdx": 9
+      }
+    },
+    {
+      "id": "ferramentas",
+      "kind": "label",
+      "at": {
+        "match": "vieram outras ferramentas"
+      },
+      "until": {
+        "match": "se você dev"
+      },
+      "eyebrow": "// e logo vieram",
+      "chips": [
+        "Antigravity",
+        "Codex",
+        "Claude Code"
+      ],
+      "steps": [
+        {
+          "at": {
+            "match": "Antigravity"
+          },
+          "dst": 10.533333333333333
+        },
+        {
+          "at": {
+            "match": "Codex"
+          },
+          "dst": 11.433333333333334
+        },
+        {
+          "at": {
+            "match": "Claude Code"
+          },
+          "dst": 12.566666666666666
+        }
+      ],
+      "dst": [
+        9.033333,
+        13.9
+      ],
+      "anchor": {
+        "t": 9.14,
+        "how": "match",
+        "word": "w0049",
+        "endWordIdx": 27
+      }
+    },
+    {
+      "id": "foco",
+      "kind": "list",
+      "at": {
+        "match": "código"
+      },
+      "until": {
+        "match": "nós desenvolvedores"
+      },
+      "eyebrow": "// seu foco passa a ser",
+      "items": [
+        "código",
+        "regra de negócio",
+        "produto"
+      ],
+      "steps": [
+        {
+          "at": {
+            "match": "código"
+          },
+          "dst": 27.033333333333335
+        },
+        {
+          "at": {
+            "match": "regra de negócio"
+          },
+          "dst": 28.8
+        },
+        {
+          "at": {
+            "match": "no produto"
+          },
+          "dst": 33
+        }
+      ],
+      "dst": [
+        26.933333,
+        34.966667
+      ],
+      "anchor": {
+        "t": 27.04,
+        "how": "match",
+        "word": "w0098",
+        "endWordIdx": 74
+      }
+    },
+    {
+      "id": "problema",
+      "kind": "label",
+      "at": {
+        "match": "nós desenvolvedores"
+      },
+      "until": {
+        "match": "mas quando pro próprio cliente"
+      },
+      "eyebrow": "// nosso problema",
+      "title": "a gente foca muito na tecnologia",
+      "dst": [
+        34.966667,
+        41.333333
+      ],
+      "anchor": {
+        "t": 35.06,
+        "how": "match",
+        "word": "w0121",
+        "endWordIdx": 97
+      }
+    },
+    {
+      "id": "cliente",
+      "kind": "label",
+      "at": {
+        "match": "o que ele quer"
+      },
+      "durationSec": 30,
+      "eyebrow": "// o que o cliente quer",
+      "title": "o sistema funcionando",
+      "chips": [
+        "dinheiro",
+        "tempo",
+        "ambos"
+      ],
+      "steps": [
+        {
+          "at": {
+            "match": "dinheiro"
+          },
+          "dst": 49.233333333333334
+        },
+        {
+          "at": {
+            "match": "tempo"
+          },
+          "dst": 49.96666666666667
+        },
+        {
+          "at": {
+            "match": "ambos"
+          },
+          "dst": 50.833333333333336
+        }
+      ],
+      "dst": [
+        44.133333,
+        53.1
+      ],
+      "anchor": {
+        "t": 44.22,
+        "how": "match",
+        "word": "w0152",
+        "endWordIdx": 127
+      }
+    }
+  ],
+  "overlayStyle": {
+    "fontsDir": "fonts",
+    "fonts": [
+      {
+        "family": "Inter",
+        "weight": 700,
+        "file": "Inter-700.woff2"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": 700,
+        "file": "JetBrainsMono-700.woff2"
+      }
+    ],
+    "topY": 0.1
+  },
+  "transitions": [],
+  "export": {
+    "video": {
+      "codec": "libx264",
+      "profile": "high",
+      "pixFmt": "yuv420p",
+      "crf": 18,
+      "preset": "medium",
+      "gop": 60,
+      "colorPrimaries": "bt709"
+    },
+    "audio": {
+      "codec": "aac",
+      "bitrate": "192k",
+      "sampleRate": 48000,
+      "channels": 2
+    },
+    "preview": {
+      "width": 540,
+      "height": 960,
+      "crf": 28,
+      "preset": "veryfast"
+    },
+    "loudness": {
+      "targetLufs": -14,
+      "truePeakDb": -1.5
+    }
+  },
+  "stats": {
+    "sourceSec": 66.401,
+    "outputSec": 53.1,
+    "removedSec": 13.301,
+    "cuts": 5,
+    "zoomCuts": 10,
+    "wordsKept": 153,
+    "wordsRemovedByDecision": 27,
+    "wordsLostUnexpected": 0
+  },
+  "review": [
+    {
+      "src": [
+        8.56,
+        9.94
+      ],
+      "reason": "confirmar remoção da repetição: \"Já é uma realidade, já é uma realidade,\"",
+      "by": "engine"
+    },
+    {
+      "src": [
+        52.88,
+        54.18
+      ],
+      "reason": "repetição enfática mantida: \"refinar, refinar, refinar, refinar,\"",
+      "by": "engine"
+    },
+    {
+      "src": [
+        0,
+        7.6
+      ],
+      "reason": "possível recomeço: \"entao eu gostaria de…\" também começa em 24.68s — avalie excluir uma das tomadas",
+      "by": "engine"
+    },
+    {
+      "src": [
+        38.28,
+        43.84
+      ],
+      "reason": "possível recomeço: \"voce passa a focar…\" também começa em 44.74s — avalie excluir uma das tomadas",
+      "by": "engine"
+    },
+    {
+      "src": [
+        18.74,
+        18.84
+      ],
+      "dst": [
+        8.44,
+        8.54
+      ],
+      "reason": "baixa confiança no reconhecimento: \"E\" (0.33)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        18.84,
+        18.98
+      ],
+      "dst": [
+        8.54,
+        8.68
+      ],
+      "reason": "baixa confiança no reconhecimento: \"logo\" (0.28)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        20.72,
+        20.84
+      ],
+      "dst": [
+        10.42,
+        10.54
+      ],
+      "reason": "baixa confiança no reconhecimento: \"o\" (0.3)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        29.44,
+        30.06
+      ],
+      "dst": [
+        16.44,
+        17.06
+      ],
+      "reason": "baixa confiança no reconhecimento: \"Mas\" (0.05)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        30.06,
+        30.86
+      ],
+      "dst": [
+        17.233,
+        17.86
+      ],
+      "reason": "baixa confiança no reconhecimento: \"utilizar\" (0.47)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        31.16,
+        31.36
+      ],
+      "dst": [
+        18.16,
+        18.36
+      ],
+      "reason": "baixa confiança no reconhecimento: \"te\" (0.08)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        52.56,
+        52.78
+      ],
+      "dst": [
+        39.393,
+        39.613
+      ],
+      "reason": "baixa confiança no reconhecimento: \"e\" (0.25)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        54.5,
+        54.52
+      ],
+      "dst": [
+        41.333,
+        41.353
+      ],
+      "reason": "baixa confiança no reconhecimento: \"mas\" (0.31)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        56.52,
+        56.68
+      ],
+      "dst": [
+        43.22,
+        43.38
+      ],
+      "reason": "baixa confiança no reconhecimento: \"não\" (0.46)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        66.14,
+        66.28
+      ],
+      "dst": [
+        52.84,
+        52.98
+      ],
+      "reason": "baixa confiança no reconhecimento: \"ruim.\" (0.08)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        14.9,
+        15.97
+      ],
+      "dst": [
+        4.867,
+        5.937
+      ],
+      "reason": "\"2022\" dura 1.07 s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)",
+      "by": "engine"
+    },
+    {
+      "src": [
+        60.38,
+        62.04
+      ],
+      "dst": [
+        47.08,
+        48.74
+      ],
+      "reason": "\"faça\" dura 1.66 s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)",
+      "by": "engine"
+    }
+  ],
+  "decisions": [
+    {
+      "what": "remover primeira ocorrência de \"Já é uma realidade,\" (8.56–9.94s)",
+      "why": "frase repetida em sequência (falso começo)",
+      "by": "engine"
+    },
+    {
+      "what": "excluir 0–8.5s",
+      "why": "tomada recomeçada (recomeço detectado em 24,68 s); abertura lenta; contém o texto queimado 'ESCUTA ISSO'",
+      "by": "operator"
+    },
+    {
+      "what": "excluir 24.68–26.9s",
+      "why": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'",
+      "by": "operator"
+    },
+    {
+      "what": "2 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s, 50.333→50.3s)",
+      "why": "evitar quadro órfão/micro-plano junto a emenda do celular",
+      "by": "engine"
+    },
+    {
+      "what": "ênfase (zoom 1.2) em \"se você dev não está utilizando … ficando para trás\" (s05)",
+      "why": "frase de virada do argumento",
+      "by": "operator"
+    },
+    {
+      "what": "palavra w0177 sem legenda",
+      "why": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado",
+      "by": "operator"
+    },
+    {
+      "what": "7 palavra(s) legendada(s) em linha única (y 0.696) enquanto o texto queimado está na base",
+      "why": "manter a fala legendada sem colidir com o texto do autor",
+      "by": "engine"
+    }
+  ],
+  "warnings": [
+    "Card tese encurtado para terminar quando opcional entra (mesma região da tela).",
+    "Card foco encurtado para terminar quando problema entra (mesma região da tela)."
+  ],
+  "provenance": {
+    "engine": "motion-core/reel",
+    "engineVersion": "1.1.1+reel",
+    "ffmpeg": "8.0.1-3ubuntu2",
+    "analysisSchema": "motion.reel.analysis",
+    "transcriptProvider": "faster-whisper"
+  },
+  "hash": "aaec343dfa0761fb54dba7428f21e1bd8d0b29d47a45f0d9bcec7bbe3243a5d6"
+}

@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "command": "edit transcribe",
+  "output": "transcript/raw.transcript.json",
+  "srt": "transcript/raw.asr.srt",
+  "language": "pt",
+  "languageProbability": 0.9849,
+  "words": 177,
+  "review": 23,
+  "warnings": [],
+  "provider": {
+    "id": "faster-whisper",
+    "model": {
+      "name": "small",
+      "computeType": "int8",
+      "device": "cpu",
+      "repo": "Systran/faster-whisper-small",
+      "revision": "536b0662742c02347bc0e980a01041f333bce120",
+      "path": "~/.local/share/motion/stt/models/models--Systran--faster-whisper-small/snapshots/536b0662742c02347bc0e980a01041f333bce120"
+    },
+    "versions": {
+      "faster_whisper": "1.2.1",
+      "ctranslate2": "4.9.1",
+      "numpy": "2.5.5",
+      "python": "3.14.4"
+    },
+    "decoding": {
+      "beamSize": 5,
+      "temperature": [
+        0,
+        0.2,
+        0.4,
+        0.6,
+        0.8,
+        1
+      ],
+      "seed": 1,
+      "compressionRatioThreshold": 2.4,
+      "logProbThreshold": -1,
+      "wordTimestamps": true,
+      "vadFilter": false,
+      "conditionOnPreviousText": false,
+      "hotwords": "IA, ChatGPT, Claude Code, Anthropic, Codex, Antigravity, dev, programação",
+      "initialPrompt": null
+    },
+    "timing": {
+      "loadSec": 2.21,
+      "transcribeSec": 35.49
+    }
+  }
+}

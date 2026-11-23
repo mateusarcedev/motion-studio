@@ -1,0 +1,309 @@
+{
+  "preset": "talking-head",
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "faceBox": {
+    "x": 0.18,
+    "y": 0.31,
+    "w": 0.62,
+    "h": 0.5
+  },
+  "faceBoxSource": "operator",
+  "exclude": [
+    [
+      0,
+      8.5
+    ],
+    [
+      24.68,
+      26.89
+    ]
+  ],
+  "excludeReasons": {
+    "0-8.5": "tomada recomeçada (recomeço detectado em 24,68 s); abertura lenta; contém o texto queimado 'ESCUTA ISSO'",
+    "24.68-26.89": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'"
+  },
+  "emphasis": [
+    {
+      "match": "se você dev não está utilizando",
+      "until": "ficando para trás",
+      "zoom": 1.2,
+      "why": "frase de virada do argumento"
+    }
+  ],
+  "corrections": [
+    {
+      "wordIds": [
+        "w0068"
+      ],
+      "text": "dev",
+      "reason": "termo do glossário reconhecido como 'deve'",
+      "by": "operator",
+      "evidence": "legendas.srt (legenda humana do mesmo take): 'se você dev não está utilizando'"
+    },
+    {
+      "wordIds": [
+        "w0054"
+      ],
+      "text": "Antigravity,",
+      "reason": "nome de produto reconhecido como 'AdGravity'",
+      "by": "operator",
+      "evidence": "legendas.srt: 'como o Antigravity Codex'"
+    },
+    {
+      "wordIds": [
+        "w0056",
+        "w0057",
+        "w0058",
+        "w0059"
+      ],
+      "text": "o próprio Claude Code da Anthropic",
+      "reason": "ASR omitiu 'próprio' e 'da'",
+      "by": "operator",
+      "evidence": "legendas.srt: 'o próprio Claude Code da Anthropic'"
+    },
+    {
+      "wordIds": [
+        "w0143",
+        "w0144",
+        "w0145",
+        "w0146"
+      ],
+      "text": "pro próprio cliente",
+      "reason": "trecho irreconhecível 'para o pro -aroclente'",
+      "by": "operator",
+      "evidence": "legendas.srt: 'Mas quando pro próprio cliente aquilo não é importante'"
+    },
+    {
+      "wordIds": [
+        "w0043"
+      ],
+      "text": "ChatGPT",
+      "reason": "confirmação de palavra de baixa confiança (0,10)",
+      "by": "operator",
+      "evidence": "legendas.srt: 'quando o ChatGPT surgiu'"
+    },
+    {
+      "wordIds": [
+        "w0079"
+      ],
+      "text": "IA",
+      "reason": "confirmação de palavra de baixa confiança (0,06)",
+      "by": "operator",
+      "evidence": "legendas.srt: 'Utilizar IA traz muitos benefícios'"
+    },
+    {
+      "wordIds": [
+        "w0084"
+      ],
+      "text": "traz muitas",
+      "reason": "ASR omitiu 'traz' (fala contínua de 3,3 s com só 3 palavras reconhecidas)",
+      "by": "operator",
+      "evidence": "legendas.srt (legenda humana do mesmo take): 'traz muitas possibilidades'"
+    },
+    {
+      "wordIds": [
+        "w0086"
+      ],
+      "text": "traz muita",
+      "reason": "ASR omitiu 'traz' e reconheceu 'muito' (confiança 0,20)",
+      "by": "operator",
+      "evidence": "legendas.srt: 'traz muita rapidez'"
+    }
+  ],
+  "captions": {
+    "fontsDir": "fonts",
+    "fontFamily": "Inter",
+    "fontWeight": 700,
+    "platform": "instagram-reels",
+    "hideWords": [
+      {
+        "wordId": "w0177",
+        "reason": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado"
+      }
+    ]
+  },
+  "overlayStyle": {
+    "fontsDir": "fonts",
+    "fonts": [
+      {
+        "family": "Inter",
+        "weight": 700,
+        "file": "Inter-700.woff2"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": 700,
+        "file": "JetBrainsMono-700.woff2"
+      }
+    ],
+    "topY": 0.1
+  },
+  "overlays": [
+    {
+      "id": "tese",
+      "kind": "title",
+      "at": {
+        "dst": 0
+      },
+      "durationSec": 2.6,
+      "leadSec": 0,
+      "lines": [
+        {
+          "text": "IA na programação",
+          "accent": true
+        }
+      ]
+    },
+    {
+      "id": "opcional",
+      "kind": "label",
+      "at": {
+        "match": "não é mais algo opcional"
+      },
+      "until": {
+        "match": "e logo após isso"
+      },
+      "eyebrow": "// 2022 · ChatGPT",
+      "title": "Não é mais opcional"
+    },
+    {
+      "id": "ferramentas",
+      "kind": "label",
+      "at": {
+        "match": "vieram outras ferramentas"
+      },
+      "until": {
+        "match": "se você dev"
+      },
+      "eyebrow": "// e logo vieram",
+      "chips": [
+        "Antigravity",
+        "Codex",
+        "Claude Code"
+      ],
+      "steps": [
+        {
+          "at": {
+            "match": "Antigravity"
+          }
+        },
+        {
+          "at": {
+            "match": "Codex"
+          }
+        },
+        {
+          "at": {
+            "match": "Claude Code"
+          }
+        }
+      ]
+    },
+    {
+      "id": "foco",
+      "kind": "list",
+      "at": {
+        "match": "código"
+      },
+      "until": {
+        "match": "nós desenvolvedores"
+      },
+      "eyebrow": "// seu foco passa a ser",
+      "items": [
+        "código",
+        "regra de negócio",
+        "produto"
+      ],
+      "steps": [
+        {
+          "at": {
+            "match": "código"
+          }
+        },
+        {
+          "at": {
+            "match": "regra de negócio"
+          }
+        },
+        {
+          "at": {
+            "match": "no produto"
+          }
+        }
+      ]
+    },
+    {
+      "id": "problema",
+      "kind": "label",
+      "at": {
+        "match": "nós desenvolvedores"
+      },
+      "until": {
+        "match": "mas quando pro próprio cliente"
+      },
+      "eyebrow": "// nosso problema",
+      "title": "a gente foca muito na tecnologia"
+    },
+    {
+      "id": "cliente",
+      "kind": "label",
+      "at": {
+        "match": "o que ele quer"
+      },
+      "durationSec": 30,
+      "eyebrow": "// o que o cliente quer",
+      "title": "o sistema funcionando",
+      "chips": [
+        "dinheiro",
+        "tempo",
+        "ambos"
+      ],
+      "steps": [
+        {
+          "at": {
+            "match": "dinheiro"
+          }
+        },
+        {
+          "at": {
+            "match": "tempo"
+          }
+        },
+        {
+          "at": {
+            "match": "ambos"
+          }
+        }
+      ]
+    }
+  ],
+  "transitions": [],
+  "burnedText": [
+    {
+      "src": [
+        0.13,
+        1.83
+      ],
+      "region": "top",
+      "text": "ESCUTA ISSO"
+    },
+    {
+      "src": [
+        63.9,
+        66.401
+      ],
+      "region": "bottom",
+      "text": "E VOCÊ, O QUE ACHA?"
+    }
+  ],
+  "audio": {
+    "preset": "noisy-room"
+  },
+  "keywords": [
+    "trás"
+  ]
+}

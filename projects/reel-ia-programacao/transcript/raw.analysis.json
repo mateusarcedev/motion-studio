@@ -1,0 +1,517 @@
+{
+  "schema": "motion.reel.analysis",
+  "schemaVersion": 1,
+  "source": {
+    "path": "out/source/reels-motion.mp4",
+    "sha256": "a62139faf67b6271142ecfcf1791324d4ecce9da5c548283a185320d73750824",
+    "bytes": 39510896
+  },
+  "probe": {
+    "path": "out/source/reels-motion.mp4",
+    "bytes": 39510896,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "durationSec": 66.401,
+    "bitRate": 4760277,
+    "video": {
+      "codec": "h264",
+      "profile": "High",
+      "pixFmt": "yuv420p",
+      "codedWidth": 1080,
+      "codedHeight": 1920,
+      "width": 1080,
+      "height": 1920,
+      "rotation": 0,
+      "fps": 30,
+      "nominalFps": 30,
+      "vfr": false,
+      "frames": 1992,
+      "bitRate": 4589540,
+      "colorSpace": "bt709",
+      "colorTransfer": "bt709",
+      "startTime": 0
+    },
+    "audio": {
+      "codec": "aac",
+      "sampleRate": 48000,
+      "channels": 2,
+      "channelLayout": "stereo",
+      "bitRate": 161773,
+      "startTime": 0,
+      "durationSec": 66.401
+    },
+    "streams": 2
+  },
+  "audio": {
+    "loudness": {
+      "integratedLufs": -16.17,
+      "truePeakDbtp": -1.16,
+      "lraLu": 2.4,
+      "thresholdLufs": -26.26
+    },
+    "stats": {
+      "peakDb": -2.065948,
+      "rmsDb": -18.928703,
+      "crestFactor": null,
+      "dcOffset": 0.00001,
+      "flatFactor": 0
+    },
+    "hum": {
+      "detected": true,
+      "baseHz": 60,
+      "harmonics": [
+        60
+      ],
+      "referenceDb": -56.8,
+      "excessDb": {
+        "60": 18.4
+      },
+      "regions": [
+        [
+          22.1,
+          22.95
+        ],
+        [
+          24.61,
+          25.15
+        ],
+        [
+          2.56,
+          3.07
+        ]
+      ]
+    },
+    "noiseFloorDb": -31.9,
+    "speechLevelDb": -13.9,
+    "vadThresholdDb": -25.9,
+    "snrDb": 18,
+    "speech": [
+      {
+        "start": 0.21,
+        "end": 1.94
+      },
+      {
+        "start": 2.16,
+        "end": 2.56
+      },
+      {
+        "start": 3.07,
+        "end": 4.55
+      },
+      {
+        "start": 4.74,
+        "end": 6.16
+      },
+      {
+        "start": 6.59,
+        "end": 7.7
+      },
+      {
+        "start": 8.17,
+        "end": 9.79
+      },
+      {
+        "start": 10.13,
+        "end": 11.99
+      },
+      {
+        "start": 12.17,
+        "end": 15.97
+      },
+      {
+        "start": 16.2,
+        "end": 17.35
+      },
+      {
+        "start": 17.56,
+        "end": 18.24
+      },
+      {
+        "start": 18.74,
+        "end": 21.5
+      },
+      {
+        "start": 21.72,
+        "end": 22.1
+      },
+      {
+        "start": 22.95,
+        "end": 24.61
+      },
+      {
+        "start": 25.15,
+        "end": 25.61
+      },
+      {
+        "start": 25.97,
+        "end": 29.46
+      },
+      {
+        "start": 29.68,
+        "end": 30.13
+      },
+      {
+        "start": 30.31,
+        "end": 32.39
+      },
+      {
+        "start": 32.57,
+        "end": 33.35
+      },
+      {
+        "start": 33.65,
+        "end": 35.73
+      },
+      {
+        "start": 35.91,
+        "end": 40.97
+      },
+      {
+        "start": 41.17,
+        "end": 41.68
+      },
+      {
+        "start": 41.99,
+        "end": 44.65
+      },
+      {
+        "start": 44.83,
+        "end": 50.19
+      },
+      {
+        "start": 50.57,
+        "end": 54.73
+      },
+      {
+        "start": 55.11,
+        "end": 60.73
+      },
+      {
+        "start": 61.05,
+        "end": 61.65
+      },
+      {
+        "start": 61.86,
+        "end": 64.58
+      },
+      {
+        "start": 64.77,
+        "end": 65.66
+      },
+      {
+        "start": 65.85,
+        "end": 66.31
+      }
+    ],
+    "pauses": [
+      {
+        "start": 0,
+        "end": 0.21,
+        "duration": 0.21,
+        "kind": "leading"
+      },
+      {
+        "start": 1.94,
+        "end": 2.16,
+        "duration": 0.22,
+        "kind": "gap"
+      },
+      {
+        "start": 2.56,
+        "end": 3.07,
+        "duration": 0.51,
+        "kind": "gap"
+      },
+      {
+        "start": 4.55,
+        "end": 4.74,
+        "duration": 0.19,
+        "kind": "gap"
+      },
+      {
+        "start": 6.16,
+        "end": 6.59,
+        "duration": 0.43,
+        "kind": "gap"
+      },
+      {
+        "start": 7.7,
+        "end": 8.17,
+        "duration": 0.47,
+        "kind": "gap"
+      },
+      {
+        "start": 9.79,
+        "end": 10.13,
+        "duration": 0.34,
+        "kind": "gap"
+      },
+      {
+        "start": 11.99,
+        "end": 12.17,
+        "duration": 0.18,
+        "kind": "gap"
+      },
+      {
+        "start": 15.97,
+        "end": 16.2,
+        "duration": 0.23,
+        "kind": "gap"
+      },
+      {
+        "start": 17.35,
+        "end": 17.56,
+        "duration": 0.21,
+        "kind": "gap"
+      },
+      {
+        "start": 18.24,
+        "end": 18.74,
+        "duration": 0.5,
+        "kind": "gap"
+      },
+      {
+        "start": 21.5,
+        "end": 21.72,
+        "duration": 0.22,
+        "kind": "gap"
+      },
+      {
+        "start": 22.1,
+        "end": 22.95,
+        "duration": 0.85,
+        "kind": "gap"
+      },
+      {
+        "start": 24.61,
+        "end": 25.15,
+        "duration": 0.54,
+        "kind": "gap"
+      },
+      {
+        "start": 25.61,
+        "end": 25.97,
+        "duration": 0.36,
+        "kind": "gap"
+      },
+      {
+        "start": 29.46,
+        "end": 29.68,
+        "duration": 0.22,
+        "kind": "gap"
+      },
+      {
+        "start": 30.13,
+        "end": 30.31,
+        "duration": 0.18,
+        "kind": "gap"
+      },
+      {
+        "start": 32.39,
+        "end": 32.57,
+        "duration": 0.18,
+        "kind": "gap"
+      },
+      {
+        "start": 33.35,
+        "end": 33.65,
+        "duration": 0.3,
+        "kind": "gap"
+      },
+      {
+        "start": 35.73,
+        "end": 35.91,
+        "duration": 0.18,
+        "kind": "gap"
+      },
+      {
+        "start": 40.97,
+        "end": 41.17,
+        "duration": 0.2,
+        "kind": "gap"
+      },
+      {
+        "start": 41.68,
+        "end": 41.99,
+        "duration": 0.31,
+        "kind": "gap"
+      },
+      {
+        "start": 44.65,
+        "end": 44.83,
+        "duration": 0.18,
+        "kind": "gap"
+      },
+      {
+        "start": 50.19,
+        "end": 50.57,
+        "duration": 0.38,
+        "kind": "gap"
+      },
+      {
+        "start": 54.73,
+        "end": 55.11,
+        "duration": 0.38,
+        "kind": "gap"
+      },
+      {
+        "start": 60.73,
+        "end": 61.05,
+        "duration": 0.32,
+        "kind": "gap"
+      },
+      {
+        "start": 61.65,
+        "end": 61.86,
+        "duration": 0.21,
+        "kind": "gap"
+      },
+      {
+        "start": 64.58,
+        "end": 64.77,
+        "duration": 0.19,
+        "kind": "gap"
+      },
+      {
+        "start": 65.66,
+        "end": 65.85,
+        "duration": 0.19,
+        "kind": "gap"
+      },
+      {
+        "start": 66.31,
+        "end": 66.401,
+        "duration": 0.091,
+        "kind": "trailing"
+      }
+    ],
+    "speechSec": 57.43,
+    "speechRatio": 0.865,
+    "cutOpportunities": {
+      "pausesOver300ms": 13,
+      "removableSec": 2.57
+    },
+    "envelope": {
+      "hopSec": 0.01,
+      "frames": 6631,
+      "note": "envelope completo não é serializado; recalculado sob demanda"
+    }
+  },
+  "warnings": [
+    "18 descontinuidade(s) já existentes na fonte (emendas/saltos): 0.1333s, 7.8s, 8.7667s, 12.1s, 18.3667s, 24.8333s, 25.0333s, 29.5667s, 30.2333s, 32.5333s, 33.6s, 36.6s, 39.3s, 41.8s, 48s, 50.3s, 64.6667s, 65.7667s."
+  ],
+  "recommendations": {
+    "voicePreset": "noisy-room"
+  },
+  "video": {
+    "sourceCuts": [
+      {
+        "t": 0.1333,
+        "frame": 4,
+        "score": 0.305,
+        "localMedian": 0.002
+      },
+      {
+        "t": 7.8,
+        "frame": 234,
+        "score": 0.098,
+        "localMedian": 0.0043
+      },
+      {
+        "t": 8.7667,
+        "frame": 263,
+        "score": 0.117,
+        "localMedian": 0.0017
+      },
+      {
+        "t": 12.1,
+        "frame": 363,
+        "score": 0.052,
+        "localMedian": 0.0008
+      },
+      {
+        "t": 18.3667,
+        "frame": 551,
+        "score": 0.083,
+        "localMedian": 0.0029
+      },
+      {
+        "t": 24.8333,
+        "frame": 745,
+        "score": 0.052,
+        "localMedian": 0.0011
+      },
+      {
+        "t": 25.0333,
+        "frame": 751,
+        "score": 0.092,
+        "localMedian": 0.001
+      },
+      {
+        "t": 29.5667,
+        "frame": 887,
+        "score": 0.129,
+        "localMedian": 0.0014
+      },
+      {
+        "t": 30.2333,
+        "frame": 907,
+        "score": 0.101,
+        "localMedian": 0.0012
+      },
+      {
+        "t": 32.5333,
+        "frame": 976,
+        "score": 0.158,
+        "localMedian": 0.0021
+      },
+      {
+        "t": 33.6,
+        "frame": 1008,
+        "score": 0.142,
+        "localMedian": 0.0033
+      },
+      {
+        "t": 36.6,
+        "frame": 1098,
+        "score": 0.102,
+        "localMedian": 0.0019
+      },
+      {
+        "t": 39.3,
+        "frame": 1179,
+        "score": 0.088,
+        "localMedian": 0.0015
+      },
+      {
+        "t": 41.8,
+        "frame": 1254,
+        "score": 0.069,
+        "localMedian": 0.0015
+      },
+      {
+        "t": 48,
+        "frame": 1440,
+        "score": 0.074,
+        "localMedian": 0.0019
+      },
+      {
+        "t": 50.3,
+        "frame": 1509,
+        "score": 0.177,
+        "localMedian": 0.0015
+      },
+      {
+        "t": 64.6667,
+        "frame": 1940,
+        "score": 0.075,
+        "localMedian": 0.0012
+      },
+      {
+        "t": 65.7667,
+        "frame": 1973,
+        "score": 0.151,
+        "localMedian": 0.0013
+      }
+    ]
+  }
+}

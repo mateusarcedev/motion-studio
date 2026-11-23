@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "project": "reel-ia-programacao",
+  "portable": true,
+  "artifacts": [
+    {
+      "path": "out/final/reel.mp4",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.voice.wav",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.captions.srt",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.captions.words.srt",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.captions.ass",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.captions.json",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.timeline.json",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "out/final/reel.render.json",
+      "role": "deliverable",
+      "required": true
+    },
+    {
+      "path": "edit.json",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "edit.config.json",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "BRIEF.md",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "STYLE.md",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "EDIT_PLAN.md",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "README.md",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "benchmark.mjs",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "transcript/raw.transcript.json",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "transcript/raw.analysis.json",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "transcript/raw.asr.srt",
+      "role": "source",
+      "required": true
+    },
+    {
+      "path": "reviews/qa-reel.json",
+      "role": "evidence",
+      "required": true
+    },
+    {
+      "path": "reviews/qa-reel.md",
+      "role": "evidence",
+      "required": true
+    },
+    {
+      "path": "reviews/BENCHMARK.md",
+      "role": "evidence",
+      "required": true
+    },
+    {
+      "path": "reviews/benchmark.json",
+      "role": "evidence",
+      "required": true
+    },
+    {
+      "path": "reviews/INSPECAO_VISUAL.md",
+      "role": "evidence",
+      "required": true
+    },
+    {
+      "path": "reviews/REPAIR_LOG.md",
+      "role": "evidence",
+      "required": true
+    },
+    {
+      "path": "fonts/Inter-700.woff2",
+      "role": "font",
+      "required": true
+    },
+    {
+      "path": "fonts/JetBrainsMono-700.woff2",
+      "role": "font",
+      "required": true
+    },
+    {
+      "path": "fonts/OFL-inter.txt",
+      "role": "font",
+      "required": true
+    },
+    {
+      "path": "fonts/OFL-jetbrains-mono.txt",
+      "role": "font",
+      "required": true
+    },
+    {
+      "path": "out/final/audio-ab/original.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/original-loudness-matched.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/ab-before.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/ab-after.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/previews/preview.mp4",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/frames/stills-4.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/frames/contact-sheet.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/frames/final-stills.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/frames/final-contact-sheet.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "transcript/reference.transcript.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "transcript/reference.asr.srt",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/caption_end_fullres.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/cards_fullres.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/cta_onset3.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/cutsgrid_0.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/cutsgrid_1.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/cutsgrid_2.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/end_50.9s_view.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/pair_virada_vazio.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/ref_contact.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_card_foco.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_end.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_end2.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_mas_utilizar.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_open.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_open2.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_sliver_1046.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/strip_virada.png",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/frames/stills-r1.png",
+      "role": "evidence",
+      "required": false
+    }
+  ],
+  "fonts": [
+    {
+      "family": "Inter",
+      "weight": 700,
+      "path": "fonts/Inter-700.woff2",
+      "license": "SIL Open Font License 1.1",
+      "licenseFile": "fonts/OFL-inter.txt",
+      "origin": "The Inter Project (rsms/inter), cópia do repositório MOTION (.agents/skills/hyperframes/assets/frame-presets/code-editorial/fonts/)",
+      "redistributable": true,
+      "required": true
+    },
+    {
+      "family": "JetBrains Mono",
+      "weight": 700,
+      "path": "fonts/JetBrainsMono-700.woff2",
+      "license": "SIL Open Font License 1.1",
+      "licenseFile": "fonts/OFL-jetbrains-mono.txt",
+      "origin": "JetBrains Mono Project, cópia do repositório MOTION (.agents/skills/hyperframes/assets/frame-presets/code-editorial/fonts/)",
+      "redistributable": true,
+      "required": true
+    }
+  ],
+  "notes": "Originais (reels-motion.mp4, reel-ia-programacao.mp4, legendas.srt, capa.jpg) não são redistribuídos: ficam referenciados por caminho e SHA-256 no BRIEF e na timeline."
+}

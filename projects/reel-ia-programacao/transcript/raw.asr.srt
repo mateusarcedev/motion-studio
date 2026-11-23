@@ -1,0 +1,127 @@
+1
+00:00:00,000 --> 00:00:03,160
+Então, eu gostaria de falar sobre a
+
+2
+00:00:03,160 --> 00:00:05,360
+importância de utilizar a IA na
+
+3
+00:00:05,360 --> 00:00:07,600
+programação hoje em dia
+
+4
+00:00:08,560 --> 00:00:10,800
+Já é uma realidade, já é uma realidade,
+
+5
+00:00:10,940 --> 00:00:12,040
+não temos para onde fugir
+
+6
+00:00:12,040 --> 00:00:14,900
+Não é mais algo opcional como era ali em
+
+7
+00:00:14,900 --> 00:00:18,700
+2022 quando o ChatGPT surgiu
+
+8
+00:00:18,700 --> 00:00:20,040
+E logo após isso vieram outras
+
+9
+00:00:20,040 --> 00:00:23,480
+ferramentas, como o AdGravity, Codex, o
+
+10
+00:00:23,480 --> 00:00:24,680
+Claude Code, Anthropic
+
+11
+00:00:24,680 --> 00:00:27,480
+Então, eu gostaria de falar que se você
+
+12
+00:00:27,480 --> 00:00:28,960
+deve não está utilizando, você está
+
+13
+00:00:28,960 --> 00:00:29,440
+ficando para trás
+
+14
+00:00:29,440 --> 00:00:33,420
+Mas utilizar IA te traz muitos benefícios,
+
+15
+00:00:33,680 --> 00:00:37,480
+muitas possibilidades, muito rapidez nas
+
+16
+00:00:37,480 --> 00:00:38,120
+suas entregas.
+
+17
+00:00:38,280 --> 00:00:40,300
+Você passa a focar não somente em código,
+
+18
+00:00:40,540 --> 00:00:43,580
+mas também na regra de negócio e muito
+
+19
+00:00:43,580 --> 00:00:43,840
+mais
+
+20
+00:00:43,840 --> 00:00:44,540
+do que isso.
+
+21
+00:00:44,740 --> 00:00:47,160
+Você passa a focar no produto e não na
+
+22
+00:00:47,160 --> 00:00:47,620
+tecnologia.
+
+23
+00:00:48,060 --> 00:00:49,440
+Nós desenvolvedores geralmente temos esse
+
+24
+00:00:49,440 --> 00:00:52,080
+problema de que a gente foca muito na
+
+25
+00:00:52,080 --> 00:00:52,560
+tecnologia
+
+26
+00:00:52,560 --> 00:00:54,180
+e quer refinar, refinar, refinar, refinar,
+
+27
+00:00:54,500 --> 00:00:56,520
+mas quando para o pro -aroclente aquilo
+
+28
+00:00:56,520 --> 00:00:58,440
+não é importante porque o que ele quer, o
+
+29
+00:00:58,440 --> 00:00:59,940
+sistema funcionando, ele quer que o
+
+30
+00:00:59,940 --> 00:01:02,040
+sistema faça
+
+31
+00:01:02,040 --> 00:01:04,140
+ele economizar dinheiro, ou tempo, ou
+
+32
+00:01:04,140 --> 00:01:06,280
+ambos, então esse é o meu ruim.

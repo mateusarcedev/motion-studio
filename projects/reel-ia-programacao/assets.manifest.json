@@ -1,0 +1,1388 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "@technomanceer/motion-core delivery-integrity",
+  "contract": {
+    "path": "delivery.contract.json",
+    "schemaVersion": 1,
+    "sha256": "b61602c2f6be0acd18eaef0cbbc0779811371a76030153d82571e21e9c82faf9"
+  },
+  "fonts": [
+    {
+      "family": "Inter",
+      "weight": 700,
+      "path": "fonts/Inter-700.woff2",
+      "license": "SIL Open Font License 1.1",
+      "licenseFile": "fonts/OFL-inter.txt",
+      "origin": "The Inter Project (rsms/inter), cópia do repositório MOTION (.agents/skills/hyperframes/assets/frame-presets/code-editorial/fonts/)",
+      "redistributable": true,
+      "required": true
+    },
+    {
+      "family": "JetBrains Mono",
+      "weight": 700,
+      "path": "fonts/JetBrainsMono-700.woff2",
+      "license": "SIL Open Font License 1.1",
+      "licenseFile": "fonts/OFL-jetbrains-mono.txt",
+      "origin": "JetBrains Mono Project, cópia do repositório MOTION (.agents/skills/hyperframes/assets/frame-presets/code-editorial/fonts/)",
+      "redistributable": true,
+      "required": true
+    }
+  ],
+  "files": [
+    {
+      "path": "out/final/reel.mp4",
+      "mediaType": "video/mp4",
+      "bytes": 45628131,
+      "sha256": "5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.voice.wav",
+      "mediaType": "audio/x-wav",
+      "bytes": 7646544,
+      "sha256": "522ca25806396cbc720727713a61248102283cd35e357d1149fb5f6d7301b47b",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.captions.srt",
+      "mediaType": "text/plain",
+      "bytes": 2383,
+      "sha256": "68671f0435bec8c50e42d63ac456b009ac32308d69890e0ce1a460c2a79b7d60",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.captions.words.srt",
+      "mediaType": "text/plain",
+      "bytes": 6108,
+      "sha256": "bcdf76217dff0fd3a7de79cca0e6ba5165d3e97e69deaf8662deb79a0e14c061",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.captions.ass",
+      "mediaType": "text/x-ssa",
+      "bytes": 24288,
+      "sha256": "3202c3ec8f93c93a881982e8fc8db54de4576019fc3831e4d3fdabed40e53799",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.captions.json",
+      "mediaType": "application/json",
+      "bytes": 39795,
+      "sha256": "09b3bab181011a9df0e8e4641421c49c58363e98bd906b16252dd1f16e14aee1",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.timeline.json",
+      "mediaType": "application/json",
+      "bytes": 160006,
+      "sha256": "cfe925b5f16ff85385c34d2e38c81aba6257175de08b129fc986a4521dd01763",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/reel.render.json",
+      "mediaType": "application/json",
+      "bytes": 26173,
+      "sha256": "59c0e8637b8f8a9f31f033ad5b400ea8481ff572032ca47ebc3e35c1ba5e9c40",
+      "role": "deliverable",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "edit.json",
+      "mediaType": "application/json",
+      "bytes": 160006,
+      "sha256": "cfe925b5f16ff85385c34d2e38c81aba6257175de08b129fc986a4521dd01763",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "edit.config.json",
+      "mediaType": "application/json",
+      "bytes": 6516,
+      "sha256": "775c4dc747de280f106fad8c912d4041031f320e3645cf8af54247fc17f3b1b8",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "BRIEF.md",
+      "mediaType": "text/markdown",
+      "bytes": 2775,
+      "sha256": "02121297441977fc3053f3305d9195fbec02fdc4980f8f7f2143329648c783c8",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "STYLE.md",
+      "mediaType": "text/markdown",
+      "bytes": 2370,
+      "sha256": "2a4cdcd7af8d0cc4a0fb9b76d11bfc9171ed08898779b58f4f8be031c240338a",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "EDIT_PLAN.md",
+      "mediaType": "text/markdown",
+      "bytes": 4494,
+      "sha256": "8ea444b47cd978db391b7fa2bd51053bdccd8dc383210e4c05057bcb7c32b338",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "README.md",
+      "mediaType": "text/markdown",
+      "bytes": 1951,
+      "sha256": "5d68046580742cd1e5ff04ed15aab3ac368fd52c2f92527b5f8bc05756147f32",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark.mjs",
+      "mediaType": "text/javascript",
+      "bytes": 5880,
+      "sha256": "455cacb6b1e9e79c3d96b79bf5436016d2de3115f35acd336027a125011c11b2",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "transcript/raw.transcript.json",
+      "mediaType": "application/json",
+      "bytes": 43396,
+      "sha256": "f7ad42e5faca1322451f328a74da04d95934cb6fb5fb1d6e6d4415ac4ada94a5",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "transcript/raw.analysis.json",
+      "mediaType": "application/json",
+      "bytes": 9656,
+      "sha256": "40329c00803d1f026426739987f3c15c74f17f70d723531e55dbfb80b1ea49e7",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "transcript/raw.asr.srt",
+      "mediaType": "text/plain",
+      "bytes": 2111,
+      "sha256": "f3d2078c094f65819a7304fca5b9f87cd8693486396e9b4d3d03db8274c113ca",
+      "role": "source",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/qa-reel.json",
+      "mediaType": "application/json",
+      "bytes": 13677,
+      "sha256": "2062ffadc7c6b82fd5d22265e995bb02f4942f81456bf3e6c9caab8266127d95",
+      "role": "evidence",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/qa-reel.md",
+      "mediaType": "text/markdown",
+      "bytes": 5654,
+      "sha256": "e303cb47606dd2a12477de6e0ff1a500a760c3c371a17356859ca73aa144f64b",
+      "role": "evidence",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/BENCHMARK.md",
+      "mediaType": "text/markdown",
+      "bytes": 5397,
+      "sha256": "73f34e185b2e457d8de90c512a6f6366b765b330a8b850a17c9c0ad8f7196c6a",
+      "role": "evidence",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/benchmark.json",
+      "mediaType": "application/json",
+      "bytes": 4828,
+      "sha256": "44c308c03bb4a006f88139bf18034e8eb72873e56375234ab57096f495194d5e",
+      "role": "evidence",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/INSPECAO_VISUAL.md",
+      "mediaType": "text/markdown",
+      "bytes": 3002,
+      "sha256": "42fd8cd888b722f4f6a044766c540e625695a420b903e04d3595202619e6a3e6",
+      "role": "evidence",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/REPAIR_LOG.md",
+      "mediaType": "text/markdown",
+      "bytes": 8341,
+      "sha256": "96e8ce67ac55ee21cc7872b8915bd5c7ca8223d1028333414a1431af4aa1b0e6",
+      "role": "evidence",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "fonts/Inter-700.woff2",
+      "mediaType": "font/woff2",
+      "bytes": 24356,
+      "sha256": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491",
+      "role": "font",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "fonts/JetBrainsMono-700.woff2",
+      "mediaType": "font/woff2",
+      "bytes": 21908,
+      "sha256": "d0d4e818808f2a0ba39b2b09d1989366f63494e295f003c7ef436697378507e8",
+      "role": "font",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "fonts/OFL-inter.txt",
+      "mediaType": "text/plain",
+      "bytes": 4477,
+      "sha256": "3b0a5fca3d17942cde889069889dedbbbd075e9b599968c82a95f4d944e9b345",
+      "role": "font",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "fonts/OFL-jetbrains-mono.txt",
+      "mediaType": "text/plain",
+      "bytes": 4524,
+      "sha256": "403581b69dac5cff4079205e01c6b467e56af449ecbd7247693ddb1baafa005b",
+      "role": "font",
+      "required": true,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/audio-ab/original.wav",
+      "mediaType": "audio/x-wav",
+      "bytes": 7646544,
+      "sha256": "4597126d42d3e3cdedac64aac5c057838738acf86ab826ed72c263afdce58471",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/audio-ab/original-loudness-matched.wav",
+      "mediaType": "audio/x-wav",
+      "bytes": 7646544,
+      "sha256": "e21f15a4077c004170446200f21e464079c08a46d2fb952726ac693806485433",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/audio-ab/ab-before.wav",
+      "mediaType": "audio/x-wav",
+      "bytes": 1728144,
+      "sha256": "3353eda56320d53c4039feccf9f4da535484519796c89f467c62f8cf054c8ca5",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/final/audio-ab/ab-after.wav",
+      "mediaType": "audio/x-wav",
+      "bytes": 1728144,
+      "sha256": "5731da35290ff8fc2ac5b45fc082fb99dab522d0ac1155c85e8429e2d147f9d0",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "out/previews/preview.mp4",
+      "mediaType": "video/mp4",
+      "bytes": 4149988,
+      "sha256": "2eaa58e976dc8e2085381c59edc26a63cb0a85b61b8a6b839f85644638c70127",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/frames/stills-4.png",
+      "mediaType": "image/png",
+      "bytes": 640773,
+      "sha256": "ac1c90d57edb2b428b0927570eaf6c18d9452ab019ddbe97d02c99613a1607de",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1440×640"
+          }
+        ]
+      },
+      "width": 1440,
+      "height": 640
+    },
+    {
+      "path": "reviews/frames/contact-sheet.png",
+      "mediaType": "image/png",
+      "bytes": 1154083,
+      "sha256": "c745e610fb79bf46e55496522ca8d168441ff9eaccc462fffd289eb79ece7bf3",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1260×960"
+          }
+        ]
+      },
+      "width": 1260,
+      "height": 960
+    },
+    {
+      "path": "reviews/frames/final-stills.png",
+      "mediaType": "image/png",
+      "bytes": 787000,
+      "sha256": "09f34d1cc958b54e0f918fb67b966a1570ca08150fc78ecf4bd2361874e3d426",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1440×640"
+          }
+        ]
+      },
+      "width": 1440,
+      "height": 640
+    },
+    {
+      "path": "reviews/frames/final-contact-sheet.png",
+      "mediaType": "image/png",
+      "bytes": 1329448,
+      "sha256": "64e119c6dd2ca0abc88b0befcd5ec7ab6a388902624de1765ee22c2a825570a1",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1260×960"
+          }
+        ]
+      },
+      "width": 1260,
+      "height": 960
+    },
+    {
+      "path": "transcript/reference.transcript.json",
+      "mediaType": "application/json",
+      "bytes": 37050,
+      "sha256": "86a0794bc3a704e0615d11de0021121e8b63e2c20dbc404f1fb8858ca8d24644",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "transcript/reference.asr.srt",
+      "mediaType": "text/plain",
+      "bytes": 1854,
+      "sha256": "c448780ed12cb9f1f61ba747c8356e8b15bc90309d152b17e629aefd59c7833d",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "path": "reviews/critic/caption_end_fullres.png",
+      "mediaType": "image/png",
+      "bytes": 153756,
+      "sha256": "0f1d7c34438f67a58811764d7acabbd516f38de6db91fd6727522337ed298613",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "700×300"
+          }
+        ]
+      },
+      "width": 700,
+      "height": 300
+    },
+    {
+      "path": "reviews/critic/cards_fullres.png",
+      "mediaType": "image/png",
+      "bytes": 77152,
+      "sha256": "6e37cdf7fc51398a53e0d547d93fbbe5d98ef8a9f0774c11124ea75b4c87f9b0",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "600×480"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 480
+    },
+    {
+      "path": "reviews/critic/cta_onset3.png",
+      "mediaType": "image/png",
+      "bytes": 159202,
+      "sha256": "3b180f66709a6e784dd10bfaf90d0470ade9d9e9125a3f33b4aa49b48b6559a9",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1080×160"
+          }
+        ]
+      },
+      "width": 1080,
+      "height": 160
+    },
+    {
+      "path": "reviews/critic/cutsgrid_0.png",
+      "mediaType": "image/png",
+      "bytes": 2951554,
+      "sha256": "aa3359e2bdec14125b79e7689c53b6566b3bd424ab60fc4d6fe44c767641e502",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2880×1360"
+          }
+        ]
+      },
+      "width": 2880,
+      "height": 1360
+    },
+    {
+      "path": "reviews/critic/cutsgrid_1.png",
+      "mediaType": "image/png",
+      "bytes": 2977766,
+      "sha256": "045093ab1033fa4aa043a554b44a2203a5eb461a5140fc46b49ae2d01015f982",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2880×1360"
+          }
+        ]
+      },
+      "width": 2880,
+      "height": 1360
+    },
+    {
+      "path": "reviews/critic/cutsgrid_2.png",
+      "mediaType": "image/png",
+      "bytes": 2653165,
+      "sha256": "df3fefe4f6afe9b32422a55ff50cac0c16d811d25c81fcdc47d0df2ca4c7d5a7",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2880×1360"
+          }
+        ]
+      },
+      "width": 2880,
+      "height": 1360
+    },
+    {
+      "path": "reviews/critic/end_50.9s_view.png",
+      "mediaType": "image/png",
+      "bytes": 302627,
+      "sha256": "a0c6819fbf91c75c9cf2dc00d90d043c08a494c98e74badce677a8d97dee92cc",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "540×750"
+          }
+        ]
+      },
+      "width": 540,
+      "height": 750
+    },
+    {
+      "path": "reviews/critic/pair_virada_vazio.png",
+      "mediaType": "image/png",
+      "bytes": 547427,
+      "sha256": "759f12b5483d97f04793434ce4c052994ff2d55805e0e3a12ae93c5df2605241",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "864×768"
+          }
+        ]
+      },
+      "width": 864,
+      "height": 768
+    },
+    {
+      "path": "reviews/critic/ref_contact.png",
+      "mediaType": "image/png",
+      "bytes": 1660081,
+      "sha256": "9fc421607cd2c512888061a2661fb466b0adda8827ddb638e1e85a9e7da74f37",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1400×1068"
+          }
+        ]
+      },
+      "width": 1400,
+      "height": 1068
+    },
+    {
+      "path": "reviews/critic/strip_card_foco.png",
+      "mediaType": "image/png",
+      "bytes": 1143007,
+      "sha256": "d9554eb8920abf931d3d758d8abdc1f86d633b78c39e6bfef98dc0602e4823f3",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2400×534"
+          }
+        ]
+      },
+      "width": 2400,
+      "height": 534
+    },
+    {
+      "path": "reviews/critic/strip_end.png",
+      "mediaType": "image/png",
+      "bytes": 1058323,
+      "sha256": "a3e34de28193e81865c72654d07c8a71d3ea45f9ca496a3d3a715e8656993ac7",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2400×534"
+          }
+        ]
+      },
+      "width": 2400,
+      "height": 534
+    },
+    {
+      "path": "reviews/critic/strip_end2.png",
+      "mediaType": "image/png",
+      "bytes": 1041053,
+      "sha256": "09c7dec63b671277b634615c45a9f1c3c6cbb4a3d20e8388a18cd0c81b486d9d",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2400×534"
+          }
+        ]
+      },
+      "width": 2400,
+      "height": 534
+    },
+    {
+      "path": "reviews/critic/strip_mas_utilizar.png",
+      "mediaType": "image/png",
+      "bytes": 1491297,
+      "sha256": "13bfc56ef8c187d849c60a1e7fa2df626a5523c591afbe154cb7847a001bfaa8",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1920×852"
+          }
+        ]
+      },
+      "width": 1920,
+      "height": 852
+    },
+    {
+      "path": "reviews/critic/strip_open.png",
+      "mediaType": "image/png",
+      "bytes": 1088945,
+      "sha256": "b332850c36b656ba264c5d10f53a49e908596138695bf2588ecda47eb2122e17",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2400×534"
+          }
+        ]
+      },
+      "width": 2400,
+      "height": 534
+    },
+    {
+      "path": "reviews/critic/strip_open2.png",
+      "mediaType": "image/png",
+      "bytes": 1079406,
+      "sha256": "82da5923b375fb7a8d14f495c5a5b28533f504da3c7d873f53387e8b7344f713",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2400×534"
+          }
+        ]
+      },
+      "width": 2400,
+      "height": 534
+    },
+    {
+      "path": "reviews/critic/strip_sliver_1046.png",
+      "mediaType": "image/png",
+      "bytes": 1011159,
+      "sha256": "9f640ea27cc6df1c09ce64515c70bfe3651fcc06c000b47a32ab5f7ae9f3c5f7",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2640×426"
+          }
+        ]
+      },
+      "width": 2640,
+      "height": 426
+    },
+    {
+      "path": "reviews/critic/strip_virada.png",
+      "mediaType": "image/png",
+      "bytes": 1151880,
+      "sha256": "73b652ba207e9c9f7ffda4dcf98689ef110c6c29095e78c9c23eb14b25dcb132",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "2400×534"
+          }
+        ]
+      },
+      "width": 2400,
+      "height": 534
+    },
+    {
+      "path": "reviews/frames/stills-r1.png",
+      "mediaType": "image/png",
+      "bytes": 738841,
+      "sha256": "25a177a394ae452695882de9d7556551af814361f284e7c71b8abc85715550ce",
+      "role": "evidence",
+      "required": false,
+      "validation": {
+        "status": "PASS",
+        "checks": [
+          {
+            "id": "mediaType.extension",
+            "status": "PASS"
+          },
+          {
+            "id": "file.format",
+            "status": "PASS"
+          },
+          {
+            "id": "media.dimensions",
+            "status": "PASS",
+            "details": "1800×534"
+          }
+        ]
+      },
+      "width": 1800,
+      "height": 534
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "findings": []
+  }
+}

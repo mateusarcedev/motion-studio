@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "project": ".",
+  "zip": "out/entrega-reel-ia-programacao.zip",
+  "files": 57,
+  "findings": []
+}

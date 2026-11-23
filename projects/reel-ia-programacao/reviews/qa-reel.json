@@ -1,0 +1,446 @@
+{
+  "subject": "reel.mp4",
+  "kind": "reel",
+  "generatedBy": "motion-core/qa",
+  "status": "WARN",
+  "counts": {
+    "PASS": 35,
+    "WARN": 6,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_TESTED": 2
+  },
+  "checks": [
+    {
+      "id": "media.probe",
+      "title": "Arquivo de mídia legível",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "mov,mp4,m4a,3gp,3g2,mj2, 53.10s",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.stream",
+      "title": "Stream de vídeo presente",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "h264 yuv420p",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.codec",
+      "title": "Codec de vídeo = h264",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "encontrado h264",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.resolution",
+      "title": "Resolução 1080×1920",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "encontrado 1080×1920",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.fps",
+      "title": "Taxa de quadros 30 fps (CFR)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "média 30.000 fps, nominal 30.000 fps",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.duration",
+      "title": "Duração ≈ 53.1s",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "encontrado 53.100s (±0.05s)",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.frames",
+      "title": "Contagem de quadros = 1593",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "encontrado 1593",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.decode",
+      "title": "Decodificação completa sem erros",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": null,
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.audio.stream",
+      "title": "Stream de áudio presente",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "aac 48000Hz 2ch",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.audio.sync",
+      "title": "Sincronismo áudio/vídeo (duração)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": "diferença 0.000s",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.audio.start",
+      "title": "Início alinhado (t=0 = frame 0)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "offset 0.000s",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.audio.silence",
+      "title": "Silêncio inesperado",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": "0% abaixo de −50 dB",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.audio.loudness",
+      "title": "Loudness integrado entre -16 e -12 LUFS",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": "-14.1 LUFS",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.audio.clipping",
+      "title": "Sem clipping (true peak)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "pico -4.6 dBFS",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.black",
+      "title": "Sem trechos pretos inesperados (≥0,5 s)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": null,
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "media.video.frozen",
+      "title": "Sem cenas congeladas sem justificativa (≥1,5 s)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": null,
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "subject.sha256",
+      "title": "Arquivo medido (SHA-256)",
+      "status": "PASS",
+      "required": false,
+      "heuristic": false,
+      "details": "5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "format.audio-codec",
+      "title": "Áudio AAC",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "aac 48000 Hz 2ch",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "format.pixfmt",
+      "title": "yuv420p (compatível com redes sociais)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "yuv420p",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "format.vertical",
+      "title": "Vertical 9:16",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "1080×1920",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "audio.loudness-target",
+      "title": "Loudness -14 LUFS ±1 LU (EBU R128)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "-14.15 LUFS, LRA 1.2 LU",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "audio.true-peak",
+      "title": "True peak ≤ -1.5 dBTP após AAC (sem clipping)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "-4.55 dBTP",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "timeline.frames",
+      "title": "Quadros = timeline (1593)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "1593 no MP4",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "source.preserved",
+      "title": "Arquivo original preservado (SHA-256)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "a62139faf67b6271…",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "shots.orphan",
+      "title": "Sem planos de 1–2 quadros (cortes + saltos da fonte)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "21 planos visuais; 18 saltos da fonte considerados",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "shots.min",
+      "title": "Planos visuais ≥ 0,7 s",
+      "status": "WARN",
+      "required": true,
+      "heuristic": true,
+      "details": "16.57–17.23s (20 q), 52.47–53.1s (19 q)",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "cuts.speech",
+      "title": "Cortes de silêncio não removem fala (VAD na fonte)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "11 cortes de pausa verificados",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "cuts.decisions",
+      "title": "Fala removida por decisão editorial (repetição/hesitação/operador)",
+      "status": "WARN",
+      "required": false,
+      "heuristic": false,
+      "details": "9.05s em 3 trechos — confirmar na revisão: repeated-phrase 8.54–9.93; operator 0–8.54; operator 24.68–26.83",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "cuts.boundaries",
+      "title": "Pontos de corte em silêncio (±20 ms abaixo do limiar de fala)",
+      "status": "WARN",
+      "required": true,
+      "heuristic": true,
+      "details": "com energia de fala: 18.37s",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.sync",
+      "title": "Legendas sincronizadas com a fala do vídeo final (±120 ms)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "153/153 palavras sobre fala detectada no áudio final (100%)",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.bounds",
+      "title": "Legendas dentro da duração final",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "44 páginas",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.overlap",
+      "title": "Sem páginas de legenda sobrepostas",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": null,
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.coverage",
+      "title": "Toda palavra falada tem página de legenda (exceto ocultas por decisão)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "1 oculta(s) por decisão registrada",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.long-words",
+      "title": "Palavras com duração plausível (≤ 1 s)",
+      "status": "WARN",
+      "required": true,
+      "heuristic": true,
+      "details": "possíveis palavras não reconhecidas: \"2022\" 1.07s @4.867s, \"faça\" 1.66s @47.08s",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.confidence",
+      "title": "Palavras de baixa confiança revisadas",
+      "status": "WARN",
+      "required": false,
+      "heuristic": false,
+      "details": "10 palavras < 0,5 sem revisão: \"E\"@8.44s, \"logo\"@8.54s, \"o\"@10.42s, \"Mas\"@16.44s, \"utilizar\"@17.233s, \"te\"@18.16s, \"e\"@39.393s, \"mas\"@41.333s…",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.safe-zone",
+      "title": "Legendas dentro da zona segura Instagram Reels (medido no render do ASS)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "44 páginas medidas; faixa vertical 1298–1465 px",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.face",
+      "title": "Legendas não cobrem olhos/boca (faixa do rosto declarado)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": "0 páginas sobre a faixa 931–1267 px; rosto declarado pelo operador a partir dos stills; zoom pode deslocar o rosto",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "overlays.render",
+      "title": "Cards: fontes carregadas e sem overflow",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "15 camadas",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "overlays.visual",
+      "title": "Cards: zona segura, contraste e tamanho de texto (DOM, heurística genérica video-vertical: topo 15%)",
+      "status": "WARN",
+      "required": true,
+      "heuristic": true,
+      "details": "tese: fora da safe zone genérica (div.tl topo 220px) | opcional: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | ferramentas#-1: fora da safe zone genérica (div.eyebrow topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#-1: fora da safe zone genérica (div.eyebrow topo 220px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#2: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | problema: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px)",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "av.sync",
+      "title": "Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "desvio 0 ms (correlação 0.9991)",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "determinism",
+      "title": "Render reprodutível (hash de quadros/amostras decodificados)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "idêntico ao segundo render",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "human.listening",
+      "title": "Revisão auditiva humana (naturalidade, artefatos, fonemas)",
+      "status": "NOT_TESTED",
+      "required": false,
+      "heuristic": false,
+      "details": "obrigatória antes de declarar qualidade de áudio",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "human.critic",
+      "title": "Crítico independente (contact sheet + prévia em movimento)",
+      "status": "NOT_TESTED",
+      "required": false,
+      "heuristic": false,
+      "details": "aprovação não é automática",
+      "evidence": null,
+      "reproduce": null
+    }
+  ],
+  "note": "Heurísticas (heuristic:true) indicam risco; não provam qualidade artística. Aprovação final é do Crítico/humano."
+}
