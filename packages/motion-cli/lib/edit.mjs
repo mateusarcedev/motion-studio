@@ -46,6 +46,7 @@ export const EDIT_HELP = `
     edit progress <saida.mp4>
     edit presets
 
+  motion audio doctor
   motion stt doctor | providers | setup [--model=small] [--yes]
   motion qa reel <reel.mp4> [--timeline=edit.json] [--compare=outro_render.mp4] [--json]
 `;
@@ -129,7 +130,7 @@ export async function runEdit(sub, args, flags) {
           `Voz tratada (${r.params.preset}, denoiser ${r.denoiser}) → ${r.output}`,
           `Antes: ${r.before.loudness.integratedLufs} LUFS / ${r.before.loudness.truePeakDbtp} dBTP · Depois: ${r.after.loudness.integratedLufs} LUFS / ${r.after.loudness.truePeakDbtp} dBTP`,
           `QA: ${r.qa.status}`, ...r.qa.checks.map((c) => `  ${c.status.padEnd(10)} ${c.title}${c.details ? ` — ${c.details}` : ""}`),
-          r.ab ? `A/B: ${r.ab.beforeSample} × ${r.ab.afterSample}` : "",
+          r.ab ? `A/B (${r.ab.clips.length} trechos, volume igualado): ${r.ab.index}` : "",
         ].filter(Boolean).join("\n"));
       }
       case "captions": {
@@ -168,6 +169,14 @@ export async function runEdit(sub, args, flags) {
     }
     throw error;
   }
+}
+
+export async function runAudio(sub, args, flags) {
+  if (sub !== "doctor") { console.log("Uso: motion audio doctor [--json]   (tratamento: motion edit audio)"); if (sub) process.exitCode = 1; return; }
+  const R = await core();
+  const d = await R.audioDoctor();
+  if (!d.ok) process.exitCode = 3;
+  return out(flags, "audio doctor", d, [`${d.ffmpeg ?? "FFmpeg ausente"}`, d.missingFilters.length ? `✗ filtros ausentes: ${d.missingFilters.join(", ")}` : "✓ filtros de voz", `DeepFilterNet ${d.deepfilternet.version}: ${d.deepfilternet.state}${d.deepfilternet.reason ? ` — ${d.deepfilternet.reason}` : ""}`, `Modo auto usa: ${d.autoDenoiser}`, ...d.warnings.map((w) => `⚠ ${w}`)].join("\n"));
 }
 
 export async function runStt(sub, args, flags) {

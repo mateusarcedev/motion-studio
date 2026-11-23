@@ -22,7 +22,9 @@ export async function noisySpeechWav(dir, { noiseDb = -45, name = "speech", burs
   const gate = bursts.map(([a, b]) => `between(t,${a},${b})`).join("+");
   const voice = `(0.25*sin(2*PI*180*t)+0.12*sin(2*PI*360*t)+0.06*sin(2*PI*1200*t)+0.03*sin(2*PI*2600*t))*(0.6+0.4*sin(2*PI*4*t))*(${gate})`;
   must(["-f", "lavfi", "-i", `aevalsrc=exprs='${voice}':s=48000:d=${duration}`, "-f", "lavfi", "-i", `anoisesrc=color=pink:seed=${seed}:sample_rate=48000:duration=${duration}:amplitude=1`,
-    "-filter_complex", `[1:a]volume=${noiseDb + 13}dB[n];[0:a][n]amix=inputs=2:normalize=0[out]`, "-map", "[out]", "-c:a", "pcm_s24le", out], "fala com ruído");
+    // breath: aperiodic energy inside the bursts (pure harmonics make latency correlation ambiguous)
+    "-f", "lavfi", "-i", `anoisesrc=color=pink:seed=${seed + 1}:sample_rate=48000:duration=${duration}:amplitude=1`,
+    "-filter_complex", `[1:a]volume=${noiseDb + 13}dB[n];[2:a]volume='0.3*(0.6+0.4*sin(2*PI*5.3*t))*(${gate})':eval=frame,asetnsamples=48[b];[0:a][n][b]amix=inputs=3:normalize=0[out]`, "-map", "[out]", "-c:a", "pcm_s24le", out], "fala com ruído");
   return out;
 }
 

@@ -12,7 +12,7 @@ import { runQA } from "./qa.mjs";
 import { runComponents } from "./components.mjs";
 import { runTransition } from "./transition.mjs";
 import { runAssets, runSvg } from "./assets.mjs";
-import { runEdit, runStt } from "./edit.mjs";
+import { runEdit, runAudio, runStt } from "./edit.mjs";
 import { VERSION } from "./version.mjs";
 
 export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } = {}) {
@@ -169,6 +169,9 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
         await runEdit(posArgs[1], posArgs.slice(2), flags);
         break;
 
+      case "audio":
+        await runAudio(posArgs[1], posArgs.slice(2), flags);
+        break;
       case "stt":
         await runStt(posArgs[1], posArgs.slice(2), flags);
         break;

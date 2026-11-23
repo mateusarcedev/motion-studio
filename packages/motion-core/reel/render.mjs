@@ -9,11 +9,13 @@
  * Progress is written to <output>.progress.json for CLI/MCP polling.
  */
 import { existsSync } from "node:fs";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { buildAss, captionsJson, pagesToSrt, wordsToSrt } from "./captions.mjs";
 import { renderOverlayLayers } from "./overlays.mjs";
 import { assertTimeline, resolveFrom, timelineHash } from "./timeline.mjs";
+import { measureLoudness } from "./analyze.mjs";
+import { PRESETS } from "./presets.mjs";
 import { processVoice } from "./voice.mjs";
 import { clamp, mapLimit, probeMedia, reelError, REEL_ERRORS, requireFfmpeg, round, run, sha256File } from "./util.mjs";
 
@@ -134,10 +136,11 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
       output: voiceWav, preset: timeline.audio.preset, overrides: timeline.audio.overrides ?? {}, denoiser: timeline.audio.denoiser ?? "auto",
       segments: audioRanges(timeline.segments).map(([a, b]) => [a - audioOffset, b - audioOffset]),
       music: timeline.audio.music ? { ...timeline.audio.music, path: resolveFrom(timeline, timeline.audio.music.path) } : null,
-      abDir: voiceAbDir, workDir: path.join(work, "voice"),
+      channels: timeline.export.audio.channels, abDir: voiceAbDir, workDir: path.join(work, "voice"),
     });
     report.files.voice = voiceWav;
-    report.voice = { qa: voice.qa, after: voice.after.loudness, chain: voice.chain, latency: voice.latency, denoiser: voice.denoiser, ab: voice.ab };
+    report.voice = { qa: voice.qa, after: voice.after.loudness, chain: voice.chain, latency: voice.latency, denoiser: voice.denoiser, denoiserFallback: voice.denoiserFallback, chainVersion: voice.chainVersion, params: voice.params, speechToPause: voice.speechToPause, loudnessPass: voice.loudnessPass, ab: voice.ab };
+    if (voice.denoiserFallback) report.warnings.push(voice.denoiserFallback);
     report.timings.audioSec = round((Date.now() - t) / 1000, 2);
     if (Math.abs(audioOffset) > 0.001) report.warnings.push(`Áudio começa ${round(audioOffset * 1000, 1)} ms depois do vídeo na fonte; offset compensado no corte.`);
   } else report.warnings.push("Fonte sem áudio: vídeo renderizado sem trilha.");
@@ -222,6 +225,24 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
     "-fflags", "+bitexact", "-flags:v", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", outFile);
   const total = timeline.output.frames;
   await ff(args, "composição final", { onProgress: (s) => { const m = s.match(/frame=\s*(\d+)/g); if (m) { const n = Number(m.at(-1).replace(/\D/g, "")); stage("compose", n, total); } } });
+  // 6) true peak is judged on the delivered AAC: the encoder adds inter-sample overshoot that no
+  // limiter upstream can guarantee. Over the ceiling → less gain, audio re-encoded, video copied.
+  if (aIdx !== null) {
+    const ceiling = timeline.export.loudness.truePeakDb, cfg = { ...PRESETS.render.truePeak, ...(timeline.export.truePeak ?? {}) };
+    let tp = (await measureLoudness(outFile)).truePeakDbtp, trim = 0;
+    const attempts = [{ gainDb: 0, truePeakDbtp: tp }];
+    while (tp > ceiling && attempts.length <= cfg.maxReencodes) {
+      trim -= tp - ceiling + cfg.marginDb;
+      const tmpOut = `${base}.tp.mp4`;
+      await ff(["-i", outFile, "-i", voiceWav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af", `volume=${trim.toFixed(3)}dB`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6),
+        "-fflags", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", tmpOut], "recodificação do áudio (true peak)");
+      await rename(tmpOut, outFile);
+      tp = (await measureLoudness(outFile)).truePeakDbtp;
+      attempts.push({ gainDb: round(trim, 3), truePeakDbtp: tp });
+    }
+    report.truePeak = { ceilingDbtp: ceiling, attempts, ok: tp <= ceiling };
+    if (tp > ceiling) report.warnings.push(`True peak ${tp} dBTP acima do teto ${ceiling} após ${attempts.length - 1} recodificações: o QA reprova.`);
+  }
   report.timings.composeSec = round((Date.now() - t2) / 1000, 2);
   report.timings.totalSec = round((Date.now() - t0) / 1000, 2);
   report.sha256 = await sha256File(outFile);

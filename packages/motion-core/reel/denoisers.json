@@ -1,0 +1,29 @@
+{
+  "schema": "motion.reel.denoisers",
+  "schemaVersion": 1,
+  "providers": [
+    {
+      "id": "ffmpeg-afftdn",
+      "kind": "builtin",
+      "implemented": true
+    },
+    {
+      "id": "deepfilternet",
+      "kind": "external-binary",
+      "version": "0.5.6",
+      "source": "https://github.com/Rikorose/DeepFilterNet/releases/tag/v0.5.6",
+      "license": "MIT OR Apache-2.0",
+      "platforms": {
+        "linux-x64": {
+          "url": "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/deep-filter-0.5.6-x86_64-unknown-linux-musl",
+          "sha256": null
+        }
+      },
+      "weights": {
+        "name": "DeepFilterNet3 (embutido no binário)",
+        "sha256": null
+      },
+      "note": "A release oficial não publica SHA-256 (verificado em 2026-11-23). Sem hash conferido o binário não é usado em modo auto; pedido explícito exige MOTION_DEEPFILTER_SHA256 igual ao arquivo."
+    }
+  ]
+}

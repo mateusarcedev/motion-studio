@@ -144,7 +144,9 @@ describe("Análise e Voice Studio", () => {
     assert.equal(p.compressor.thresholdDb, -26, "limiar relativo à fala medida");
     const chain = R.buildVoiceChain(p);
     assert.match(chain, /highpass=f=120/); assert.doesNotMatch(chain, /deesser/);
-    const squashed = R.resolveVoiceParams("clean", {}, { speechLevelDb: -14, lraLu: 2.5 });
+    assert.equal(R.resolveVoiceParams("clean", {}, { speechLevelDb: -14, lraLu: 2.5 }).compressor.bypassed, true, "fonte muito comprimida: compressor não entra");
+    assert.doesNotMatch(R.buildVoiceChain(R.resolveVoiceParams("clean", {}, { lraLu: 2.5 })), /acompressor/);
+    const squashed = R.resolveVoiceParams("clean", {}, { speechLevelDb: -14, lraLu: 3.5 });
     assert.equal(squashed.compressor.ratio, 1.6, "fonte já comprimida não é comprimida de novo");
     assert.throws(() => R.resolveVoiceParams("radio"), /desconhecido/);
   });
@@ -158,9 +160,12 @@ describe("Análise e Voice Studio", () => {
     assert.equal(byId(r.qa, "voice.latency").status, "PASS", byId(r.qa, "voice.latency").details);
     assert.equal(byId(r.qa, "voice.listening").status, "NOT_TESTED", "qualidade de estúdio nunca é declarada sem escuta");
     assert.ok(r.params.dehum && r.params.dehum.baseHz === 60);
-    for (const k of ["original", "originalLoudnessMatched", "beforeSample", "afterSample"]) assert.ok(existsSync(r.ab[k]), k);
-    const lm = await R.measureLoudness(r.ab.originalLoudnessMatched);
-    assert.ok(Math.abs(lm.integratedLufs - r.after.loudness.integratedLufs) < 1.2, "A/B no mesmo nível");
+    for (const k of ["original", "beforeSample", "afterSample", "index"]) assert.ok(existsSync(r.ab[k]), k);
+    for (const c of r.ab.clips) {
+      const [x, y] = [await R.measureLoudness(c.before), await R.measureLoudness(c.after)];
+      assert.ok(Math.abs(x.integratedLufs - y.integratedLufs) < 0.3, "A/B no mesmo nível em cada trecho");
+      assert.ok(Math.max(x.truePeakDbtp, y.truePeakDbtp) <= -1.4, "A/B sem limitador e sem clipping");
+    }
     assert.equal(r.source.unchanged, true); assert.equal(await R.sha256File(FIX), before);
   });
   test("cortes + música com ducking: duração exata em amostras e sem clipping", { skip: !haveFfmpeg, timeout: 120000 }, async () => {

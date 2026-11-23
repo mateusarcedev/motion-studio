@@ -4,14 +4,17 @@
  * NOT_TESTED, never PASS. Human listening and the independent Critic stay outside.
  */
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createQaReport } from "../quality/qa-status.mjs";
 import { qaMedia } from "../quality/media_qa.mjs";
 import { detectSpeech, energyEnvelope, measureLoudness } from "./analyze.mjs";
 import { buildAss, loadSafeZonePreset } from "./captions.mjs";
-import { measureLatency } from "./voice.mjs";
-import { probeMedia, round, run, sha256File } from "./util.mjs";
+import { PRESETS, resolveQaParams } from "./presets.mjs";
+import { audioRanges } from "./render.mjs";
+import { highBandEnvelope } from "./sibilants.mjs";
+import { cutWav, measureLatency, speechToPauseCheck } from "./voice.mjs";
+import { monoDownmix, probeMedia, round, run, sha256File } from "./util.mjs";
 
 const overlapSec = (a, b) => Math.max(0, Math.min(a[1], b[1]) - Math.max(a[0], b[0]));
 
@@ -54,6 +57,19 @@ export async function compareRenders(a, b) {
   return { a: ha, b: hb, identical: ha !== null && ha === hb };
 }
 
+/** The untreated source cut exactly like the timeline (mono): the "before" of every audio comparison. */
+export async function sourceCutWav(t, workDir) {
+  await mkdir(workDir, { recursive: true });
+  const full = path.join(workDir, "qa-source.wav"), cut = path.join(workDir, "qa-source-cut.wav");
+  const down = monoDownmix(t.source.probe.audio.channels);
+  const r = await run("ffmpeg", ["-v", "error", "-y", "-i", t.source.path, "-vn", ...(down ? ["-af", down] : []), "-ac", "1", "-ar", "48000", "-c:a", "pcm_f32le", full]);
+  if (r.code !== 0) throw new Error(r.stderr.trim().split("\n").at(-1));
+  const off = (t.source.probe.audio.startTime ?? 0) - (t.source.probe.video?.startTime ?? 0);
+  await cutWav(full, audioRanges(t.segments).map(([a, b]) => [a - off, b - off]), cut);
+  await rm(full, { force: true });
+  return cut;
+}
+
 /**
  * @param mp4 rendered reel
  * @param o { timeline (object), renderReport (object), compareWith (mp4 of a second render), workDir, platform }
@@ -62,7 +78,9 @@ export async function qaReel(mp4, o = {}) {
   const report = createQaReport({ subject: path.basename(mp4), kind: "reel" });
   const t = o.timeline ?? null;
   const fps = t?.output?.fps ?? 30;
-  const media = await qaMedia(mp4, { width: t?.output?.width ?? (o.preview ? undefined : 1080), height: t?.output?.height ?? (o.preview ? undefined : 1920), fps, durationSec: t?.output?.durationSec, durationTolerance: 1.5 / fps, codec: "h264", audio: true, minLufs: -16, maxLufs: -12, maxPeakDb: -1.0 });
+  const Q = resolveQaParams(t?.preset, t?.qa ?? o.qa);
+  const work = o.workDir ?? path.join(path.dirname(path.resolve(mp4)), ".qa-work");
+  const media = await qaMedia(mp4, { width: t?.output?.width ?? (o.preview ? undefined : 1080), height: t?.output?.height ?? (o.preview ? undefined : 1920), fps, durationSec: t?.output?.durationSec, durationTolerance: 1.5 / fps, codec: "h264", audio: true, minLufs: Q.loudness.minLufs, maxLufs: Q.loudness.maxLufs, maxPeakDb: t?.export?.loudness?.truePeakDb ?? -1.5 });
   report.merge(media, "media");
   if (!existsSync(mp4)) return report;
   const probe = await probeMedia(mp4).catch(() => null);
@@ -72,12 +90,13 @@ export async function qaReel(mp4, o = {}) {
     report.add({ id: "format.pixfmt", title: "yuv420p (compatível com redes sociais)", status: probe.video?.pixFmt === "yuv420p" ? "PASS" : "FAIL", details: probe.video?.pixFmt });
     report.add({ id: "format.vertical", title: "Vertical 9:16", status: probe.video && Math.abs(probe.video.width / probe.video.height - 9 / 16) < 0.01 ? "PASS" : "FAIL", details: probe.video ? `${probe.video.width}×${probe.video.height}` : null });
   }
+  const rr0 = o.renderReport ?? null;
   const loud = await measureLoudness(mp4).catch(() => null);
   const target = t?.export?.loudness?.targetLufs ?? -14, tpMax = t?.export?.loudness?.truePeakDb ?? -1.5;
   if (loud) {
     const d = Math.abs((loud.integratedLufs ?? -99) - target);
-    report.add({ id: "audio.loudness-target", title: `Loudness ${target} LUFS ±1 LU (EBU R128)`, status: d <= 1 ? "PASS" : d <= 2 ? "WARN" : "FAIL", details: `${loud.integratedLufs} LUFS, LRA ${loud.lraLu} LU` });
-    report.add({ id: "audio.true-peak", title: `True peak ≤ ${tpMax} dBTP após AAC (sem clipping)`, status: loud.truePeakDbtp !== null && loud.truePeakDbtp <= tpMax + 0.5 ? "PASS" : "FAIL", details: `${loud.truePeakDbtp} dBTP` });
+    report.add({ id: "audio.loudness-target", title: `Loudness ${target} LUFS ±${Q.loudness.toleranceLu} LU (EBU R128)`, status: d <= Q.loudness.toleranceLu ? "PASS" : d <= Q.loudness.failLu ? "WARN" : "FAIL", details: `${loud.integratedLufs} LUFS, LRA ${loud.lraLu} LU` });
+    report.add({ id: "audio.true-peak", title: `True peak ≤ ${tpMax} dBTP após AAC (sem clipping)`, status: loud.truePeakDbtp !== null && loud.truePeakDbtp <= tpMax ? "PASS" : "FAIL", details: `${loud.truePeakDbtp} dBTP` });
   }
 
   if (!t) {
@@ -99,9 +118,9 @@ export async function qaReel(mp4, o = {}) {
       const b = [sg.dst[0], ...inner, sg.dst[1]];
       for (let i = 0; i + 1 < b.length; i++) shots.push({ start: b[i], end: b[i + 1], frames: Math.round((b[i + 1] - b[i]) * fps), seg: sg.id });
     }
-    const orphan = shots.filter((x) => x.frames < 3), short = shots.filter((x) => x.frames >= 3 && x.end - x.start < 0.7);
+    const orphan = shots.filter((x) => x.frames < Q.shots.orphanFrames), short = shots.filter((x) => x.frames >= Q.shots.orphanFrames && x.end - x.start < Q.shots.minSec);
     report.add({ id: "shots.orphan", title: "Sem planos de 1–2 quadros (cortes + saltos da fonte)", status: orphan.length ? "FAIL" : "PASS", details: orphan.length ? orphan.map((x) => `${round(x.start, 2)}s (${x.frames} q)`).join(", ") : `${shots.length} planos visuais; ${cuts.length} saltos da fonte considerados` });
-    report.add({ id: "shots.min", title: "Planos visuais ≥ 0,7 s", heuristic: true, status: short.length ? "WARN" : "PASS", details: short.length ? short.map((x) => `${round(x.start, 2)}–${round(x.end, 2)}s (${x.frames} q)`).join(", ") : null });
+    report.add({ id: "shots.min", title: `Planos visuais ≥ ${Q.shots.minSec} s`, heuristic: true, status: short.length ? "WARN" : "PASS", details: short.length ? short.map((x) => `${round(x.start, 2)}–${round(x.end, 2)}s (${x.frames} q)`).join(", ") : null });
   }
 
   // speech vs cuts (measured on the source)
@@ -112,16 +131,37 @@ export async function qaReel(mp4, o = {}) {
     const decided = t.removed.filter((r) => !["pause", "leading-silence", "trailing-silence"].includes(r.reason));
     const keptSrc = t.segments.map((s) => s.src);
     const lostIn = (r) => vad.segments.reduce((n, s) => n + Math.max(0, overlapSec([s.start, s.end], r.src) - keptSrc.reduce((k, src) => k + overlapSec(src, [Math.max(s.start, r.src[0]), Math.min(s.end, r.src[1])]), 0)), 0);
-    const bad = silenceRemovals.map((r) => ({ r, lost: lostIn(r) })).filter((x) => x.lost > 0.05);
+    const bad = silenceRemovals.map((r) => ({ r, lost: lostIn(r) })).filter((x) => x.lost > Q.cuts.lostSpeechSec);
     report.add({ id: "cuts.speech", title: "Cortes de silêncio não removem fala (VAD na fonte)", status: bad.length ? "FAIL" : "PASS", details: bad.length ? bad.map((x) => `${x.r.src.join("–")}s perde ${round(x.lost, 2)}s`).join("; ") : `${silenceRemovals.length} cortes de pausa verificados` });
     const decidedSec = round(decided.reduce((n, r) => n + lostIn(r), 0), 2);
     report.add({ id: "cuts.decisions", title: "Fala removida por decisão editorial (repetição/hesitação/operador)", status: decided.length ? "WARN" : "PASS", required: false, details: decided.length ? `${decidedSec}s em ${decided.length} trechos — confirmar na revisão: ${decided.map((r) => `${r.reason} ${r.src.join("–")}`).join("; ")}` : "nenhuma" });
     const hop = 0.01;
-    const boundaryLevel = (tt) => { const i = Math.round(tt / hop); let m = -120; for (let k = i - 2; k <= i + 2; k++) if (env[k] !== undefined) m = Math.max(m, env[k]); return m; };
+    const boundaryLevel = (tt) => { const i = Math.round(tt / hop); const span = Math.round(Q.cuts.boundarySec / hop); let m = -120; for (let k = i - span; k <= i + span; k++) if (env[k] !== undefined) m = Math.max(m, env[k]); return m; };
     const jumps = t.segments.filter((s, i) => i > 0 && s.cutBefore);
     const hot = [];
     t.segments.forEach((s, i) => { if (!s.cutBefore || i === 0) return; const prev = t.segments[i - 1]; for (const tt of [prev.src[1], s.src[0]]) if (boundaryLevel(tt) > vad.thresholdDb) hot.push(round(tt, 2)); });
     report.add({ id: "cuts.boundaries", title: "Pontos de corte em silêncio (±20 ms abaixo do limiar de fala)", heuristic: true, status: hot.length ? "WARN" : "PASS", details: hot.length ? `com energia de fala: ${hot.join(", ")}s` : `${jumps.length} cortes, ${jumps.length * 2} bordas` });
+    if (t.effective?.cut?.sibilants) {
+      const cfg = t.effective.cut.sibilants;
+      const hb = await highBandEnvelope(t.source.path, { ...cfg, channels: t.source.probe.audio.channels });
+      const span = Math.round(Q.cuts.sibilantBoundarySec / hop);
+      // energy on BOTH sides of the cut: the sibilant continues past the kept range
+      const peak = (i0, i1) => { let m = -120; for (let k = i0; k < i1; k++) if (hb.env[k] !== undefined) m = Math.max(m, hb.env[k]); return m; };
+      const torn = [];
+      t.segments.forEach((sg, i) => { if (!sg.cutBefore || i === 0) return; for (const tt of [t.segments[i - 1].src[1], sg.src[0]]) { const k = Math.round(tt / hop); if (peak(k - span, k) > hb.thresholdDb && peak(k, k + span) > hb.thresholdDb) torn.push(round(tt, 3)); } });
+      report.add({ id: "cuts.sibilants", title: `Bordas não truncam sibilantes (energia > ${cfg.hz} Hz dos dois lados)`, heuristic: true, status: torn.length ? "WARN" : "PASS", details: torn.length ? `possível /s/ truncado (tempo da fonte): ${torn.join(", ")}s` : `limiar ${hb.thresholdDb} dBFS` });
+    }
+    // speech − pause on the delivered MP4 versus the same cut without treatment
+    const limits = rr0?.voice?.params?.speechToPause ?? PRESETS.voice[t.audio?.preset]?.speechToPause ?? PRESETS.voice.clean.speechToPause;
+    if (t.audio?.music) report.add({ id: "audio.speech-to-pause", title: "Relação fala − pausa não piora", status: "NOT_TESTED", required: false, details: "trilha musical nas pausas: a métrica mede só voz" });
+    else {
+      try {
+        const cut = await sourceCutWav(t, work);
+        const c = speechToPauseCheck(await energyEnvelope(cut, { channels: 1 }), await energyEnvelope(mp4, { channels: probe?.audio?.channels ?? 2 }), limits, { durationSec: t.output.durationSec });
+        report.add({ id: c.id, title: `${c.title}, no MP4 final, preset ${t.audio?.preset}`, heuristic: true, required: c.status !== "NOT_TESTED", status: c.status, details: c.details });
+        await rm(cut, { force: true });
+      } catch (e) { report.add({ id: "audio.speech-to-pause", title: "Relação fala − pausa não piora", status: "BLOCKED", details: e.message, reproduce: "Disponibilize o original e rode motion qa reel de novo." }); }
+    }
   } else report.add({ id: "cuts.speech", title: "Cortes não removem fala", status: "BLOCKED", details: "original indisponível", reproduce: "Disponibilize o original e rode de novo." });
 
   // captions
@@ -129,10 +169,10 @@ export async function qaReel(mp4, o = {}) {
     const outEnv = await energyEnvelope(mp4, { channels: 2 });
     const outVad = detectSpeech(outEnv);
     const words = t.captions.words.filter((w) => !w.suspect);
-    const tol = 0.12;
+    const tol = Q.captions.syncToleranceSec;
     const synced = words.filter((w) => outVad.segments.some((s) => s.end + tol > w.start && s.start - tol < w.end));
     const ratio = words.length ? synced.length / words.length : 1;
-    report.add({ id: "captions.sync", title: "Legendas sincronizadas com a fala do vídeo final (±120 ms)", status: ratio >= 0.95 ? "PASS" : ratio >= 0.85 ? "WARN" : "FAIL", details: `${synced.length}/${words.length} palavras sobre fala detectada no áudio final (${round(ratio * 100, 1)}%)` });
+    report.add({ id: "captions.sync", title: "Legendas sincronizadas com a fala do vídeo final (±120 ms)", status: ratio >= Q.captions.syncPass ? "PASS" : ratio >= Q.captions.syncWarn ? "WARN" : "FAIL", details: `${synced.length}/${words.length} palavras sobre fala detectada no áudio final (${round(ratio * 100, 1)}%)` });
     const beyond = t.captions.pages.filter((p) => p.end > t.output.durationSec + 1e-3);
     report.add({ id: "captions.bounds", title: "Legendas dentro da duração final", status: beyond.length ? "FAIL" : "PASS", details: beyond.length ? `${beyond.length} páginas passam do fim` : `${t.captions.pages.length} páginas` });
     const overlaps = t.captions.pages.filter((p, i) => i && p.start < t.captions.pages[i - 1].end - 1e-3);
@@ -141,13 +181,12 @@ export async function qaReel(mp4, o = {}) {
     const hiddenIds = new Set(t.captions.hiddenWords ?? []);
     const uncovered = words.filter((w) => !shownIds.has(w.id) && !hiddenIds.has(w.id.split("#")[0]));
     report.add({ id: "captions.coverage", title: "Toda palavra falada tem página de legenda (exceto ocultas por decisão)", status: uncovered.length ? "WARN" : "PASS", details: uncovered.length ? `${uncovered.length} sem página: ${uncovered.slice(0, 8).map((w) => `"${w.text}"@${w.start}s`).join(", ")}` : `${hiddenIds.size} oculta(s) por decisão registrada` });
-    const long = words.filter((w) => w.end - w.start > 1.0);
+    const long = words.filter((w) => w.end - w.start > Q.captions.longWordSec);
     report.add({ id: "captions.long-words", title: "Palavras com duração plausível (≤ 1 s)", heuristic: true, status: long.length ? "WARN" : "PASS", details: long.length ? `possíveis palavras não reconhecidas: ${long.map((w) => `"${w.text}" ${round(w.end - w.start, 2)}s @${w.start}s`).join(", ")}` : null });
-    const low = words.filter((w) => w.confidence !== null && w.confidence !== undefined && w.confidence < 0.5 && !w.corrected);
+    const low = words.filter((w) => w.confidence !== null && w.confidence !== undefined && w.confidence < Q.captions.lowConfidence && !w.corrected);
     report.add({ id: "captions.confidence", title: "Palavras de baixa confiança revisadas", status: low.length ? "WARN" : "PASS", required: false, details: low.length ? `${low.length} palavras < 0,5 sem revisão: ${low.slice(0, 8).map((w) => `"${w.text}"@${w.start}s`).join(", ")}${low.length > 8 ? "…" : ""}` : "nenhuma" });
     // measured placement
     const sz = loadSafeZonePreset(t.captions.style.platform ?? "instagram-reels");
-    const work = o.workDir ?? path.join(path.dirname(path.resolve(mp4)), ".qa-work");
     const fontsDir = t.captions.fontsDir ? path.resolve(path.dirname(t.__file ?? mp4), t.captions.fontsDir) : null;
     const m = await measureCaptionBoxes(t, { workDir: work, resolveFont: fontsDir });
     if (!m.ok || !m.boxes.length) report.add({ id: "captions.safe-zone", title: "Legendas dentro da zona segura (medido)", status: "BLOCKED", details: m.stderr ?? "nenhuma caixa medida", reproduce: "Verifique FFmpeg com libass e rode motion qa reel de novo." });
@@ -194,7 +233,7 @@ export async function qaReel(mp4, o = {}) {
   // A/V alignment: treated voice WAV vs the muxed AAC track
   if (rr?.files?.voice && existsSync(rr.files.voice)) {
     const lat = await measureLatency(rr.files.voice, mp4, { start: 0, duration: Math.min(20, t.output.durationSec) });
-    report.add({ id: "av.sync", title: "Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)", status: Math.abs(lat.seconds) <= 0.005 ? "PASS" : Math.abs(lat.seconds) <= 1 / fps ? "WARN" : "FAIL", details: `desvio ${round(lat.seconds * 1000, 2)} ms (correlação ${lat.envelopeCorrelation})` });
+    report.add({ id: "av.sync", title: "Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)", status: Math.abs(lat.seconds) <= Q.avSync.passSec ? "PASS" : Math.abs(lat.seconds) <= 1 / fps ? "WARN" : "FAIL", details: `desvio ${round(lat.seconds * 1000, 2)} ms (correlação ${lat.envelopeCorrelation})` });
   } else report.add({ id: "av.sync", title: "Trilha do MP4 alinhada à voz tratada", status: "NOT_TESTED", details: "voz tratada do render não disponível" });
 
   if (o.compareWith) {

@@ -1,0 +1,521 @@
+{
+  "schema": "motion.reel.presets",
+  "schemaVersion": 1,
+  "voice": {
+    "natural": {
+      "description": "Toque mínimo: corta grave inútil, ruído leve, compressão suave. Preserva o máximo de timbre.",
+      "highpassHz": 70,
+      "denoise": {
+        "strengthDb": 6,
+        "adaptive": true
+      },
+      "expander": null,
+      "eq": [
+        {
+          "f": 3000,
+          "g": 1.5,
+          "q": 0.9
+        }
+      ],
+      "highShelf": null,
+      "compressor": {
+        "thresholdDb": "auto",
+        "thresholdBelowSpeechDb": 6,
+        "ratio": 2,
+        "attackMs": 20,
+        "releaseMs": 200,
+        "makeupDb": 1,
+        "reduceBelowLraLu": 4,
+        "reducedRatio": 1.6,
+        "bypassBelowLraLu": 3
+      },
+      "deesser": null,
+      "loudness": {
+        "targetLufs": -14,
+        "truePeakDb": -1.5,
+        "lra": 11,
+        "toleranceLu": 0.5,
+        "failLu": 2,
+        "limiterMarginDb": 0.3
+      },
+      "speechToPause": {
+        "maxWorseningDb": 1.5,
+        "minPauseSec": 0.25,
+        "trimSec": 0.06,
+        "maxImprovementDb": 25
+      }
+    },
+    "clean": {
+      "description": "Uso geral para Reels: limpa ruído moderado, tira embolado em 250 Hz, dá presença.",
+      "highpassHz": 80,
+      "denoise": {
+        "strengthDb": 10,
+        "adaptive": true
+      },
+      "expander": {
+        "rangeDb": 6,
+        "position": 0.35,
+        "ratio": 2,
+        "attackMs": 6,
+        "releaseMs": 120,
+        "lookaheadMs": 12,
+        "sibilantHz": 4000,
+        "sibilantBoostDb": 8
+      },
+      "eq": [
+        {
+          "f": 250,
+          "g": -2,
+          "q": 1
+        },
+        {
+          "f": 3200,
+          "g": 2,
+          "q": 1
+        }
+      ],
+      "highShelf": {
+        "f": 10000,
+        "g": 1
+      },
+      "compressor": {
+        "thresholdDb": "auto",
+        "thresholdBelowSpeechDb": 8,
+        "ratio": 2.5,
+        "attackMs": 15,
+        "releaseMs": 180,
+        "makeupDb": 2,
+        "reduceBelowLraLu": 4,
+        "reducedRatio": 1.6,
+        "bypassBelowLraLu": 3
+      },
+      "deesser": null,
+      "loudness": {
+        "targetLufs": -14,
+        "truePeakDb": -1.5,
+        "lra": 9,
+        "toleranceLu": 0.5,
+        "failLu": 2,
+        "limiterMarginDb": 0.3
+      },
+      "speechToPause": {
+        "maxWorseningDb": 2,
+        "minPauseSec": 0.25,
+        "trimSec": 0.06,
+        "maxImprovementDb": 25
+      }
+    },
+    "studio": {
+      "description": "Voz mais encorpada e próxima: EQ e compressão um pouco mais firmes, de-esser ligado. Não promete 'qualidade de estúdio' sem revisão auditiva.",
+      "highpassHz": 90,
+      "denoise": {
+        "strengthDb": 12,
+        "adaptive": true
+      },
+      "expander": {
+        "rangeDb": 8,
+        "position": 0.35,
+        "ratio": 2,
+        "attackMs": 6,
+        "releaseMs": 120,
+        "lookaheadMs": 12,
+        "sibilantHz": 4000,
+        "sibilantBoostDb": 8
+      },
+      "eq": [
+        {
+          "f": 300,
+          "g": -3,
+          "q": 1
+        },
+        {
+          "f": 3000,
+          "g": 2.5,
+          "q": 1
+        }
+      ],
+      "highShelf": {
+        "f": 10000,
+        "g": 2
+      },
+      "compressor": {
+        "thresholdDb": "auto",
+        "thresholdBelowSpeechDb": 10,
+        "ratio": 3,
+        "attackMs": 10,
+        "releaseMs": 150,
+        "makeupDb": 3,
+        "reduceBelowLraLu": 4,
+        "reducedRatio": 1.6,
+        "bypassBelowLraLu": 3
+      },
+      "deesser": {
+        "intensity": 0.4,
+        "maxReduction": 0.5,
+        "frequency": 0.5
+      },
+      "loudness": {
+        "targetLufs": -14,
+        "truePeakDb": -1.5,
+        "lra": 7,
+        "toleranceLu": 0.5,
+        "failLu": 2,
+        "limiterMarginDb": 0.3
+      },
+      "speechToPause": {
+        "maxWorseningDb": 3,
+        "minPauseSec": 0.25,
+        "trimSec": 0.06,
+        "maxImprovementDb": 25
+      }
+    },
+    "noisy-room": {
+      "description": "Sala com ruído/ventilador: passa-altas mais alto e redução de ruído mais forte, ainda limitada para não comer fonemas.",
+      "highpassHz": 100,
+      "denoise": {
+        "strengthDb": 18,
+        "adaptive": true
+      },
+      "expander": {
+        "rangeDb": 10,
+        "position": 0.35,
+        "ratio": 2,
+        "attackMs": 6,
+        "releaseMs": 120,
+        "lookaheadMs": 12,
+        "sibilantHz": 4000,
+        "sibilantBoostDb": 8
+      },
+      "eq": [
+        {
+          "f": 250,
+          "g": -2.5,
+          "q": 1
+        },
+        {
+          "f": 3200,
+          "g": 2,
+          "q": 1
+        }
+      ],
+      "highShelf": {
+        "f": 9000,
+        "g": 1
+      },
+      "compressor": {
+        "thresholdDb": "auto",
+        "thresholdBelowSpeechDb": 8,
+        "ratio": 2.5,
+        "attackMs": 15,
+        "releaseMs": 180,
+        "makeupDb": 2,
+        "reduceBelowLraLu": 4,
+        "reducedRatio": 1.6,
+        "bypassBelowLraLu": 3
+      },
+      "deesser": {
+        "intensity": 0.3,
+        "maxReduction": 0.5,
+        "frequency": 0.5
+      },
+      "loudness": {
+        "targetLufs": -14,
+        "truePeakDb": -1.5,
+        "lra": 9,
+        "toleranceLu": 0.5,
+        "failLu": 2,
+        "limiterMarginDb": 0.3
+      },
+      "speechToPause": {
+        "maxWorseningDb": 2,
+        "minPauseSec": 0.25,
+        "trimSec": 0.06,
+        "maxImprovementDb": 25
+      }
+    }
+  },
+  "edit": {
+    "talking-head": {
+      "description": "Reels/Shorts falados para a câmera: ritmo enxuto, jump cuts com punch-in, legendas cinéticas.",
+      "cut": {
+        "removePausesLongerThan": 0.32,
+        "padBefore": 0.09,
+        "padAfter": 0.13,
+        "tailHold": 0.45,
+        "minSegment": 0.25,
+        "sibilants": {
+          "hz": 4000,
+          "marginDb": 12,
+          "maxGapSec": 0.06,
+          "maxExtendSec": 0.2
+        },
+        "quietestWindowSec": 0.08,
+        "snapToSourceCutSec": 0.7
+      },
+      "fillers": {
+        "remove": true
+      },
+      "repetitions": {
+        "autoRemovePhrases": true,
+        "autoRemoveStutter": true
+      },
+      "zoom": {
+        "mode": "punch",
+        "levels": [
+          1,
+          1.12
+        ],
+        "hookLevel": 1.16,
+        "minShotSec": 0.7,
+        "easeFrames": 0,
+        "maxShotSec": 5.5,
+        "minZoomCutSec": 2.2
+      },
+      "captions": {
+        "maxWordsPerPage": 3,
+        "maxCharsPerLine": 14,
+        "maxLines": 2
+      },
+      "audio": {
+        "preset": "clean"
+      },
+      "faceBox": {
+        "x": 0.2,
+        "y": 0.24,
+        "w": 0.6,
+        "h": 0.42
+      }
+    },
+    "tutorial": {
+      "description": "Tutoriais/aulas: pausas mais longas preservadas para acompanhar o raciocínio; zoom discreto.",
+      "cut": {
+        "removePausesLongerThan": 0.7,
+        "padBefore": 0.12,
+        "padAfter": 0.25,
+        "tailHold": 0.6,
+        "minSegment": 0.3,
+        "sibilants": {
+          "hz": 4000,
+          "marginDb": 12,
+          "maxGapSec": 0.06,
+          "maxExtendSec": 0.2
+        },
+        "quietestWindowSec": 0.08,
+        "snapToSourceCutSec": 0.7
+      },
+      "fillers": {
+        "remove": true
+      },
+      "repetitions": {
+        "autoRemovePhrases": false,
+        "autoRemoveStutter": true
+      },
+      "zoom": {
+        "mode": "punch",
+        "levels": [
+          1,
+          1.06
+        ],
+        "hookLevel": 1.08,
+        "minShotSec": 2.5,
+        "easeFrames": 6
+      },
+      "captions": {
+        "maxWordsPerPage": 5,
+        "maxCharsPerLine": 20,
+        "maxLines": 2
+      },
+      "audio": {
+        "preset": "clean"
+      },
+      "faceBox": null
+    },
+    "podcast": {
+      "description": "Podcast/entrevista: cortes só em silêncios longos, sem punch-in automático, legendas com mais palavras.",
+      "cut": {
+        "removePausesLongerThan": 1,
+        "padBefore": 0.15,
+        "padAfter": 0.35,
+        "tailHold": 0.8,
+        "minSegment": 0.4,
+        "sibilants": {
+          "hz": 4000,
+          "marginDb": 12,
+          "maxGapSec": 0.06,
+          "maxExtendSec": 0.2
+        },
+        "quietestWindowSec": 0.08,
+        "snapToSourceCutSec": 0.7
+      },
+      "fillers": {
+        "remove": false
+      },
+      "repetitions": {
+        "autoRemovePhrases": false,
+        "autoRemoveStutter": false
+      },
+      "zoom": {
+        "mode": "none",
+        "levels": [
+          1
+        ],
+        "hookLevel": 1,
+        "minShotSec": 99,
+        "easeFrames": 0
+      },
+      "captions": {
+        "maxWordsPerPage": 6,
+        "maxCharsPerLine": 22,
+        "maxLines": 2
+      },
+      "audio": {
+        "preset": "natural"
+      },
+      "faceBox": null
+    },
+    "interview": {
+      "description": "Entrevista em plano único: preserva respirações, punch-in leve nas respostas.",
+      "cut": {
+        "removePausesLongerThan": 0.6,
+        "padBefore": 0.12,
+        "padAfter": 0.22,
+        "tailHold": 0.6,
+        "minSegment": 0.3,
+        "sibilants": {
+          "hz": 4000,
+          "marginDb": 12,
+          "maxGapSec": 0.06,
+          "maxExtendSec": 0.2
+        },
+        "quietestWindowSec": 0.08,
+        "snapToSourceCutSec": 0.7
+      },
+      "fillers": {
+        "remove": true
+      },
+      "repetitions": {
+        "autoRemovePhrases": false,
+        "autoRemoveStutter": true
+      },
+      "zoom": {
+        "mode": "punch",
+        "levels": [
+          1,
+          1.08
+        ],
+        "hookLevel": 1.1,
+        "minShotSec": 2,
+        "easeFrames": 0
+      },
+      "captions": {
+        "maxWordsPerPage": 4,
+        "maxCharsPerLine": 18,
+        "maxLines": 2
+      },
+      "audio": {
+        "preset": "natural"
+      },
+      "faceBox": null
+    },
+    "institucional": {
+      "description": "Vídeo institucional: ritmo calmo, respirações preservadas, sem punch-in brusco, legendas mais longas.",
+      "cut": {
+        "removePausesLongerThan": 0.8,
+        "padBefore": 0.14,
+        "padAfter": 0.3,
+        "tailHold": 0.6,
+        "minSegment": 0.3,
+        "sibilants": {
+          "hz": 4000,
+          "marginDb": 12,
+          "maxGapSec": 0.06,
+          "maxExtendSec": 0.2
+        },
+        "quietestWindowSec": 0.08,
+        "snapToSourceCutSec": 0.7
+      },
+      "fillers": {
+        "remove": true
+      },
+      "repetitions": {
+        "autoRemovePhrases": false,
+        "autoRemoveStutter": true
+      },
+      "zoom": {
+        "mode": "none",
+        "levels": [
+          1
+        ],
+        "hookLevel": 1,
+        "minShotSec": 1.5,
+        "easeFrames": 0
+      },
+      "captions": {
+        "maxWordsPerPage": 6,
+        "maxCharsPerLine": 22,
+        "maxLines": 2
+      },
+      "audio": {
+        "preset": "natural"
+      },
+      "faceBox": null
+    }
+  },
+  "qa": {
+    "base": {
+      "loudness": {
+        "minLufs": -16,
+        "maxLufs": -12,
+        "toleranceLu": 0.5,
+        "failLu": 2
+      },
+      "avSync": {
+        "passSec": 0.005
+      },
+      "shots": {
+        "orphanFrames": 3,
+        "minSec": 0.7
+      },
+      "cuts": {
+        "lostSpeechSec": 0.05,
+        "boundarySec": 0.02,
+        "sibilantBoundarySec": 0.02
+      },
+      "captions": {
+        "syncToleranceSec": 0.12,
+        "syncPass": 0.95,
+        "syncWarn": 0.85,
+        "longWordSec": 1,
+        "lowConfidence": 0.5
+      }
+    },
+    "talking-head": {},
+    "tutorial": {
+      "shots": {
+        "minSec": 1
+      }
+    },
+    "podcast": {
+      "shots": {
+        "minSec": 1
+      }
+    },
+    "interview": {},
+    "institucional": {
+      "shots": {
+        "minSec": 1
+      }
+    }
+  },
+  "render": {
+    "truePeak": {
+      "maxReencodes": 3,
+      "marginDb": 0.1
+    }
+  },
+  "ab": {
+    "clips": 4,
+    "clipSec": 4,
+    "minSpeechRatio": 0.6
+  }
+}

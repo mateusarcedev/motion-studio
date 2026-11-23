@@ -34,6 +34,7 @@
     "reel/stt/*.py",
     "reel/stt/*.mjs",
     "reel/*.mjs",
+    "reel/*.json",
     "lib/*.mjs",
     "assets/icons/LICENSE-*.txt",
     "visual-assets/*.mjs",

@@ -9,42 +9,12 @@ import path from "node:path";
 import { analyzeMedia, energyEnvelope } from "./analyze.mjs";
 import { buildPages, placeCaptions, DEFAULT_CAPTION_STYLE } from "./captions.mjs";
 import { computeDst, refineWordTiming, remapWords, TIMELINE_SCHEMA, TIMELINE_VERSION, timelineHash, totalFrames } from "./timeline.mjs";
+import { EDIT_PRESETS, resolveQaParams } from "./presets.mjs";
+import { extendSpeechToSibilants } from "./sibilants.mjs";
+import { VOICE_CHAIN_VERSION } from "./voice.mjs";
 import { normalizeWord, probeMedia, reelError, REEL_ERRORS, round, sha256File, ffmpegTools } from "./util.mjs";
 
-export const EDIT_PRESETS = Object.freeze({
-  "talking-head": {
-    description: "Reels/Shorts falados para a câmera: ritmo enxuto, jump cuts com punch-in, legendas cinéticas.",
-    cut: { removePausesLongerThan: 0.32, padBefore: 0.09, padAfter: 0.13, tailHold: 0.45, minSegment: 0.25 },
-    fillers: { remove: true }, repetitions: { autoRemovePhrases: true, autoRemoveStutter: true },
-    zoom: { mode: "punch", levels: [1.0, 1.12], hookLevel: 1.16, minShotSec: 0.7, easeFrames: 0, maxShotSec: 5.5, minZoomCutSec: 2.2 },
-    captions: { maxWordsPerPage: 3, maxCharsPerLine: 14, maxLines: 2 }, audio: { preset: "clean" },
-    faceBox: { x: 0.2, y: 0.24, w: 0.6, h: 0.42 },
-  },
-  tutorial: {
-    description: "Tutoriais/aulas: pausas mais longas preservadas para acompanhar o raciocínio; zoom discreto.",
-    cut: { removePausesLongerThan: 0.7, padBefore: 0.12, padAfter: 0.25, tailHold: 0.6, minSegment: 0.3 },
-    fillers: { remove: true }, repetitions: { autoRemovePhrases: false, autoRemoveStutter: true },
-    zoom: { mode: "punch", levels: [1.0, 1.06], hookLevel: 1.08, minShotSec: 2.5, easeFrames: 6 },
-    captions: { maxWordsPerPage: 5, maxCharsPerLine: 20, maxLines: 2 }, audio: { preset: "clean" },
-    faceBox: null,
-  },
-  podcast: {
-    description: "Podcast/entrevista: cortes só em silêncios longos, sem punch-in automático, legendas com mais palavras.",
-    cut: { removePausesLongerThan: 1.0, padBefore: 0.15, padAfter: 0.35, tailHold: 0.8, minSegment: 0.4 },
-    fillers: { remove: false }, repetitions: { autoRemovePhrases: false, autoRemoveStutter: false },
-    zoom: { mode: "none", levels: [1.0], hookLevel: 1.0, minShotSec: 99, easeFrames: 0 },
-    captions: { maxWordsPerPage: 6, maxCharsPerLine: 22, maxLines: 2 }, audio: { preset: "natural" },
-    faceBox: null,
-  },
-  interview: {
-    description: "Entrevista em plano único: preserva respirações, punch-in leve nas respostas.",
-    cut: { removePausesLongerThan: 0.6, padBefore: 0.12, padAfter: 0.22, tailHold: 0.6, minSegment: 0.3 },
-    fillers: { remove: true }, repetitions: { autoRemovePhrases: false, autoRemoveStutter: true },
-    zoom: { mode: "punch", levels: [1.0, 1.08], hookLevel: 1.1, minShotSec: 2, easeFrames: 0 },
-    captions: { maxWordsPerPage: 4, maxCharsPerLine: 18, maxLines: 2 }, audio: { preset: "natural" },
-    faceBox: null,
-  },
-});
+export { EDIT_PRESETS };
 
 export function listEditPresets() {
   return Object.entries(EDIT_PRESETS).map(([id, p]) => ({ id, description: p.description, removePausesLongerThan: p.cut.removePausesLongerThan, zoom: p.zoom.mode, voicePreset: p.audio.preset }));
@@ -193,7 +163,13 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     }
   } else warnings.push("Sem transcrição: cortes só por energia (VAD) e legendas desativadas. Rode motion edit transcribe.");
 
-  const speech = analysis.audio?.speech ?? [];
+  // VAD misses weak sibilants: extend speech edges where energy > 4 kHz continues
+  let speech = analysis.audio?.speech ?? [];
+  if (speech.length && cut.sibilants && probe.audio) {
+    const ext = await extendSpeechToSibilants(sourcePath, speech, cut.sibilants, { channels: probe.audio.channels, durationSec: dur });
+    speech = ext.speech;
+    if (ext.extended.length) decisions.push({ what: `${ext.extended.length} borda(s) de fala estendida(s) por energia > ${cut.sibilants.hz} Hz (${ext.extended.map((x) => `${x.edge === "end" ? "fim" : "início"} ${x.from}→${x.to}s`).join(", ")})`, why: "não truncar sibilantes fracas", by: "engine" });
+  }
   const pads = { padBefore: cut.padBefore, padAfter: cut.padAfter };
   // protected = speech energy (VAD), padded. Recognizer word ends often spill into silence,
   // so words only add protection where the VAD saw no energy (soft speech the VAD missed).
@@ -262,14 +238,14 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     const env = await energyEnvelope(sourcePath, { channels: probe.audio?.channels });
     const quietest = (t) => {
       let best = t, bestV = Infinity;
-      for (let i = Math.max(0, Math.round((t - 0.08) * 100)); i <= Math.min(env.length - 1, Math.round((t + 0.08) * 100)); i++) if (env[i] < bestV) { bestV = env[i]; best = i / 100; }
+      for (let i = Math.max(0, Math.round((t - cut.quietestWindowSec) * 100)); i <= Math.min(env.length - 1, Math.round((t + cut.quietestWindowSec) * 100)); i++) if (env[i] < bestV) { bestV = env[i]; best = i / 100; }
       return round(best, 3);
     };
     for (const r of decided) {
       const before = [...r.src];
       if (r.src[0] > 0.05 && inSpeech(r.src[0])) r.src[0] = quietest(r.src[0]);
       if (r.src[1] < dur - 0.05 && inSpeech(r.src[1])) r.src[1] = quietest(r.src[1]);
-      if (before[0] !== r.src[0] || before[1] !== r.src[1]) r.boundaryRefined = { from: before, by: "energy-minimum ±80 ms" };
+      if (before[0] !== r.src[0] || before[1] !== r.src[1]) r.boundaryRefined = { from: before, by: `energy-minimum ±${cut.quietestWindowSec * 1000} ms` };
     }
   }
 
@@ -319,9 +295,9 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   const speechIn = (x, y) => speech.some((sp) => sp.end > x + 0.005 && sp.start < y - 0.005);
   const snaps = [];
   for (const r of ranges) {
-    const nearEnd = sourceCuts.filter((c) => c < r[1] - 1e-6 && r[1] - c <= minShot && c - r[0] >= minShot).at(-1);
+    const nearEnd = sourceCuts.filter((c) => c < r[1] - 1e-6 && r[1] - c <= cut.snapToSourceCutSec && c - r[0] >= minShot).at(-1);
     if (nearEnd !== undefined && !speechIn(nearEnd, r[1])) { snaps.push({ from: r[1], to: nearEnd, edge: "end" }); r[1] = nearEnd; }
-    const nearStart = sourceCuts.find((c) => c > r[0] + 1e-6 && c - r[0] <= minShot && r[1] - c >= minShot);
+    const nearStart = sourceCuts.find((c) => c > r[0] + 1e-6 && c - r[0] <= cut.snapToSourceCutSec && r[1] - c >= minShot);
     if (nearStart !== undefined && !speechIn(r[0], nearStart)) { snaps.push({ from: r[0], to: nearStart, edge: "start" }); r[0] = nearStart; }
   }
   if (snaps.length) decisions.push({ what: `${snaps.length} borda(s) de corte encaixada(s) em saltos já existentes na fonte (${snaps.map((x) => `${round(x.from, 3)}→${round(x.to, 3)}s`).join(", ")})`, why: "evitar quadro órfão/micro-plano junto a emenda do celular", by: "engine" });
@@ -486,7 +462,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     segments,
     removed: union(removals.map((r) => r.src)).length ? removals.map((r) => ({ ...r, src: [round(Math.max(0, r.src[0]), 3), round(Math.min(dur, r.src[1]), 3)] })) : [],
     transcript: transcriptInfo,
-    audio: { preset: opt.audio?.preset ?? P.audio.preset, overrides: opt.audio?.overrides ?? {}, denoiser: opt.audio?.denoiser ?? "auto", music: opt.audio?.music ?? null },
+    audio: { preset: opt.audio?.preset ?? P.audio.preset, overrides: opt.audio?.overrides ?? {}, denoiser: opt.audio?.denoiser ?? "auto", chainVersion: VOICE_CHAIN_VERSION, music: opt.audio?.music ?? null },
     captions: { enabled: pages.length > 0 && opt.captions?.enabled !== false, style: capStyle, placement, pages, words: dstWords, hiddenWords: [...hidden.keys()], fontsDir: opt.captions?.fontsDir ?? null },
     overlays,
     overlayStyle: opt.overlayStyle ?? null,
@@ -501,6 +477,8 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       sourceSec: dur, outputSec: outDur, removedSec: round(dur - outDur, 3), cuts: segments.filter((s) => s.cutBefore).length, zoomCuts: segments.filter((s) => s.zoomCut).length,
       wordsKept: dstWords.length, wordsRemovedByDecision: lost.length - unexpectedLost.length, wordsLostUnexpected: unexpectedLost.length,
     },
+    qa: resolveQaParams(preset, opt.qa),
+    effective: { cut, zoom: zoomCfg },
     review, decisions, warnings,
     provenance: { engine: "motion-core/reel", engineVersion: "1.1.1+reel", ffmpeg: tools.version, analysisSchema: analysis.schema, transcriptProvider: transcriptInfo?.provider?.id ?? null },
   };
