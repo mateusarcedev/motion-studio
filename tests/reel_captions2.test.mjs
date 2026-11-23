@@ -46,7 +46,7 @@ describe("Checks de legenda", () => {
     const fast = [page(0, 0, 0.8, ["CONSTANTEMENTE", "RAPIDAMENTE"]), page(1, 0.8, 1.6, ["EXTRAORDINÁRIO", "IMENSAMENTE"])];
     const a = R.captionCps(fast.map((p) => ({ ...p, words: p.words.map((w) => ({ ...w, start: w.start, end: w.start + 0.6 })) })), cfg.cps, cfg);
     assert.equal(a.length, 2); assert.equal(a[0].cause, "texto demais");
-    const b = R.captionCps([page(0, 0, 0.4, ["IMPOSSIVELMENTE"]), page(1, 0.4, 2.4, ["FAÇA"])], cfg.cps, cfg);
+    const b = R.captionCps([page(0, 0, 0.4, ["IMPOSSIVELMENTEE"]), page(1, 0.4, 2.4, ["FAÇA"])], cfg.cps, cfg);
     assert.equal(b.length, 1); assert.equal(b[0].cause, "timing do ASR"); assert.match(b[0].evidence, /cps|2 s/);
     assert.deepEqual(R.captionCps([page(0, 0, 1, ["BOM", "RITMO"])], cfg.cps, cfg), []);
   });
@@ -55,6 +55,10 @@ describe("Checks de legenda", () => {
     const m = await R.measureWordBoxes(t, { workDir: path.join(tmp, "wb") });
     assert.equal(m.ok, true, m.stderr); assert.equal(m.boxes.length, t.captions.pages.reduce((n, p) => n + p.words.length, 0));
     assert.deepEqual(R.wordOverlaps(m.boxes, 2), []);
+    // many words: every measured box must belong to its own word (regression: 1-frame slip)
+    const pages = Array.from({ length: 45 }, (_, i) => ({ index: i, start: i, end: i + 1, lines: [1, 2], words: ["E", "QUER", "REFINAR"].map((d, k) => ({ id: `${i}-${k}`, text: d, display: d, start: i + k / 3, end: i + (k + 1) / 3 })) }));
+    const big = await R.measureWordBoxes({ ...t, captions: { ...t.captions, pages } }, { workDir: path.join(tmp, "wb3") });
+    for (const b of big.boxes) assert.deepEqual([b.x1, b.x2, b.y1, b.y2], [big.boxes[b.word].x1, big.boxes[b.word].x2, big.boxes[b.word].y1, big.boxes[b.word].y2], `página ${b.page} palavra ${b.word}`);
     const wide = structuredClone(t); wide.captions.style.outlineWidth = 40;
     assert.ok(R.wordOverlaps((await R.measureWordBoxes(wide, { workDir: path.join(tmp, "wb2") })).boxes, 2).length > 0, "contorno enorme precisa colidir");
   });

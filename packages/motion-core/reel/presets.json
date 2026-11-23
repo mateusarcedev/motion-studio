@@ -490,7 +490,7 @@
         "cps": {
           "warn": 20,
           "fail": 30,
-          "maxWordCps": 30,
+          "maxWordCps": 45,
           "windowPages": 1
         },
         "contrast": {

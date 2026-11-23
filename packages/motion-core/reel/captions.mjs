@@ -208,9 +208,9 @@ export function buildWordBoxAss(pages, { width, height, styleIn = {}, placement,
     p.words.forEach((_, i) => {
       let k = 0;
       const text = p.lines.map((n) => { const parts = []; for (let j = 0; j < n; j++, k++) parts.push(`{\\alpha${k === i ? "&H00&" : "&HFF&"}}${escapeAss(p.words[k].display)}`); return parts.join(" "); }).join("\\N");
-      const f = index.length;
+      const f = index.length; // event centred on its frame: libass truncates frame times to ms
       index.push({ page: p.index, word: i });
-      events.push(`Dialogue: 0,${assTime(f / fps)},${assTime((f + 1) / fps)},Caption,,0,0,0,,{\\an5\\pos(${x},${Math.round((p.y ?? placement.y) * height)})\\fscx${scale}\\fscy${scale}}${text}`);
+      events.push(`Dialogue: 0,${assTime((f - 0.4) / fps)},${assTime((f + 0.4) / fps)},Caption,,0,0,0,,{\\an5\\pos(${x},${Math.round((p.y ?? placement.y) * height)})\\fscx${scale}\\fscy${scale}}${text}`);
     });
   }
   return { ass: assHeader(s, width, height).concat(events).join("\n") + "\n", index };
