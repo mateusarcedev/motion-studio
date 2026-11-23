@@ -47,6 +47,9 @@ export async function loadCatalog({ loader = defaultCatalogLoader, profile = "al
     if (digest !== entry.sha256) {
       throw new BootstrapError("SKILL_INTEGRITY", `Integridade falhou para a Skill '${entry.name}' (sha256 diverge do manifesto).`, "O pacote pode estar corrompido ou adulterado; reinstale-o.");
     }
+    if (entry.treeSha256 !== undefined && (await treeHash(srcDir)) !== entry.treeSha256) {
+      throw new BootstrapError("SKILL_INTEGRITY", `Integridade falhou para a Skill '${entry.name}' (arquivos divergem do manifesto).`, "O pacote pode estar corrompido ou adulterado; reinstale-o.");
+    }
     all.push({ name: entry.name, srcDir, sha256: entry.sha256, version: entry.version });
   }
 

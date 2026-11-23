@@ -25,7 +25,7 @@ Esse é o fluxo oficial. Você não precisa conhecer os pacotes internos (`@tech
 1. Verifica o catálogo de Skills (sha256 de cada `SKILL.md` contra `public-skills.json`). Falha explicitamente se faltar alguma Skill.
 2. Detecta o gerenciador de pacotes (`packageManager` do package.json → lockfile → npm).
 3. Instala **CLI, Core e Skills** como `devDependencies` exatas, sem scripts de terceiros (`--ignore-scripts`), nunca globalmente.
-4. Copia as **13 Skills oficiais** para `.agents/skills/` e, para Claude Code, cria links relativos em `.claude/skills/`.
+4. Copia as **14 Skills oficiais** para `.agents/skills/` e, para Claude Code, cria links relativos em `.claude/skills/`.
 5. Cria `motion.config.json` e `motion/` (brand, projects, out, gallery).
 6. Grava `.motion/install.json` (versões, hashes, status) e verifica a integridade.
 7. Roda o diagnóstico dos motores e imprime o relatório.
@@ -114,3 +114,11 @@ Skills que você não modificou são atualizadas; as modificadas são preservada
 
 1. `npm uninstall @technomanceer/motion-cli @technomanceer/motion-core @technomanceer/motion-studio-skills`
 2. `rm -rf motion motion.config.json .motion .agents/skills .claude/skills` (confira antes: remova só o que for do MOTION se você tem outras Skills)
+
+## Dependências Python opcionais
+
+O mapa de batidas da Skill `cinematic-product-director` usa numpy e scipy:
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r .agents/skills/cinematic-product-director/scripts/requirements.txt
+```

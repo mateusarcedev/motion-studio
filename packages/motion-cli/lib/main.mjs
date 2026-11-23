@@ -44,7 +44,7 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
   Comandos principais:
     init                     Inicializa o MOTION Studio no projeto atual
       --brand=<nome>         Define o nome da marca (padrão: nome da pasta)
-      --profile=<nome>       Perfil de skills (padrão: all = as 13 Skills oficiais)
+      --profile=<nome>       Perfil de skills (padrão: all = as 14 Skills oficiais)
       --force                Substitui configuração/Skills divergentes (com backup)
       --agents=<lista>       claude,codex,gemini,opencode,copilot (padrão: detecção automática)
       --skills-dir=<pasta>   Instala as Skills nesta pasta do projeto (não toca em .claude/.agents)

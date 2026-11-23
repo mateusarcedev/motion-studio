@@ -1,6 +1,6 @@
 ---
 name: studio-director
-description: MOTION's universal creative director and adaptive dispatcher — interprets natural language requests across 5 independent dimensions (subject, intent, audience, channel, visual language), performs factual grounding, calculates adaptive durations, and routes to specialist studios (explainer-motion, motion-director, stageshow, 3d-scene-director, web-director, carousel-studio, story-studio, feed-studio, aula-interativa, reel-editor, voice-studio), coordinating single deliverables and multi-format campaigns. Principle: the production adapts to the user's intent, never the opposite.
+description: MOTION's universal creative director and adaptive dispatcher — interprets natural language requests across 5 independent dimensions (subject, intent, audience, channel, visual language), performs factual grounding, calculates adaptive durations, and routes to specialist studios (explainer-motion, motion-director, stageshow, 3d-scene-director, web-director, carousel-studio, story-studio, feed-studio, aula-interativa, reel-editor, voice-studio, shorts-director, cinematic-product-director), coordinating single deliverables and multi-format campaigns. Principle: the production adapts to the user's intent, never the opposite.
 ---
 
 # Studio Director — Universal Creative Director & Adaptive Content Production
@@ -130,6 +130,12 @@ Evitar questionários exaustivos com 10 perguntas mecânicas. Perguntar apenas o
 | **Stories Sequenciais (9:16)** | Story Vertical | **`story-studio`** | Remotion / Chromium |
 | **Aula Interativa com Feedback e Exercícios** | Interactive Mental Model HTML | **`aula-interativa`** | Gabriel Greco Skills |
 | **Edição de vídeo gravado (talking-head, entrevista, tutorial, podcast, Reels de celular)** | Edição real · cortes · legendas · voz | **`reel-editor`** | **`voice-studio`** · `motion edit` · STT local |
+| **Lançamento de app/feature, teaser, filme de produto, logo em 3D** | Filme de produto (`ui-launch` / `cinema-3d`) | **`cinematic-product-director`** | `3d-scene-director` · `motion-director` |
+| **Short narrado a partir de texto, história ou versículo** | Short ilustrado | **`shorts-director`** | TTS · legendas |
+
+**Precedência:** carrossel, stories, post e site ficam nos estúdios próprios, mesmo quando o assunto é lançamento;
+depois vem gravação existente (`reel-editor`), short narrado (`shorts-director`) e só então filme de produto
+(`cinematic-product-director`).
 
 **Vídeo existente ≠ motion do zero.** Quando o usuário traz uma gravação e pede para editar,
 cortar pausas, legendar, melhorar o áudio ou "transformar em Reels", encaminhe ao **`reel-editor`**

@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   classifyCreativeIntent,
+  resolveRoute,
   calculateAdaptiveDuration,
   renderFrames,
   SUBJECT_DOMAINS,
@@ -92,6 +93,26 @@ describe("MOTION Studio — Intent-Driven Creative Router & Homologação", () =
     assert.equal(intentE.visualLanguage, "ui_motion");
     assert.equal(intentE.durationSeconds, 30);
   });
+
+  const ROUTES = [
+    ["cinematic-product-director", ["vídeo de lançamento da feature X", "teaser do app", "filme do produto", "logo 3D abrindo o vídeo", "vídeo estilo Apple para o meu app", "Faz um reel de lançamento do nosso aplicativo"]],
+    ["reel-editor", ["edita meu vídeo gravado", "tira as pausas e legenda meu reel", "edita o vídeo de lançamento que eu gravei", "transforma essa gravação em Reels e corta as pausas", "edita minha filmagem do site"]],
+    ["shorts-director", ["short narrado deste texto", "short narrado sobre o lançamento do produto", "short ilustrado deste versículo"]],
+    ["carousel-studio", ["carrossel de lançamento do app"]],
+    ["story-studio", ["stories para o lançamento"]],
+    ["feed-studio", ["post de lançamento do produto"]],
+    ["web-director", ["landing page de lançamento"]],
+    [null, ["como funciona uma API", "vídeo explicativo sobre o lançamento de foguetes", "showcase da plataforma com cursor e bento", "Vídeo publicitário de 15 segundos para Atelier Aurora", "cena 3D de um relógio girando"]],
+  ];
+  for (const [route, prompts] of ROUTES) for (const p of prompts) {
+    test(`2b. Rota ${route ?? "por dimensões"}: ${p}`, () => {
+      assert.equal(resolveRoute(p), route);
+      const c = classifyCreativeIntent(p);
+      assert.equal(c.route, route);
+      if (route) assert.deepEqual(c.specialists, [route]);
+      else assert.ok(!c.specialists.includes("cinematic-product-director"));
+    });
+  }
 
   test("3. Cálculo de Duração Adaptativa (Sem dogmas rígidos)", () => {
     // Usuário especifica duração exata

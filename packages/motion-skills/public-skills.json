@@ -62,6 +62,24 @@
       "sha256": "7aa124c3c8b26e45a0d0b5365aefed53520b77f5c81b204063e2ea246f288208"
     },
     {
+      "name": "cinematic-product-director",
+      "path": "skills/cinematic-product-director/SKILL.md",
+      "version": "snapshot-865597990c8d",
+      "source": {
+        "type": "first-party",
+        "repository": "https://github.com/mateusarcedev/motion-studio",
+        "path": "packages/motion-skills/skills/cinematic-product-director/SKILL.md",
+        "revision": "7a7947b2982dcc278132554bac5d04804c7708da"
+      },
+      "license": {
+        "spdx": "Apache-2.0",
+        "file": "LICENSE"
+      },
+      "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
+      "sha256": "865597990c8d2bffca28f8195f7848dd18349fd41534930d5b3813f486d8cfeb",
+      "treeSha256": "dfc14be584ee96c90b857126b98a3ffc7acbcf6e5223d5cbc0b672335062fc1c"
+    },
+    {
       "name": "explainer-motion",
       "path": "skills/explainer-motion/SKILL.md",
       "version": "snapshot-064965f97d40",
@@ -166,7 +184,7 @@
     {
       "name": "studio-director",
       "path": "skills/studio-director/SKILL.md",
-      "version": "snapshot-b4baa94a6b51",
+      "version": "snapshot-452d18dbaa60",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -178,7 +196,7 @@
         "file": "LICENSE"
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "b4baa94a6b516fe30aac68afc608350902316c6e0a807630391edbab1490a811"
+      "sha256": "452d18dbaa608a366bc9e11f445f2a52d24b89ea1924831d80e37827af3487ce"
     },
     {
       "name": "thermo-nuclear-code-quality-review",

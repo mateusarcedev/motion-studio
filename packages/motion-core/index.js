@@ -62,6 +62,7 @@ export {
   calculateAdaptiveDuration,
   SUBJECT_DOMAINS,
   INTENT_TYPES,
+  resolveRoute,
   AUDIENCE_PROFILES,
   CHANNELS,
   VISUAL_LANGUAGES,

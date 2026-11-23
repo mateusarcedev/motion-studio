@@ -18,6 +18,7 @@ O que **efetivamente roda** neste repositório hoje. Tudo o mais está no catál
 | faster-whisper (PyPI, **opcional**, venv isolado fora do repo) | 1.2.1 | MIT | STT local (`motion edit transcribe`) | `~/.local/share/motion/stt/venv`; não é dependência npm |
 | CTranslate2 (PyPI, opcional) | 4.9.1 | MIT | inferência INT8/CPU do faster-whisper | idem |
 | numpy / tokenizers / huggingface-hub (PyPI, opcional) | 2.5.5 / 0.23.3 / 2.4.0 | BSD-3 / Apache-2.0 / Apache-2.0 | dependências do faster-whisper | idem (onnxruntime e PyAV vêm junto, não são usados pelo worker) |
+| numpy / scipy (PyPI, opcional) | ≥2,<3 / ≥1.13,<2 (testado 2.5.5 / 1.18.1) | BSD-3 / BSD-3 | `beat_map.py` da Skill cinematic-product-director | `pip install -r scripts/requirements.txt`; não redistribuído |
 | Modelo `Systran/faster-whisper-small` (opcional) | rev `536b0662742c02347bc0e980a01041f333bce120` | MIT (conversão do Whisper small, OpenAI, MIT) | pesos do STT | cache local, nunca versionado nem empacotado |
 
 Suspensos (verificados, não runtime): ver matriz em `INTEGRATIONS.md`. Regras de

@@ -39,7 +39,7 @@ jobs:
       - name: Chromium
         run: npx playwright-core install --with-deps chromium
       - name: Dependências Python
-        run: python3 -m pip install --quiet pillow
+        run: python3 -m pip install --quiet pillow -r packages/motion-skills/skills/cinematic-product-director/scripts/requirements.txt
       - name: Suíte completa
         run: npm run test:ci
       - name: Testes Python

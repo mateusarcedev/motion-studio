@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { treeHash } from "../packages/motion-cli/lib/bootstrap/util.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packageDir = path.join(root, "packages", "motion-skills");
@@ -32,6 +33,7 @@ for (const skill of manifest.skills) {
   const bytes = await readFile(skillPath);
   const digest = createHash("sha256").update(bytes).digest("hex");
   assert.equal(digest, skill.sha256, `stale SHA-256 in public-skills.json for ${skill.name}`);
+  if (skill.treeSha256 !== undefined) assert.equal(await treeHash(path.dirname(skillPath)), skill.treeSha256, `stale treeSha256 for ${skill.name}`);
   await readFile(path.join(packageDir, skill.license.file));
   assert.ok(skill.version.endsWith(skill.sha256.slice(0, 12)), `version must identify the content snapshot for ${skill.name}`);
 }

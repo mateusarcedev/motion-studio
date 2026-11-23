@@ -25,7 +25,7 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
   test("1. Descoberta de Skills", async () => {
     const skills = await listSkills();
     const localSkills = await listLocalSkills();
-    assert.equal(skills.length, 13, `Esperado o catálogo público de 13 skills, encontrado ${skills.length}`);
+    assert.equal(skills.length, 14, `Esperado o catálogo público de 14 skills, encontrado ${skills.length}`);
     assert.ok(localSkills.length >= 50, `Esperado preservar ao menos 50 skills locais, encontrado ${localSkills.length}`);
     const names = skills.map((s) => s.name);
     assert.ok(names.includes("studio-director"), "studio-director ausente");

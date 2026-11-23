@@ -125,6 +125,32 @@ export function calculateAdaptiveDuration({
 }
 
 /**
+ * Single-owner routes, in order of precedence: static pieces and sites, existing footage, narrated shorts,
+ * product films. Returns null when the multi-dimensional classification decides.
+ */
+export function resolveRoute(prompt = "") {
+  const text = String(prompt).toLowerCase();
+  const word = (re) => new RegExp(`(?<![\\p{L}\\p{N}])(?:${re})(?![\\p{L}\\p{N}])`, "u").test(text);
+  const footage = word("(?:que )?(?:eu |n[oó]s |a gente )?(?:gravei|gravamos|gravou|filmei|filmamos)") || word("gravad[oa]s?|gravaç(?:ão|ões)|filmagem|footage|talking.head");
+  const editing = word("edit(?:a|e|ar|ando|em)|cort(?:a|e|ar)|legend(?:a|e|ar)|tir(?:a|e|ar) as pausas|melhor(?:a|e|ar) o áudio|transform(?:a|e|ar)");
+  const ownVideo = word("(?:meu|minha|nosso|nossa|esse|este) (?:vídeo|video|reel|reels|podcast|entrevista|tutorial)");
+  if ((footage && editing) || (editing && ownVideo) || word("tir(?:a|e|ar) as pausas")) return "reel-editor";
+  if (word("carross[eé]l|carousel|lâminas")) return "carousel-studio";
+  if (word("story|stories")) return "story-studio";
+  if (word("landing page|landing|site|website")) return "web-director";
+  if (word("post|posts") && !word("vídeo|video|filme|teaser")) return "feed-studio";
+  if (footage) return null;
+  if (word("shorts?|vídeo vertical") && word("narrad[oa]|narração|ilustrad[oa]|versículo") || word("shorts? (?:deste|desse|do|a partir d[eo]) (?:texto|versículo|história)")) return "shorts-director";
+  const film = word("vídeo|video|filme|film|teaser|trailer|reel|reels");
+  if (word("explica(?:r|tivo)?|explique|como funciona|aula|tutorial")) return null;
+  if (word("filme (?:do|de|da|para o|para a) (?:nosso |nossa |meu |minha )?(?:produto|marca|app|aplicativo|feature)")) return "cinematic-product-director";
+  if (film && word("lançamento|lançar|launch|estilo apple")) return "cinematic-product-director";
+  if (word("teaser") && word("app|aplicativo|feature|produto|software|plataforma|saas|marca")) return "cinematic-product-director";
+  if (film && word("logo(?:tipo)?") && word("3d")) return "cinematic-product-director";
+  return null;
+}
+
+/**
  * Classifies a user request into independent creative dimensions.
  * @param {string|Object} input User's natural language request or options object
  * @param {Object} context Optional project and brand context
@@ -310,6 +336,15 @@ export function classifyCreativeIntent(input = "", context = {}) {
     specialists.push("motion-director");
   }
 
+  // A single-owner route replaces the generic specialists.
+  const route = resolveRoute(prompt);
+  if (route) {
+    specialists.length = 0;
+    specialists.push(route);
+    useStageshow = false;
+    if (route === "cinematic-product-director") visualLanguage = "cinematic_film";
+  }
+
   // 7. BRANDING & PALETTE STRATEGY
   let brandMode = "bespoke_subject";
   let suggestedPalette = null;
@@ -394,6 +429,7 @@ export function classifyCreativeIntent(input = "", context = {}) {
       rationale: durationRationale,
     },
     visualLanguage,
+    route,
     specialists,
     useStageshow,
     researchRequired,

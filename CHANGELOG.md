@@ -23,6 +23,13 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 - **Config**: `corrections` aceita `start`/`end`; `captions.breakBefore`/`noBreakBefore`.
 - **Correção**: a suíte passa em clone limpo (stills regenerados no teste).
 
+### Missão 22 — filmes de produto
+
+- **Skill `cinematic-product-director`** (modos `ui-launch` e `cinema-3d`); pacote público de Skills: 14. `public-skills.json` aceita `treeSha256` (scripts e referências), conferido pelo `skills:verify` e pelo instalador.
+- **Rotas**: `resolveRoute` e campo `route` em `classifyCreativeIntent` (estáticos e site → gravação → short narrado → filme de produto).
+- **Scripts da Skill**: `beat_map.py` com ataque medido na onda, `tempoCandidates` e `--bpm-hint` (aviso de oitava exige confirmação do BPM); `ref_analyze.py` separa cortes de `reviewCandidates`; `export_whatsapp.sh` nunca grava no master e exige `--force` para destino existente.
+- **CI**: numpy e scipy; testes Python recusam pulos.
+
 - **Core**: `render_static --transparent`; contrato de entrega aceita `.ass`.
 
 ## [1.1.1] — candidata de estabilização (não publicada)
