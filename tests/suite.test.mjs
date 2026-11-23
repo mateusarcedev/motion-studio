@@ -25,7 +25,7 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
   test("1. Descoberta de Skills", async () => {
     const skills = await listSkills();
     const localSkills = await listLocalSkills();
-    assert.equal(skills.length, 11, `Esperado o catálogo público de 11 skills, encontrado ${skills.length}`);
+    assert.equal(skills.length, 13, `Esperado o catálogo público de 13 skills, encontrado ${skills.length}`);
     assert.ok(localSkills.length >= 50, `Esperado preservar ao menos 50 skills locais, encontrado ${localSkills.length}`);
     const names = skills.map((s) => s.name);
     assert.ok(names.includes("studio-director"), "studio-director ausente");
@@ -34,6 +34,8 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     assert.ok(names.includes("carousel-studio"), "carousel-studio ausente");
     assert.ok(names.includes("shorts-director"), "shorts-director ausente");
     assert.ok(names.includes("3d-scene-director"), "3d-scene-director ausente");
+    assert.ok(names.includes("reel-editor"), "reel-editor ausente");
+    assert.ok(names.includes("voice-studio"), "voice-studio ausente");
   });
 
   test("2. CLI Doctor (Diagnóstico de Dependências)", () => {
