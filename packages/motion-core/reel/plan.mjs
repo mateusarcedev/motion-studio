@@ -6,10 +6,11 @@
  * repeated phrases, operator ranges) are recorded as decisions and listed for review.
  */
 import path from "node:path";
-import { analyzeMedia, energyEnvelope } from "./analyze.mjs";
-import { buildPages, placeCaptions, DEFAULT_CAPTION_STYLE } from "./captions.mjs";
+import { analyzeMedia, detectSpeech, energyEnvelope } from "./analyze.mjs";
+import { assertCaptionColors, buildPages, placeCaptions, DEFAULT_CAPTION_STYLE } from "./captions.mjs";
 import { computeDst, refineWordTiming, remapWords, TIMELINE_SCHEMA, TIMELINE_VERSION, timelineHash, totalFrames } from "./timeline.mjs";
-import { EDIT_PRESETS, resolveQaParams } from "./presets.mjs";
+import { proposeOpenings } from "./brief.mjs";
+import { EDIT_PRESETS, PRESETS, resolveQaParams } from "./presets.mjs";
 import { extendSpeechToSibilants } from "./sibilants.mjs";
 import { VOICE_CHAIN_VERSION } from "./voice.mjs";
 import { normalizeWord, probeMedia, reelError, REEL_ERRORS, round, sha256File, ffmpegTools } from "./util.mjs";
@@ -260,6 +261,28 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     return [Math.max(a, inside[0][0] - cut.padBefore), Math.min(b, Math.min(inside.at(-1)[1], b) + after)];
   }).filter(Boolean);
 
+  // opening: the brief decides; strongest-line is only a proposal until a human approves the range
+  const opening = { mode: opt.opening ?? "original", proposals: [], applied: false, approval: null };
+  if (!["original", "strongest-line", "custom"].includes(opening.mode)) throw reelError(REEL_ERRORS.INPUT_INVALID, `opening desconhecido: ${opening.mode}`, { hint: "original | strongest-line | custom" });
+  if (opening.mode === "strongest-line") {
+    const kw = words.filter((w) => kept.some(([a, b]) => w.start >= a - 0.05 && w.end <= b + 0.05));
+    opening.proposals = proposeOpenings(kw, { ...PRESETS.opening, ...(opt.openingParams ?? {}) });
+    const ap = opt.openingApproval;
+    if (ap) {
+      const tol = PRESETS.opening.approvalToleranceSec;
+      const match = opening.proposals.find((x) => Math.abs(x.src[0] - ap.src?.[0]) <= tol && Math.abs(x.src[1] - ap.src?.[1]) <= tol);
+      if (!ap.by || !ap.at || !Array.isArray(ap.src)) throw reelError(REEL_ERRORS.INPUT_INVALID, "openingApproval exige by, at e src [início, fim].");
+      if (!match && !ap.custom) throw reelError(REEL_ERRORS.INPUT_INVALID, "openingApproval não corresponde a nenhuma proposta atual.", { details: opening.proposals.map((x) => ({ src: x.src, text: x.text })), hint: "Aprove uma das propostas, ou marque custom: true com o trecho escolhido." });
+      opening.approval = ap; opening.applied = true;
+      opt.hook = ap.src; opt.hookReason = `abertura aprovada por ${ap.by} em ${ap.at}`;
+    } else if (opening.proposals.length) review.push({ src: opening.proposals[0].src, reason: `abertura proposta (aguarda aprovação, nada foi reordenado): "${opening.proposals[0].text}"`, by: "engine", severity: "gate" });
+  } else if (opening.mode === "custom") {
+    const i = findPhrase(words, opt.openingText ?? "");
+    if (i < 0) throw reelError(REEL_ERRORS.INPUT_INVALID, `openingText não foi dito na gravação: "${opt.openingText ?? ""}"`);
+    const n = String(opt.openingText).split(/\s+/).map(normalizeWord).filter(Boolean).length;
+    opt.hook = [words[i].start, words[i + n - 1].end]; opt.hookReason = "abertura definida no BRIEF (custom)"; opening.applied = true;
+  }
+
   // hook (moved to the front)
   let hookRange = null;
   if (opt.hook) {
@@ -376,8 +399,14 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
 
   // words → dst, losses accounted
   const removedByDecision = removals.filter((r) => ["filler", "repeated-phrase", "stutter", "operator"].includes(r.reason)).map((r) => r.src);
-  const { words: dstWords, lost } = remapWords(refinedWords, segments, { excluded: removedByDecision });
-  const inDecision = (w) => removedByDecision.some(([a, b]) => Math.max(0, Math.min(w.end, b) - Math.max(w.start, a)) >= 0.5 * Math.max(1e-6, w.end - w.start));
+  let energy = null;
+  if (words.length && probe.audio) {
+    const env = await energyEnvelope(sourcePath, { channels: probe.audio.channels });
+    energy = { env, thresholdDb: detectSpeech(env).thresholdDb };
+  }
+  const { words: dstWords, lost } = remapWords(refinedWords, segments, { excluded: removedByDecision, energy, params: opt.captions?.remap });
+  for (const w of lost) if (w.lostReason === "energy-cut") decisions.push({ what: `legenda de "${w.text}" (${round(w.start, 2)}s) retirada`, why: `a região de energia da palavra foi cortada (só ${Math.round((w.audibleRatio ?? 0) * 100)}% audível)`, by: "engine" });
+  const inDecision = (w) => w.lostReason === "decision" || removedByDecision.some(([a, b]) => Math.max(0, Math.min(w.end, b) - Math.max(w.start, a)) >= 0.5 * Math.max(1e-6, w.end - w.start));
   const unexpectedLost = lost.filter((w) => !inDecision(w));
   for (const w of unexpectedLost) review.push({ src: [w.start, w.end], reason: `palavra "${w.text}" ficou fora da edição sem decisão explícita`, by: "engine", severity: "high" });
   for (const w of dstWords) if (w.confidence !== null && w.confidence !== undefined && w.confidence < 0.5 && !w.corrected) review.push({ src: [w.srcStart, w.srcEnd], dst: [w.start, w.end], reason: `baixa confiança no reconhecimento: "${w.text}" (${round(w.confidence, 2)})`, by: "engine" });
@@ -389,6 +418,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
 
   // captions
   const capStyle = { ...DEFAULT_CAPTION_STYLE, ...P.captions, ...(opt.captions ?? {}), keywords: opt.keywords ?? opt.captions?.keywords ?? [] };
+  assertCaptionColors(capStyle);
   const width = opt.output?.width ?? 1080, height = opt.output?.height ?? 1920;
   const placement = placeCaptions({ width, height, faceBox, platform: capStyle.platform, lines: capStyle.maxLines, fontSize: capStyle.fontSize, override: opt.captions?.position });
   // Text already burned into the source (phone app titles, creator CTA): map to dst. Captions
@@ -426,13 +456,28 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   }
 
   // overlays (cards/titles/CTA) anchored to words
+  const ovCfg = { ...PRESETS.overlays, ...(opt.overlayTiming ?? {}) };
   const overlays = [];
   for (const [i, o] of (opt.overlays ?? []).entries()) {
     const anchor = resolveAnchor(o.at, dstWords, segments, { t: 0, how: "default" });
     if (!anchor) { warnings.push(`Overlay ${o.id ?? i + 1}: âncora não encontrada (${JSON.stringify(o.at)}); não incluído.`); continue; }
-    let start = Math.max(0, anchor.t - (o.leadSec ?? 0.1));
+    let start = Math.max(0, anchor.t - (o.leadSec ?? ovCfg.leadSec));
     let end = o.until ? (resolveAnchor(o.until, dstWords, segments)?.t ?? start + (o.durationSec ?? 2.5)) : start + (o.durationSec ?? 2.5);
     if (o.kind === "cta" && o.at?.dst === undefined && !o.at) start = Math.max(0, outDur - (o.durationSec ?? 2.5));
+    // a card never shows text before it is said: literal quotes found only later delay the card
+    if (!o.allowAnticipation) for (const text of [o.title, ...(o.lines ?? []).map((l) => l.text)].filter(Boolean)) {
+      const first = findPhrase(dstWords, text);
+      if (first < 0 || dstWords[first].start <= start + ovCfg.anticipationToleranceSec) continue;
+      const shift = dstWords[first].start - start;
+      warnings.push(`Card ${o.id ?? i + 1}: entrada adiada ${round(shift, 2)} s para não antecipar "${text}".`);
+      start += shift; if (!o.until) end += shift;
+    }
+    const firstStep = Math.min(...(o.steps ?? []).map((st) => resolveAnchor(st.at, dstWords, segments)?.t ?? Infinity));
+    if (!o.title && !(o.lines ?? []).length && Number.isFinite(firstStep) && firstStep - start > ovCfg.maxEmptySec) {
+      warnings.push(`Card ${o.id ?? i + 1}: ficaria ${round(firstStep - start, 2)} s vazio (> ${ovCfg.maxEmptySec} s); entra junto do primeiro item.`);
+      if (!o.until) end += firstStep - start;
+      start = firstStep;
+    }
     end = Math.min(outDur, end);
     start = Math.round(start * fps) / fps; end = Math.round(end * fps) / fps;
     if (end - start < 0.5) { warnings.push(`Overlay ${o.id ?? i + 1}: menos de 0,5 s na tela; não incluído.`); continue; }
@@ -477,8 +522,9 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       sourceSec: dur, outputSec: outDur, removedSec: round(dur - outDur, 3), cuts: segments.filter((s) => s.cutBefore).length, zoomCuts: segments.filter((s) => s.zoomCut).length,
       wordsKept: dstWords.length, wordsRemovedByDecision: lost.length - unexpectedLost.length, wordsLostUnexpected: unexpectedLost.length,
     },
+    opening,
     qa: resolveQaParams(preset, opt.qa),
-    effective: { cut, zoom: zoomCfg },
+    effective: { cut, zoom: zoomCfg, overlays: ovCfg },
     review, decisions, warnings,
     provenance: { engine: "motion-core/reel", engineVersion: "1.1.1+reel", ffmpeg: tools.version, analysisSchema: analysis.schema, transcriptProvider: transcriptInfo?.provider?.id ?? null },
   };

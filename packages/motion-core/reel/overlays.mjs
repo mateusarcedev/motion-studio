@@ -31,7 +31,8 @@ function cardBody(o, step, st) {
     case "title":
       return `<div class="title">${(o.lines ?? []).map((l) => `<div class="tl${l.accent ? " acc" : ""}">${esc(l.text)}</div>`).join("")}</div>`;
     case "label": {
-      const chips = o.chips ?? []; // step -1 → empty state (all hidden)
+      // before the first reveal a titled card shows only its title (no reserved blank area)
+      const chips = step === -1 && o.title ? [] : o.chips ?? [];
       return `${o.eyebrow ? `<div class="eyebrow"><i></i>${esc(o.eyebrow)}</div>` : ""}${o.title ? `<div class="ct">${o.strike ? `<s>${esc(o.strike)}</s>` : ""}${esc(o.title)}</div>` : ""}${chips.length ? `<div class="chips">${chips.map((c, i) => chip(c, step !== null && i === step, !shown(i))).join("")}</div>` : ""}`;
     }
     case "list": {
@@ -103,15 +104,21 @@ export function overlayLayers(overlays) {
     if (!steps.length) { layers.push({ overlay: o, step: null, start: o.dst[0], end: o.dst[1], enter: true, exit: true }); continue; }
     steps.sort((a, b) => a.dst - b.dst);
     // first reveal comes later than the card: show the card's empty state until then
-    if (steps[0].dst > o.dst[0] + 0.05) layers.push({ overlay: o, step: -1, start: o.dst[0], end: Math.min(o.dst[1], steps[0].dst + 0.2), enter: true, exit: false, crossfade: false });
+    if (steps[0].dst > o.dst[0] + 0.05) layers.push({ overlay: o, step: -1, start: o.dst[0], end: Math.min(o.dst[1], steps[0].dst + (o.title ? 0 : 0.2)), enter: true, exit: false, crossfade: false });
     const hasEmpty = steps[0].dst > o.dst[0] + 0.05;
     steps.forEach((st, k) => {
       const start = k === 0 && !hasEmpty ? o.dst[0] : st.dst;
       const next = steps[k + 1]?.dst;
-      layers.push({ overlay: o, step: k, start, end: next !== undefined ? Math.min(o.dst[1], next + 0.2) : o.dst[1], enter: k === 0 && !hasEmpty, exit: next === undefined, crossfade: k > 0 || hasEmpty });
+      layers.push({ overlay: o, step: k, start, end: next !== undefined ? Math.min(o.dst[1], next + 0.2) : o.dst[1], enter: k === 0 && !hasEmpty, exit: next === undefined, crossfade: k > 0 || (hasEmpty && !o.title) });
     });
   }
   return layers;
+}
+
+/** Texts a layer shows on screen (what the viewer can read, not what is reserved). */
+export function layerTexts({ overlay: o, step }) {
+  const upTo = (list) => (list ?? []).slice(0, step === null ? undefined : step + 1);
+  return [o.title, o.subtitle, ...(o.lines ?? []).map((l) => l.text), ...upTo(o.chips), ...upTo(o.items)].filter(Boolean).map(String);
 }
 
 /** Renders every overlay layer to a transparent full-frame PNG. Returns layers with png paths and QA. */

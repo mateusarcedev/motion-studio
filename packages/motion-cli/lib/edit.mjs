@@ -37,7 +37,7 @@ export const EDIT_HELP = `
     edit transcribe <video> [--provider=faster-whisper] [--model=small] [--compute-type=int8] [--language=pt]
                     [--hotwords="IA, Claude Code"] [--corrections=corrections.json] [--output=transcript.json] [--srt=out.srt]
     edit import-srt <legenda.srt> [--media=<video_da_legenda>] [--output=transcript.json]
-    edit plan <video> [--preset=talking-head] [--transcript=t.json] [--analysis=a.json] [--config=edit.config.json] --output=edit.json
+    edit plan <video> [--preset=talking-head] [--transcript=t.json] [--analysis=a.json] [--config=edit.config.json] [--brief=BRIEF.md] --output=edit.json
     edit validate <edit.json>
     edit audio <video> [--preset=clean] --output=voice.wav [--ab=<dir>] [--report=voice.json] [--denoiser=auto|ffmpeg|deepfilternet|none] [--music=trilha.wav]
     edit captions <edit.json> --output-dir=<dir>      Exporta SRT/ASS/JSON sem renderizar
@@ -103,12 +103,18 @@ export async function runEdit(sub, args, flags) {
         if (flags.config) config = rebasePaths(await readJson(flags.config), path.dirname(path.resolve(flags.config)), path.dirname(output));
         let transcript = flags.transcript ? await readJson(flags.transcript) : null;
         if (transcript && config.corrections?.length) transcript = R.applyCorrections(transcript, config.corrections);
+        const brief = flags.brief ? await R.loadBrief(flags.brief) : null;
+        let suggestions = [];
+        if (brief?.glossary && transcript) { const g = R.applyGlossary(transcript, brief.glossary, { briefSha256: brief.sha256 }); transcript = g.transcript; suggestions = g.suggestions; }
         const analysis = flags.analysis ? await readJson(flags.analysis) : null;
         const { corrections, preset: cfgPreset, ...opts } = config;
+        if (brief) for (const k of ["opening", "openingText", "openingApproval", "keywords"]) if (brief[k] !== undefined && opts[k] === undefined) opts[k] = brief[k];
         const t = await R.planEdit(video, { analysis, transcript, preset: flags.preset || cfgPreset || "talking-head", ...opts });
+        for (const g of suggestions) t.review.push({ src: [g.start, g.end], reason: `glossário sugere "${g.term}" para "${g.heard}" (semelhança ${g.similarity}, confiança ${g.confidence}); não aplicado`, by: "engine" });
+        if (brief) t.brief = { path: path.relative(path.dirname(output), path.resolve(flags.brief)), sha256: brief.sha256 };
         await mkdir(path.dirname(output), { recursive: true });
         const saved = await R.saveTimeline(t, output);
-        return out(flags, command, { output, hash: saved.hash, stats: t.stats, decisions: t.decisions, review: t.review, warnings: t.warnings },
+        return out(flags, command, { output, hash: saved.hash, stats: t.stats, opening: t.opening, decisions: t.decisions, review: t.review, warnings: t.warnings },
           `Plano: ${t.stats.sourceSec}s → ${t.stats.outputSec}s (−${t.stats.removedSec}s) · ${t.segments.length} segmentos · ${t.stats.cuts} cortes · ${t.stats.zoomCuts} zoom cuts · ${t.captions.pages.length} páginas de legenda · ${t.overlays.length} cards\n` +
           `Decisões: ${t.decisions.length} · para revisar: ${t.review.length} · palavras perdidas sem decisão: ${t.stats.wordsLostUnexpected}\n→ ${output}${t.warnings.map((w) => `\n⚠ ${w}`).join("")}`);
       }

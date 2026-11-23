@@ -486,24 +486,63 @@
         "syncPass": 0.95,
         "syncWarn": 0.85,
         "longWordSec": 1,
-        "lowConfidence": 0.5
+        "lowConfidence": 0.5,
+        "cps": {
+          "warn": 20,
+          "fail": 30,
+          "maxWordCps": 30,
+          "windowPages": 1
+        },
+        "contrast": {
+          "minRatio": 3,
+          "outlineMinRatio": 4.5,
+          "outlineMinPx": 3,
+          "percentile": 90
+        },
+        "overlapTolerancePx": 2,
+        "cardDuplicateRatio": 0.6
       }
     },
     "talking-head": {},
     "tutorial": {
       "shots": {
         "minSec": 1
+      },
+      "captions": {
+        "cps": {
+          "warn": 17,
+          "fail": 25
+        }
       }
     },
     "podcast": {
       "shots": {
         "minSec": 1
+      },
+      "captions": {
+        "cps": {
+          "warn": 17,
+          "fail": 25
+        }
       }
     },
-    "interview": {},
+    "interview": {
+      "captions": {
+        "cps": {
+          "warn": 17,
+          "fail": 25
+        }
+      }
+    },
     "institucional": {
       "shots": {
         "minSec": 1
+      },
+      "captions": {
+        "cps": {
+          "warn": 15,
+          "fail": 22
+        }
       }
     }
   },
@@ -517,5 +556,31 @@
     "clips": 4,
     "clipSec": 4,
     "minSpeechRatio": 0.6
+  },
+  "captions": {
+    "glossary": {
+      "minChars": 3,
+      "applySimilarity": 0.72,
+      "suggestSimilarity": 0.6,
+      "maxConfidence": 0.85
+    },
+    "remap": {
+      "minAudibleRatio": 0.3,
+      "minAudibleSec": 0.06,
+      "levelMarginDb": 0
+    }
+  },
+  "opening": {
+    "minSec": 1.0,
+    "idealMaxSec": 4.5,
+    "maxSec": 7,
+    "breakGapSec": 0.35,
+    "proposals": 3,
+    "approvalToleranceSec": 0.3
+  },
+  "overlays": {
+    "leadSec": 0,
+    "maxEmptySec": 0.8,
+    "anticipationToleranceSec": 0.1
   }
 }

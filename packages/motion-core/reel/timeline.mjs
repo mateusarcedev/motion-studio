@@ -8,6 +8,7 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { PRESETS } from "./presets.mjs";
 import { reelError, REEL_ERRORS, round, sha256Text } from "./util.mjs";
 
 export const TIMELINE_SCHEMA = "motion.timeline";
@@ -49,24 +50,54 @@ export function refineWordTiming(words, speech) {
   });
 }
 
+/** Segments contiguous in the source (zoom cuts) play as one uninterrupted stretch of audio. */
+export function audioRuns(segments) {
+  const runs = [];
+  for (const s of segments) {
+    const last = runs.at(-1);
+    if (last && Math.abs(s.src[0] - last.src[1]) < 1e-6 && Math.abs(s.dst[0] - last.dst[1]) < 1e-6) { last.src[1] = s.src[1]; last.dst[1] = s.dst[1]; last.segments.push(s); }
+    else runs.push({ src: [...s.src], dst: [...s.dst], segments: [s] });
+  }
+  return runs;
+}
+
 /**
- * Maps source-timed words onto the destination timeline. A word is placed in every kept
- * segment holding ≥ 50% of it (the hook may repeat a range: occurrence ids are suffixed);
- * otherwise in the segment with the largest overlap. Only zero-overlap words are lost.
+ * Maps source-timed words onto the destination timeline by what is actually audible. With
+ * `energy` ({env, thresholdDb}, 10 ms frames of the source) the word's region is its frames of
+ * speech energy; without it, its whole span. A word is captioned where enough of that region
+ * survived, timed by the surviving frames. It is never moved to a neighbouring stretch: if its
+ * region was cut, the caption goes away (lost[].lostReason says why).
  */
-export function remapWords(words, segments, { excluded = [] } = {}) {
+export function remapWords(words, segments, { excluded = [], energy = null, params = {} } = {}) {
+  const P = { ...PRESETS.captions.remap, ...params };
+  const runs = audioRuns(segments);
+  const hop = 0.01;
   const out = [];
   const lost = [];
+  const len = (ranges) => ranges.reduce((n, [a, b]) => n + (b - a), 0);
+  const clip = (ranges, lo, hi) => ranges.map(([a, b]) => [Math.max(a, lo), Math.min(b, hi)]).filter(([a, b]) => b - a > 1e-6);
   for (const w of words) {
-    const dur = Math.max(1e-6, w.end - w.start);
-    // words deliberately removed (filler/repetition/operator) never get the max-overlap fallback
-    const inExcluded = excluded.reduce((n, [a, b]) => n + Math.max(0, Math.min(w.end, b) - Math.max(w.start, a)), 0);
-    if (inExcluded >= 0.5 * dur) { lost.push(w); continue; }
-    const overlaps = segments.map((s) => ({ s, a: Math.max(w.start, s.src[0]), b: Math.min(w.end, s.src[1]) })).map((o) => ({ ...o, ov: o.b - o.a })).filter((o) => o.ov > 1e-6);
-    let chosen = overlaps.filter((o) => o.ov >= 0.5 * dur);
-    if (!chosen.length && overlaps.length) chosen = [overlaps.reduce((m, o) => (o.ov > m.ov ? o : m))];
-    if (!chosen.length) { lost.push(w); continue; }
-    chosen.forEach((o, k) => out.push({ ...w, id: k ? `${w.id}#${k + 1}` : w.id, srcStart: w.start, srcEnd: w.end, start: round(o.s.dst[0] + (o.a - o.s.src[0]), 3), end: round(o.s.dst[0] + (o.b - o.s.src[0]), 3), segment: o.s.id, clipped: o.ov < dur - 1e-3 }));
+    let region = [[w.start, w.end]], measured = false;
+    if (energy) {
+      const f = [];
+      for (let i = Math.floor(w.start / hop + 1e-6); i < Math.ceil(w.end / hop - 1e-6); i++) {
+        if (!(energy.env[i] > energy.thresholdDb + P.levelMarginDb)) continue;
+        const a = Math.max(w.start, i * hop), b = Math.min(w.end, (i + 1) * hop);
+        if (f.length && a - f.at(-1)[1] < 1e-6) f.at(-1)[1] = b; else f.push([a, b]);
+      }
+      if (f.length) { region = f; measured = true; }
+    }
+    const total = Math.max(1e-6, len(region));
+    const gone = excluded.reduce((n, [a, b]) => n + len(clip(region, a, b)), 0);
+    if (gone >= 0.5 * total) { lost.push({ ...w, lostReason: "decision" }); continue; }
+    const places = runs.map((r) => ({ r, kept: clip(region, r.src[0], r.src[1]) })).filter((x) => x.kept.length);
+    const chosen = places.filter((x) => len(x.kept) >= P.minAudibleRatio * total - 1e-6 && len(x.kept) >= Math.min(P.minAudibleSec, total) - 1e-6);
+    if (!chosen.length) { lost.push({ ...w, lostReason: places.length ? "energy-cut" : "removed", audibleRatio: round(len(places.flatMap((x) => x.kept)) / total, 2) }); continue; }
+    chosen.forEach(({ r, kept }, k) => {
+      const a = kept[0][0], b = kept.at(-1)[1], at = (t) => round(r.dst[0] + (t - r.src[0]), 3);
+      out.push({ ...w, id: k ? `${w.id}#${k + 1}` : w.id, srcStart: w.start, srcEnd: w.end, start: at(a), end: at(b), segment: (r.segments.find((s) => a >= s.src[0] - 1e-6 && a < s.src[1] - 1e-6) ?? r.segments[0]).id,
+        clipped: len(kept) < total - 1e-3, retimed: measured && (Math.abs(a - w.start) > 0.02 || Math.abs(b - w.end) > 0.02) });
+    });
   }
   out.sort((x, y) => x.start - y.start || x.end - y.end);
   return { words: out, lost };

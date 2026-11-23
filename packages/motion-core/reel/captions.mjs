@@ -8,14 +8,14 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeWord, round } from "./util.mjs";
+import { normalizeWord, reelError, REEL_ERRORS, round } from "./util.mjs";
 import { srtTime, toSrt } from "./stt/index.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 export const DEFAULT_CAPTION_STYLE = Object.freeze({
   fontFamily: "Inter", fontWeight: 700, fontSize: 96, uppercase: true,
-  color: "#FFFFFF", activeColor: "#2EE6A6", keywordColor: "#2EE6A6",
+  color: "#FFFFFF", activeColor: "#2EE6A6", keywordColor: "#FFD23F",
   outlineColor: "#000000", outlineWidth: 6, shadow: 2, shadowColor: "#000000",
   maxWordsPerPage: 3, maxCharsPerLine: 14, maxLines: 2, minPageSec: 0.65, maxGapSec: 0.45,
   // libass metrics measured for Inter 700: cap height ≈ 0.567 × size, mean uppercase advance ≈ 0.466 em
@@ -169,19 +169,60 @@ const assTime = (t) => {
 };
 const escapeAss = (s) => s.replace(/\\/g, "\\\\").replace(/\{/g, "(").replace(/\}/g, ")");
 
+/** Auto-fit scale (%): a long word must never push the page into the side controls. */
+export function pageFit(p, s, placement) {
+  let k = 0;
+  const longest = Math.max(...p.lines.map((n) => { const t = p.words.slice(k, k + n).map((w) => w.display).join(" "); k += n; return t.length; }));
+  const estW = longest * s.advanceEm * s.fontSize + 2 * s.outlineWidth;
+  return placement.maxWidthPx && estW > placement.maxWidthPx ? Math.floor((placement.maxWidthPx / estW) * 100) : 100;
+}
+
+/** Keyword and active colours must differ, otherwise the keyword disappears while it is spoken. */
+export function assertCaptionColors(style) {
+  const s = { ...DEFAULT_CAPTION_STYLE, ...style };
+  const eq = (a, b) => a.toLowerCase() === b.toLowerCase();
+  if ((s.keywords ?? []).length && (eq(s.keywordColor, s.activeColor) || eq(s.keywordColor, s.color))) throw reelError(REEL_ERRORS.INPUT_INVALID, `keywordColor (${s.keywordColor}) precisa ser diferente da cor ativa e da cor do texto.`, { hint: "Defina captions.keywordColor no config." });
+}
+
+const assHeader = (s, width, height) => [
+  "[Script Info]", "; MOTION Smart Captions — gerado por motion-core/reel", "ScriptType: v4.00+", `PlayResX: ${width}`, `PlayResY: ${height}`, "WrapStyle: 2", "ScaledBorderAndShadow: yes", "YCbCr Matrix: TV.709", "",
+  "[V4+ Styles]",
+  "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+  `Style: Caption,${s.fontFamily},${s.fontSize},${assColor(s.color)},${assColor(s.color)},${assColor(s.outlineColor)},${assColor(s.shadowColor, 0x60)},${s.fontWeight >= 600 ? -1 : 0},0,0,0,100,100,0,0,1,${s.outlineWidth},${s.shadow},5,0,0,0,1`,
+  "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+];
+
+/** Largest scale (%) the entrance animation reaches, relative to the resting size. */
+export const animationPeak = (s) => Math.max(100, s.popPeak ?? 100);
+
+/**
+ * QA track: every (page, word) alone on one frame, same layout and peak animation scale, fill
+ * and outline white and no shadow, so each word's real box (outline included) can be measured.
+ */
+export function buildWordBoxAss(pages, { width, height, styleIn = {}, placement, fps = 30 }) {
+  const s = { ...DEFAULT_CAPTION_STYLE, ...styleIn, color: "#FFFFFF", outlineColor: "#FFFFFF", shadow: 0 };
+  const events = [], index = [];
+  const x = Math.round(width / 2);
+  for (const p of pages) {
+    const scale = Math.round((pageFit(p, { ...DEFAULT_CAPTION_STYLE, ...styleIn }, placement) * animationPeak(s)) / 100);
+    p.words.forEach((_, i) => {
+      let k = 0;
+      const text = p.lines.map((n) => { const parts = []; for (let j = 0; j < n; j++, k++) parts.push(`{\\alpha${k === i ? "&H00&" : "&HFF&"}}${escapeAss(p.words[k].display)}`); return parts.join(" "); }).join("\\N");
+      const f = index.length;
+      index.push({ page: p.index, word: i });
+      events.push(`Dialogue: 0,${assTime(f / fps)},${assTime((f + 1) / fps)},Caption,,0,0,0,,{\\an5\\pos(${x},${Math.round((p.y ?? placement.y) * height)})\\fscx${scale}\\fscy${scale}}${text}`);
+    });
+  }
+  return { ass: assHeader(s, width, height).concat(events).join("\n") + "\n", index };
+}
+
 /**
  * Kinetic ASS: one Dialogue per (page, active word). Page entrance pop on the first state
  * only; the active word switches colour (no reflow). Times are on the 10 ms ASS grid.
  */
 export function buildAss(pages, { width, height, styleIn = {}, placement }) {
   const s = { ...DEFAULT_CAPTION_STYLE, ...styleIn };
-  const header = [
-    "[Script Info]", "; MOTION Smart Captions — gerado por motion-core/reel", "ScriptType: v4.00+", `PlayResX: ${width}`, `PlayResY: ${height}`, "WrapStyle: 2", "ScaledBorderAndShadow: yes", "YCbCr Matrix: TV.709", "",
-    "[V4+ Styles]",
-    "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    `Style: Caption,${s.fontFamily},${s.fontSize},${assColor(s.color)},${assColor(s.color)},${assColor(s.outlineColor)},${assColor(s.shadowColor, 0x60)},${s.fontWeight >= 600 ? -1 : 0},0,0,0,100,100,0,0,1,${s.outlineWidth},${s.shadow},5,0,0,0,1`,
-    "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-  ];
+  const header = assHeader(s, width, height);
   const x = Math.round(width / 2);
   const events = [];
   for (const p of pages) {
@@ -196,16 +237,12 @@ export function buildAss(pages, { width, height, styleIn = {}, placement }) {
         const parts = [];
         for (let j = 0; j < n; j++, k++) {
           const w = words[k];
-          const col = k === i ? s.activeColor : w.keyword ? s.keywordColor : s.color;
+          const col = w.keyword ? s.keywordColor : k === i ? s.activeColor : s.color;
           parts.push(`{\\c${assColor(col)}}${escapeAss(w.display)}`);
         }
         return parts.join(" ");
       });
-      // auto-fit: a long word must never push the page into the side controls
-      let k2 = 0;
-      const longest = Math.max(...p.lines.map((n) => { const t = words.slice(k2, k2 + n).map((w) => w.display).join(" "); k2 += n; return t.length; }));
-      const estW = longest * s.advanceEm * s.fontSize + 2 * s.outlineWidth;
-      const fit = placement.maxWidthPx && estW > placement.maxWidthPx ? Math.floor((placement.maxWidthPx / estW) * 100) : 100;
+      const fit = pageFit(p, s, placement);
       const base = fit < 100 ? `\\fscx${fit}\\fscy${fit}` : "";
       const intro = i === 0 && s.animation === "pop" ? `\\fscx${Math.round(fit * 0.86)}\\fscy${Math.round(fit * 0.86)}\\t(0,90,\\fscx${fit}\\fscy${fit})\\fad(60,0)` : base;
       events.push(`Dialogue: 0,${assTime(st)},${assTime(en)},Caption,,0,0,0,,{\\an5\\pos(${x},${y})${intro}}${lineTexts.join("\\N")}`);

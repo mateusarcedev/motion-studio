@@ -10,6 +10,8 @@ import { createQaReport } from "../quality/qa-status.mjs";
 import { qaMedia } from "../quality/media_qa.mjs";
 import { detectSpeech, energyEnvelope, measureLoudness } from "./analyze.mjs";
 import { buildAss, loadSafeZonePreset } from "./captions.mjs";
+import { captionContrast, captionCps, cardDuplicates, measureWordBoxes, wordOverlaps } from "./caption_qa.mjs";
+import { layerTexts, overlayLayers } from "./overlays.mjs";
 import { PRESETS, resolveQaParams } from "./presets.mjs";
 import { audioRanges } from "./render.mjs";
 import { highBandEnvelope } from "./sibilants.mjs";
@@ -176,7 +178,7 @@ export async function qaReel(mp4, o = {}) {
     const beyond = t.captions.pages.filter((p) => p.end > t.output.durationSec + 1e-3);
     report.add({ id: "captions.bounds", title: "Legendas dentro da duração final", status: beyond.length ? "FAIL" : "PASS", details: beyond.length ? `${beyond.length} páginas passam do fim` : `${t.captions.pages.length} páginas` });
     const overlaps = t.captions.pages.filter((p, i) => i && p.start < t.captions.pages[i - 1].end - 1e-3);
-    report.add({ id: "captions.overlap", title: "Sem páginas de legenda sobrepostas", status: overlaps.length ? "FAIL" : "PASS", details: overlaps.length ? `${overlaps.length} sobreposições` : null });
+    report.add({ id: "captions.page-overlap", title: "Sem páginas de legenda sobrepostas", status: overlaps.length ? "FAIL" : "PASS", details: overlaps.length ? `${overlaps.length} sobreposições` : null });
     const shownIds = new Set(t.captions.pages.flatMap((p) => p.words.map((w) => w.id)));
     const hiddenIds = new Set(t.captions.hiddenWords ?? []);
     const uncovered = words.filter((w) => !shownIds.has(w.id) && !hiddenIds.has(w.id.split("#")[0]));
@@ -185,10 +187,19 @@ export async function qaReel(mp4, o = {}) {
     report.add({ id: "captions.long-words", title: "Palavras com duração plausível (≤ 1 s)", heuristic: true, status: long.length ? "WARN" : "PASS", details: long.length ? `possíveis palavras não reconhecidas: ${long.map((w) => `"${w.text}" ${round(w.end - w.start, 2)}s @${w.start}s`).join(", ")}` : null });
     const low = words.filter((w) => w.confidence !== null && w.confidence !== undefined && w.confidence < Q.captions.lowConfidence && !w.corrected);
     report.add({ id: "captions.confidence", title: "Palavras de baixa confiança revisadas", status: low.length ? "WARN" : "PASS", required: false, details: low.length ? `${low.length} palavras < 0,5 sem revisão: ${low.slice(0, 8).map((w) => `"${w.text}"@${w.start}s`).join(", ")}${low.length > 8 ? "…" : ""}` : "nenhuma" });
+    const cps = captionCps(t.captions.pages, Q.captions.cps, { longWordSec: Q.captions.longWordSec });
+    report.add({ id: "captions.cps", title: `Velocidade de leitura ≤ ${Q.captions.cps.warn} caracteres/s (FAIL acima de ${Q.captions.cps.fail})`, heuristic: true, status: cps.some((c) => c.cps > Q.captions.cps.fail) ? "FAIL" : cps.length ? "WARN" : "PASS", details: cps.length ? cps.map((c) => `${c.cps} cps @${c.start}s "${c.text}" [${c.cause}: ${c.evidence}]`).join(" | ") : `${t.captions.pages.length} páginas` });
+    const dup = cardDuplicates(t, Q.captions.cardDuplicateRatio);
+    report.add({ id: "captions.card-duplicate", title: "Cards não repetem a legenda ativa", heuristic: true, required: false, status: dup.length ? "WARN" : "PASS", details: dup.length ? dup.map((d) => `${d.card} × "${d.caption}" @${d.start}s`).join(" | ") : null });
     // measured placement
     const sz = loadSafeZonePreset(t.captions.style.platform ?? "instagram-reels");
     const fontsDir = t.captions.fontsDir ? path.resolve(path.dirname(t.__file ?? mp4), t.captions.fontsDir) : null;
     const m = await measureCaptionBoxes(t, { workDir: work, resolveFont: fontsDir });
+    const wb = await measureWordBoxes(t, { workDir: work, resolveFont: fontsDir });
+    if (!wb.ok) report.add({ id: "captions.overlap", title: "Caixas das palavras não se sobrepõem (pico da animação)", status: "BLOCKED", details: wb.stderr, reproduce: "Verifique FFmpeg com libass e rode motion qa reel de novo." });
+    else { const ov = wordOverlaps(wb.boxes, Q.captions.overlapTolerancePx); report.add({ id: "captions.overlap", title: "Caixas das palavras não se sobrepõem (contorno incluído, pico da animação)", status: ov.length ? "FAIL" : "PASS", details: ov.length ? ov.slice(0, 6).map((x) => `página ${x.page} (${x.start}s): "${x.a}" × "${x.b}" ${x.px}px`).join("; ") : `${wb.boxes.length} palavras medidas` }); }
+    const ct = await captionContrast(t, m.boxes, Q.captions.contrast);
+    report.add({ id: "captions.contrast", title: `Contraste do texto sobre a filmagem ≥ ${Q.captions.contrast.minRatio}:1 (amostrado sem a legenda)`, heuristic: true, status: ct.status, details: ct.details, reproduce: ct.status === "BLOCKED" ? "Disponibilize o original e rode motion qa reel de novo." : null });
     if (!m.ok || !m.boxes.length) report.add({ id: "captions.safe-zone", title: "Legendas dentro da zona segura (medido)", status: "BLOCKED", details: m.stderr ?? "nenhuma caixa medida", reproduce: "Verifique FFmpeg com libass e rode motion qa reel de novo." });
     else {
       const W = t.output.width, H = t.output.height;
@@ -220,6 +231,13 @@ export async function qaReel(mp4, o = {}) {
   // overlays from the render report
   const rr = o.renderReport;
   if (t.overlays?.length) {
+    const max = t.effective?.overlays?.maxEmptySec;
+    if (max !== undefined) {
+      const empty = overlayLayers(structuredClone(t.overlays)).filter((l) => !layerTexts(l).length && l.end - l.start > max + 0.2 + 1 / fps);
+      report.add({ id: "overlays.empty", title: `Cards não ficam vazios por mais de ${max} s`, status: empty.length ? "FAIL" : "PASS", details: empty.length ? empty.map((l) => `${l.overlay.id} ${round(l.end - l.start, 2)}s`).join(", ") : null });
+      const early = t.overlays.filter((o) => o.anchor?.word && o.dst[0] < o.anchor.t - t.effective.overlays.anticipationToleranceSec - 1 / fps);
+      report.add({ id: "overlays.anticipation", title: "Cards não antecipam a fala da âncora", status: early.length ? "FAIL" : "PASS", details: early.length ? early.map((o) => o.id).join(", ") : null });
+    }
     if (!rr?.overlays) report.add({ id: "overlays.render", title: "Cards renderizados (Chromium)", status: "NOT_TESTED", details: "relatório de render ausente" });
     else {
       const bad = rr.overlays.filter((x) => x.qa?.status === "FAIL" || x.qa?.fontsLoaded === false || x.qa?.overflow > 0);
