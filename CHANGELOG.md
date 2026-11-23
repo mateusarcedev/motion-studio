@@ -10,6 +10,17 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 - **`motion qa reel`**: sincronia de legendas no áudio final, caixa medida das legendas × safe zone × rosto, fala perdida em cortes, A/V, determinismo por hash de quadros/amostras.
 - **`motion mcp`**: servidor MCP local stdio (sem dependências) com jobs em background.
 - **Skills** `reel-editor` e `voice-studio`; `studio-director` roteia edição de vídeo existente. Pacote público de Skills: 13.
+### Missão 21.1 — qualidade, CI e portabilidade
+
+- **Voice Studio 2.0**: ganho no layout de entrega → expansor → um reajuste → limitador só para picos; compressor desligado em fonte já comprimida; `audio.speech-to-pause`; true peak medido e corrigido no AAC; A/B por trechos; bordas por energia > 4 kHz; `motion audio doctor`; DeepFilterNet só com SHA-256 conferido.
+- **Captions 2.0**: remapeamento por energia; `captions.overlap` agora é **espacial** (o temporal virou `captions.page-overlap`); `captions.cps` com causa, `captions.contrast`, `captions.card-duplicate`; glossário do BRIEF; cor própria de palavra-chave.
+- **Edição semântica**: bloco `motion-brief`, `opening`, cards que não antecipam nem ficam vazios.
+- **Crítico**: parecer JSON gravado sem edição e verificado (`motion qa critic-*`).
+- **QA mais estrito**: sem tolerância no true peak; LUFS ±0,5 (antes ±1) para `PASS`.
+- **Limiares em `reel/presets.json`**; preset `institucional`.
+- **CI** (`.github/workflows/ci.yml`), `init --skills-dir/--no-skills`, paridade MCP × CLI, `docs/COMPATIBILITY.md`.
+- **Correção**: a suíte passa em clone limpo (stills regenerados no teste).
+
 - **Core**: `render_static --transparent`; contrato de entrega aceita `.ass`.
 
 ## [1.1.1] — candidata de estabilização (não publicada)

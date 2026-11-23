@@ -178,6 +178,8 @@ Reabre um ZIP já produzido, valida o contrato/manifesto e compara cada entrada 
 | `motion edit preview|render <edit.json> --output` | prévia (meia resolução) / final |
 | `motion edit progress <saída.mp4>` | progresso do job |
 | `motion qa reel <mp4> --timeline [--compare]` | QA do reel |
+| `motion audio doctor` | filtros de voz e DeepFilterNet (hash conferido) |
+| `motion qa critic-schema` · `critic-record <json> --reviews=<pasta>` · `critic-verify` | parecer do Crítico, gravado sem edição |
 | `motion stt doctor|providers|setup [--yes]` | ambiente de transcrição |
 | `motion mcp` | servidor MCP local (stdio) |
 

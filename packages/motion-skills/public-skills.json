@@ -98,7 +98,7 @@
     {
       "name": "motion-director",
       "path": "skills/motion-director/SKILL.md",
-      "version": "snapshot-6d113950eb9d",
+      "version": "snapshot-1bf463b3ff98",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -110,12 +110,12 @@
         "file": "LICENSE"
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "6d113950eb9d4cdb4b37371d1bd52750665c9c7d61038c9d73f504e50e65301c"
+      "sha256": "1bf463b3ff986ee816aeb97981755fdfa5a747f71a84a70016e75810338509a7"
     },
     {
       "name": "reel-editor",
       "path": "skills/reel-editor/SKILL.md",
-      "version": "snapshot-ebd506d9cc14",
+      "version": "snapshot-49c74e6dc2a2",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -127,7 +127,7 @@
         "file": "LICENSE"
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "ebd506d9cc148c0ea404f98983dece0bb411914ed50995fb26bc4cebf4ff5822"
+      "sha256": "49c74e6dc2a213a52059f96e19f178afeec3fafc25327e0c6613e6a8d5076ab2"
     },
     {
       "name": "shorts-director",
@@ -200,7 +200,7 @@
     {
       "name": "voice-studio",
       "path": "skills/voice-studio/SKILL.md",
-      "version": "snapshot-fa119a788d6d",
+      "version": "snapshot-b19bda4eb7a2",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
@@ -212,7 +212,7 @@
         "file": "LICENSE"
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "fa119a788d6d7ab4d4e14d28586c15950e59a3e36bf34c992583ddfbec6cd828"
+      "sha256": "b19bda4eb7a2a6fb419134b915bad9d55d919d2ea8be5a29cecf0b6c60b2b354"
     },
     {
       "name": "web-director",

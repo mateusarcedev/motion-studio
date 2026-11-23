@@ -100,7 +100,8 @@ the creative direction. Do not render final deliverables until the preview passe
 Review the **actual renders**, not the Animator's description. Run the critique in a fresh context
 (subagent when available) with the approved BRIEF.md, contact-sheet stills and video preview.
 Score 1–10: visual composition, typography, product readability, motion quality, timing,
-continuity, brand consistency. Report the **three most important defects**, each with: frame or
+continuity, brand consistency. The Critic returns **JSON only** (`motion qa critic-schema`) and needs no write access; production records it
+unedited with `motion qa critic-record`, which generates findings.md. Repairs go to REPAIR_LOG.md. Report the **three most important defects**, each with: frame or
 timestamp / observation (what is visibly wrong) / why it matters / smallest useful fix /
 **preserve** (what must stay) / **recheck** (frames to verify after repair). Still frames reveal
 layout defects; the moving preview reveals pacing and timing problems — inspect both.
@@ -108,7 +109,7 @@ layout defects; the moving preview reveals pacing and timing problems — inspec
 The Critic also reads `reviews/qa-report.{json,md}` (from `motion qa precheck`) as **measured evidence**, and scores art
 direction with `docs/ART_DIRECTION.md` (hierarchy, depth, rhythm, scene variation, legibility). Each defect also names the
 **affected composition** (file/selector). Loop: identify → locate → propose smallest fix → apply (within the repair policy) →
-re-render only affected frames (`--sample-frames`) → compare before/after → record the outcome in findings.md.
+re-render only affected frames (`--sample-frames`) → compare before/after → record the outcome in REPAIR_LOG.md.
 
 ## Stage 7 · CORRECTION — local repair loop
 

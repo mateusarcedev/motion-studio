@@ -1,5 +1,7 @@
 # Matriz de Compatibilidade com Agentes — MOTION Studio
 
+> **Matriz atual: [`docs/COMPATIBILITY.md`](COMPATIBILITY.md).** Esta página guarda o histórico; em divergência, vale a matriz.
+
 O MOTION Studio adota a especificação aberta **Agent Skills** (`SKILL.md`). Os motores de renderização, validação e empacotamento são binários agnósticos de agente que rodam no terminal (`node`, `python3`, `ffmpeg`).
 
 > [!IMPORTANT]

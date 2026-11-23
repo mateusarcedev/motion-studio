@@ -35,7 +35,7 @@ motion edit transcribe bruto.mp4 --hotwords="nomes próprios, produtos" \
   --output=transcript/raw.transcript.json --srt=transcript/raw.asr.srt
 #   → escreva BRIEF.md, STYLE.md e EDIT_PLAN.md (decisões + cards a partir da transcrição)
 motion edit plan bruto.mp4 --transcript=transcript/raw.transcript.json \
-  --analysis=transcript/raw.analysis.json --config=edit.config.json --output=edit.json
+  --analysis=transcript/raw.analysis.json --config=edit.config.json --brief=BRIEF.md --output=edit.json
 motion edit preview edit.json --output=out/previews/preview.mp4      # stills + contact sheet → Crítico
 motion edit render  edit.json --output=out/final/reel.mp4 --ab=out/final/audio-ab
 motion qa reel out/final/reel.mp4 --timeline=edit.json [--compare=<2º render>] --json
@@ -46,7 +46,7 @@ motion export . entrega.zip && motion qa delivery --project . --zip entrega.zip
 
 | Campo | Para quê |
 |---|---|
-| `preset` | `talking-head` · `tutorial` · `podcast` · `interview` (`motion edit presets`) |
+| `preset` | `talking-head` · `tutorial` · `podcast` · `interview` · `institucional` (`motion edit presets`) |
 | `faceBox` + `faceBoxSource:"operator"` | caixa da cabeça (topo do cabelo → queixo), normalizada, lida nos stills; protege olhos→boca e centra o zoom |
 | `exclude` + `excludeReasons` | trechos a remover (tomada recomeçada, final ruim). O motor ajusta às bordas das palavras |
 | `hook` | trecho movido para o início (só se a história pedir) |
@@ -57,6 +57,10 @@ motion export . entrega.zip && motion qa delivery --project . --zip entrega.zip
 | `audio` | `{preset, overrides, denoiser, music:{path, gainDb, duck}}` |
 
 Cards só com texto que a pessoa **disse** (ou resumo fiel). Nunca métricas, telas ou CTAs inventados.
+
+O `BRIEF.md` pode trazer um bloco `json motion-brief` (`opening`, `glossary`, `keywords`). `opening:
+strongest-line` só propõe: mostre as frases ao usuário e só aplique com `openingApproval`. Gancho, loop e
+CTA não são obrigatórios. Card não antecipa a fala nem fica vazio > 0,8 s (o plano adia e avisa).
 
 ## 3 · Leitura do plano
 
@@ -74,6 +78,12 @@ e a faixa do rosto, cards (fontes/overflow/DOM), alinhamento A/V, original prese
 `--compare`, reprodutibilidade por hash de quadros/amostras. Entregue: MP4, voz tratada (WAV),
 A/B com loudness casado, SRT/ASS/JSON das legendas, `edit.json`, config, transcrição, relatórios
 de QA e notas — via `delivery.contract.json`.
+
+**Crítico:** rode em contexto novo, sem escrita, e peça só o JSON de `motion qa critic-schema` com o SHA-256
+do MP4 visto. Grave com `motion qa critic-record parecer.json --reviews=reviews` sem editar; o QA confere.
+
+`captions.cps` diz a causa provável: *timing do ASR* se corrige com tempo/escuta; *texto demais*, dividindo
+a página ou aceitando o ritmo da fala.
 
 ## 5 · Limites honestos
 

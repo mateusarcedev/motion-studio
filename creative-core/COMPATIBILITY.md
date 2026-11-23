@@ -1,5 +1,7 @@
 # Compatibilidade com Agentes — status honesto
 
+> **Matriz atual: [`docs/COMPATIBILITY.md`](../docs/COMPATIBILITY.md).** Esta página guarda o histórico; em divergência, vale a matriz.
+
 Fonte de verdade: `.agents/skills/` (padrão Agent Skills). Todos os **motores**
 (creative-core: renderer Playwright/Chromium, validators, exporters, galeria) rodam por
 **CLI** (`node` / `python3`) — independentes de qualquer agente.

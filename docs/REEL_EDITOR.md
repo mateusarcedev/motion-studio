@@ -23,11 +23,13 @@ fonte (MP4/MOV/… — só leitura, SHA-256)
   │             · grade de quadros · zoom cuts · punch-in · legendas · cards
   │             → motion.timeline@1 (edit.json, hash de conteúdo)
   │
-  ├─ render ─── voz: cadeia Voice Studio na fonte inteira → corte por amostra → loudness linear
+  ├─ render ─── voz: cadeia Voice Studio na fonte inteira → corte por amostra → ganho no layout
+  │             de entrega → expansor → 1 reajuste → limitador só para picos
   │             vídeo: 1 intermediário por segmento (seek preciso, nº exato de quadros,
   │                    cover + crop/lanczos ou perspective subpixel, dips opcionais)
   │             cards: HTML → PNG transparente (render_static/Chromium, fontes do projeto)
-  │             compose: concat + cards (ease-out) + ASS cinético (libass) + AAC
+  │             compose: concat + cards (ease-out) + ASS cinético (libass) + AAC; true peak medido no
+  │                      MP4 e áudio recodificado com menos ganho se passar do teto
   │             → reel.mp4 + voice.wav + captions.{srt,words.srt,ass,json} + render.json
   │
   └─ qa reel ── formato · loudness/TP pós-AAC · fala em cortes · bordas · sincronia das legendas
@@ -35,8 +37,8 @@ fonte (MP4/MOV/… — só leitura, SHA-256)
                 A/V · original preservado · determinismo (hash de quadros/amostras)
 ```
 
-Módulos: `packages/motion-core/reel/{util,analyze,voice,timeline,captions,plan,overlays,render,qa_reel}.mjs`
-e `reel/stt/{index.mjs,faster_whisper_worker.py}`. Sem dependências npm novas.
+Módulos: `packages/motion-core/reel/{util,analyze,sibilants,voice,denoisers,timeline,captions,caption_qa,brief,plan,overlays,render,qa_reel}.mjs`,
+limiares em `presets.json` (sobrescrevíveis no config: `cut`, `zoom`, `captions`, `overlayTiming`, `qa`, `audio.overrides`) e `reel/stt/{index.mjs,faster_whisper_worker.py}`. Sem dependências npm novas.
 
 ## CLI
 
@@ -47,7 +49,7 @@ motion edit transcribe video.mp4 [--model=small] [--compute-type=int8] [--langua
                      [--hotwords="IA, Claude Code"] [--corrections=c.json] --output=t.json [--srt=asr.srt]
 motion edit import-srt legenda.srt [--media=<vídeo da legenda>] --output=t.json
 motion edit plan     video.mp4 --transcript=t.json [--analysis=a.json] [--config=edit.config.json] \
-                     [--preset=talking-head] --output=edit.json
+                     [--brief=BRIEF.md] [--preset=talking-head] --output=edit.json
 motion edit validate edit.json
 motion edit audio    video.mp4 --preset=clean --output=voice.wav [--ab=<dir>] [--report=r.json] \
                      [--denoiser=auto|ffmpeg|deepfilternet|none] [--music=trilha.wav]
@@ -56,6 +58,8 @@ motion edit preview  edit.json --output=preview.mp4
 motion edit render   edit.json --output=reel.mp4 [--ab=<dir>] [--keep-work]
 motion edit progress reel.mp4
 motion qa reel reel.mp4 [--timeline=edit.json] [--compare=<2º render>] [--json] [--output=qa.json] [--markdown=qa.md]
+motion qa critic-schema | critic-record <parecer.json> --reviews=<pasta> | critic-verify --reviews=<pasta>
+motion audio doctor
 motion stt doctor | providers | setup [--model=small] [--yes]
 motion mcp
 ```
@@ -73,16 +77,51 @@ Exit 2 = falha, 3 = ambiente bloqueado.
 | `tutorial` | 0,70 s | 120 / 250 ms | 1,00↔1,06 com ease | 5 palavras |
 | `podcast` | 1,00 s | 150 / 350 ms | nenhum | 6 palavras |
 | `interview` | 0,60 s | 120 / 220 ms | 1,00↔1,08 | 4 palavras |
+| `institucional` | 0,80 s | 140 / 300 ms | nenhum | 6 palavras |
 
-| Voz | Passa-altas | Denoise | Expansor | Compressão | De-esser |
-|---|---|---|---|---|---|
-| `natural` | 70 Hz | 6 dB | — | 2:1, limiar = fala − 6 dB | — |
-| `clean` | 80 Hz | 10 dB | 6 dB | 2,5:1, fala − 8 dB | — |
-| `studio` | 90 Hz | 12 dB | 8 dB | 3:1, fala − 10 dB | sim |
-| `noisy-room` | 100 Hz | 18 dB | 10 dB | 2,5:1, fala − 8 dB | leve |
+| Voz | Passa-altas | Denoise | Expansor | Compressão | De-esser | Piora máx. fala − pausa |
+|---|---|---|---|---|---|---|
+| `natural` | 70 Hz | 6 dB | — | 2:1, limiar = fala − 6 dB | — | 1,5 dB |
+| `clean` | 80 Hz | 10 dB | 6 dB | 2,5:1, fala − 8 dB | — | 2,0 dB |
+| `studio` | 90 Hz | 12 dB | 8 dB | 3:1, fala − 10 dB | sim | 3,0 dB |
+| `noisy-room` | 100 Hz | 18 dB | 10 dB | 2,5:1, fala − 8 dB | leve | 2,0 dB |
 
-Todos com notch de zumbido quando medido, ratio limitado a 1,6 em fonte já comprimida
-(LRA < 4 LU), −14 LUFS e true peak ≤ −1,5 dBTP (ganho linear + limitador 4× oversampled).
+Todos com notch de zumbido quando medido, compressor desligado com LRA < 3 LU e ratio limitado a
+1,6 com LRA < 4 LU, −14 LUFS (±0,5; fora disso `WARN`, sem nova iteração) e true peak ≤ −1,5 dBTP
+medido no AAC entregue.
+
+## BRIEF legível por máquina (opcional)
+
+Um bloco cercado no `BRIEF.md`, lido por `--brief`. Sem bloco, nada muda. Gancho, loop e CTA não são
+obrigatórios.
+
+````
+```json motion-brief
+{ "opening": "original", "glossary": ["Codex", { "term": "Claude Code", "aliases": ["cloud code"] }] }
+```
+````
+
+- `opening`: `original` · `strongest-line` (o plano **propõe** até 3 frases; só aplica com
+  `openingApproval: {by, at, src}`) · `custom` (com `openingText`, frase dita na gravação).
+- `glossary`: corrige grafia, variantes declaradas e palavras parecidas em que o ASR estava inseguro;
+  cada correção registra motivo e hash do BRIEF. O resto vira sugestão em `review`.
+
+## Checks de legenda e card
+
+| Check | Regra |
+|---|---|
+| `captions.overlap` | caixas reais das palavras (contorno, pico da animação) não se cruzam |
+| `captions.page-overlap` | páginas não se sobrepõem no tempo (antes chamava `captions.overlap`) |
+| `captions.cps` | caracteres/s por preset, com causa provável: timing do ASR × texto demais |
+| `captions.contrast` | cor × filmagem real sem legenda; só o contorno salva = `WARN` |
+| `captions.card-duplicate` | `WARN` quando o card visível repete a legenda ativa |
+| `overlays.anticipation` / `overlays.empty` | card não antecipa a âncora nem fica vazio > 0,8 s |
+| `audio.speech-to-pause` | piora fala − pausa no MP4 × corte sem tratamento, regiões de VAD fixas |
+| `cuts.sibilants` | energia > 4 kHz dos dois lados do corte |
+| `critic.integrity` | parecer do Crítico não foi editado depois de gravado |
+
+Palavra é remapeada pela energia que sobrou do corte e nunca muda de trecho; se a energia dela foi
+cortada, a legenda sai e a decisão é registrada.
 
 ## Timeline `motion.timeline@1` (campos principais)
 

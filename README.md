@@ -162,6 +162,8 @@ Comandos:
   init                     Inicializa o estúdio no projeto atual
     --brand=<nome>         Define o nome da marca (padrão: nome da pasta)
     --profile=<nome>       Perfil de skills: core, web, motion, social, 3d, blender, all
+    --skills-dir=<pasta>   Skills nesta pasta do projeto (não toca em pastas de agente)
+    --no-skills            Não instala Skills
     --force                Sobrescreve configuração existente
 
   doctor                   Audita dependências obrigatórias e opcionais do sistema
@@ -182,6 +184,12 @@ Comandos:
 
   export <pasta> <zip_out> Gera manifesto SHA-256 e empacota entrega final em ZIP
     --gallery              Registra na galeria local com status draft
+
+  edit <sub>               Edição de vídeo real: analyze, transcribe, plan, audio, captions, preview, render
+  stt doctor|providers|setup  Transcrição local
+  audio doctor             Filtros de voz e denoiser opcional
+  mcp                      Servidor MCP local (stdio)
+  qa reel <mp4> [--timeline=edit.json]  QA do vídeo editado
 
   qa <url_ou_html> <outdir> Executa auditoria multi-viewport em 5 telas com Playwright
 ```
@@ -231,7 +239,7 @@ O ecossistema é modularizado em três pacotes distribuíveis independentes:
 ```
 @motion-studio/
 ├── packages/motion-core           # Motores de render, QA Playwright, FFmpeg CFR, validadores
-├── packages/motion-skills         # Catálogo local de 51 Skills; pacote público com 11 autorizadas
+├── packages/motion-skills         # Catálogo local de 53 Skills; pacote público com 13 autorizadas
 └── packages/motion-cli            # Binário 'motion', subcomandos e scaffolds funcionais
 ```
 
