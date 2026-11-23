@@ -66,6 +66,7 @@ export async function qaReel(mp4, o = {}) {
   report.merge(media, "media");
   if (!existsSync(mp4)) return report;
   const probe = await probeMedia(mp4).catch(() => null);
+  report.add({ id: "subject.sha256", title: "Arquivo medido (SHA-256)", status: "PASS", required: false, details: await sha256File(mp4) });
   if (probe) {
     report.add({ id: "format.audio-codec", title: "Áudio AAC", status: probe.audio?.codec === "aac" ? "PASS" : "FAIL", details: probe.audio ? `${probe.audio.codec} ${probe.audio.sampleRate} Hz ${probe.audio.channels}ch` : "sem áudio" });
     report.add({ id: "format.pixfmt", title: "yuv420p (compatível com redes sociais)", status: probe.video?.pixFmt === "yuv420p" ? "PASS" : "FAIL", details: probe.video?.pixFmt });
@@ -185,7 +186,8 @@ export async function qaReel(mp4, o = {}) {
       const bad = rr.overlays.filter((x) => x.qa?.status === "FAIL" || x.qa?.fontsLoaded === false || x.qa?.overflow > 0);
       const vis = rr.overlays.filter((x) => x.qa?.visual && (x.qa.visual.outsideSafeZone?.length || x.qa.visual.lowContrast?.length || x.qa.visual.tiny?.length));
       report.add({ id: "overlays.render", title: "Cards: fontes carregadas e sem overflow", status: bad.length ? "FAIL" : "PASS", details: `${rr.overlays.length} camadas${bad.length ? `; problemas: ${bad.map((x) => x.id).join(", ")}` : ""}` });
-      report.add({ id: "overlays.visual", title: "Cards: zona segura, contraste e tamanho de texto (DOM)", heuristic: true, status: vis.length ? "WARN" : "PASS", details: vis.length ? vis.map((x) => `${x.id}${x.step !== null ? `#${x.step}` : ""}`).join(", ") : null });
+      const why = (v) => [v.outsideSafeZone?.length ? `fora da safe zone genérica (${v.outsideSafeZone.map((e) => `${e.el} topo ${e.bounds?.top}px`).join("; ")})` : null, v.lowContrast?.length ? `baixo contraste (${v.lowContrast.length})` : null, v.tiny?.length ? `texto pequeno (${v.tiny.length})` : null].filter(Boolean).join(", ");
+      report.add({ id: "overlays.visual", title: "Cards: zona segura, contraste e tamanho de texto (DOM, heurística genérica video-vertical: topo 15%)", heuristic: true, status: vis.length ? "WARN" : "PASS", details: vis.length ? vis.map((x) => `${x.id}${x.step !== null ? `#${x.step}` : ""}: ${why(x.qa.visual)}`).join(" | ") : null });
     }
   }
 

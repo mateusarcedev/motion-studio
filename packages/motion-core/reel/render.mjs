@@ -173,7 +173,8 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
     assFile = `${base}.captions.ass`;
     await writeFile(assFile, buildAss(timeline.captions.pages, { width: timeline.output.width, height: timeline.output.height, styleIn: timeline.captions.style, placement: timeline.captions.placement }));
     await writeFile(`${base}.captions.srt`, pagesToSrt(timeline.captions.pages));
-    await writeFile(`${base}.captions.words.srt`, wordsToSrt(timeline.captions.words));
+    const hiddenIds = new Set(timeline.captions.hiddenWords ?? []);
+    await writeFile(`${base}.captions.words.srt`, wordsToSrt(timeline.captions.words.filter((w) => !hiddenIds.has(String(w.id).split("#")[0]))));
     await writeFile(`${base}.captions.json`, JSON.stringify(captionsJson(timeline.captions.pages, { placement: timeline.captions.placement, style: timeline.captions.style, timelineHash: report.timelineHash }), null, 2));
     report.files.captionsAss = assFile; report.files.captionsSrt = `${base}.captions.srt`; report.files.captionsWordsSrt = `${base}.captions.words.srt`; report.files.captionsJson = `${base}.captions.json`;
     fontsDir = timeline.captions.fontsDir ? resolveFrom(timeline, timeline.captions.fontsDir) : null;
