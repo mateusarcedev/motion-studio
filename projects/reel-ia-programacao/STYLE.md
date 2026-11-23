@@ -21,6 +21,7 @@ menta), mas com composição e textos próprios.
 | texto | `#FFFFFF` | legendas, títulos |
 | acento | `#2EE6A6` | palavra ativa na legenda, linha de destaque, chip ativo |
 | card | `rgba(18,22,20,.94)` + borda `rgba(46,230,166,.35)` | fundo dos cards |
+| palavra-chave | `#FFD23F` | "TRÁS" na virada (distinta da palavra ativa) |
 | apoio | `#9FB3AA` | rótulos mono |
 
 ## Composição
@@ -32,7 +33,7 @@ menta), mas com composição e textos próprios.
 - Cards: topo em y = 0,10 (abaixo do cabeçalho do app; preset Reels 8%), largura ≤ 78%, uma linha
   por elemento; estados progressivos reservam o layout final.
 - Zoom: 1,00 / 1,12 alternados em cortes e "zoom cuts" (plano mínimo 0,7 s); 1,20 cobrindo a
-  frase de virada inteira ("se você dev … ficando para trás").
+  frase de abertura inteira ("se você dev … ficando para trás").
 
 ## Movimento
 

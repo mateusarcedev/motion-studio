@@ -9,13 +9,13 @@ reexecutáveis a partir destes arquivos.
 ```bash
 cd projects/reel-ia-programacao
 M="node ../../packages/motion-cli/bin/motion.mjs"
-SRC=out/source/reels-motion.mp4
+SRC=out/source/reels-motion.mp4   # cópia do bruto (não versionada); SHA-256 no BRIEF
 $M stt doctor
 $M edit analyze "$SRC" --output=transcript/raw.analysis.json
 $M edit transcribe "$SRC" --hotwords="IA, ChatGPT, Claude Code, Anthropic, Codex, Antigravity, dev, programação" \
    --output=transcript/raw.transcript.json --srt=transcript/raw.asr.srt
 $M edit plan "$SRC" --transcript=transcript/raw.transcript.json --analysis=transcript/raw.analysis.json \
-   --config=edit.config.json --output=edit.json
+   --config=edit.config.json --brief=BRIEF.md --output=edit.json
 $M edit preview edit.json --output=out/previews/preview.mp4
 $M edit render  edit.json --output=out/final/reel.mp4 --ab=out/final/audio-ab
 $M edit render  edit.json --output=out/determinism/reel-run2.mp4

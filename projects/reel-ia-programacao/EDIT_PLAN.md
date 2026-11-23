@@ -12,19 +12,22 @@ Tempos em segundos do **bruto** (`reels-motion.mp4`); os tempos finais saem da t
 | 3 | 24,68–26,89 "Então, eu gostaria de falar que" | excluir | muleta de recomeço; a frase-chave começa em "se você dev…" |
 | 4 | 52,88–54,18 "refinar, refinar, refinar, refinar" | **manter** | repetição enfática (o motor classifica sequências ≥ 3 do mesmo termo como ênfase, não como falso começo) |
 | 5 | 63,90–66,40 (texto queimado "E VOCÊ, O QUE ACHA?") | **manter** o trecho; legenda cede a base ao CTA do autor (≈ 2,5 s legível); card do cliente segue no topo e acende "ambos" | reparo 1 do Crítico (B1): a versão anterior cortava o fim e deixava o CTA 0,87 s empilhado sob a legenda; a palavra final irreconhecível fica sem legenda |
-| 6 | pausas > 0,32 s | remover (automático) | ritmo; sempre com 90 ms antes / 130 ms depois da fala |
+| 6 | 26,80–29,57 "se você dev … ficando para trás" | **abre o vídeo** (aceito em 2026-11-23) | virada do argumento, fala com quem assiste; a frase não se repete no lugar de origem |
+| 7 | "Mas" (29,6 s) | áudio mantido, sem legenda | confiança 0,05; re-transcrições ouvem hesitação; aguarda escuta |
+| 8 | pausas > 0,32 s | remover (automático) | ritmo; sempre com 90 ms antes / 130 ms depois da fala |
 
-Estrutura final (cronológica — **não** reproduz o gancho invertido da referência):
+Estrutura final (a frase da virada abre; o resto segue a ordem da fala). A referência abre com a mesma frase:
+a decisão é do dono do projeto e substitui a restrição inicial de não repetir o gancho dela.
 
 | Bloco | Fala | Visual |
 |---|---|---|
-| Abertura | "já é uma realidade, não temos para onde fugir" | card título "Utilizar IA / já é realidade" (palavras ditas no vídeo) |
-| Contexto | "não é mais algo opcional como era ali em 2022 quando o ChatGPT surgiu" | card `// 2022 · ChatGPT` "Não é mais opcional" |
+| Abertura | "se você dev não está utilizando, você está ficando para trás" | punch-in 1,20, sem card; "VOCÊ ESTÁ / FICANDO PARA TRÁS", "TRÁS" em cor própria |
+| Tese | "já é uma realidade, não temos para onde fugir" | legenda |
+| Contexto | "não é mais algo opcional como era ali em 2022 quando o ChatGPT surgiu" | card "Não é mais opcional" (sem rótulo: "2022" invertia a frase) |
 | Ferramentas | "como o Antigravity, Codex, o próprio Claude Code da Anthropic" | card `// e logo vieram` com chips revelados na fala |
-| Virada | "se você dev não está utilizando, você está ficando para trás" | punch-in 1,20 cobrindo a frase inteira, sem card |
 | Benefícios | "utilizar IA te traz muitos benefícios…" | legenda |
-| Foco | "não somente em código, mas também na regra de negócio… no produto" | lista `// seu foco passa a ser` 1 código · 2 regra de negócio · 3 produto |
-| Problema | "nós desenvolvedores… a gente foca muito na tecnologia" | card `// nosso problema` "foca muito na tecnologia" |
+| Foco | "não somente em código, mas também na regra de negócio… no produto" | lista `// seu foco passa a ser` 1 regra de negócio · 2 produto ("código" saiu: a fala é "não somente em código") |
+| Problema | "nós desenvolvedores… a gente foca muito na tecnologia" | legenda (card removido: repetia a fala) |
 | Cliente | "o que ele quer, o sistema funcionando… economizar dinheiro, ou tempo, ou ambos" | card `// o que o cliente quer` "o sistema funcionando" + chips dinheiro · tempo · ambos |
 
 ## Correções de reconhecimento (com evidência)
@@ -52,4 +55,4 @@ Ficam para revisão humana (sem evidência ou com divergência que só a escuta 
 Caixa da cabeça (topo do cabelo → queixo): x 0,18 · y 0,31 · w 0,62 · h 0,50 → faixa
 olhos→boca 0,485–0,66 → legenda abaixo da boca.
 
-Áudio: preset `noisy-room` (recomendado pela análise: SNR ~18 dB, zumbido de 60 Hz).
+Áudio: preset `natural` (Missão 21.1; era `noisy-room`).

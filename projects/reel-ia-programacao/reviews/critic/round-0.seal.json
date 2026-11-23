@@ -1,0 +1,17 @@
+{
+  "schema": "motion.critic.seal",
+  "schemaVersion": 1,
+  "round": 0,
+  "json": "round-0.json",
+  "jsonSha256": "1e0ae5bc1397c04a7f5fbbb31ed13e4049f0e3f9613cff352e48200904ccdaed",
+  "findingsSha256": "ba4e6c884bc5f9c2b4143e312cbd8a41e4536109d3bfaa7321e2774febb565d2",
+  "reviewer": {
+    "id": "critic-independente-contexto-novo",
+    "freshContext": true,
+    "model": "claude-opus-5-5"
+  },
+  "subject": {
+    "file": "out/final/reel.mp4",
+    "sha256": "c584c1eb1cc89ea373d32486c01ed6a26ee7f88caf75c3cc77343fd635fcf09c"
+  }
+}

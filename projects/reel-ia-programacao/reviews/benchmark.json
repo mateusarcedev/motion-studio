@@ -16,64 +16,38 @@
       "speechRatio": 0.865,
       "pausesOver300ms": 13,
       "pauseSecOver300ms": 5.69,
-      "speechToPauseDb": 12.3,
+      "speechToPauseDb": 12.33,
       "noiseFloorDb": -31.9,
       "sceneCuts": 13
     },
     "motion": {
       "path": "out/final/reel.mp4",
-      "sha256": "5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3",
-      "durationSec": 53.1,
+      "sha256": "ab69fff2f230e6d5c7776f9935fee57186884782b497b7759b69428af323a3a5",
+      "durationSec": 53.467,
       "video": "1080×1920 h264 30fps",
       "audio": "aac 48000Hz 2ch",
       "loudness": {
-        "integratedLufs": -14.15,
-        "truePeakDbtp": -4.55,
-        "lraLu": 1.2
+        "integratedLufs": -14.09,
+        "truePeakDbtp": -1.71,
+        "lraLu": 2.4
       },
-      "speechSec": 49.38,
-      "speechRatio": 0.93,
-      "pausesOver300ms": 2,
-      "pauseSecOver300ms": 0.63,
-      "speechToPauseDb": 10.7,
-      "noiseFloorDb": -26.9,
+      "speechSec": 48.35,
+      "speechRatio": 0.904,
+      "pausesOver300ms": 4,
+      "pauseSecOver300ms": 1.48,
+      "speechToPauseDb": 13.45,
+      "noiseFloorDb": -29.8,
       "sceneCuts": 19
     },
     "reference": {
-      "path": "out/source/reel-ia-programacao.mp4",
-      "sha256": "f6f40a01690426c90dc56299e31a28f874856676514d429778bfdd96bc17f3fd",
-      "durationSec": 52.799,
-      "video": "1080×1920 h264 30fps",
-      "audio": "aac 48000Hz 2ch",
-      "loudness": {
-        "integratedLufs": -14.22,
-        "truePeakDbtp": -1.28,
-        "lraLu": 2.1
-      },
-      "speechSec": 48.38,
-      "speechRatio": 0.916,
-      "pausesOver300ms": 6,
-      "pauseSecOver300ms": 2.67,
-      "speechToPauseDb": 11.6,
-      "noiseFloorDb": -28.9,
-      "sceneCuts": 16
+      "status": "BLOCKED",
+      "reason": "reel-ia-programacao.mp4 indisponível"
     }
   },
   "asr": {
     "referenceVsHumanSrt": {
-      "wer": 0.19463087248322147,
-      "edits": 29,
-      "refWords": 149,
-      "model": {
-        "name": "small",
-        "computeType": "int8",
-        "device": "cpu",
-        "repo": "Systran/faster-whisper-small",
-        "revision": "536b0662742c02347bc0e980a01041f333bce120",
-        "path": "~/.local/share/motion/stt/models/models--Systran--faster-whisper-small/snapshots/536b0662742c02347bc0e980a01041f333bce120"
-      },
-      "language": "pt",
-      "note": "WER do faster-whisper small (glossário) sobre o áudio da referência contra a legenda humana dela; a legenda humana omite/normaliza palavras, então o valor é um limite superior do erro."
+      "status": "BLOCKED",
+      "reason": "referência e legendas.srt indisponível"
     },
     "raw": {
       "words": 177,
@@ -85,28 +59,30 @@
     }
   },
   "captions": {
+    "reference": {
+      "status": "BLOCKED",
+      "reason": "referência e legendas.srt indisponível"
+    },
     "motion": {
       "overSpeech": 1,
-      "items": 44,
-      "medianOnsetOffsetSec": -0.0030000000000001137,
-      "pages": 44,
+      "items": 45,
+      "medianOnsetOffsetSec": 0,
+      "pages": 45,
       "words": 153,
       "source": "páginas da timeline (ASR revisado)"
-    },
-    "reference": {
-      "overSpeech": 1,
-      "items": 59,
-      "medianOnsetOffsetSec": 0.06,
-      "pages": 59,
-      "source": "legendas.srt (humana)"
     }
   },
   "edit": {
-    "removedSec": 13.301,
+    "removedSec": 12.934,
     "cuts": 5,
     "zoomCuts": 10,
-    "overlays": 6,
+    "overlays": 4,
     "decisions": [
+      {
+        "what": "17 borda(s) de fala estendida(s) por energia > 4000 Hz (fim 1.94→2.14s, início 2.16→1.96s, fim 4.55→4.68s, início 4.74→4.59s, fim 9.79→9.82s, fim 15.97→16.09s, fim 17.35→17.46s, fim 21.5→21.55s, fim 22.1→22.3s, fim 29.46→29.55s, início 29.68→29.67s, fim 33.35→33.52s, início 33.65→33.45s, início 35.91→35.88s, início 41.99→41.93s, início 50.57→50.51s, fim 64.58→64.66s)",
+        "why": "não truncar sibilantes fracas",
+        "by": "engine"
+      },
       {
         "what": "remover primeira ocorrência de \"Já é uma realidade,\" (8.56–9.94s)",
         "why": "frase repetida em sequência (falso começo)",
@@ -123,13 +99,23 @@
         "by": "operator"
       },
       {
-        "what": "2 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s, 50.333→50.3s)",
+        "what": "gancho: 26.8–29.57s abre o vídeo",
+        "why": "abertura definida no BRIEF (custom)",
+        "by": "operator"
+      },
+      {
+        "what": "1 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s)",
         "why": "evitar quadro órfão/micro-plano junto a emenda do celular",
         "by": "engine"
       },
       {
-        "what": "ênfase (zoom 1.2) em \"se você dev não está utilizando … ficando para trás\" (s05)",
+        "what": "ênfase (zoom 1.2) em \"se você dev não está utilizando … ficando para trás\" (s01)",
         "why": "frase de virada do argumento",
+        "by": "operator"
+      },
+      {
+        "what": "palavra w0077 sem legenda",
+        "why": "'Mas' (confiança 0,05) não se confirma: 4 re-transcrições ouvem hesitação ou nada, e a legenda humana da referência não tem a palavra; áudio mantido, aguarda escuta",
         "by": "operator"
       },
       {

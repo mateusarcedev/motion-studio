@@ -2,13 +2,13 @@
   "subject": "reel.mp4",
   "kind": "reel",
   "generatedBy": "motion-core/qa",
-  "status": "WARN",
+  "status": "FAIL",
   "counts": {
-    "PASS": 35,
-    "WARN": 6,
-    "FAIL": 0,
+    "PASS": 41,
+    "WARN": 9,
+    "FAIL": 1,
     "BLOCKED": 0,
-    "NOT_TESTED": 2
+    "NOT_TESTED": 1
   },
   "checks": [
     {
@@ -17,7 +17,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "mov,mp4,m4a,3gp,3g2,mj2, 53.10s",
+      "details": "mov,mp4,m4a,3gp,3g2,mj2, 53.47s",
       "evidence": null,
       "reproduce": null
     },
@@ -63,21 +63,21 @@
     },
     {
       "id": "media.video.duration",
-      "title": "Duração ≈ 53.1s",
+      "title": "Duração ≈ 53.466667s",
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "encontrado 53.100s (±0.05s)",
+      "details": "encontrado 53.467s (±0.05s)",
       "evidence": null,
       "reproduce": null
     },
     {
       "id": "media.video.frames",
-      "title": "Contagem de quadros = 1593",
+      "title": "Contagem de quadros = 1604",
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "encontrado 1593",
+      "details": "encontrado 1604",
       "evidence": null,
       "reproduce": null
     },
@@ -107,7 +107,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": true,
-      "details": "diferença 0.000s",
+      "details": "diferença 0.001s",
       "evidence": null,
       "reproduce": null
     },
@@ -147,7 +147,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "pico -4.6 dBFS",
+      "details": "pico -1.7 dBFS",
       "evidence": null,
       "reproduce": null
     },
@@ -177,7 +177,7 @@
       "status": "PASS",
       "required": false,
       "heuristic": false,
-      "details": "5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3",
+      "details": "ab69fff2f230e6d5c7776f9935fee57186884782b497b7759b69428af323a3a5",
       "evidence": null,
       "reproduce": null
     },
@@ -213,11 +213,11 @@
     },
     {
       "id": "audio.loudness-target",
-      "title": "Loudness -14 LUFS ±1 LU (EBU R128)",
+      "title": "Loudness -14 LUFS ±0.5 LU (EBU R128)",
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "-14.15 LUFS, LRA 1.2 LU",
+      "details": "-14.09 LUFS, LRA 2.4 LU",
       "evidence": null,
       "reproduce": null
     },
@@ -227,17 +227,17 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "-4.55 dBTP",
+      "details": "-1.71 dBTP",
       "evidence": null,
       "reproduce": null
     },
     {
       "id": "timeline.frames",
-      "title": "Quadros = timeline (1593)",
+      "title": "Quadros = timeline (1604)",
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "1593 no MP4",
+      "details": "1604 no MP4",
       "evidence": null,
       "reproduce": null
     },
@@ -263,11 +263,11 @@
     },
     {
       "id": "shots.min",
-      "title": "Planos visuais ≥ 0,7 s",
+      "title": "Planos visuais ≥ 0.7 s",
       "status": "WARN",
       "required": true,
       "heuristic": true,
-      "details": "16.57–17.23s (20 q), 52.47–53.1s (19 q)",
+      "details": "16.77–17.43s (20 q), 52.83–53.47s (19 q)",
       "evidence": null,
       "reproduce": null
     },
@@ -277,7 +277,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "11 cortes de pausa verificados",
+      "details": "9 cortes de pausa verificados",
       "evidence": null,
       "reproduce": null
     },
@@ -302,6 +302,26 @@
       "reproduce": null
     },
     {
+      "id": "cuts.sibilants",
+      "title": "Bordas não truncam sibilantes (energia > 4000 Hz dos dois lados)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": "limiar -47.7 dBFS",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "audio.speech-to-pause",
+      "title": "Relação fala − pausa não piora (limite 1.5 dB), no MP4 final, preset natural",
+      "status": "PASS",
+      "required": true,
+      "heuristic": true,
+      "details": "antes 11.97 dB → depois 13.25 dB (piora -1.28 dB; 9 pausas; fala -18.44→-15.98, pausa -30.4→-29.24 dBFS)",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
       "id": "captions.sync",
       "title": "Legendas sincronizadas com a fala do vídeo final (±120 ms)",
       "status": "PASS",
@@ -317,12 +337,12 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "44 páginas",
+      "details": "45 páginas",
       "evidence": null,
       "reproduce": null
     },
     {
-      "id": "captions.overlap",
+      "id": "captions.page-overlap",
       "title": "Sem páginas de legenda sobrepostas",
       "status": "PASS",
       "required": true,
@@ -337,7 +357,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "1 oculta(s) por decisão registrada",
+      "details": "2 oculta(s) por decisão registrada",
       "evidence": null,
       "reproduce": null
     },
@@ -347,7 +367,7 @@
       "status": "WARN",
       "required": true,
       "heuristic": true,
-      "details": "possíveis palavras não reconhecidas: \"2022\" 1.07s @4.867s, \"faça\" 1.66s @47.08s",
+      "details": "possíveis palavras não reconhecidas: \"2022\" 1.01s @7.653s, \"benefícios,\" 1.28s @19.26s, \"rapidez\" 1.6s @22.88s, \"faça\" 1.66s @47.447s",
       "evidence": null,
       "reproduce": null
     },
@@ -357,7 +377,47 @@
       "status": "WARN",
       "required": false,
       "heuristic": false,
-      "details": "10 palavras < 0,5 sem revisão: \"E\"@8.44s, \"logo\"@8.54s, \"o\"@10.42s, \"Mas\"@16.44s, \"utilizar\"@17.233s, \"te\"@18.16s, \"e\"@39.393s, \"mas\"@41.333s…",
+      "details": "10 palavras < 0,5 sem revisão: \"E\"@11.207s, \"logo\"@11.307s, \"o\"@13.187s, \"Mas\"@16.87s, \"utilizar\"@17.26s, \"te\"@18.36s, \"e\"@39.77s, \"mas\"@41.68s…",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.cps",
+      "title": "Velocidade de leitura ≤ 20 caracteres/s (FAIL acima de 32)",
+      "status": "WARN",
+      "required": true,
+      "heuristic": true,
+      "details": "30 cps @1.96s \"VOCÊ ESTÁ\" [timing do ASR: \"está\" a 80 cps, acima da fala humana] | 27.7 cps @2.26s \"FICANDO PARA TRÁS\" [timing do ASR: \"ficando\" a 117 cps, acima da fala humana] | 22.5 cps @2.873s \"JÁ É UMA REALIDADE\" [texto demais: vizinhança também rápida (22.7 cps)] | 20.3 cps @3.673s \"NÃO TEMOS PARA ONDE FUGIR\" [timing do ASR: vizinhança a 17.2 cps] | 20 cps @11.207s \"E LOGO APÓS ISSO\" [timing do ASR: vizinhança a 15.3 cps] | 22.3 cps @12.007s \"VIERAM OUTRAS FERRAMENTAS\" [timing do ASR: vizinhança a 18 cps] | 21.5 cps @20.88s \"TRAZ MUITAS POSSIBILIDADES\" [timing do ASR: \"benefícios,\" ao lado com 1.28 s] | 21.4 cps @25.48s \"VOCÊ PASSA A FOCAR\" [timing do ASR: vizinhança a 17.2 cps] | 21.5 cps @27.15s \"EM CÓDIGO MAS TAMBÉM\" [timing do ASR: vizinhança a 13.7 cps] | 31.7 cps @35.26s \"NÓS DESENVOLVEDORES\" [texto demais: vizinhança também rápida (21.5 cps)] | 25 cps @35.86s \"GERALMENTE TEMOS ESSE\" [timing do ASR: \"temos\" a 71 cps, acima da fala humana] | 22.9 cps @38.72s \"FOCA MUITO NA TECNOLOGIA\" [timing do ASR: vizinhança a 15.9 cps] | 21.1 cps @40.54s \"REFINAR REFINAR REFINAR\" [timing do ASR: vizinhança a 17.8 cps] | 20.7 cps @42.407s \"PRO PRÓPRIO CLIENTE\" [texto demais: vizinhança também rápida (20.4 cps)] | 25.6 cps @43.327s \"AQUILO NÃO É IMPORTANTE\" [texto demais: vizinhança também rápida (21.1 cps)] | 25 cps @46.567s \"ELE QUER QUE O SISTEMA\" [timing do ASR: \"faça\" ao lado com 1.66 s]",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.card-duplicate",
+      "title": "Cards não repetem a legenda ativa",
+      "status": "WARN",
+      "required": false,
+      "heuristic": true,
+      "details": "opcional × \"Não é mais algo\" @4.903s | ferramentas × \"como o Antigravity, Codex,\" @13.127s | ferramentas × \"o próprio Claude Code\" @15.017s | foco × \"na regra de negócio\" @28.08s | foco × \"no produto\" @33.2s | cliente × \"o sistema funcionando,\" @45.447s | cliente × \"dinheiro, ou tempo,\" @49.607s",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.overlap",
+      "title": "Caixas das palavras não se sobrepõem (contorno incluído, pico da animação)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "151 palavras medidas",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "captions.contrast",
+      "title": "Contraste do texto sobre a filmagem ≥ 3:1 (amostrado sem a legenda)",
+      "status": "WARN",
+      "required": true,
+      "heuristic": true,
+      "details": "texto #FFFFFF: pior 2.31:1 em 13.63s; ativa #2EE6A6: pior 1.43:1 em 13.63s; palavra-chave #FFD23F: pior 1.6:1 em 13.63s; texto: 3/45 páginas abaixo (legível pelo contorno 6px, 21:1); ativa: 22/45 páginas abaixo (legível pelo contorno 6px, 13:1); palavra-chave: 18/45 páginas abaixo (legível pelo contorno 6px, 14.5:1)",
       "evidence": null,
       "reproduce": null
     },
@@ -367,7 +427,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "44 páginas medidas; faixa vertical 1298–1465 px",
+      "details": "45 páginas medidas; faixa vertical 1298–1465 px",
       "evidence": null,
       "reproduce": null
     },
@@ -382,12 +442,32 @@
       "reproduce": null
     },
     {
+      "id": "overlays.empty",
+      "title": "Cards não ficam vazios por mais de 0.8 s",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": null,
+      "evidence": null,
+      "reproduce": null
+    },
+    {
+      "id": "overlays.anticipation",
+      "title": "Cards não antecipam a fala da âncora",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": null,
+      "evidence": null,
+      "reproduce": null
+    },
+    {
       "id": "overlays.render",
       "title": "Cards: fontes carregadas e sem overflow",
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "15 camadas",
+      "details": "10 camadas",
       "evidence": null,
       "reproduce": null
     },
@@ -397,7 +477,7 @@
       "status": "WARN",
       "required": true,
       "heuristic": true,
-      "details": "tese: fora da safe zone genérica (div.tl topo 220px) | opcional: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | ferramentas#-1: fora da safe zone genérica (div.eyebrow topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#-1: fora da safe zone genérica (div.eyebrow topo 220px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#2: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | problema: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px)",
+      "details": "opcional: fora da safe zone genérica (div.ct topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px)",
       "evidence": null,
       "reproduce": null
     },
@@ -407,7 +487,7 @@
       "status": "PASS",
       "required": true,
       "heuristic": false,
-      "details": "desvio 0 ms (correlação 0.9991)",
+      "details": "desvio 0 ms (correlação 0.9989)",
       "evidence": null,
       "reproduce": null
     },
@@ -432,12 +512,22 @@
       "reproduce": null
     },
     {
+      "id": "critic.integrity",
+      "title": "Parecer do Crítico íntegro (hash)",
+      "status": "PASS",
+      "required": true,
+      "heuristic": false,
+      "details": "rodada 1, e4a534fd40a0eeb83bfe1b65249de6f3221c4579573374ccbfaead0f0324e69a, por critic-independente-round-1",
+      "evidence": null,
+      "reproduce": null
+    },
+    {
       "id": "human.critic",
       "title": "Crítico independente (contact sheet + prévia em movimento)",
-      "status": "NOT_TESTED",
+      "status": "FAIL",
       "required": false,
       "heuristic": false,
-      "details": "aprovação não é automática",
+      "details": "reprovado, 5 achado(s)",
       "evidence": null,
       "reproduce": null
     }

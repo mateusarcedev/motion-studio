@@ -37,3 +37,12 @@ elemento, sem fantasma no cross-fade.
 - Palavras de baixa confiança sem evidência ("te", "Mas", "e quer") seguem como o ASR ouviu; a
   frase final "então esse é o meu […]" é falada sem legenda (fica sob o CTA do autor).
 - Escuta do A/B (`out/final/audio-ab/ab-before.wav` × `ab-after.wav`) pendente.
+
+## Missão 21.1
+
+As seções acima descrevem o render da Missão 21 (as amostras A/B agora são `clip-NN-before/after.wav`
+e `ab.json`). Render atual: 53,47 s, 1604 quadros, abertura na frase da virada, 4 cards, sem os
+cards `tese` e `problema`. Parecer: `findings.md`.
+
+Escuta pendente: `out/listen-points/` ("Codex", queda em 41,7 s do corte anterior, "FAÇA ele"),
+início da abertura (possível /s/ em 26,8 s do bruto), hesitação em 29,6 s do bruto ("Mas"?).

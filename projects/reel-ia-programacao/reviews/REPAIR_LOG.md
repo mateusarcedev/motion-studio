@@ -71,3 +71,21 @@ Pela política de reparo (máx. 2 rodadas por defeito) a produção **parou** e 
 Corrigidos após a verificação, sem mudar o vídeo (mesmo SHA-256): N5 (`captions.words.srt` mostrava
 a palavra oculta "ruim"), N8 (WARN dos cards agora diz o motivo: topo fora da heurística genérica de
 15%, dentro do preset Reels de 8%) e SHA-256 do arquivo medido no relatório de QA.
+
+# Missão 21.1 (B4)
+
+Pareceres sem edição em `critic/round-0.json` e `critic/round-1.json` (selados, `motion qa critic-verify`).
+
+| # | Sev. | Rodada 0 | Ação | Rodada 1 |
+|---|---|---|---|---|
+| C1 | bloq. | card do cliente some por 1 quadro (f1487) | motor: sobreposição na troca de estado | resolvido |
+| C2 | imp. | termina em "esse é o meu" | nenhuma: o bruto termina no meio da frase; fechar em "ou ambos" tira o CTA do autor → **decisão humana** | persiste (motivo da reprovação) |
+| C3 | imp. | card "código" contradiz "não somente em código" | item removido | resolvido |
+| C4 | menor | card encosta no cabelo no punch-in | nenhuma (zona segura × zoom) | parcial |
+| C5 | menor | "2022 · ChatGPT" antecipado | rótulo removido | resolvido |
+| C6 | menor | páginas < 0,65 s | "MAS" unido a "QUANDO"; "NÓS DESENVOLVEDORES" 0,60 s é a fala | parcial |
+| C7 | menor | amarelo fora do STYLE | cor documentada (aceita pelo dono) | resolvido |
+| C8 | menor | card em fade no último quadro | motor: card que fecha o filme fica sólido | resolvido |
+| C9, N1 | menor | chip ilegível / card escurece por 1 quadro no cross-fade | mantido (transitório) | persiste |
+
+A produção parou: o único impedimento depende do dono do projeto.

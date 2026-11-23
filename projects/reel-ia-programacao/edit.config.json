@@ -112,6 +112,56 @@
       "reason": "ASR omitiu 'traz' e reconheceu 'muito' (confiança 0,20)",
       "by": "operator",
       "evidence": "legendas.srt: 'traz muita rapidez'"
+    },
+    {
+      "wordIds": [
+        "w0073"
+      ],
+      "start": 28.84,
+      "end": 28.97,
+      "reason": "tempo do ASR",
+      "by": "operator",
+      "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
+    },
+    {
+      "wordIds": [
+        "w0074"
+      ],
+      "start": 28.97,
+      "end": 29.12,
+      "reason": "tempo do ASR: 'ficando' começa no mínimo de energia de 28,98 s",
+      "by": "operator",
+      "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
+    },
+    {
+      "wordIds": [
+        "w0077"
+      ],
+      "start": 29.62,
+      "end": 30.06,
+      "reason": "a energia volta só em 29,62 s; 'trás' termina em 29,46 s",
+      "by": "operator",
+      "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
+    },
+    {
+      "wordIds": [
+        "w0141"
+      ],
+      "start": 54.48,
+      "end": 54.7,
+      "reason": "ASR deu 20 ms a 'mas'; energia 54,48–54,72 s",
+      "by": "operator",
+      "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
+    },
+    {
+      "wordIds": [
+        "w0142"
+      ],
+      "start": 55.08,
+      "end": 55.34,
+      "reason": "'quando' cobria a pausa 54,72–55,08 s e virava legenda dupla",
+      "by": "operator",
+      "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
     }
   ],
   "captions": {
@@ -121,9 +171,23 @@
     "platform": "instagram-reels",
     "hideWords": [
       {
+        "wordId": "w0077",
+        "reason": "'Mas' (confiança 0,05) não se confirma: 4 re-transcrições ouvem hesitação ou nada, e a legenda humana da referência não tem a palavra; áudio mantido, aguarda escuta"
+      },
+      {
         "wordId": "w0177",
         "reason": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado"
       }
+    ],
+    "breakBefore": [
+      "w0074",
+      "w0141"
+    ],
+    "noBreakBefore": [
+      "w0073",
+      "w0075",
+      "w0076",
+      "w0142"
     ]
   },
   "overlayStyle": {
@@ -144,21 +208,6 @@
   },
   "overlays": [
     {
-      "id": "tese",
-      "kind": "title",
-      "at": {
-        "dst": 0
-      },
-      "durationSec": 2.6,
-      "leadSec": 0,
-      "lines": [
-        {
-          "text": "IA na programação",
-          "accent": true
-        }
-      ]
-    },
-    {
       "id": "opcional",
       "kind": "label",
       "at": {
@@ -167,7 +216,6 @@
       "until": {
         "match": "e logo após isso"
       },
-      "eyebrow": "// 2022 · ChatGPT",
       "title": "Não é mais opcional"
     },
     {
@@ -177,7 +225,7 @@
         "match": "vieram outras ferramentas"
       },
       "until": {
-        "match": "se você dev"
+        "match": "utilizar IA"
       },
       "eyebrow": "// e logo vieram",
       "chips": [
@@ -207,23 +255,17 @@
       "id": "foco",
       "kind": "list",
       "at": {
-        "match": "código"
+        "match": "regra de negócio"
       },
       "until": {
         "match": "nós desenvolvedores"
       },
       "eyebrow": "// seu foco passa a ser",
       "items": [
-        "código",
         "regra de negócio",
         "produto"
       ],
       "steps": [
-        {
-          "at": {
-            "match": "código"
-          }
-        },
         {
           "at": {
             "match": "regra de negócio"
@@ -235,18 +277,6 @@
           }
         }
       ]
-    },
-    {
-      "id": "problema",
-      "kind": "label",
-      "at": {
-        "match": "nós desenvolvedores"
-      },
-      "until": {
-        "match": "mas quando pro próprio cliente"
-      },
-      "eyebrow": "// nosso problema",
-      "title": "a gente foca muito na tecnologia"
     },
     {
       "id": "cliente",
@@ -301,9 +331,18 @@
     }
   ],
   "audio": {
-    "preset": "noisy-room"
+    "preset": "natural"
   },
   "keywords": [
     "trás"
-  ]
+  ],
+  "opening": "custom",
+  "openingText": "se você dev não está utilizando, você está ficando para trás",
+  "qa": {
+    "captions": {
+      "cps": {
+        "fail": 32
+      }
+    }
+  }
 }

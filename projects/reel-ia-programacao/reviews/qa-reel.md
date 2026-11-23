@@ -1,47 +1,56 @@
 # QA automatizado — reel.mp4
 
-**Veredito: ⚠️ WARN** (35 PASS, 6 WARN, 2 NOT_TESTED)
+**Veredito: ❌ FAIL** (41 PASS, 9 WARN, 1 FAIL, 1 NOT_TESTED)
 
-- ✅ **Arquivo de mídia legível** [PASS] — mov,mp4,m4a,3gp,3g2,mj2, 53.10s
+- ✅ **Arquivo de mídia legível** [PASS] — mov,mp4,m4a,3gp,3g2,mj2, 53.47s
 - ✅ **Stream de vídeo presente** [PASS] — h264 yuv420p
 - ✅ **Codec de vídeo = h264** [PASS] — encontrado h264
 - ✅ **Resolução 1080×1920** [PASS] — encontrado 1080×1920
 - ✅ **Taxa de quadros 30 fps (CFR)** [PASS] — média 30.000 fps, nominal 30.000 fps
-- ✅ **Duração ≈ 53.1s** [PASS] — encontrado 53.100s (±0.05s)
-- ✅ **Contagem de quadros = 1593** [PASS] — encontrado 1593
+- ✅ **Duração ≈ 53.466667s** [PASS] — encontrado 53.467s (±0.05s)
+- ✅ **Contagem de quadros = 1604** [PASS] — encontrado 1604
 - ✅ **Decodificação completa sem erros** [PASS]
 - ✅ **Stream de áudio presente** [PASS] — aac 48000Hz 2ch
-- ✅ **Sincronismo áudio/vídeo (duração)** [PASS] _(heurística)_ — diferença 0.000s
+- ✅ **Sincronismo áudio/vídeo (duração)** [PASS] _(heurística)_ — diferença 0.001s
 - ✅ **Início alinhado (t=0 = frame 0)** [PASS] — offset 0.000s
 - ✅ **Silêncio inesperado** [PASS] _(heurística)_ — 0% abaixo de −50 dB
 - ✅ **Loudness integrado entre -16 e -12 LUFS** [PASS] _(heurística)_ — -14.1 LUFS
-- ✅ **Sem clipping (true peak)** [PASS] — pico -4.6 dBFS
+- ✅ **Sem clipping (true peak)** [PASS] — pico -1.7 dBFS
 - ✅ **Sem trechos pretos inesperados (≥0,5 s)** [PASS] _(heurística)_
 - ✅ **Sem cenas congeladas sem justificativa (≥1,5 s)** [PASS] _(heurística)_
-- ✅ **Arquivo medido (SHA-256)** [PASS] — 5ce16cd6a758a8d9fc166db0677078707ccdbeac85d2b9fd60cc3a2d750994f3
+- ✅ **Arquivo medido (SHA-256)** [PASS] — ab69fff2f230e6d5c7776f9935fee57186884782b497b7759b69428af323a3a5
 - ✅ **Áudio AAC** [PASS] — aac 48000 Hz 2ch
 - ✅ **yuv420p (compatível com redes sociais)** [PASS] — yuv420p
 - ✅ **Vertical 9:16** [PASS] — 1080×1920
-- ✅ **Loudness -14 LUFS ±1 LU (EBU R128)** [PASS] — -14.15 LUFS, LRA 1.2 LU
-- ✅ **True peak ≤ -1.5 dBTP após AAC (sem clipping)** [PASS] — -4.55 dBTP
-- ✅ **Quadros = timeline (1593)** [PASS] — 1593 no MP4
+- ✅ **Loudness -14 LUFS ±0.5 LU (EBU R128)** [PASS] — -14.09 LUFS, LRA 2.4 LU
+- ✅ **True peak ≤ -1.5 dBTP após AAC (sem clipping)** [PASS] — -1.71 dBTP
+- ✅ **Quadros = timeline (1604)** [PASS] — 1604 no MP4
 - ✅ **Arquivo original preservado (SHA-256)** [PASS] — a62139faf67b6271…
 - ✅ **Sem planos de 1–2 quadros (cortes + saltos da fonte)** [PASS] — 21 planos visuais; 18 saltos da fonte considerados
-- ⚠️ **Planos visuais ≥ 0,7 s** [WARN] _(heurística)_ — 16.57–17.23s (20 q), 52.47–53.1s (19 q)
-- ✅ **Cortes de silêncio não removem fala (VAD na fonte)** [PASS] — 11 cortes de pausa verificados
+- ⚠️ **Planos visuais ≥ 0.7 s** [WARN] _(heurística)_ — 16.77–17.43s (20 q), 52.83–53.47s (19 q)
+- ✅ **Cortes de silêncio não removem fala (VAD na fonte)** [PASS] — 9 cortes de pausa verificados
 - ⚠️ **Fala removida por decisão editorial (repetição/hesitação/operador)** [WARN] — 9.05s em 3 trechos — confirmar na revisão: repeated-phrase 8.54–9.93; operator 0–8.54; operator 24.68–26.83
 - ⚠️ **Pontos de corte em silêncio (±20 ms abaixo do limiar de fala)** [WARN] _(heurística)_ — com energia de fala: 18.37s
+- ✅ **Bordas não truncam sibilantes (energia > 4000 Hz dos dois lados)** [PASS] _(heurística)_ — limiar -47.7 dBFS
+- ✅ **Relação fala − pausa não piora (limite 1.5 dB), no MP4 final, preset natural** [PASS] _(heurística)_ — antes 11.97 dB → depois 13.25 dB (piora -1.28 dB; 9 pausas; fala -18.44→-15.98, pausa -30.4→-29.24 dBFS)
 - ✅ **Legendas sincronizadas com a fala do vídeo final (±120 ms)** [PASS] — 153/153 palavras sobre fala detectada no áudio final (100%)
-- ✅ **Legendas dentro da duração final** [PASS] — 44 páginas
+- ✅ **Legendas dentro da duração final** [PASS] — 45 páginas
 - ✅ **Sem páginas de legenda sobrepostas** [PASS]
-- ✅ **Toda palavra falada tem página de legenda (exceto ocultas por decisão)** [PASS] — 1 oculta(s) por decisão registrada
-- ⚠️ **Palavras com duração plausível (≤ 1 s)** [WARN] _(heurística)_ — possíveis palavras não reconhecidas: "2022" 1.07s @4.867s, "faça" 1.66s @47.08s
-- ⚠️ **Palavras de baixa confiança revisadas** [WARN] — 10 palavras < 0,5 sem revisão: "E"@8.44s, "logo"@8.54s, "o"@10.42s, "Mas"@16.44s, "utilizar"@17.233s, "te"@18.16s, "e"@39.393s, "mas"@41.333s…
-- ✅ **Legendas dentro da zona segura Instagram Reels (medido no render do ASS)** [PASS] — 44 páginas medidas; faixa vertical 1298–1465 px
+- ✅ **Toda palavra falada tem página de legenda (exceto ocultas por decisão)** [PASS] — 2 oculta(s) por decisão registrada
+- ⚠️ **Palavras com duração plausível (≤ 1 s)** [WARN] _(heurística)_ — possíveis palavras não reconhecidas: "2022" 1.01s @7.653s, "benefícios," 1.28s @19.26s, "rapidez" 1.6s @22.88s, "faça" 1.66s @47.447s
+- ⚠️ **Palavras de baixa confiança revisadas** [WARN] — 10 palavras < 0,5 sem revisão: "E"@11.207s, "logo"@11.307s, "o"@13.187s, "Mas"@16.87s, "utilizar"@17.26s, "te"@18.36s, "e"@39.77s, "mas"@41.68s…
+- ⚠️ **Velocidade de leitura ≤ 20 caracteres/s (FAIL acima de 32)** [WARN] _(heurística)_ — 30 cps @1.96s "VOCÊ ESTÁ" [timing do ASR: "está" a 80 cps, acima da fala humana] | 27.7 cps @2.26s "FICANDO PARA TRÁS" [timing do ASR: "ficando" a 117 cps, acima da fala humana] | 22.5 cps @2.873s "JÁ É UMA REALIDADE" [texto demais: vizinhança também rápida (22.7 cps)] | 20.3 cps @3.673s "NÃO TEMOS PARA ONDE FUGIR" [timing do ASR: vizinhança a 17.2 cps] | 20 cps @11.207s "E LOGO APÓS ISSO" [timing do ASR: vizinhança a 15.3 cps] | 22.3 cps @12.007s "VIERAM OUTRAS FERRAMENTAS" [timing do ASR: vizinhança a 18 cps] | 21.5 cps @20.88s "TRAZ MUITAS POSSIBILIDADES" [timing do ASR: "benefícios," ao lado com 1.28 s] | 21.4 cps @25.48s "VOCÊ PASSA A FOCAR" [timing do ASR: vizinhança a 17.2 cps] | 21.5 cps @27.15s "EM CÓDIGO MAS TAMBÉM" [timing do ASR: vizinhança a 13.7 cps] | 31.7 cps @35.26s "NÓS DESENVOLVEDORES" [texto demais: vizinhança também rápida (21.5 cps)] | 25 cps @35.86s "GERALMENTE TEMOS ESSE" [timing do ASR: "temos" a 71 cps, acima da fala humana] | 22.9 cps @38.72s "FOCA MUITO NA TECNOLOGIA" [timing do ASR: vizinhança a 15.9 cps] | 21.1 cps @40.54s "REFINAR REFINAR REFINAR" [timing do ASR: vizinhança a 17.8 cps] | 20.7 cps @42.407s "PRO PRÓPRIO CLIENTE" [texto demais: vizinhança também rápida (20.4 cps)] | 25.6 cps @43.327s "AQUILO NÃO É IMPORTANTE" [texto demais: vizinhança também rápida (21.1 cps)] | 25 cps @46.567s "ELE QUER QUE O SISTEMA" [timing do ASR: "faça" ao lado com 1.66 s]
+- ⚠️ **Cards não repetem a legenda ativa** [WARN] _(heurística)_ — opcional × "Não é mais algo" @4.903s | ferramentas × "como o Antigravity, Codex," @13.127s | ferramentas × "o próprio Claude Code" @15.017s | foco × "na regra de negócio" @28.08s | foco × "no produto" @33.2s | cliente × "o sistema funcionando," @45.447s | cliente × "dinheiro, ou tempo," @49.607s
+- ✅ **Caixas das palavras não se sobrepõem (contorno incluído, pico da animação)** [PASS] — 151 palavras medidas
+- ⚠️ **Contraste do texto sobre a filmagem ≥ 3:1 (amostrado sem a legenda)** [WARN] _(heurística)_ — texto #FFFFFF: pior 2.31:1 em 13.63s; ativa #2EE6A6: pior 1.43:1 em 13.63s; palavra-chave #FFD23F: pior 1.6:1 em 13.63s; texto: 3/45 páginas abaixo (legível pelo contorno 6px, 21:1); ativa: 22/45 páginas abaixo (legível pelo contorno 6px, 13:1); palavra-chave: 18/45 páginas abaixo (legível pelo contorno 6px, 14.5:1)
+- ✅ **Legendas dentro da zona segura Instagram Reels (medido no render do ASS)** [PASS] — 45 páginas medidas; faixa vertical 1298–1465 px
 - ✅ **Legendas não cobrem olhos/boca (faixa do rosto declarado)** [PASS] _(heurística)_ — 0 páginas sobre a faixa 931–1267 px; rosto declarado pelo operador a partir dos stills; zoom pode deslocar o rosto
-- ✅ **Cards: fontes carregadas e sem overflow** [PASS] — 15 camadas
-- ⚠️ **Cards: zona segura, contraste e tamanho de texto (DOM, heurística genérica video-vertical: topo 15%)** [WARN] _(heurística)_ — tese: fora da safe zone genérica (div.tl topo 220px) | opcional: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | ferramentas#-1: fora da safe zone genérica (div.eyebrow topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#-1: fora da safe zone genérica (div.eyebrow topo 220px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#2: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | problema: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px)
-- ✅ **Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)** [PASS] — desvio 0 ms (correlação 0.9991)
+- ✅ **Cards não ficam vazios por mais de 0.8 s** [PASS]
+- ✅ **Cards não antecipam a fala da âncora** [PASS]
+- ✅ **Cards: fontes carregadas e sem overflow** [PASS] — 10 camadas
+- ⚠️ **Cards: zona segura, contraste e tamanho de texto (DOM, heurística genérica video-vertical: topo 15%)** [WARN] _(heurística)_ — opcional: fora da safe zone genérica (div.ct topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px)
+- ✅ **Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)** [PASS] — desvio 0 ms (correlação 0.9989)
 - ✅ **Render reprodutível (hash de quadros/amostras decodificados)** [PASS] — idêntico ao segundo render
 - ⚪ **Revisão auditiva humana (naturalidade, artefatos, fonemas)** [NOT_TESTED] — obrigatória antes de declarar qualidade de áudio
-- ⚪ **Crítico independente (contact sheet + prévia em movimento)** [NOT_TESTED] — aprovação não é automática
+- ✅ **Parecer do Crítico íntegro (hash)** [PASS] — rodada 1, e4a534fd40a0eeb83bfe1b65249de6f3221c4579573374ccbfaead0f0324e69a, por critic-independente-round-1
+- ❌ **Crítico independente (contact sheet + prévia em movimento)** [FAIL] — reprovado, 5 achado(s)

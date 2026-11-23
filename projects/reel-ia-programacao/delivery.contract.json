@@ -144,26 +144,6 @@
       "required": true
     },
     {
-      "path": "out/final/audio-ab/original.wav",
-      "role": "evidence",
-      "required": false
-    },
-    {
-      "path": "out/final/audio-ab/original-loudness-matched.wav",
-      "role": "evidence",
-      "required": false
-    },
-    {
-      "path": "out/final/audio-ab/ab-before.wav",
-      "role": "evidence",
-      "required": false
-    },
-    {
-      "path": "out/final/audio-ab/ab-after.wav",
-      "role": "evidence",
-      "required": false
-    },
-    {
       "path": "out/previews/preview.mp4",
       "role": "evidence",
       "required": false
@@ -284,7 +264,77 @@
       "required": false
     },
     {
-      "path": "reviews/frames/stills-r1.png",
+      "path": "out/final/audio-ab/original.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/ab.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-01-before.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-01-after.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-02-before.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-02-after.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-03-before.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-03-after.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-04-before.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "out/final/audio-ab/clip-04-after.wav",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/findings.md",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-0.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-0.seal.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-1.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-1.seal.json",
       "role": "evidence",
       "required": false
     }

@@ -30,12 +30,11 @@ Ditada pela fala após os cortes (alvo: 55–62 s). Sem esticar nem acelerar a v
 
 ## Estrutura (história)
 
-1. Abertura direta: "já é uma realidade, não temos para onde fugir" + card de tese.
-2. Contexto: não é mais opcional desde 2022 (ChatGPT); vieram Antigravity, Codex, Claude Code.
-3. Virada: "se você dev não está utilizando, você está ficando para trás" (ênfase visual).
-4. Benefícios e mudança de foco: código → regra de negócio → produto.
-5. Problema do dev (foco demais na tecnologia) × o que o cliente quer.
-6. Fecho: economizar dinheiro, tempo, ou ambos.
+1. Abertura: "se você dev não está utilizando, você está ficando para trás" (ênfase visual), sem card.
+2. Contexto: "já é uma realidade, não temos para onde fugir"; não é mais opcional desde 2022 (ChatGPT); vieram Antigravity, Codex, Claude Code.
+3. Benefícios e mudança de foco: código → regra de negócio → produto.
+4. Problema do dev (foco demais na tecnologia) × o que o cliente quer.
+5. Fecho: economizar dinheiro, tempo, ou ambos.
 
 ## Restrições
 
@@ -45,3 +44,18 @@ Ditada pela fala após os cortes (alvo: 55–62 s). Sem esticar nem acelerar a v
   "E VOCÊ, O QUE ACHA?" (63,90–66,40 s, base). Nada do estúdio pode colidir com esses textos.
 - Sem música (nenhuma trilha licenciada foi fornecida).
 - Não copiar a edição de referência (gancho, cards e textos próprios, estrutura cronológica).
+- Voz: preset `natural`; páginas de fala rápida aceitam até 32 cps só neste projeto (`qa.captions.cps.fail`).
+
+## Parâmetros lidos pelo motor
+
+A abertura foi aceita pelo dono do projeto em 2026-11-23 (Missão 21.1, B4) e fica também em
+`edit.config.json`. A referência abre com a mesma frase, portanto a restrição "não copiar o gancho"
+cedeu neste ponto. Para voltar à ordem da fala: `opening: "original"` e retirar `openingText` (nos dois arquivos).
+
+```json motion-brief
+{
+  "opening": "custom",
+  "openingText": "se você dev não está utilizando, você está ficando para trás",
+  "glossary": ["Antigravity", "Claude Code", "Codex", "ChatGPT", "Anthropic"]
+}
+```
