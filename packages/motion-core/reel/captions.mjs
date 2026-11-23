@@ -1,0 +1,175 @@
+/**
+ * MOTION Core — reel/captions.mjs
+ * Smart Captions: pages from destination-timed words, kinetic ASS (libass) with an
+ * active-word highlight, placement that respects platform safe zones and the speaker's
+ * face, and SRT / JSON exports. Words are displayed exactly as transcribed (only letter
+ * case and trailing comma/period may be styled away; never words or meaning).
+ */
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { normalizeWord, round } from "./util.mjs";
+import { srtTime, toSrt } from "./stt/index.mjs";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+
+export const DEFAULT_CAPTION_STYLE = Object.freeze({
+  fontFamily: "Inter", fontWeight: 700, fontSize: 74, uppercase: true,
+  color: "#FFFFFF", activeColor: "#2EE6A6", keywordColor: "#2EE6A6",
+  outlineColor: "#000000", outlineWidth: 5, shadow: 2, shadowColor: "#000000",
+  maxWordsPerPage: 3, maxCharsPerLine: 14, maxLines: 2, minPageSec: 0.45, maxGapSec: 0.45,
+  holdSec: 0.25, punctuation: "minimal", animation: "pop", keywords: [],
+  platform: "instagram-reels",
+});
+
+export function loadSafeZonePreset(platform = "instagram-reels") {
+  const file = path.join(here, "..", "safe-zones", "presets.json");
+  const data = JSON.parse(readFileSync(file, "utf8"));
+  const p = data.presets[platform];
+  if (!p) throw new Error(`safe zone desconhecida: ${platform}`);
+  return { id: platform, ...p, version: data.version };
+}
+
+/** Text shown on screen for a word: case and minimal punctuation only. */
+export function displayWord(text, style) {
+  let t = text;
+  if (style.punctuation === "minimal") t = t.replace(/[,.;:…]+$/u, "");
+  return style.uppercase ? t.toLocaleUpperCase("pt-BR") : t;
+}
+
+/**
+ * Groups words into caption pages: break on long gaps, sentence punctuation, word/char
+ * budgets. Lines are balanced inside a page.
+ */
+export function buildPages(words, styleIn = {}) {
+  const style = { ...DEFAULT_CAPTION_STYLE, ...styleIn };
+  const pages = [];
+  let cur = [];
+  const chars = (ws) => ws.map((w) => displayWord(w.text, style)).join(" ").length;
+  const flush = () => { if (cur.length) pages.push(cur); cur = []; };
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i];
+    if (w.suspect) continue; // suspected hallucination never becomes a caption
+    const prev = cur.at(-1);
+    const gap = prev ? w.start - prev.end : 0;
+    const budget = style.maxCharsPerLine * style.maxLines;
+    if (cur.length && (gap > style.maxGapSec || cur.length >= style.maxWordsPerPage || chars([...cur, w]) > budget || /[.!?…]$/u.test(prev.text))) flush();
+    cur.push(w);
+  }
+  flush();
+  const kw = new Set((style.keywords ?? []).map(normalizeWord));
+  return pages.map((ws, i) => {
+    const next = pages[i + 1];
+    const start = ws[0].start;
+    let end = ws.at(-1).end + style.holdSec;
+    if (next) end = Math.min(end, next[0].start);
+    end = Math.max(end, start + style.minPageSec);
+    if (next) end = Math.min(end, next[0].start);
+    return {
+      index: i, start: round(start), end: round(end),
+      lines: balanceLines(ws.map((w) => displayWord(w.text, style)), style.maxCharsPerLine, style.maxLines),
+      words: ws.map((w) => ({ id: w.id, text: w.text, display: displayWord(w.text, style), start: w.start, end: w.end, keyword: kw.has(normalizeWord(w.text)), confidence: w.confidence ?? null })),
+    };
+  });
+}
+
+/** Splits displayed words into ≤ maxLines lines, minimizing the longest line. Returns word counts per line. */
+export function balanceLines(tokens, maxChars, maxLines) {
+  const len = (a, b) => tokens.slice(a, b).join(" ").length;
+  if (maxLines <= 1 || len(0, tokens.length) <= maxChars) return [tokens.length];
+  let best = null;
+  for (let k = 1; k < tokens.length; k++) {
+    const worst = Math.max(len(0, k), len(k, tokens.length));
+    if (!best || worst < best.worst) best = { k, worst };
+  }
+  return [best.k, tokens.length - best.k];
+}
+
+/**
+ * Vertical placement (0..1, block centre). Avoids the eyes→mouth band of the face box and
+ * stays inside the platform's safe area (above bottom UI, left of side controls).
+ */
+export function placeCaptions({ width, height, faceBox = null, platform = "instagram-reels", lines = 2, fontSize = 74, override = null }) {
+  const sz = loadSafeZonePreset(platform);
+  const top = sz.margins.top / 100, bottom = 1 - sz.margins.bottom / 100;
+  const blockH = (lines * fontSize * 1.18) / height;
+  const reserved = sz.reservedRegions.map((r) => ({ ...r, x0: r.x / 100, x1: (r.x + r.width) / 100, y0: r.y / 100, y1: (r.y + r.height) / 100 }));
+  const side = reserved.filter((r) => r.x0 > 0.5).reduce((m, r) => Math.min(m, r.x0), 1 - sz.margins.right / 100);
+  const maxWidthPx = Math.floor(2 * (side - 0.5) * width) - 16;
+  if (override?.y !== undefined) return { y: override.y, maxWidthPx, reason: "definido pelo operador", safe: { top, bottom, side }, blockH };
+  let band = null;
+  // faceBox = head bounding box (top of hair → chin). Protected band: eyes → mouth.
+  if (faceBox) band = [faceBox.y + 0.35 * faceBox.h, faceBox.y + 0.7 * faceBox.h];
+  const lowestCenter = bottom - blockH / 2 - 0.01;
+  if (!band) return { y: round(Math.min(0.72, lowestCenter), 3), maxWidthPx, reason: "sem rosto declarado: terço inferior seguro", safe: { top, bottom, side }, blockH };
+  const below = band[1] + blockH / 2 + 0.015;
+  if (below <= lowestCenter) return { y: round(below, 3), maxWidthPx, reason: "abaixo da boca, dentro da área segura", safe: { top, bottom, side }, blockH, faceBand: band };
+  const above = band[0] - blockH / 2 - 0.015;
+  if (above - blockH / 2 >= top + 0.12) return { y: round(above, 3), maxWidthPx, reason: "acima dos olhos (sem espaço abaixo)", safe: { top, bottom, side }, blockH, faceBand: band };
+  return { y: round(lowestCenter, 3), maxWidthPx, reason: "limite inferior seguro (rosto ocupa o quadro; sobreposição mínima ao queixo)", safe: { top, bottom, side }, blockH, faceBand: band };
+}
+
+const assColor = (hex, alpha = 0) => {
+  const h = hex.replace("#", "");
+  const [r, g, b] = [h.slice(0, 2), h.slice(2, 4), h.slice(4, 6)];
+  return `&H${alpha.toString(16).padStart(2, "0").toUpperCase()}${b}${g}${r}`.toUpperCase();
+};
+const assTime = (t) => {
+  const cs = Math.max(0, Math.round(t * 100));
+  return `${Math.floor(cs / 360000)}:${String(Math.floor(cs / 6000) % 60).padStart(2, "0")}:${String(Math.floor(cs / 100) % 60).padStart(2, "0")}.${String(cs % 100).padStart(2, "0")}`;
+};
+const escapeAss = (s) => s.replace(/\\/g, "\\\\").replace(/\{/g, "(").replace(/\}/g, ")");
+
+/**
+ * Kinetic ASS: one Dialogue per (page, active word). Page entrance pop on the first state
+ * only; the active word switches colour (no reflow). Times are on the 10 ms ASS grid.
+ */
+export function buildAss(pages, { width, height, styleIn = {}, placement }) {
+  const s = { ...DEFAULT_CAPTION_STYLE, ...styleIn };
+  const header = [
+    "[Script Info]", "; MOTION Smart Captions — gerado por motion-core/reel", "ScriptType: v4.00+", `PlayResX: ${width}`, `PlayResY: ${height}`, "WrapStyle: 2", "ScaledBorderAndShadow: yes", "YCbCr Matrix: TV.709", "",
+    "[V4+ Styles]",
+    "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+    `Style: Caption,${s.fontFamily},${s.fontSize},${assColor(s.color)},${assColor(s.color)},${assColor(s.outlineColor)},${assColor(s.shadowColor, 0x60)},${s.fontWeight >= 600 ? -1 : 0},0,0,0,100,100,0,0,1,${s.outlineWidth},${s.shadow},5,0,0,0,1`,
+    "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+  ];
+  const x = Math.round(width / 2), y = Math.round(placement.y * height);
+  const events = [];
+  for (const p of pages) {
+    const words = p.words;
+    for (let i = 0; i < words.length; i++) {
+      const st = i === 0 ? p.start : words[i].start;
+      const en = i + 1 < words.length ? words[i + 1].start : p.end;
+      if (en - st < 0.01) continue;
+      let k = 0;
+      const lineTexts = p.lines.map((n) => {
+        const parts = [];
+        for (let j = 0; j < n; j++, k++) {
+          const w = words[k];
+          const col = k === i ? s.activeColor : w.keyword ? s.keywordColor : s.color;
+          parts.push(`{\\c${assColor(col)}}${escapeAss(w.display)}`);
+        }
+        return parts.join(" ");
+      });
+      const intro = i === 0 && s.animation === "pop" ? "\\fscx86\\fscy86\\t(0,90,\\fscx100\\fscy100)\\fad(60,0)" : "";
+      events.push(`Dialogue: 0,${assTime(st)},${assTime(en)},Caption,,0,0,0,,{\\an5\\pos(${x},${y})${intro}}${lineTexts.join("\\N")}`);
+    }
+  }
+  return header.concat(events).join("\n") + "\n";
+}
+
+/** Caption pages → SRT (one cue per page, original words). */
+export function pagesToSrt(pages) {
+  return toSrt(pages.map((p) => ({ start: p.start, end: p.end, text: p.words.map((w) => w.text).join(" ") })));
+}
+
+/** Word-level SRT (one cue per word) for tools that need it. */
+export function wordsToSrt(words) {
+  return toSrt(words.filter((w) => !w.suspect).map((w) => ({ start: w.start, end: w.end, text: w.text })));
+}
+
+export function captionsJson(pages, { placement, style, timelineHash = null } = {}) {
+  return { schema: "motion.captions", schemaVersion: 1, timelineHash, style, placement, pages };
+}
+
+export { srtTime };

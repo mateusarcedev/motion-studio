@@ -47,6 +47,7 @@ export { listMotionComponents, getMotionComponent, validateComponentConfig, gene
 export { previewMotionComponent, renderMotionComponent, renderComposition } from "./components/render.js";
 export { listTransitions, renderTransition } from "./transitions/index.js";
 export { verifyDeterminism } from "./quality/determinism.mjs";
+export * as reel from "./reel/index.mjs";
 export {
   analyzeSafeZones,
   createSafeZoneOverlaySvg,
