@@ -169,16 +169,6 @@
       "required": false
     },
     {
-      "path": "transcript/reference.transcript.json",
-      "role": "evidence",
-      "required": false
-    },
-    {
-      "path": "transcript/reference.asr.srt",
-      "role": "evidence",
-      "required": false
-    },
-    {
       "path": "reviews/critic/caption_end_fullres.png",
       "role": "evidence",
       "required": false

@@ -7516,9 +7516,9 @@
     "analysisSchema": "motion.reel.analysis",
     "transcriptProvider": "faster-whisper"
   },
-  "hash": "3020686b0862078866bcdf997752e9d8e3a18f73a8bf574504584b24442f36e1",
+  "hash": "244cf61fc81b7bcd27120300c7a75ba1464d3b687d2d21a6d6546d5df04c4294",
   "brief": {
     "path": "BRIEF.md",
-    "sha256": "6e8474373a7d80e37d3af5393fa4e5916fd0366ed0b2bfcd551a9b26c99f6e5c"
+    "sha256": "4d026535207e17d63c01d0f253a4eebd13edb4347408674b02d61aadfde5cca4"
   }
 }

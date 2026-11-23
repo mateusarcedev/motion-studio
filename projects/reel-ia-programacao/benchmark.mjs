@@ -61,9 +61,10 @@ for (const [k, f] of Object.entries(files)) {
 }
 
 // ASR quality vs the human caption of the reference (upper bound: human captions drop/normalize words)
-if (existsSync(`${D}/legendas.srt`) && existsSync(files.reference)) {
+// the reference transcript belongs to third-party material: kept next to the originals, never versioned
+if (existsSync(`${D}/legendas.srt`) && existsSync(files.reference) && existsSync(`${D}/reference.transcript.json`)) {
 const human = R.parseSubtitles(await readFile(`${D}/legendas.srt`, "utf8"));
-const refAsr = await readJson("transcript/reference.transcript.json");
+const refAsr = JSON.parse(await readFile(`${D}/reference.transcript.json`, "utf8"));
 const humanWords = norm(human.map((c) => c.text).join(" "));
 out.asr.referenceVsHumanSrt = { ...wer(humanWords, norm(refAsr.words.map((w) => w.text).join(" "))), model: refAsr.provider.model, language: refAsr.language, note: "WER do faster-whisper small (glossário) sobre o áudio da referência contra a legenda humana dela; a legenda humana omite/normaliza palavras, então o valor é um limite superior do erro." };
 } else out.asr.referenceVsHumanSrt = out.captions.reference = blocked("referência e legendas.srt");

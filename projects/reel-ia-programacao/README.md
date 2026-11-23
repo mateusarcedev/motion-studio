@@ -33,7 +33,7 @@ $M qa delivery --project . --zip out/entrega-reel-ia-programacao.zip
 | `BRIEF.md`, `STYLE.md`, `EDIT_PLAN.md` | direção (gates humanos pendentes) e storyboard de edição |
 | `edit.config.json` | decisões do operador (exclusões, ênfase, correções com evidência, cards, rosto) |
 | `edit.json` | timeline `motion.timeline@1` gerada (reexecutável) |
-| `transcript/` | transcrição faster-whisper (bruto e referência), análise |
+| `transcript/` | transcrição faster-whisper do bruto e análise; a da referência de terceiros não é versionada |
 | `fonts/` | Inter 700 e JetBrains Mono 700 (OFL) |
 | `out/` | renders (não versionado) |
 | `reviews/` | QA, benchmark, inspeção visual, parecer do Crítico |
