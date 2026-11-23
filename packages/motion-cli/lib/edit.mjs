@@ -30,6 +30,26 @@ function rebasePaths(config, configDir, timelineDir) {
   return c;
 }
 
+/** Plan shared by the CLI and the MCP server, so both resolve config, brief and paths alike. */
+export async function buildPlan(R, video, o) {
+  const output = path.resolve(o.output);
+  let config = {};
+  if (o.config) config = rebasePaths(await readJson(o.config), path.dirname(path.resolve(o.config)), path.dirname(output));
+  let transcript = o.transcript ? await readJson(o.transcript) : null;
+  if (transcript && config.corrections?.length) transcript = R.applyCorrections(transcript, config.corrections);
+  const brief = o.brief ? await R.loadBrief(o.brief) : null;
+  let suggestions = [];
+  if (brief?.glossary && transcript) { const g = R.applyGlossary(transcript, brief.glossary, { briefSha256: brief.sha256 }); transcript = g.transcript; suggestions = g.suggestions; }
+  const analysis = o.analysis ? await readJson(o.analysis) : null;
+  const { corrections, preset: cfgPreset, ...opts } = config;
+  if (brief) for (const k of ["opening", "openingText", "openingApproval", "keywords"]) if (brief[k] !== undefined && opts[k] === undefined) opts[k] = brief[k];
+  const t = await R.planEdit(video, { analysis, transcript, preset: o.preset || cfgPreset || "talking-head", ...opts });
+  for (const g of suggestions) t.review.push({ src: [g.start, g.end], reason: `glossário sugere "${g.term}" para "${g.heard}" (semelhança ${g.similarity}, confiança ${g.confidence}); não aplicado`, by: "engine" });
+  if (brief) t.brief = { path: path.relative(path.dirname(output), path.resolve(o.brief)), sha256: brief.sha256 };
+  await mkdir(path.dirname(output), { recursive: true });
+  return { timeline: t, saved: await R.saveTimeline(t, output), output };
+}
+
 export const EDIT_HELP = `
   motion edit — Smart Reel Editor & Voice Studio (headless, agnóstico de agente; --json em todos)
 
@@ -98,22 +118,7 @@ export async function runEdit(sub, args, flags) {
       case "plan": {
         const video = args[0];
         if (!video || !flags.output) throw new TypeError("Uso: motion edit plan <video> --output=edit.json [--transcript=t.json] [--config=edit.config.json] [--preset=talking-head]");
-        const output = path.resolve(flags.output);
-        let config = {};
-        if (flags.config) config = rebasePaths(await readJson(flags.config), path.dirname(path.resolve(flags.config)), path.dirname(output));
-        let transcript = flags.transcript ? await readJson(flags.transcript) : null;
-        if (transcript && config.corrections?.length) transcript = R.applyCorrections(transcript, config.corrections);
-        const brief = flags.brief ? await R.loadBrief(flags.brief) : null;
-        let suggestions = [];
-        if (brief?.glossary && transcript) { const g = R.applyGlossary(transcript, brief.glossary, { briefSha256: brief.sha256 }); transcript = g.transcript; suggestions = g.suggestions; }
-        const analysis = flags.analysis ? await readJson(flags.analysis) : null;
-        const { corrections, preset: cfgPreset, ...opts } = config;
-        if (brief) for (const k of ["opening", "openingText", "openingApproval", "keywords"]) if (brief[k] !== undefined && opts[k] === undefined) opts[k] = brief[k];
-        const t = await R.planEdit(video, { analysis, transcript, preset: flags.preset || cfgPreset || "talking-head", ...opts });
-        for (const g of suggestions) t.review.push({ src: [g.start, g.end], reason: `glossário sugere "${g.term}" para "${g.heard}" (semelhança ${g.similarity}, confiança ${g.confidence}); não aplicado`, by: "engine" });
-        if (brief) t.brief = { path: path.relative(path.dirname(output), path.resolve(flags.brief)), sha256: brief.sha256 };
-        await mkdir(path.dirname(output), { recursive: true });
-        const saved = await R.saveTimeline(t, output);
+        const { timeline: t, saved, output } = await buildPlan(await core(), video, flags);
         return out(flags, command, { output, hash: saved.hash, stats: t.stats, opening: t.opening, decisions: t.decisions, review: t.review, warnings: t.warnings },
           `Plano: ${t.stats.sourceSec}s → ${t.stats.outputSec}s (−${t.stats.removedSec}s) · ${t.segments.length} segmentos · ${t.stats.cuts} cortes · ${t.stats.zoomCuts} zoom cuts · ${t.captions.pages.length} páginas de legenda · ${t.overlays.length} cards\n` +
           `Decisões: ${t.decisions.length} · para revisar: ${t.review.length} · palavras perdidas sem decisão: ${t.stats.wordsLostUnexpected}\n→ ${output}${t.warnings.map((w) => `\n⚠ ${w}`).join("")}`);

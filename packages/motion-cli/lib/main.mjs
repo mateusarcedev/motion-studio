@@ -47,6 +47,8 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
       --profile=<nome>       Perfil de skills (padrão: all = as 13 Skills oficiais)
       --force                Substitui configuração/Skills divergentes (com backup)
       --agents=<lista>       claude,codex,gemini,opencode,copilot (padrão: detecção automática)
+      --skills-dir=<pasta>   Instala as Skills nesta pasta do projeto (não toca em .claude/.agents)
+      --no-skills            Não instala Skills (só CLI/Core e configuração)
       --with-package-json    Cria package.json mínimo se não existir (padrão: modo standalone)
       --skip-install         Não instala dependências; usa os arquivos do pacote em execução
       --strict               Falha (exit 3) se motores obrigatórios estiverem ausentes

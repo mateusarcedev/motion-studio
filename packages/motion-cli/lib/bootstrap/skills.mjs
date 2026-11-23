@@ -80,15 +80,15 @@ async function copyVerified(src, dest, tmpRoot, wantHash) {
 }
 
 /**
- * Non-destructive install into <cwd>/.agents/skills.
+ * Non-destructive install into <cwd>/<skillsDir> (default .agents/skills).
  * - missing → copied (via temp dir + hash check, so a crash never leaves a half skill)
  * - identical → untouched
  * - differs, previously installed by us and unmodified (hash == manifest) → updated
  * - differs, listed as pending from an interrupted run → repaired
  * - anything else (user's own/edited skill) → preserved, reported as conflict
  */
-export async function installSkillFiles({ cwd, catalog, previous = {}, pending = [], force = false }) {
-  const base = path.join(cwd, ".agents", "skills");
+export async function installSkillFiles({ cwd, skillsDir = ".agents/skills", catalog, previous = {}, pending = [], force = false }) {
+  const base = path.join(cwd, skillsDir);
   const tmpRoot = path.join(cwd, ".motion", "tmp");
   const backupRoot = path.join(cwd, ".motion", "backups");
   const results = [];

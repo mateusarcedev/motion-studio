@@ -319,3 +319,40 @@ test("CLI binaries: motion init and motion-studio init share one implementation"
     }
   }
 });
+
+test("--skills-dir: only that folder, agent folders untouched, rerun keeps the choice, escapes refused", async () => {
+  const dir = await tmp();
+  try {
+    await mkdir(path.join(dir, ".claude"), { recursive: true });
+    const r = await quiet(() => runBootstrap({ ...base, cwd: dir, "skills-dir": "tools/skills" }));
+    assert.equal(r.ok, true, JSON.stringify(r.error));
+    assert.deepEqual((await readdir(path.join(dir, "tools/skills"))).sort(), PUBLIC);
+    assert.ok(!(await exists(path.join(dir, ".agents"))));
+    assert.deepEqual(await readdir(path.join(dir, ".claude")), []);
+    assert.equal((await readManifest(dir)).skillsDir, "tools/skills");
+    const again = await quiet(() => runBootstrap({ ...base, cwd: dir }));
+    assert.equal(again.ok, true);
+    assert.ok(again.skills.every((s) => s.status === "unchanged"));
+    assert.ok(!(await exists(path.join(dir, ".agents"))));
+    assert.ok((await verifyInstall(dir)).every((c) => c.ok));
+    const { symlink } = await import("node:fs/promises");
+    await symlink(os.tmpdir(), path.join(dir, "fora"));
+    for (const bad of ["../x", "/tmp/x", ".", "fora/skills", "node_modules/x", true]) {
+      const b = await quiet(() => runBootstrap({ ...base, cwd: dir, "skills-dir": bad }));
+      assert.equal(b.error?.code, "BAD_SKILLS_DIR", String(bad));
+    }
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
+
+test("--no-skills: config and manifest only; conflicts with --skills-dir", async () => {
+  const dir = await tmp();
+  try {
+    const r = await quiet(() => runBootstrap({ ...base, cwd: dir, "no-skills": true }));
+    assert.equal(r.ok, true, JSON.stringify(r.error));
+    assert.ok(!(await exists(path.join(dir, ".agents")))); assert.ok(!(await exists(path.join(dir, ".claude"))));
+    assert.ok(await exists(path.join(dir, "motion.config.json")));
+    assert.ok((await verifyInstall(dir)).every((c) => c.ok));
+    const b = await quiet(() => runBootstrap({ ...base, cwd: dir, "no-skills": true, "skills-dir": "x" }));
+    assert.equal(b.error.code, "BAD_SKILLS_DIR");
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});

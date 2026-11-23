@@ -37,6 +37,31 @@ async function guardAgainstRecursion(cwd, pkgJson) {
   }
 }
 
+export const DEFAULT_SKILLS_DIR = ".agents/skills";
+
+/**
+ * Where Skills go: null (none), or a project-relative directory. Flags win; otherwise a previous
+ * install keeps its choice, so a rerun never writes where the user asked it not to.
+ */
+export async function resolveSkillsDir(cwd, o = {}, manifest = null) {
+  const custom = o.skillsDir ?? o["skills-dir"];
+  const none = Boolean(o.noSkills ?? o["no-skills"]);
+  if (none && custom !== undefined) throw new BootstrapError("BAD_SKILLS_DIR", "--no-skills e --skills-dir não podem ser usados juntos.");
+  if (none) return null;
+  if (custom === undefined) return manifest?.skillsDir !== undefined ? manifest.skillsDir : DEFAULT_SKILLS_DIR;
+  if (custom === true || !String(custom).trim()) throw new BootstrapError("BAD_SKILLS_DIR", "Informe a pasta: --skills-dir=<caminho dentro do projeto>.");
+  const root = await realpath(cwd);
+  const abs = path.resolve(root, String(custom));
+  // deepest existing ancestor, resolved: a symlink must not take the files out of the project
+  let probe = abs;
+  while (!(await exists(probe))) probe = path.dirname(probe);
+  const real = path.join(await realpath(probe), path.relative(probe, abs));
+  const rel = path.relative(root, real);
+  if (!rel || rel.startsWith("..") || path.isAbsolute(rel)) throw new BootstrapError("BAD_SKILLS_DIR", `--skills-dir precisa ficar dentro do projeto: ${custom}`);
+  if (rel.split(path.sep).includes("node_modules")) throw new BootstrapError("BAD_SKILLS_DIR", "--skills-dir não pode ficar em node_modules.");
+  return rel.split(path.sep).join("/");
+}
+
 export async function readManifest(cwd) {
   return readJson(path.join(cwd, MANIFEST_REL), MANIFEST_REL);
 }
@@ -54,15 +79,20 @@ export async function verifyInstall(cwd, { loader } = {}) {
     return checks;
   }
   add("manifesto de instalação", manifest.status === "complete", manifest.status === "complete" ? MANIFEST_REL : `status '${manifest.status}' (instalação incompleta; reexecute init)`);
+  const skillsDir = manifest.skillsDir === undefined ? DEFAULT_SKILLS_DIR : manifest.skillsDir;
+  if (skillsDir === null) {
+    add("Skills", true, "não instaladas por opção (--no-skills)");
+    return checks;
+  }
   const catalog = await loadCatalog({ loader, profile: manifest.profile || "all" }).catch((e) => {
     add("catálogo de Skills", false, e.message);
     return null;
   });
   const expectedNames = catalog ? catalog.selected.map((s) => s.name) : Object.keys(manifest.skills || {});
   for (const name of expectedNames) {
-    const dir = path.join(cwd, ".agents", "skills", name);
+    const dir = path.join(cwd, skillsDir, name);
     if (!(await exists(path.join(dir, "SKILL.md")))) {
-      add(`skill ${name}`, false, ".agents/skills ausente");
+      add(`skill ${name}`, false, `${skillsDir} ausente`);
       continue;
     }
     const rec = manifest.skills?.[name];
@@ -90,6 +120,7 @@ function logger(quiet) {
  *  cwd, brand, profile (default "all"), agents ("claude,codex"), force, strict, json,
  *  skipInstall (use files from the running package, no dependency install),
  *  withPackageJson (create a minimal package.json when none exists),
+ *  skillsDir (project-relative Skills folder, no agent links) / noSkills,
  *  skipDoctor, catalogLoader, doctor (injectable)
  */
 export async function runBootstrap(o = {}) {
@@ -123,10 +154,13 @@ export async function runBootstrap(o = {}) {
 
     // 1. Catalog (fail before touching anything if mandatory Skills are unavailable)
     const profile = o.profile && o.profile !== true ? String(o.profile) : "all";
-    const catalog = await loadCatalog({ loader: o.catalogLoader, profile });
+    const skillsDir = await resolveSkillsDir(cwd, o, manifest);
+    report.skillsDir = skillsDir;
+    const catalog = skillsDir === null ? { version: null, selected: [], excluded: [] } : await loadCatalog({ loader: o.catalogLoader, profile });
     report.versions.skills = catalog.version;
     if (catalog.excluded.length) warn(`${catalog.excluded.length} Skill(s) do perfil '${profile}' não são redistribuíveis e não foram incluídas: ${catalog.excluded.join(", ")}`);
-    step("Catálogo de Skills verificado", "ok", `${catalog.selected.length} Skills públicas (sha256 conferido)`);
+    if (skillsDir === null) step("Catálogo de Skills", "skip", "--no-skills");
+    else step("Catálogo de Skills verificado", "ok", `${catalog.selected.length} Skills públicas (sha256 conferido)`);
 
     // 2. Mode / package manager
     let mode = "project";
@@ -152,7 +186,7 @@ export async function runBootstrap(o = {}) {
     // 3. Mark in-progress BEFORE changing anything (enables recovery)
     await mkdir(path.join(cwd, ".motion"), { recursive: true });
     const manifestPath = path.join(cwd, MANIFEST_REL);
-    const base = { schemaVersion: 1, mode, profile, packageManager: pm.name, versions: expected, skills: manifest?.skills || {} };
+    const base = { schemaVersion: 1, mode, profile, packageManager: pm.name, versions: expected, skillsDir, skills: manifest?.skills || {} };
     await writeJsonAtomic(manifestPath, { ...base, status: "in-progress", pending: catalog.selected.map((s) => s.name) });
 
     // 4. Dependencies
@@ -184,17 +218,20 @@ export async function runBootstrap(o = {}) {
     // 5. Agents + Skills
     const detected = await detectAgents(cwd, { probeBinaries: !o.noProbe });
     const targets = resolveTargets(detected, o.agents && o.agents !== true ? o.agents : null);
+    // a custom folder (or none) means "do not touch agent folders"
+    if (skillsDir !== DEFAULT_SKILLS_DIR) targets.claudeLink = false;
     report.agents = { detected: Object.fromEntries(Object.entries(detected).map(([k, v]) => [k, { label: v.label, detected: v.detected, evidence: v.evidence, location: v.location }])), selected: targets.agents, claudeLink: targets.claudeLink };
 
     const force = Boolean(o.force);
-    const skillRes = await installSkillFiles({ cwd, catalog, previous: manifest?.skills || {}, pending: manifest?.status !== "complete" ? manifest?.pending || [] : [], force });
+    const skillRes = skillsDir === null ? [] : await installSkillFiles({ cwd, skillsDir, catalog, previous: manifest?.skills || {}, pending: manifest?.status !== "complete" ? manifest?.pending || [] : [], force });
     let linkRes = [];
     if (targets.claudeLink) linkRes = await linkClaudeSkills({ cwd, names: catalog.selected.map((s) => s.name), force });
     report.skills = skillRes;
     const count = (arr, s) => arr.filter((r) => r.status === s).length;
     const conflicts = [...skillRes, ...linkRes.map((r) => ({ ...r, name: `.claude/${r.name}` }))].filter((r) => r.status === "conflict");
     for (const c of conflicts) warn(`Conflito: '${c.name}' já existe com conteúdo diferente — preservado, não sobrescrito (use --force para substituir com backup em .motion/backups).`);
-    step("Skills oficiais", conflicts.length ? "warn" : "ok", `${skillRes.length} em .agents/skills (novas ${count(skillRes, "installed")}, atualizadas ${count(skillRes, "updated") + count(skillRes, "repaired")}, inalteradas ${count(skillRes, "unchanged")}, conflitos ${count(skillRes, "conflict")})`);
+    if (skillsDir === null) step("Skills oficiais", "skip", "--no-skills: use o CLI/MCP direto, ou --skills-dir depois");
+    else step("Skills oficiais", conflicts.length ? "warn" : "ok", `${skillRes.length} em ${skillsDir} (novas ${count(skillRes, "installed")}, atualizadas ${count(skillRes, "updated") + count(skillRes, "repaired")}, inalteradas ${count(skillRes, "unchanged")}, conflitos ${count(skillRes, "conflict")})`);
     if (targets.claudeLink) step("Integração Claude Code", "ok", `.claude/skills (${count(linkRes, "linked")} links, ${count(linkRes, "copied")} cópias, ${count(linkRes, "unchanged")} inalterados)`);
 
     // 6. Project files
@@ -249,10 +286,11 @@ function printSummary(r, log, conflicts) {
   const sel = r.agents.selected.length ? r.agents.selected.map((id) => AGENTS[id].label).join(", ") : "nenhum detectado (instalação universal)";
   log("\n──────── Relatório ────────");
   log(`Modo:        ${r.mode}${r.packageManager && r.mode === "project" ? ` (${r.packageManager.name})` : ""}`);
-  log(`Skills:      ${r.skills.length} oficiais em .agents/skills${r.agents.claudeLink ? " + .claude/skills" : ""}`);
+  log(`Skills:      ${r.skillsDir === null ? "não instaladas (--no-skills)" : `${r.skills.length} oficiais em ${r.skillsDir}`}${r.agents.claudeLink ? " + .claude/skills" : ""}`);
   log(`Agentes:     ${sel}`);
-  log("Descoberta:  .agents/skills → Codex, OpenCode, Antigravity (testados)" + (r.agents.claudeLink ? " · .claude/skills → Claude Code (testado)" : ""));
-  log("             Gemini CLI e GitHub Copilot: caminhos conforme a documentação oficial, não testados.");
+  if (r.skillsDir === DEFAULT_SKILLS_DIR) log("Descoberta:  .agents/skills → Codex, OpenCode, Antigravity (testados)" + (r.agents.claudeLink ? " · .claude/skills → Claude Code (testado)" : ""));
+  if (r.skillsDir === DEFAULT_SKILLS_DIR) log("             Gemini CLI e GitHub Copilot: caminhos conforme a documentação oficial, não testados.");
+  if (r.skillsDir && r.skillsDir !== DEFAULT_SKILLS_DIR) log(`Descoberta:  aponte seu agente para ${r.skillsDir} (nenhuma pasta de agente foi alterada).`);
   if (conflicts) log(`Conflitos:   ${conflicts} preservado(s)`);
   log(r.enginesOk === false ? "\n⚠️  Instalado, mas há motores obrigatórios ausentes (veja acima). Rode `npx motion doctor` após instalá-los." : "\n🎉 MOTION Studio pronto.");
   log("Próximos passos: `npx motion doctor` · `npx motion create video <nome>`");

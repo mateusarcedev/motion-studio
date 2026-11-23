@@ -24,12 +24,13 @@ export const TOOLS = [
   { name: "motion_edit_presets", description: "Lista presets de edição, de voz, tipos de card e provedores STT.", inputSchema: S({}) },
   { name: "motion_edit_analyze", description: "Analisa um vídeo/áudio: metadados, loudness EBU R128, true peak, fala/pausas (VAD), ruído e zumbido. Somente leitura.", inputSchema: S({ input: str("caminho do vídeo"), output: str("JSON de saída (opcional)") }, ["input"]) },
   { name: "motion_stt_doctor", description: "Verifica provedores de Speech-to-Text (faster-whisper local em venv isolado).", inputSchema: S({ model: str("modelo, padrão small") }) },
+  { name: "motion_audio_doctor", description: "Verifica filtros de voz do FFmpeg e o DeepFilterNet opcional (hash conferido).", inputSchema: S({}) },
   { name: "motion_edit_transcribe", description: "Transcreve a fala com timestamps por palavra (job em background). Retorna jobId.", inputSchema: S({ input: str("vídeo"), output: str("transcript.json"), language: str("ex.: pt (opcional: detecção automática)"), model: str("small por padrão"), hotwords: str("glossário de nomes próprios, separados por vírgula") }, ["input", "output"]) },
-  { name: "motion_edit_plan", description: "Gera a timeline editável (cortes, zoom, legendas, cards) a partir do vídeo, da transcrição e de um config de decisões do operador.", inputSchema: S({ input: str("vídeo"), output: str("edit.json"), transcript: str("transcript.json"), config: str("edit.config.json (decisões: exclude, overlays, emphasis, faceBox...)"), preset: str("talking-head | tutorial | podcast | interview") }, ["input", "output"]) },
-  { name: "motion_edit_audio", description: "Voice Studio: trata a voz (job em background) e exporta WAV + A/B.", inputSchema: S({ input: str("vídeo/áudio"), output: str("voice.wav"), preset: str("natural | clean | studio | noisy-room"), abDir: str("pasta A/B (opcional)") }, ["input", "output"]) },
-  { name: "motion_edit_render", description: "Renderiza a timeline (job em background). mode=preview (meia resolução) ou final.", inputSchema: S({ timeline: str("edit.json"), output: str("reel.mp4"), mode: { type: "string", enum: ["preview", "final"] } }, ["timeline", "output"]) },
+  { name: "motion_edit_plan", description: "Gera a timeline editável (cortes, zoom, legendas, cards) a partir do vídeo, da transcrição e de um config de decisões do operador.", inputSchema: S({ input: str("vídeo"), output: str("edit.json"), transcript: str("transcript.json"), analysis: str("analysis.json (opcional)"), config: str("edit.config.json (decisões: exclude, overlays, emphasis, faceBox...)"), brief: str("BRIEF.md com bloco motion-brief (opcional)"), preset: str("talking-head | tutorial | podcast | interview | institucional") }, ["input", "output"]) },
+  { name: "motion_edit_audio", description: "Voice Studio: trata a voz (job em background) e exporta WAV + A/B.", inputSchema: S({ input: str("vídeo/áudio"), output: str("voice.wav"), preset: str("natural | clean | studio | noisy-room"), denoiser: str("auto | ffmpeg | deepfilternet | none"), music: str("trilha (opcional)"), abDir: str("pasta A/B (opcional)") }, ["input", "output"]) },
+  { name: "motion_edit_render", description: "Renderiza a timeline (job em background). mode=preview (meia resolução) ou final.", inputSchema: S({ timeline: str("edit.json"), output: str("reel.mp4"), mode: { type: "string", enum: ["preview", "final"] }, abDir: str("pasta A/B (opcional)") }, ["timeline", "output"]) },
   { name: "motion_job_status", description: "Consulta o progresso/resultado de um job (transcribe, audio, render).", inputSchema: S({ jobId: str("id retornado ao iniciar o job") }, ["jobId"]) },
-  { name: "motion_qa_reel", description: "QA do vídeo editado (PASS/WARN/FAIL/BLOCKED/NOT_TESTED).", inputSchema: S({ input: str("reel.mp4"), timeline: str("edit.json (opcional)") }, ["input"]) },
+  { name: "motion_qa_reel", description: "QA do vídeo editado (PASS/WARN/FAIL/BLOCKED/NOT_TESTED).", inputSchema: S({ input: str("reel.mp4"), timeline: str("edit.json (opcional)"), compare: str("segundo render (opcional, determinismo)"), reviews: str("pasta reviews (opcional)") }, ["input"]) },
   { name: "motion_edit_export", description: "Empacota e verifica a entrega (delivery.contract.json → ZIP verificado).", inputSchema: S({ project: str("pasta do projeto com delivery.contract.json"), zip: str("saída .zip") }, ["project", "zip"]) },
 ];
 
@@ -53,6 +54,7 @@ async function callTool(name, a) {
       return r;
     }
     case "motion_stt_doctor": return R.sttDoctor({ model: a.model || "small" });
+    case "motion_audio_doctor": return R.audioDoctor();
     case "motion_edit_transcribe": {
       const job = startJob("transcribe", async () => {
         const t = await R.transcribeMedia(a.input, { model: a.model || "small", language: a.language || null, hotwords: a.hotwords || null });
@@ -62,25 +64,20 @@ async function callTool(name, a) {
       return { jobId: job.id, status: job.status };
     }
     case "motion_edit_plan": {
-      let config = a.config ? JSON.parse(await readFile(a.config, "utf8")) : {};
-      let transcript = a.transcript ? JSON.parse(await readFile(a.transcript, "utf8")) : null;
-      if (transcript && config.corrections?.length) transcript = R.applyCorrections(transcript, config.corrections);
-      const { corrections, preset, ...opts } = config;
-      const t = await R.planEdit(a.input, { transcript, preset: a.preset || preset || "talking-head", ...opts });
-      await mkdir(path.dirname(path.resolve(a.output)), { recursive: true });
-      const saved = await R.saveTimeline(t, a.output);
-      return { output: a.output, hash: saved.hash, stats: t.stats, decisions: t.decisions, review: t.review, warnings: t.warnings };
+      const { buildPlan } = await import("./edit.mjs");
+      const { timeline, saved } = await buildPlan(R, a.input, a);
+      return { output: a.output, hash: saved.hash, stats: timeline.stats, opening: timeline.opening, decisions: timeline.decisions, review: timeline.review, warnings: timeline.warnings };
     }
     case "motion_edit_audio": {
       const job = startJob("audio", async () => {
-        const r = await R.processVoice(a.input, { output: a.output, preset: a.preset || "clean", abDir: a.abDir || null });
+        const r = await R.processVoice(a.input, { output: a.output, preset: a.preset || "clean", denoiser: a.denoiser || "auto", music: a.music ? { path: a.music } : null, abDir: a.abDir || null });
         return { output: r.output, qa: r.qa, before: r.before.loudness, after: r.after.loudness, ab: r.ab };
       }, { input: a.input });
       return { jobId: job.id, status: job.status };
     }
     case "motion_edit_render": {
       const t = await R.loadTimeline(a.timeline);
-      const job = startJob("render", async () => R.renderTimeline(t, { output: a.output, mode: a.mode === "final" ? "final" : "preview" }), { output: a.output });
+      const job = startJob("render", async () => R.renderTimeline(t, { output: a.output, mode: a.mode === "final" ? "final" : "preview", voiceAbDir: a.abDir || null }), { output: a.output });
       return { jobId: job.id, status: job.status, progressFile: `${path.resolve(a.output)}.progress.json` };
     }
     case "motion_job_status": {
@@ -90,8 +87,8 @@ async function callTool(name, a) {
       return { jobId: job.id, kind: job.kind, status: job.status, elapsedSec: Math.round((Date.now() - job.startedAt) / 1000), progress, result: job.result, error: job.error };
     }
     case "motion_qa_reel": {
-      const timeline = a.timeline ? await R.loadTimeline(a.timeline) : null;
-      const report = await R.qaReel(a.input, { timeline, renderReport: await R.loadRenderReport(a.input) });
+      const { runReelQa } = await import("./qa.mjs");
+      const report = await runReelQa(R, a.input, a);
       return report.toJSON();
     }
     case "motion_edit_export": {

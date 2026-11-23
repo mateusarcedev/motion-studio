@@ -9,6 +9,18 @@ try {
   qaViewports = mod.qaViewports;
 }
 
+/** Reel QA shared by the CLI and the MCP server. */
+export async function runReelQa(R, mp4, o = {}) {
+  const { existsSync } = await import("node:fs");
+  const sibling = mp4.replace(/\.mp4$/i, "") + ".timeline.json";
+  const file = o.timeline || (existsSync(sibling) ? sibling : null);
+  const timeline = file ? await R.loadTimeline(file) : null;
+  const renderReport = await R.loadRenderReport(mp4);
+  const preview = renderReport?.mode === "preview";
+  if (timeline && preview) timeline.output = { ...timeline.output, width: renderReport.width, height: renderReport.height };
+  return R.qaReel(mp4, { timeline, renderReport, compareWith: o.compare || null, preview, reviewsDir: o.reviews || null });
+}
+
 export async function runQA(urlOrHtml, outdir, options = {}) {
   if (urlOrHtml === "critic-schema" || urlOrHtml === "critic-record" || urlOrHtml === "critic-verify") {
     const api = await import("@technomanceer/motion-core").catch(() => import("../../motion-core/index.js"));
@@ -29,13 +41,7 @@ export async function runQA(urlOrHtml, outdir, options = {}) {
     if (!mp4) throw new TypeError("Uso: motion qa reel <reel.mp4> [--timeline=edit.json] [--compare=<segundo_render.mp4>] [--json]");
     const api = await import("@technomanceer/motion-core").catch(() => import("../../motion-core/index.js"));
     const R = api.reel;
-    let timeline = null;
-    const tlFile = options.timeline || (await import("node:fs")).existsSync(mp4.replace(/\.mp4$/i, "") + ".timeline.json") && mp4.replace(/\.mp4$/i, "") + ".timeline.json";
-    if (tlFile) timeline = await R.loadTimeline(tlFile);
-    const renderReport = await R.loadRenderReport(mp4);
-    const preview = renderReport?.mode === "preview";
-    if (timeline && preview) timeline.output = { ...timeline.output, width: renderReport.width, height: renderReport.height };
-    const report = await R.qaReel(mp4, { timeline, renderReport, compareWith: options.compare || null, preview, reviewsDir: options.reviews || null });
+    const report = await runReelQa(R, mp4, options);
     const json = report.toJSON();
     if (options.output) await (await import("node:fs/promises")).writeFile(options.output, JSON.stringify(json, null, 2));
     if (options.markdown) await (await import("node:fs/promises")).writeFile(options.markdown, report.toMarkdown());
