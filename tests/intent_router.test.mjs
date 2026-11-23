@@ -1,12 +1,14 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { stat, readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { stat, readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
   classifyCreativeIntent,
   calculateAdaptiveDuration,
+  renderFrames,
   SUBJECT_DOMAINS,
   INTENT_TYPES,
   AUDIENCE_PROFILES,
@@ -161,16 +163,34 @@ describe("MOTION Studio — Intent-Driven Creative Router & Homologação", () =
         assert.ok(procStat.size > 500, `${proj.id}: PROCESS.md ausente ou truncado`);
       }
 
-      // 3. Keyframe stills renderizados
-      const manifestRaw = await readFile(path.join(projDir, "assets.manifest.json"), "utf-8");
-      const manifest = JSON.parse(manifestRaw);
+      const manifest = JSON.parse(await readFile(path.join(projDir, "assets.manifest.json"), "utf-8"));
       assert.equal(manifest.renditions.length, 4, `${proj.id}: esperado 4 renditions em manifest`);
-
-      for (const rendition of manifest.renditions) {
-        const stillPath = path.join(projDir, rendition);
-        const stillStat = await stat(stillPath);
-        assert.ok(stillStat.size > 50000, `${proj.id}: still ${rendition} inválido ou corrompido (${stillStat.size} bytes)`);
-      }
     }
   });
+
+  // Stills are never versioned (out/ is ignored), so they are rendered here from the versioned
+  // composition. c/d/e use the storyboard's keyframes; a/b declare none: scene midpoints.
+  const KEYFRAMES = {
+    "homolog-a-api-explainer": [120, 390, 675, 930],
+    "homolog-b-squid-eyes": [105, 330, 585, 810],
+    "homolog-c-food-factory": [160, 500, 870, 1200],
+    "homolog-d-service-commercial": [60, 170, 280, 400],
+    "homolog-e-software-showcase": [120, 340, 580, 800],
+  };
+  for (const [id, frames] of Object.entries(KEYFRAMES)) {
+    test(`6. Homologação — stills regenerados de ${id}`, { timeout: 120000 }, async () => {
+      const outDir = path.join(rootDir, "tests", "tmp", "homolog", id);
+      await rm(outDir, { recursive: true, force: true });
+      await renderFrames(path.join(rootDir, "projects", id, "composition.html"), outDir, { frames: 1350, sampleFrames: frames.join(","), width: 1080, height: 1920, fps: 30 });
+      const pngs = (await readdir(outDir)).filter((f) => f.endsWith(".png")).sort();
+      assert.equal(pngs.length, frames.length, `${id}: ${pngs.length} stills`);
+      const hashes = new Set();
+      for (const f of pngs) {
+        const bytes = await readFile(path.join(outDir, f));
+        assert.ok(bytes.length > 50000, `${id}: still ${f} inválido (${bytes.length} bytes)`);
+        hashes.add(createHash("sha256").update(bytes).digest("hex"));
+      }
+      assert.equal(hashes.size, frames.length, `${id}: stills repetidos (a composição não anima)`);
+    });
+  }
 });
