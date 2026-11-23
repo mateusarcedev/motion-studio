@@ -410,8 +410,8 @@
     {
       "path": "reviews/qa-reel.json",
       "mediaType": "application/json",
-      "bytes": 18181,
-      "sha256": "d10ac548ad34381b75e4be708c25448a493bc960810e33d0d4ed81983a3c8c05",
+      "bytes": 18168,
+      "sha256": "48418fd53fa7b82fd3a997b3644e10ffa6506d0332e30ddda65071aab2db2af0",
       "role": "evidence",
       "required": true,
       "validation": {
@@ -431,8 +431,8 @@
     {
       "path": "reviews/qa-reel.md",
       "mediaType": "text/markdown",
-      "bytes": 8504,
-      "sha256": "7463f55c918d24decdb44e515382ebdbf4f8529dce6036a78c829a70395d440d",
+      "bytes": 8477,
+      "sha256": "6afe748e102bc8cd9b478134025b30e524aee0f8bc9d9a1472399534f677718c",
       "role": "evidence",
       "required": true,
       "validation": {
@@ -494,8 +494,8 @@
     {
       "path": "reviews/INSPECAO_VISUAL.md",
       "mediaType": "text/markdown",
-      "bytes": 3468,
-      "sha256": "f90e276a66db51325798f2296da7823e33bcac6399d2dcedd20a2734c79c2a43",
+      "bytes": 3527,
+      "sha256": "cb6794a88e840b1fe09cb9cd37886bbe2d101729d95b18fb1449e5d972846d20",
       "role": "evidence",
       "required": true,
       "validation": {
@@ -515,8 +515,8 @@
     {
       "path": "reviews/REPAIR_LOG.md",
       "mediaType": "text/markdown",
-      "bytes": 10522,
-      "sha256": "cb2eefc17521f1de9709a9d8caf28bdd3a0575a3d42c648c8cc09cc620502661",
+      "bytes": 10570,
+      "sha256": "8542a5d46070dc1df0d58b2a2819d0107eeddba7a9b68fb4a2ea4ab66f8854dc",
       "role": "evidence",
       "required": true,
       "validation": {
@@ -1586,8 +1586,8 @@
     {
       "path": "reviews/listening.json",
       "mediaType": "application/json",
-      "bytes": 314,
-      "sha256": "b38a3969de6f5611978745fe4970e00704a7d0a5976aad86beddbda4a2f25b9b",
+      "bytes": 534,
+      "sha256": "029cfeb31ab68429531eed297cdde3d7434883f25caf49e8f391e54e6a02da12",
       "role": "evidence",
       "required": false,
       "validation": {

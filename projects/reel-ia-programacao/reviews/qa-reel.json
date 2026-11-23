@@ -4,11 +4,11 @@
   "generatedBy": "motion-core/qa",
   "status": "WARN",
   "counts": {
-    "PASS": 42,
+    "PASS": 43,
     "WARN": 9,
     "FAIL": 0,
     "BLOCKED": 0,
-    "NOT_TESTED": 1
+    "NOT_TESTED": 0
   },
   "checks": [
     {
@@ -504,10 +504,10 @@
     {
       "id": "human.listening",
       "title": "Revisão auditiva humana (naturalidade, artefatos, fonemas)",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "required": false,
       "heuristic": false,
-      "details": "listening.json é de outro arquivo",
+      "details": "dono do projeto, 2026-11-23",
       "evidence": null,
       "reproduce": null
     },

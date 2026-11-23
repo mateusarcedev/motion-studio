@@ -1,6 +1,6 @@
 # QA automatizado — reel.mp4
 
-**Veredito: ⚠️ WARN** (42 PASS, 9 WARN, 1 NOT_TESTED)
+**Veredito: ⚠️ WARN** (43 PASS, 9 WARN)
 
 - ✅ **Arquivo de mídia legível** [PASS] — mov,mp4,m4a,3gp,3g2,mj2, 51.40s
 - ✅ **Stream de vídeo presente** [PASS] — h264 yuv420p
@@ -51,6 +51,6 @@
 - ⚠️ **Cards: zona segura, contraste e tamanho de texto (DOM, heurística genérica video-vertical: topo 15%)** [WARN] _(heurística)_ — opcional: fora da safe zone genérica (div.ct topo 220px) | ferramentas#0: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px) | ferramentas#1: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px) | ferramentas#2: fora da safe zone genérica (div.eyebrow topo 220px; span.chip topo 277px; span.chip topo 277px; span.chip topo 277px) | foco#0: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | foco#1: fora da safe zone genérica (div.eyebrow topo 220px; div.li topo 277px; b topo 281px) | cliente#-1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#0: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#1: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cliente#2: fora da safe zone genérica (div.eyebrow topo 220px; div.ct topo 277px) | cta: fora da safe zone genérica (div.ct topo 1520px)
 - ✅ **Trilha do MP4 alinhada à voz tratada (t=0 = quadro 0)** [PASS] — desvio 0 ms (correlação 0.9989)
 - ✅ **Render reprodutível (hash de quadros/amostras decodificados)** [PASS] — idêntico ao segundo render
-- ⚪ **Revisão auditiva humana (naturalidade, artefatos, fonemas)** [NOT_TESTED] — listening.json é de outro arquivo
+- ✅ **Revisão auditiva humana (naturalidade, artefatos, fonemas)** [PASS] — dono do projeto, 2026-11-23
 - ✅ **Parecer do Crítico íntegro (hash)** [PASS] — rodada 3, 643ed2d5e42dd10debf2cf61dba8fb3e44d8afcfbdc1fec3bf5227470856dd2b, por critic-independente-round-3
 - ✅ **Crítico independente (contact sheet + prévia em movimento)** [PASS] — aprovado, 6 achado(s)
