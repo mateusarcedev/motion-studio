@@ -77,11 +77,22 @@ export function findRepetitions(words) {
   const norm = words.map((w) => normalizeWord(w.text));
   const found = [];
   const used = new Set();
+  // runs of one repeated token (≥ 3) are emphasis, not false starts: claim them first
+  for (let i = 0; i < words.length; i++) {
+    let run = 1;
+    while (i + run < words.length && norm[i] && norm[i + run] === norm[i]) run++;
+    if (run >= 3 && norm[i].length >= 2) {
+      found.push({ kind: "emphasis", n: 1, run, from: i, firstEnd: i + run - 2, text: words.slice(i, i + run).map((w) => w.text).join(" ") });
+      for (let k = 0; k < run; k++) used.add(i + k);
+      i += run - 1;
+    }
+  }
   for (let n = 5; n >= 1; n--) {
     for (let i = 0; i + 2 * n <= words.length; i++) {
       if (used.has(i)) continue;
       let same = true;
-      for (let k = 0; k < n; k++) if (!norm[i + k] || norm[i + k] !== norm[i + n + k]) { same = false; break; }
+      for (let k = 0; k < 2 * n; k++) if (used.has(i + k)) { same = false; break; }
+      if (same) for (let k = 0; k < n; k++) if (!norm[i + k] || norm[i + k] !== norm[i + n + k]) { same = false; break; }
       if (!same) continue;
       if (n === 1) {
         let run = 2;
@@ -245,13 +256,13 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   // kept = complement, then trim each kept range to its own speech (normalizes boundaries)
   let kept = subtract([[0, dur]], removals.map((r) => r.src));
   const speechish = union([...speech.map((s) => [s.start, s.end]), ...unseenWords.map((w) => [w.start, w.end])]);
-  kept = kept.map(([a, b]) => {
+  kept = kept.map(([a, b], i, all) => {
     const inside = speechish.filter(([x, y]) => y > a && x < b);
     if (!inside.length) return null;
-    return [Math.max(a, inside[0][0] - cut.padBefore), Math.min(b, inside.at(-1)[1] + cut.padAfter)];
+    // the final kept range holds a little longer (reading time), never past its own bound
+    const after = i === all.length - 1 ? Math.max(cut.padAfter, cut.tailHold) : cut.padAfter;
+    return [Math.max(a, inside[0][0] - cut.padBefore), Math.min(b, Math.min(inside.at(-1)[1], b) + after)];
   }).filter(Boolean);
-  // the last kept range keeps the tail hold
-  if (kept.length) kept[kept.length - 1][1] = Math.min(dur, Math.max(kept.at(-1)[1], (speechish.at(-1)?.[1] ?? 0) + cut.tailHold));
 
   // hook (moved to the front)
   let hookRange = null;
@@ -265,7 +276,9 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   // frame grid: expand outward (never shave speech), drop slivers without speech
   const toGrid = ([a, b]) => [Math.floor(a * fps + 1e-6) / fps, Math.min(Math.ceil(b * fps - 1e-6) / fps, Math.floor(dur * fps) / fps)];
   let ranges = kept.map(toGrid);
-  ranges = union(ranges).filter(([a, b]) => b - a >= Math.max(2 / fps, cut.minSegment) || speechish.some(([x, y]) => y > a && x < b));
+  // slivers (shorter than minSegment) survive only if they hold most of a recognized word
+  const holdsWord = ([a, b]) => refineWordTiming(words, speech).some((w) => Math.min(b, w.end) - Math.max(a, w.start) >= 0.6 * Math.max(0.02, w.end - w.start));
+  ranges = union(ranges).filter(([a, b]) => b - a >= Math.max(2 / fps, cut.minSegment) || (words.length ? holdsWord([a, b]) : speechish.some(([x, y]) => y > a && x < b)));
   if (hookRange) ranges.unshift(toGrid(hookRange));
   if (!ranges.length) throw reelError(REEL_ERRORS.INPUT_INVALID, "Nenhum trecho com fala foi encontrado para manter.", { hint: "Confira se o áudio tem fala audível ou ajuste --cut." });
 
@@ -281,9 +294,11 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     const inside = refinedWords.filter((w) => w.start >= a && w.end <= b);
     const cands = [];
     for (let k = 0; k + 1 < inside.length; k++) {
-      const gap = inside[k + 1].start - inside[k].end;
+      // every word boundary is a candidate (contiguous audio, so no time is removed);
+      // pauses and punctuation are preferred
+      const gap = Math.max(0, inside[k + 1].start - inside[k].end);
       const punct = /[,.;:!?]$/.test(inside[k].text);
-      if (gap >= 0.06 || punct) cands.push({ t: Math.round(((inside[k].end + inside[k + 1].start) / 2) * fps) / fps, score: gap + (punct ? 0.3 : 0) });
+      cands.push({ t: Math.round(((inside[k].end + inside[k + 1].start) / 2) * fps) / fps, score: gap + (punct ? 0.3 : 0) });
     }
     let start = a;
     while (b - start > zoomCfg.maxShotSec) {
@@ -356,6 +371,16 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     overlays.push({ ...o, id: o.id ?? `ov${String(i + 1).padStart(2, "0")}`, dst: [round(start, 6), round(end, 6)], anchor, steps: steps.length ? steps : undefined });
   }
 
+  overlays.sort((a, b) => a.dst[0] - b.dst[0]);
+  for (let i = 1; i < overlays.length; i++) {
+    const prev = overlays[i - 1], cur = overlays[i];
+    const samePlace = (prev.position?.y ?? null) === (cur.position?.y ?? null);
+    if (samePlace && cur.dst[0] < prev.dst[1]) {
+      prev.dst[1] = cur.dst[0];
+      warnings.push(`Card ${prev.id} encurtado para terminar quando ${cur.id} entra (mesma região da tela).`);
+    }
+  }
+  for (const o of overlays) if (o.steps) o.steps = o.steps.map((st) => (st.dst !== null && st.dst >= o.dst[1] ? { ...st, dst: null, dropped: true } : st));
   const tools = await ffmpegTools();
   const timeline = {
     schema: TIMELINE_SCHEMA, schemaVersion: TIMELINE_VERSION,

@@ -15,8 +15,11 @@ import { probeMedia, round, run, sha256File } from "./util.mjs";
 
 const overlapSec = (a, b) => Math.max(0, Math.min(a[1], b[1]) - Math.max(a[0], b[0]));
 
-/** Measured caption boxes: the ASS track is rendered over black and cropdetect gives each page's bbox. */
-export async function measureCaptionBoxes(timeline, { workDir, resolveFont = null } = {}) {
+/**
+ * Measured caption boxes: the ASS track is rendered over black at each page's midpoint
+ * (half resolution, grayscale) and the bounding box of lit pixels is computed per frame.
+ */
+export async function measureCaptionBoxes(timeline, { workDir, resolveFont = null, threshold = 48 } = {}) {
   const { width, height } = timeline.output;
   const pages = timeline.captions.pages;
   await mkdir(workDir, { recursive: true });
@@ -24,11 +27,20 @@ export async function measureCaptionBoxes(timeline, { workDir, resolveFont = nul
   await writeFile(ass, buildAss(pages, { width, height, styleIn: timeline.captions.style, placement: timeline.captions.placement }));
   const esc = (p) => p.replace(/\\/g, "/").replace(/:/g, "\\:").replace(/'/g, "\\'");
   const fonts = resolveFont ? `:fontsdir='${esc(resolveFont)}'` : "";
-  const times = pages.map((p) => round(p.start + Math.min(0.5, (p.end - p.start) / 2), 3));
-  const sel = times.map((t) => `between(t,${t - 0.0167},${t + 0.0167})`).join("+");
-  const r = await run("ffmpeg", ["-hide_banner", "-nostats", "-f", "lavfi", "-i", `color=black:s=${width}x${height}:r=30:d=${timeline.output.durationSec}`,
-    "-vf", `ass='${esc(ass)}'${fonts},select='${sel}',cropdetect=limit=40:round=2:reset=1:skip=0`, "-f", "null", "-"]);
-  const boxes = [...r.stderr.matchAll(/x1:(-?\d+) x2:(-?\d+) y1:(-?\d+) y2:(-?\d+).*?t:([\d.]+)/g)].map((m) => ({ x1: +m[1], x2: +m[2], y1: +m[3], y2: +m[4], t: +m[5] })).filter((b) => b.x2 > b.x1 && b.y2 > b.y1);
+  const fps = 30;
+  const frames = [...new Set(pages.map((p) => Math.round((p.start + Math.min(0.5, (p.end - p.start) / 2)) * fps)))];
+  const sel = frames.map((n) => `eq(n,${n})`).join("+");
+  const w2 = Math.round(width / 2), h2 = Math.round(height / 2);
+  const r = await run("ffmpeg", ["-hide_banner", "-v", "error", "-f", "lavfi", "-i", `color=black:s=${width}x${height}:r=${fps}:d=${timeline.output.durationSec}`,
+    "-vf", `ass='${esc(ass)}'${fonts},select='${sel}',scale=${w2}:${h2},format=gray`, "-fps_mode", "passthrough", "-f", "rawvideo", "-"], { binary: true });
+  const size = w2 * h2;
+  const boxes = [];
+  for (let k = 0; k * size + size <= r.stdout.length; k++) {
+    let x1 = w2, x2 = -1, y1 = h2, y2 = -1;
+    const off = k * size;
+    for (let y = 0; y < h2; y++) for (let x = 0; x < w2; x++) if (r.stdout[off + y * w2 + x] > threshold) { if (x < x1) x1 = x; if (x > x2) x2 = x; if (y < y1) y1 = y; if (y > y2) y2 = y; }
+    if (x2 >= 0) boxes.push({ x1: x1 * 2, x2: x2 * 2 + 1, y1: y1 * 2, y2: y2 * 2 + 1, t: round((frames[k] ?? 0) / fps, 3) });
+  }
   return { boxes, ok: r.code === 0, stderr: r.code === 0 ? null : r.stderr.split("\n").slice(-3).join(" ") };
 }
 

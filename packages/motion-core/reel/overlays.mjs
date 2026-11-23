@@ -28,7 +28,7 @@ function cardBody(o, step, st) {
     case "title":
       return `<div class="title">${(o.lines ?? []).map((l) => `<div class="tl${l.accent ? " acc" : ""}">${esc(l.text)}</div>`).join("")}</div>`;
     case "label": {
-      const chips = (o.chips ?? []).slice(0, step === null ? undefined : step + 1);
+      const chips = (o.chips ?? []).slice(0, step === null ? undefined : step + 1); // step -1 → empty state
       return `${o.eyebrow ? `<div class="eyebrow"><i></i>${esc(o.eyebrow)}</div>` : ""}${o.title ? `<div class="ct">${o.strike ? `<s>${esc(o.strike)}</s>` : ""}${esc(o.title)}</div>` : ""}${chips.length ? `<div class="chips">${chips.map((c, i) => chip(c, i === chips.length - 1 && step !== null)).join("")}</div>` : ""}`;
     }
     case "list": {
@@ -53,7 +53,7 @@ html,body{margin:0;width:${width}px;height:${height}px;background:transparent;ov
 .card{position:absolute;left:50%;top:${y}px;transform:translateX(-50%);max-width:${Math.round(s.maxWidth * width)}px;box-sizing:border-box;
   background:${s.bg};border:${2 * scale}px solid ${s.border};border-radius:${s.radius * scale}px;padding:${26 * scale}px ${34 * scale}px;box-shadow:${s.shadow};
   font-family:'${s.fontFamily}',system-ui,sans-serif;color:${s.text};-webkit-font-smoothing:antialiased}
-.eyebrow{font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${24 * scale}px;color:${s.muted};display:flex;align-items:center;gap:${12 * scale}px;margin-bottom:${14 * scale}px;letter-spacing:.01em}
+.eyebrow{font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${28 * scale}px;color:${s.muted};display:flex;align-items:center;gap:${12 * scale}px;margin-bottom:${14 * scale}px;letter-spacing:.01em}
 .eyebrow i{width:${10 * scale}px;height:${10 * scale}px;border-radius:50%;background:${s.accent};display:inline-block}
 .ct{font-weight:700;font-size:${46 * scale}px;line-height:1.12;letter-spacing:-.01em}
 .ct s{color:${s.muted};text-decoration-color:${s.accent};text-decoration-thickness:${4 * scale}px;margin-right:${14 * scale}px}
@@ -98,10 +98,13 @@ export function overlayLayers(overlays) {
     const steps = (o.steps ?? []).filter((s) => s.dst !== null && s.dst !== undefined);
     if (!steps.length) { layers.push({ overlay: o, step: null, start: o.dst[0], end: o.dst[1], enter: true, exit: true }); continue; }
     steps.sort((a, b) => a.dst - b.dst);
+    // first reveal comes later than the card: show the card's empty state until then
+    if (steps[0].dst > o.dst[0] + 0.05) layers.push({ overlay: o, step: -1, start: o.dst[0], end: Math.min(o.dst[1], steps[0].dst + 0.2), enter: true, exit: false, crossfade: false });
+    const hasEmpty = steps[0].dst > o.dst[0] + 0.05;
     steps.forEach((st, k) => {
-      const start = k === 0 ? o.dst[0] : st.dst;
+      const start = k === 0 && !hasEmpty ? o.dst[0] : st.dst;
       const next = steps[k + 1]?.dst;
-      layers.push({ overlay: o, step: k, start, end: next !== undefined ? Math.min(o.dst[1], next + 0.2) : o.dst[1], enter: k === 0, exit: next === undefined, crossfade: k > 0 });
+      layers.push({ overlay: o, step: k, start, end: next !== undefined ? Math.min(o.dst[1], next + 0.2) : o.dst[1], enter: k === 0 && !hasEmpty, exit: next === undefined, crossfade: k > 0 || hasEmpty });
     });
   }
   return layers;
