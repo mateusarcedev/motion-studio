@@ -16,8 +16,8 @@ Fonte de verdade: `.agents/skills/` (padrão Agent Skills). Todos os **motores**
 
 ## Smart Reel Editor (Missão 21)
 
-`motion edit` / `motion stt` / `motion qa reel` / `motion mcp` — testados no Claude Code (CLI,
-produção real); MCP testado só por harness stdio; demais agentes **não testados** com estes
+`motion edit` / `motion stt` / `motion qa reel` / `motion mcp` — testados no Claude Code (CLI em
+produção real; MCP via `claude -p --mcp-config`); demais agentes **não testados** com estes
 comandos. Detalhes: `docs/AGENT_COMPATIBILITY.md`.
 
 ## Regras desta compatibilidade

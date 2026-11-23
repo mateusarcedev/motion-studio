@@ -31,7 +31,7 @@ O MOTION Studio adota a especificação aberta **Agent Skills** (`SKILL.md`). Os
 
 | Cliente | Skills `reel-editor`/`voice-studio` | CLI `motion edit` / `motion stt` | MCP `motion mcp` | Status |
 |---|---|---|---|---|
-| **Claude Code** | ✅ redescobertas na sessão de implementação (`.claude/skills/` → `.agents/skills/`) | ✅ produção real executada pelo agente via terminal (analyze → transcribe → plan → preview → render → qa reel → export) | ⚠️ protocolo testado por harness stdio (`tests/reel_editor.test.mjs`); conexão do cliente Claude Code ao servidor **não testada** | **CLI testado** |
+| **Claude Code** | ✅ redescobertas na sessão de implementação (`.claude/skills/` → `.agents/skills/`) | ✅ produção real executada pelo agente via terminal (analyze → transcribe → plan → preview → render → qa reel → export) | ✅ `claude -p --mcp-config` (stdio) conectou ao `motion mcp`, chamou `motion_edit_presets` e respondeu corretamente (2026-11-22); demais ferramentas cobertas pelo harness stdio dos testes | **CLI + MCP testados** |
 | **OpenCode** | ⚠️ symlinks criados em `.opencode/skills/`; descoberta não reexecutada | ⚠️ não executado | ⚠️ não testado | **Não testado** |
 | **Codex CLI** | ⚠️ `.agents/skills/` (mesmo padrão das demais); não reexecutado | ⚠️ não executado | ⚠️ não testado | **Não testado** |
 | **Gemini CLI / Antigravity** | ⚠️ Gemini CLI não instalado; Antigravity não reexecutado | ⚠️ | ⚠️ | **Não testado** |
