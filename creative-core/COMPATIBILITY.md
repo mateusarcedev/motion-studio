@@ -14,6 +14,12 @@ Fonte de verdade: `.agents/skills/` (padrão Agent Skills). Todos os **motores**
 | ChatGPT (custom GPT / sem terminal) | ⚠️ **Instruções portáveis**: cole o conteúdo de `SKILL.md` no prompt do agente; geração e crítica funcionam, MAS o render PNG exige terminal (ou humano executa os comandos CLI e devolve os PNGs) | parcial | **não testado — sem teste nenhum não há compat alegada** |
 | Cowork / OpenBot / GrokBot | ⚠️ idem ChatGPT — avaliar caso a caso conforme acesso real ao filesystem/terminal | parcial | não testado |
 
+## Smart Reel Editor (Missão 21)
+
+`motion edit` / `motion stt` / `motion qa reel` / `motion mcp` — testados no Claude Code (CLI,
+produção real); MCP testado só por harness stdio; demais agentes **não testados** com estes
+comandos. Detalhes: `docs/AGENT_COMPATIBILITY.md`.
+
 ## Regras desta compatibilidade
 
 1. **Nada de compatibilidade declarada sem teste.** A coluna Status é a única verdade.

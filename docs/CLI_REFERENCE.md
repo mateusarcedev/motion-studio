@@ -162,3 +162,23 @@ Reabre um ZIP já produzido, valida o contrato/manifesto e compara cada entrada 
 
 ### Contexto de cena para QA temporal
 `motion qa media <arquivo.mp4> --context=temporal-context.json` e `motion qa frames <pasta> --context=temporal-context.json` mantêm detectores ativos e anotam pausas de leitura/escenas escuras declaradas no contexto. Formato em [DELIVERY_INTEGRITY.md](DELIVERY_INTEGRITY.md).
+
+
+## Smart Reel Editor, Voice Studio e STT (Missão 21)
+
+| Comando | Função |
+|---|---|
+| `motion edit analyze <vídeo>` | metadados, loudness, true peak, fala/pausas, ruído, zumbido |
+| `motion edit transcribe <vídeo>` | STT local com timestamps por palavra (`--model`, `--language`, `--hotwords`, `--corrections`) |
+| `motion edit import-srt <srt> --media=<vídeo>` | importa legenda existente (escopo da mídia dela) |
+| `motion edit plan <vídeo> --transcript --config --output=edit.json` | timeline editável |
+| `motion edit validate <edit.json>` | valida o contrato |
+| `motion edit audio <vídeo> --preset --output` | Voice Studio + A/B |
+| `motion edit captions <edit.json> --output-dir` | SRT/ASS/JSON |
+| `motion edit preview|render <edit.json> --output` | prévia (meia resolução) / final |
+| `motion edit progress <saída.mp4>` | progresso do job |
+| `motion qa reel <mp4> --timeline [--compare]` | QA do reel |
+| `motion stt doctor|providers|setup [--yes]` | ambiente de transcrição |
+| `motion mcp` | servidor MCP local (stdio) |
+
+Todos aceitam `--json`. Detalhes: [`REEL_EDITOR.md`](REEL_EDITOR.md) · [`SPEECH_TO_TEXT.md`](SPEECH_TO_TEXT.md).

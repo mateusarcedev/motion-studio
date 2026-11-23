@@ -223,3 +223,15 @@ Coletado **2026-10-29** via GitHub API. Ferramentas do adendo da Missão 05 não
 | dotlottie-web | https://github.com/LottieFiles/dotlottie-web | 0.83 | MIT | lottie runtime | alternativa wasm | **não integrado** | motivo: wasm/canvas extra; formato `.lottie` já é lido por `readDotLottie` |
 | iconify | https://iconify.design | api | MIT / por coleção | icons/rede | catálogo unificado | **opt-in** | provider `iconify` |
 | ls-graphics | https://www.ls.graphics/illustrations | — | licença do titular (login/termos) | illustration | ilustrações | **opcional, local** — sem download/redistribuição | `motion assets import` |
+
+
+## Missão 21 — Speech-to-Text e Voice Studio (registros de 2026-11-22)
+
+| id | Evidência | Uso comercial | Redistribuição | Deps | Status | Ação |
+|---|---|---|---|---|---|---|
+| faster-whisper | MIT (PyPI 1.2.1, `LICENSE` do pacote instalado) | ✓ | não redistribuído (instalado no venv do usuário) | CTranslate2, tokenizers, huggingface-hub, onnxruntime, av | **integrado (opcional)** | provedor STT padrão; `motion stt setup` só instala com `--yes` |
+| ctranslate2 | MIT (PyPI 4.9.1) | ✓ | idem | — | **integrado (opcional)** | inferência INT8/CPU |
+| Systran/faster-whisper-small | MIT (conversão CTranslate2 do Whisper small, MIT) | ✓ | modelo baixado para cache local; nunca no repo/tarball | — | **integrado (opcional)** | revisão registrada em cada transcrição |
+| whisper.cpp | MIT (não instalado; compilação foi negada pelo modo automático e não é necessária) | ✓ | — | cmake/C++ | **candidato_nao_integrado** | interface `whisper-cpp` declarada, sem adaptador |
+| OpenAI Speech-to-Text / Gemini API | serviços pagos de terceiros; envio de mídia exige consentimento | ✓ (termos do provedor) | — | chave de API | **candidato_nao_integrado** | interfaces declaradas, sem adaptador |
+| DeepFilterNet | MIT/Apache-2.0 (projeto upstream; binário `deep-filter` **não instalado** neste ambiente) | ✓ | não redistribuído | binário Rust | **verificado (opcional, não testado)** | usado só se `deep-filter` estiver no PATH; pedido explícito sem binário → erro |

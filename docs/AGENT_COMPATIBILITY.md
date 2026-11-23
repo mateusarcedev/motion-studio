@@ -27,6 +27,21 @@ O MOTION Studio adota a especificação aberta **Agent Skills** (`SKILL.md`). Os
 
 ---
 
+## Smart Reel Editor / Voice Studio / STT (Missão 21, 2026-11-22)
+
+| Cliente | Skills `reel-editor`/`voice-studio` | CLI `motion edit` / `motion stt` | MCP `motion mcp` | Status |
+|---|---|---|---|---|
+| **Claude Code** | ✅ redescobertas na sessão de implementação (`.claude/skills/` → `.agents/skills/`) | ✅ produção real executada pelo agente via terminal (analyze → transcribe → plan → preview → render → qa reel → export) | ⚠️ protocolo testado por harness stdio (`tests/reel_editor.test.mjs`); conexão do cliente Claude Code ao servidor **não testada** | **CLI testado** |
+| **OpenCode** | ⚠️ symlinks criados em `.opencode/skills/`; descoberta não reexecutada | ⚠️ não executado | ⚠️ não testado | **Não testado** |
+| **Codex CLI** | ⚠️ `.agents/skills/` (mesmo padrão das demais); não reexecutado | ⚠️ não executado | ⚠️ não testado | **Não testado** |
+| **Gemini CLI / Antigravity** | ⚠️ Gemini CLI não instalado; Antigravity não reexecutado | ⚠️ | ⚠️ | **Não testado** |
+| **Clientes web (claude.ai, ChatGPT…)** | — | ❌ sem terminal local | ❌ sem ponte/conector para o servidor stdio local | **Sem suporte** — não alegado |
+
+O motor não depende de visão do agente: transcrição, medição de áudio, sincronia de legenda e
+safe zone são medidas pela CLI. Qualquer cliente com terminal ou MCP stdio usa o mesmo pipeline.
+
+---
+
 ## Como Adicionar Suporte a um Novo Agente
 
 1. Se o agente suporta a especificação Agent Skills:

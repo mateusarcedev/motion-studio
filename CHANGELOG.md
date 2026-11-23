@@ -2,6 +2,16 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [Unreleased] — Missão 21: Smart Reel Editor & Voice Studio (não publicada)
+
+- **`motion edit`**: análise (loudness EBU R128, true peak, VAD, pausas, zumbido), transcrição local, plano de cortes inteligente (pausas, hesitações, repetições × ênfase, recomeços, decisões do operador, zoom cuts, punch-in), timeline `motion.timeline@1`, prévia/render H.264/AAC determinísticos, legendas cinéticas ASS + SRT/JSON, cards HTML→PNG, progresso em JSON. Ver `docs/REEL_EDITOR.md`.
+- **Speech-to-Text agnóstico**: provedores (`faster-whisper` local em venv isolado; `srt-import`; `whisper-cpp`/`openai`/`gemini` declarados), `motion.transcript@1` com palavras, idioma, confiança, silêncios, revisão do modelo e correções com proveniência; `motion stt doctor|providers|setup`. Ver `docs/SPEECH_TO_TEXT.md`.
+- **Voice Studio**: presets `natural`/`clean`/`studio`/`noisy-room`, notch de zumbido medido, expansor, compressão adaptativa, normalização linear com limitador oversampled, compensação de latência da cadeia, ducking, A/B com loudness casado.
+- **`motion qa reel`**: sincronia de legendas no áudio final, caixa medida das legendas × safe zone × rosto, fala perdida em cortes, A/V, determinismo por hash de quadros/amostras.
+- **`motion mcp`**: servidor MCP local stdio (sem dependências) com jobs em background.
+- **Skills** `reel-editor` e `voice-studio`; `studio-director` roteia edição de vídeo existente. Pacote público de Skills: 13.
+- **Core**: `render_static --transparent`; contrato de entrega aceita `.ass`.
+
 ## [1.1.1] — candidata de estabilização (não publicada)
 
 Correção patch, compatível com a API existente. Os quatro pacotes são preparados juntos em `1.1.1`; a versão publicada `1.1.0` continua como `latest` até autorização explícita.
