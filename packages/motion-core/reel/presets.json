@@ -576,7 +576,12 @@
     "maxSec": 7,
     "breakGapSec": 0.35,
     "proposals": 3,
-    "approvalToleranceSec": 0.3
+    "approvalToleranceSec": 0.3,
+    "level": {
+      "windowSec": 2,
+      "toleranceDb": 1,
+      "maxGainDb": 4
+    }
   },
   "overlays": {
     "leadSec": 0,

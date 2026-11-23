@@ -24,7 +24,8 @@ export function audioRanges(segments) {
   const out = [];
   for (const s of segments) {
     const last = out.at(-1);
-    if (last && Math.abs(s.src[0] - last[1]) < 1e-6) last[1] = s.src[1]; else out.push([s.src[0], s.src[1]]);
+    const gain = s.gainDb ?? 0; // third element only when the stretch has its own level
+    if (last && Math.abs(s.src[0] - last[1]) < 1e-6 && (last[2] ?? 0) === gain) last[1] = s.src[1]; else out.push(gain ? [s.src[0], s.src[1], gain] : [s.src[0], s.src[1]]);
   }
   return out;
 }
@@ -134,7 +135,7 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
     const t = Date.now();
     voice = await processVoice(timeline.source.path, {
       output: voiceWav, preset: timeline.audio.preset, overrides: timeline.audio.overrides ?? {}, denoiser: timeline.audio.denoiser ?? "auto",
-      segments: audioRanges(timeline.segments).map(([a, b]) => [a - audioOffset, b - audioOffset]),
+      segments: audioRanges(timeline.segments).map(([a, b, ...g]) => [a - audioOffset, b - audioOffset, ...g]),
       music: timeline.audio.music ? { ...timeline.audio.music, path: resolveFrom(timeline, timeline.audio.music.path) } : null,
       channels: timeline.export.audio.channels, abDir: voiceAbDir, workDir: path.join(work, "voice"),
     });
@@ -197,7 +198,8 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   cur = "[b0]";
   layers.forEach((l, i) => {
     const dur = round(l.end - l.start, 6);
-    args.push("-loop", "1", "-framerate", String(fps), "-t", String(dur), "-i", l.png);
+    // two spare frames: the looped image never runs out before the layer's last frame (enable ends it)
+    args.push("-loop", "1", "-framerate", String(fps), "-t", String(round(dur + 2 / fps, 6)), "-i", l.png);
     const fi = l.crossfade ? 0.15 : l.enter ? 0.3 : 0, fo = l.exit && l.end < durationSec - 1 / fps ? 0.2 : 0; // a card that closes the film stays solid
     const chain = [`[${firstOverlayInput + i}:v]format=rgba`];
     if (outW !== timeline.output.width) chain.push(`scale=${outW}:${outH}`);
@@ -207,7 +209,7 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
     graph.push(chain.join(","));
     const slide = l.enter ? Math.round(28 * outH / 1920) : 0;
     const y = slide ? `'${slide}*(1-${ease.cubicOut(`min(1,max(0,(t-${round(l.start, 6)})/0.3))`)})'` : "0";
-    graph.push(`${cur}[o${i}]overlay=x=0:y=${y}:eval=frame:eof_action=pass:enable='between(t,${round(l.start, 6)},${round(l.end, 6)})'[b${i + 1}]`);
+    graph.push(`${cur}[o${i}]overlay=x=0:y=${y}:eval=frame:eof_action=pass:enable='gte(t,${round(l.start - 0.25 / fps, 6)})*lt(t,${round(l.end - 0.25 / fps, 6)})'[b${i + 1}]`);
     cur = `[b${i + 1}]`;
   });
   if (assFile) {

@@ -103,9 +103,8 @@ export function overlayLayers(overlays) {
     const steps = (o.steps ?? []).filter((s) => s.dst !== null && s.dst !== undefined);
     if (!steps.length) { layers.push({ overlay: o, step: null, start: o.dst[0], end: o.dst[1], enter: true, exit: true }); continue; }
     steps.sort((a, b) => a.dst - b.dst);
-    // (a titled card grows without crossfade: the short overlap leaves no frame without a card)
     // first reveal comes later than the card: show the card's empty state until then
-    if (steps[0].dst > o.dst[0] + 0.05) layers.push({ overlay: o, step: -1, start: o.dst[0], end: Math.min(o.dst[1], steps[0].dst + (o.title ? 2 / 30 : 0.2)), enter: true, exit: false, crossfade: false });
+    if (steps[0].dst > o.dst[0] + 0.05) layers.push({ overlay: o, step: -1, start: o.dst[0], end: Math.min(o.dst[1], steps[0].dst + (o.title ? 0 : 0.2)), enter: true, exit: false, crossfade: false });
     const hasEmpty = steps[0].dst > o.dst[0] + 0.05;
     steps.forEach((st, k) => {
       const start = k === 0 && !hasEmpty ? o.dst[0] : st.dst;

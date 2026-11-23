@@ -409,6 +409,20 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     const env = await energyEnvelope(sourcePath, { channels: probe.audio.channels });
     energy = { env, thresholdDb: detectSpeech(env).thresholdDb };
   }
+  // A moved opening meets speech recorded at another moment: when it is louder than what follows,
+  // it comes down to the tolerance (never the other way, which would raise the noise floor).
+  if (hookRange && energy) {
+    const L = { ...PRESETS.opening.level, ...(opt.openingParams?.level ?? {}) };
+    const hookSegs = segments.filter((sg) => sg.dst[0] < hookRange[1] - hookRange[0] - 1e-6), next = segments[hookSegs.length];
+    const level = (a, b) => { const x = Array.from(energy.env.slice(Math.round(a * 100), Math.round(b * 100))).filter((v) => v > energy.thresholdDb).map((v) => 10 ** (v / 10)); return x.length ? 10 * Math.log10(x.reduce((n, v) => n + v, 0) / x.length) : null; };
+    const end = hookSegs.at(-1).src[1];
+    const a = level(Math.max(hookRange[0], end - L.windowSec), end), b = next ? level(next.src[0], Math.min(next.src[1], next.src[0] + L.windowSec)) : null;
+    if (a !== null && b !== null) {
+      const gain = -round(Math.min(L.maxGainDb, Math.max(0, a - b - L.toleranceDb)), 2);
+      opening.level = { openingDb: round(a, 2), nextDb: round(b, 2), gainDb: gain };
+      if (gain < 0) { for (const sg of hookSegs) sg.gainDb = gain; decisions.push({ what: `abertura ${gain} dB (${round(a, 1)} → ${round(b, 1)} dBFS na emenda)`, why: "sem salto de volume entre a abertura movida e a sequência", by: "engine" }); }
+    }
+  }
   const { words: dstWords, lost } = remapWords(refinedWords, segments, { excluded: removedByDecision, energy, params: opt.captions?.remap });
   for (const w of lost) if (w.lostReason === "energy-cut") decisions.push({ what: `legenda de "${w.text}" (${round(w.start, 2)}s) retirada`, why: `a região de energia da palavra foi cortada (só ${Math.round((w.audibleRatio ?? 0) * 100)}% audível)`, by: "engine" });
   const inDecision = (w) => w.lostReason === "decision" || removedByDecision.some(([a, b]) => Math.max(0, Math.min(w.end, b) - Math.max(w.start, a)) >= 0.5 * Math.max(1e-6, w.end - w.start));
@@ -462,6 +476,9 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     pages.forEach((p, i) => { p.index = i; if (pages[i + 1] && p.end > pages[i + 1].start) p.end = pages[i + 1].start; });
     decisions.push({ what: `${burnedWords.length} palavra(s) legendada(s) em linha única (y ${altY}) enquanto o texto queimado está na base`, why: "manter a fala legendada sem colidir com o texto do autor", by: "engine" });
   }
+
+  // the minimum page time never runs past the film
+  for (const p of pages) p.end = Math.min(p.end, round(outDur));
 
   // overlays (cards/titles/CTA) anchored to words
   const ovCfg = { ...PRESETS.overlays, ...(opt.overlayTiming ?? {}) };

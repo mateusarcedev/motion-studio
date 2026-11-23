@@ -128,12 +128,12 @@ export async function cutWav(input, segments, output, { fadeMs = 5 } = {}) {
   if (!segments?.length) return ff(["-i", input, "-c:a", "pcm_f32le", output], "cópia do áudio");
   const args = [];
   const parts = [];
-  segments.forEach(([s, e], i) => {
+  segments.forEach(([s, e, gainDb = 0], i) => {
     // exact sample count per segment (48 kHz): frame-grid cuts stay sample-aligned over many segments
     const n = Math.round((e - s) * 48000);
     args.push("-ss", s.toFixed(6), "-t", ((n + 64) / 48000).toFixed(6), "-i", input);
     const d = n / 48000, fd = Math.min(fadeMs / 1000, d / 4);
-    parts.push(`[${i}:a]aresample=48000,apad=whole_len=${n},atrim=end_sample=${n},asetpts=PTS-STARTPTS,afade=t=in:d=${fd.toFixed(4)},afade=t=out:st=${(d - fd).toFixed(6)}:d=${fd.toFixed(4)}[a${i}]`);
+    parts.push(`[${i}:a]aresample=48000,apad=whole_len=${n},atrim=end_sample=${n},asetpts=PTS-STARTPTS,${gainDb ? `volume=${gainDb}dB,` : ""}afade=t=in:d=${fd.toFixed(4)},afade=t=out:st=${(d - fd).toFixed(6)}:d=${fd.toFixed(4)}[a${i}]`);
   });
   const graph = `${parts.join(";")};${segments.map((_, i) => `[a${i}]`).join("")}concat=n=${segments.length}:v=0:a=1[out]`;
   return ff([...args, "-filter_complex", graph, "-map", "[out]", "-ar", "48000", "-ac", "1", "-c:a", "pcm_f32le", output], "corte/concatenação do áudio");

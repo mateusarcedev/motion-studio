@@ -106,6 +106,15 @@ obrigatórios.
 - `glossary`: corrige grafia, variantes declaradas e palavras parecidas em que o ASR estava inseguro;
   cada correção registra motivo e hash do BRIEF. O resto vira sugestão em `review`.
 
+## Correções e paginação do operador (`edit.config.json`)
+
+- `corrections`: `{wordIds, text, reason, by, evidence}`. Com `start`/`end` (segundos da fonte), corrige também o
+  tempo. Sem `text`, só o tempo de uma palavra: ela mantém a confiança e continua na revisão. Tempo fora da
+  ordem da fala é recusado.
+- `captions.breakBefore`: ids de palavras que abrem uma página. `captions.noBreakBefore`: ids que ficam com a
+  palavra anterior. A abertura movida nunca divide página com a sequência.
+- `qa`: sobrescreve limites só no projeto, por exemplo `{ "captions": { "cps": { "fail": 32 } } }`.
+
 ## Checks de legenda e card
 
 | Check | Regra |

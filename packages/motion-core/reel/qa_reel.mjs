@@ -68,7 +68,7 @@ export async function sourceCutWav(t, workDir) {
   const r = await run("ffmpeg", ["-v", "error", "-y", "-i", t.source.path, "-vn", ...(down ? ["-af", down] : []), "-ac", "1", "-ar", "48000", "-c:a", "pcm_f32le", full]);
   if (r.code !== 0) throw new Error(r.stderr.trim().split("\n").at(-1));
   const off = (t.source.probe.audio.startTime ?? 0) - (t.source.probe.video?.startTime ?? 0);
-  await cutWav(full, audioRanges(t.segments).map(([a, b]) => [a - off, b - off]), cut);
+  await cutWav(full, audioRanges(t.segments).map(([a, b, g]) => (g ? [a - off, b - off, g] : [a - off, b - off])), cut);
   await rm(full, { force: true });
   return cut;
 }

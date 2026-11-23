@@ -138,7 +138,9 @@ describe("BRIEF: glossário e abertura", () => {
     assert.equal(ok.opening.applied, true); assert.equal(ok.segments[0].reason, "hook");
     const played = ok.segments.map((x) => x.src).sort((x, y) => x[0] - y[0]);
     for (let i = 1; i < played.length; i++) assert.ok(played[i][0] >= played[i - 1][1] - 1e-6, "nenhum quadro da fonte toca duas vezes");
+    assert.ok(ok.captions.pages.every((p) => p.end <= ok.output.durationSec + 1e-3), "página dentro do filme");
     const end = ok.segments[0].dst[1];
+    assert.ok(ok.opening.level.gainDb <= 0 && (ok.segments[0].gainDb ?? 0) === (ok.opening.level.gainDb || 0), "nível da abertura registrado e aplicado");
     for (const p of ok.captions.pages) assert.ok(!p.words.some((w) => w.start < end - 1e-6) || p.words.every((w) => w.start < end + 1e-6), "página não mistura abertura e sequência");
     await assert.rejects(plan({ opening: "strongest-line", openingApproval: { by: "dono", at: "2026-11-23", src: [0.1, 0.2] } }), /não corresponde/);
     await assert.rejects(plan({ opening: "strongest-line", openingApproval: { src: last.src } }), /by, at/);
@@ -169,8 +171,12 @@ describe("Cards ancorados na fala", () => {
     assert.ok(Math.abs(t.overlays[0].dst[0] - w.start) <= 1 / 30 + 1e-6);
     const titled = await mk({ kind: "label", title: "Ferramentas", chips: ["legenda"], items: undefined });
     const layers = R.overlayLayers(titled.overlays);
-    assert.ok(layers[0].end > layers[1].start, "nenhum quadro sem card na troca");
+    assert.ok(layers[0].end >= layers[1].start, "nenhum quadro sem card na troca");
     assert.equal(layers[0].step, -1); assert.deepEqual(R.layerTexts(layers[0]), ["Ferramentas"]);
     assert.doesNotMatch(R.overlayHtml(titled.overlays[0], { width: 1080, height: 1920, step: -1 }), /class="chips"/);
   });
+});
+
+test("audioRanges: ganho próprio da abertura não se mistura com o trecho seguinte", () => {
+  assert.deepEqual(R.audioRanges([{ src: [1, 2], gainDb: -2 }, { src: [2, 3] }, { src: [3, 4] }]), [[1, 2, -2], [2, 4]]);
 });
