@@ -26,8 +26,8 @@ SCHEMA_VERSION = 1
 MANIFEST_NAME = "assets.manifest.json"
 CONTRACT_NAME = "delivery.contract.json"
 SKIP_DIRS = {".git", "node_modules", ".cache", ".motion"}
-SUPPORTED = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".mp4", ".webm", ".mov", ".wav", ".mp3", ".ogg", ".html", ".htm", ".css", ".js", ".mjs", ".json", ".md", ".txt", ".pdf", ".woff", ".woff2", ".ttf", ".otf", ".py", ".tsx", ".ts", ".jsx", ".xml", ".srt", ".vtt"}
-MIME_OVERRIDES = {".js": "text/javascript", ".mjs": "text/javascript", ".md": "text/markdown", ".woff": "font/woff", ".woff2": "font/woff2", ".ttf": "font/ttf", ".otf": "font/otf"}
+SUPPORTED = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".mp4", ".webm", ".mov", ".wav", ".mp3", ".ogg", ".html", ".htm", ".css", ".js", ".mjs", ".json", ".md", ".txt", ".pdf", ".woff", ".woff2", ".ttf", ".otf", ".py", ".tsx", ".ts", ".jsx", ".xml", ".srt", ".vtt", ".ass"}
+MIME_OVERRIDES = {".ass": "text/x-ssa", ".js": "text/javascript", ".mjs": "text/javascript", ".md": "text/markdown", ".woff": "font/woff", ".woff2": "font/woff2", ".ttf": "font/ttf", ".otf": "font/otf"}
 
 
 def sha256_file(path):

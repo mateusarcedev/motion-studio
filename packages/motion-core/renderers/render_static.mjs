@@ -6,7 +6,7 @@
  *
  * Uso:
  *   node creative-core/renderers/render_static.mjs <input.html> <output.png> \
- *     --width=1080 --height=1350 --scale=2 [--wait=800] [--full-page]
+ *     --width=1080 --height=1350 --scale=2 [--wait=800] [--full-page] [--transparent]
  *
  * Contrato de saída: salva o PNG e imprime JSON de QA no stdout:
  *   { png, width, height, deviceScaleFactor, overflow: [...], fontIssues: [...], status }
@@ -146,7 +146,7 @@ async function main() {
     const summary = monitor.summary();
     const fontIssues = summary.warnings.filter((w) => w.resourceType === "font" || /\.(woff2?|ttf|otf)/.test(w.url ?? "")).map((w) => w.url ?? w.message);
     const absOutput = path.resolve(output);
-    await page.screenshot({ path: absOutput, fullPage: Boolean(args["full-page"]) });
+    await page.screenshot({ path: absOutput, fullPage: Boolean(args["full-page"]), omitBackground: Boolean(args.transparent) });
 
     const fontsOk = fontState.status === "loaded" && fontState.faces.every((face) => face.status === "loaded");
     const status = summary.status === "FAIL" ? "FAIL"

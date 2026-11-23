@@ -108,6 +108,7 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.requireController) args.push("--require-controller");
   if (options.qaVisual) args.push("--qa-visual");
   if (options.qaContext) args.push(`--qa-context=${options.qaContext}`);
+  if (options.transparent) args.push("--transparent");
   return runProcess("node", args);
 }
 
