@@ -169,6 +169,7 @@ describe("Cards ancorados na fala", () => {
     assert.ok(Math.abs(t.overlays[0].dst[0] - w.start) <= 1 / 30 + 1e-6);
     const titled = await mk({ kind: "label", title: "Ferramentas", chips: ["legenda"], items: undefined });
     const layers = R.overlayLayers(titled.overlays);
+    assert.ok(layers[0].end > layers[1].start, "nenhum quadro sem card na troca");
     assert.equal(layers[0].step, -1); assert.deepEqual(R.layerTexts(layers[0]), ["Ferramentas"]);
     assert.doesNotMatch(R.overlayHtml(titled.overlays[0], { width: 1080, height: 1920, step: -1 }), /class="chips"/);
   });

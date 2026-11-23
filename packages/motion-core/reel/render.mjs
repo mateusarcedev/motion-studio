@@ -198,7 +198,7 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   layers.forEach((l, i) => {
     const dur = round(l.end - l.start, 6);
     args.push("-loop", "1", "-framerate", String(fps), "-t", String(dur), "-i", l.png);
-    const fi = l.crossfade ? 0.15 : l.enter ? 0.3 : 0, fo = l.exit ? 0.2 : 0;
+    const fi = l.crossfade ? 0.15 : l.enter ? 0.3 : 0, fo = l.exit && l.end < durationSec - 1 / fps ? 0.2 : 0; // a card that closes the film stays solid
     const chain = [`[${firstOverlayInput + i}:v]format=rgba`];
     if (outW !== timeline.output.width) chain.push(`scale=${outW}:${outH}`);
     if (fi) chain.push(`fade=t=in:st=0:d=${fi}:alpha=1`);

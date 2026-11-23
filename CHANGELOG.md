@@ -19,6 +19,8 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 - **QA mais estrito**: sem tolerância no true peak; LUFS ±0,5 (antes ±1) para `PASS`.
 - **Limiares em `reel/presets.json`**; preset `institucional`.
 - **CI** (`.github/workflows/ci.yml`), `init --skills-dir/--no-skills`, paridade MCP × CLI, `docs/COMPATIBILITY.md`.
+- **Correções da homologação**: abertura movida não repete quadro da fonte nem divide página com a sequência; palavra cortada por pausa vira uma legenda só; card com título não some por 1 quadro ao ganhar chips; card que fecha o filme fica sólido.
+- **Config**: `corrections` aceita `start`/`end`; `captions.breakBefore`/`noBreakBefore`.
 - **Correção**: a suíte passa em clone limpo (stills regenerados no teste).
 
 - **Core**: `render_static --transparent`; contrato de entrega aceita `.ass`.
