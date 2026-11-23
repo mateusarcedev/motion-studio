@@ -10,6 +10,20 @@ try {
 }
 
 export async function runQA(urlOrHtml, outdir, options = {}) {
+  if (urlOrHtml === "critic-schema" || urlOrHtml === "critic-record" || urlOrHtml === "critic-verify") {
+    const api = await import("@technomanceer/motion-core").catch(() => import("../../motion-core/index.js"));
+    if (urlOrHtml === "critic-schema") return console.log(JSON.stringify(api.CRITIC_JSON_SCHEMA, null, 2));
+    const reviews = options.reviews || "reviews";
+    if (urlOrHtml === "critic-verify") {
+      const r = await api.verifyCritic(reviews);
+      console.log(JSON.stringify(r, null, 2));
+      if (r.state !== "intact") process.exitCode = r.state === "none" ? 1 : 2;
+      return;
+    }
+    if (!outdir) throw new TypeError("Uso: motion qa critic-record <parecer.json> --reviews=<pasta>");
+    console.log(JSON.stringify(await api.recordCritic(outdir, reviews), null, 2));
+    return;
+  }
   if (urlOrHtml === "reel") {
     const mp4 = outdir;
     if (!mp4) throw new TypeError("Uso: motion qa reel <reel.mp4> [--timeline=edit.json] [--compare=<segundo_render.mp4>] [--json]");
@@ -21,7 +35,7 @@ export async function runQA(urlOrHtml, outdir, options = {}) {
     const renderReport = await R.loadRenderReport(mp4);
     const preview = renderReport?.mode === "preview";
     if (timeline && preview) timeline.output = { ...timeline.output, width: renderReport.width, height: renderReport.height };
-    const report = await R.qaReel(mp4, { timeline, renderReport, compareWith: options.compare || null, preview });
+    const report = await R.qaReel(mp4, { timeline, renderReport, compareWith: options.compare || null, preview, reviewsDir: options.reviews || null });
     const json = report.toJSON();
     if (options.output) await (await import("node:fs/promises")).writeFile(options.output, JSON.stringify(json, null, 2));
     if (options.markdown) await (await import("node:fs/promises")).writeFile(options.markdown, report.toMarkdown());

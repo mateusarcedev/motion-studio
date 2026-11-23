@@ -82,6 +82,8 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
     qa safe-zones <html> [--platform=instagram-reels] [--preset-file=<json>] [--output=<dir>]
     qa reel <reel.mp4> [--timeline=edit.json] [--compare=<2º render>] [--json]   QA do Smart Reel Editor
 
+    qa critic-schema | critic-record <parecer.json> --reviews=<pasta> | critic-verify --reviews=<pasta>   Parecer do Crítico em JSON, gravado sem edição
+    audio doctor             Filtros de voz e DeepFilterNet (hash conferido)
     edit <sub> ...           Smart Reel Editor & Voice Studio (motion edit --help)
       analyze · transcribe · import-srt · plan · validate · audio · captions · preview · render · progress · presets
     stt doctor|providers|setup   Speech-to-Text local (faster-whisper em venv isolado)

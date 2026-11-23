@@ -7,6 +7,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createQaReport } from "../quality/qa-status.mjs";
+import { readListening, verifyCritic } from "../quality/critic.mjs";
 import { qaMedia } from "../quality/media_qa.mjs";
 import { detectSpeech, energyEnvelope, measureLoudness } from "./analyze.mjs";
 import { buildAss, loadSafeZonePreset } from "./captions.mjs";
@@ -72,6 +73,29 @@ export async function sourceCutWav(t, workDir) {
   return cut;
 }
 
+/** Critic and listening sign-offs count only when intact and bound to this exact file. */
+async function addHumanChecks(report, mp4, reviewsDir) {
+  const own = await sha256File(mp4);
+  const dir = reviewsDir ?? defaultReviewsDir(mp4);
+  const l = dir ? await readListening(dir) : null;
+  const listening = { id: "human.listening", title: "Revisão auditiva humana (naturalidade, artefatos, fonemas)", required: false };
+  if (!l) report.add({ ...listening, status: "NOT_TESTED", details: "obrigatória antes de declarar qualidade de áudio" });
+  else if (l.invalid || l.sha256 !== own) report.add({ ...listening, status: "NOT_TESTED", details: l.invalid ? "listening.json inválido" : "listening.json é de outro arquivo" });
+  else report.add({ ...listening, status: l.approved ? "PASS" : "FAIL", details: `${l.by}, ${l.at}` });
+  const c = dir ? await verifyCritic(dir) : { state: "none", reason: "pasta de reviews não encontrada" };
+  const critic = { id: "human.critic", title: "Crítico independente (contact sheet + prévia em movimento)", required: false };
+  if (c.state === "none") { report.add({ ...critic, status: "NOT_TESTED", details: `${c.reason}; aprovação não é automática` }); return; }
+  report.add({ id: "critic.integrity", title: "Parecer do Crítico íntegro (hash)", status: c.state === "intact" ? "PASS" : "FAIL", details: c.state === "intact" ? `rodada ${c.round}, ${c.jsonSha256}, por ${c.reviewer.id}` : c.problems.join("; ") });
+  if (c.state !== "intact") report.add({ ...critic, status: "FAIL", details: "parecer adulterado" });
+  else if (c.subject.sha256 !== own) report.add({ ...critic, status: "FAIL", details: `o parecer avaliou outro arquivo (${c.subject.sha256.slice(0, 16)}…)` });
+  else report.add({ ...critic, status: c.verdict === "approved" ? "PASS" : "FAIL", details: `${c.verdict === "approved" ? "aprovado" : "reprovado"}, ${c.findings} achado(s)` });
+}
+
+function defaultReviewsDir(mp4) {
+  for (let d = path.dirname(path.resolve(mp4)), i = 0; i < 4; i++, d = path.dirname(d)) if (existsSync(path.join(d, "reviews"))) return path.join(d, "reviews");
+  return null;
+}
+
 /**
  * @param mp4 rendered reel
  * @param o { timeline (object), renderReport (object), compareWith (mp4 of a second render), workDir, platform }
@@ -103,6 +127,7 @@ export async function qaReel(mp4, o = {}) {
 
   if (!t) {
     for (const [id, title] of [["source.preserved", "Original preservado"], ["cuts.speech", "Sem fala perdida nos cortes"], ["captions.sync", "Legendas sincronizadas"], ["captions.safe-zone", "Legendas em zona segura"]]) report.add({ id, title, status: "NOT_TESTED", details: "rode com --timeline para checar contra a edição" });
+    await addHumanChecks(report, mp4, o.reviewsDir);
     return report;
   }
   report.add({ id: "timeline.frames", title: `Quadros = timeline (${t.output.frames})`, status: probe?.video?.frames === t.output.frames || probe?.video?.frames === undefined ? (probe?.video?.frames ? "PASS" : "NOT_TESTED") : "FAIL", details: `${probe?.video?.frames ?? "?"} no MP4` });
@@ -259,8 +284,7 @@ export async function qaReel(mp4, o = {}) {
     report.add({ id: "determinism", title: "Render reprodutível (hash de quadros/amostras decodificados)", status: c.identical ? "PASS" : c.a && c.b ? "FAIL" : "BLOCKED", details: c.identical ? "idêntico ao segundo render" : "diferente do segundo render", reproduce: c.a && c.b ? null : "Renderize duas vezes a mesma timeline e compare com motion qa reel --compare." });
   } else report.add({ id: "determinism", title: "Render reprodutível", status: "NOT_TESTED", required: false, details: "use --compare=<segundo_render.mp4>" });
 
-  report.add({ id: "human.listening", title: "Revisão auditiva humana (naturalidade, artefatos, fonemas)", status: "NOT_TESTED", required: false, details: "obrigatória antes de declarar qualidade de áudio" });
-  report.add({ id: "human.critic", title: "Crítico independente (contact sheet + prévia em movimento)", status: "NOT_TESTED", required: false, details: "aprovação não é automática" });
+  await addHumanChecks(report, mp4, o.reviewsDir);
   return report;
 }
 

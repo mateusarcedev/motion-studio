@@ -19,7 +19,7 @@ _Neste repositório, cada produção vive em `projects/<slug>/`: os caminhos das
 | 4 | **Animador** (produtor roteado) | os 3 artefatos + `public/` | `src/**` (código frame-driven) | não |
 | 5 | **Eng. de Render** | `src/**` + `out/` | `out/previews/*` + `reviews/frames/*` | não |
 | 5b | **QA automático** | `out/` + `frames/`/`stills/` | `reviews/qa-report.{json,md}` (`motion qa precheck`) | `FAIL`/`BLOCKED` impedem o Crítico de aprovar; `NOT_TESTED` nunca vira `PASS` |
-| 6 | **Crítico** | **apenas renders + BRIEF.md + `qa-report`** (contexto novo/não criar o filme); eixos de `docs/ART_DIRECTION.md` | `reviews/findings.md` | sim — aprovação da entrega |
+| 6 | **Crítico** | **apenas renders + BRIEF.md + `qa-report`** (contexto novo/não criar o filme); eixos de `docs/ART_DIRECTION.md` | **JSON** `motion.critic.findings@1` (schema: `motion qa critic-schema`); não escreve arquivos | sim — aprovação da entrega |
 | 7 | **Correção** | `findings.md` | patch local em `src/**` + re-render dos frames afetados | não (máx. 2 rodadas/defeito) |
 | 8 | **Delivery** | tudo aprovado | `out/final/*` (16:9, 1:1, 9:16) + poster frames + notas | fim |
 
@@ -40,6 +40,16 @@ Mesma espinha dorsal, arte dos formatos roteados por `studio-director`:
 
 Story **animado** troca S3 (HTML → Remotion) e segue a **pista audiovisual** (stills antes do
 render completo, QA de timing/áudio) com o preset `video-vertical`.
+
+## Parecer do Crítico (gravação)
+
+1. O Crítico, em contexto novo e sem permissão de escrita, devolve **somente** o JSON do schema, com o
+   SHA-256 do arquivo que assistiu.
+2. A produção salva a resposta como veio e roda `motion qa critic-record <parecer.json> --reviews=reviews`:
+   grava os bytes em `reviews/critic/round-N.json`, o selo com hashes e o id do Crítico, e gera
+   `reviews/findings.md`. Nada é editado; o reparo é registrado em `REPAIR_LOG.md`.
+3. `motion qa reel` regenera `findings.md` e compara (`critic.integrity`). Adulteração, outro MP4 ou
+   reprovação são `FAIL`; sem parecer é `NOT_TESTED`. O hash detecta edição posterior; não prova autoria.
 
 ## Regras do bastão
 
