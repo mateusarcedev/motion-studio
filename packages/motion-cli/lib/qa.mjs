@@ -10,6 +10,26 @@ try {
 }
 
 export async function runQA(urlOrHtml, outdir, options = {}) {
+  if (urlOrHtml === "reel") {
+    const mp4 = outdir;
+    if (!mp4) throw new TypeError("Uso: motion qa reel <reel.mp4> [--timeline=edit.json] [--compare=<segundo_render.mp4>] [--json]");
+    const api = await import("@technomanceer/motion-core").catch(() => import("../../motion-core/index.js"));
+    const R = api.reel;
+    let timeline = null;
+    const tlFile = options.timeline || (await import("node:fs")).existsSync(mp4.replace(/\.mp4$/i, "") + ".timeline.json") && mp4.replace(/\.mp4$/i, "") + ".timeline.json";
+    if (tlFile) timeline = await R.loadTimeline(tlFile);
+    const renderReport = await R.loadRenderReport(mp4);
+    const preview = renderReport?.mode === "preview";
+    if (timeline && preview) timeline.output = { ...timeline.output, width: renderReport.width, height: renderReport.height };
+    const report = await R.qaReel(mp4, { timeline, renderReport, compareWith: options.compare || null, preview });
+    const json = report.toJSON();
+    if (options.output) await (await import("node:fs/promises")).writeFile(options.output, JSON.stringify(json, null, 2));
+    if (options.markdown) await (await import("node:fs/promises")).writeFile(options.markdown, report.toMarkdown());
+    console.log(options.json ? JSON.stringify(json, null, 2) : report.toMarkdown());
+    const status = report.summary().status;
+    if (status === "FAIL") process.exitCode = 2; else if (status === "BLOCKED") process.exitCode = 3;
+    return;
+  }
   if (urlOrHtml === "delivery") {
     const project = options.project || outdir;
     const zip = options.zip;

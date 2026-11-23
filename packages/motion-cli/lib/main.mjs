@@ -12,6 +12,7 @@ import { runQA } from "./qa.mjs";
 import { runComponents } from "./components.mjs";
 import { runTransition } from "./transition.mjs";
 import { runAssets, runSvg } from "./assets.mjs";
+import { runEdit, runStt } from "./edit.mjs";
 import { VERSION } from "./version.mjs";
 
 export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } = {}) {
@@ -79,6 +80,12 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
     qa frames <pasta> [--expected=N] [--dark-mean=25 --context=temporal-context.json]   Quadros vazios/escuros/repetidos (heurísticas) · qa precheck <projeto>: relatório para o Crítico
     qa delivery --project <pasta> --zip <entrega.zip>   Verifica contrato, manifesto, hashes e o conteúdo real do ZIP
     qa safe-zones <html> [--platform=instagram-reels] [--preset-file=<json>] [--output=<dir>]
+    qa reel <reel.mp4> [--timeline=edit.json] [--compare=<2º render>] [--json]   QA do Smart Reel Editor
+
+    edit <sub> ...           Smart Reel Editor & Voice Studio (motion edit --help)
+      analyze · transcribe · import-srt · plan · validate · audio · captions · preview · render · progress · presets
+    stt doctor|providers|setup   Speech-to-Text local (faster-whisper em venv isolado)
+    mcp                      Servidor MCP local (stdio) com as operações de edição
 
     components list          Lista componentes reutilizáveis e seus schemas
     components render <id> --config=<json> --output=<mp4|webm>
@@ -157,6 +164,20 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
       case "icons":
         await runAssets(command.toLowerCase() === "icons" && !["resolve", "search", "packs"].includes(posArgs[1]) ? "search" : posArgs[1], posArgs.slice(command.toLowerCase() === "icons" && !["resolve", "search", "packs"].includes(posArgs[1]) ? 1 : 2), flags);
         break;
+
+      case "edit":
+        await runEdit(posArgs[1], posArgs.slice(2), flags);
+        break;
+
+      case "stt":
+        await runStt(posArgs[1], posArgs.slice(2), flags);
+        break;
+
+      case "mcp": {
+        const { runMcpServer } = await import("./mcp.mjs");
+        await runMcpServer(flags);
+        break;
+      }
 
       case "svg":
         await runSvg(posArgs[1], posArgs.slice(2), flags);
