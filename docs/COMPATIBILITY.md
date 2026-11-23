@@ -50,5 +50,5 @@ act workflow_dispatch -j test --matrix node:22 -P ubuntu-24.04=catthehacker/ubun
 ```
 
 Os testes de transcrição real são pulados e listados (o CI não baixa modelo). Resultado em 2026-11-23, commit
-`70a9e4b`: Node 20, 22 e 24 com 268 aprovados, 0 falhos e 2 pulados; determinismo PASS. GitHub Actions:
+`be87aee`: Node 20, 22 e 24 com 268 aprovados, 0 falhos e 2 pulados; determinismo PASS. GitHub Actions:
 `NOT_TESTED` até o primeiro push.
