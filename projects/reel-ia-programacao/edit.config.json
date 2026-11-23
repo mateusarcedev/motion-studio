@@ -19,12 +19,18 @@
     ],
     [
       24.68,
-      26.89
+      27.12,
+      "exact"
+    ],
+    [
+      64.667,
+      66.401
     ]
   ],
   "excludeReasons": {
     "0-8.5": "tomada recomeçada (recomeço detectado em 24,68 s); abertura lenta; contém o texto queimado 'ESCUTA ISSO'",
-    "24.68-26.89": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'"
+    "64.667-66.401": "decisão do dono (2026-11-23): termina em 'ou ambos'; a gravação acaba no meio da frase seguinte",
+    "24.68-27.12": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'"
   },
   "emphasis": [
     {
@@ -32,6 +38,11 @@
       "until": "ficando para trás",
       "zoom": 1.2,
       "why": "frase de virada do argumento"
+    },
+    {
+      "match": "dinheiro ou tempo",
+      "zoom": 1.0,
+      "why": "fecho sem punch-in: o card do CTA cobre o texto queimado inteiro e o card do topo não encosta no cabelo"
     }
   ],
   "corrections": [
@@ -162,6 +173,36 @@
       "reason": "'quando' cobria a pausa 54,72–55,08 s e virava legenda dupla",
       "by": "operator",
       "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
+    },
+    {
+      "wordIds": [
+        "w0065"
+      ],
+      "start": 26.76,
+      "end": 27.1,
+      "reason": "tempo do ASR: 'que' vai até 27,10 s",
+      "by": "operator",
+      "evidence": "espectro de 10 ms do bruto (4–10 kHz) e re-transcrição por ponto de início; o dono ouviu \"que\" no início do render 63e49a26"
+    },
+    {
+      "wordIds": [
+        "w0066"
+      ],
+      "start": 27.12,
+      "end": 27.36,
+      "reason": "tempo do ASR: o /s/ de 'se' começa em 27,12 s",
+      "by": "operator",
+      "evidence": "espectro de 10 ms do bruto (4–10 kHz) e re-transcrição por ponto de início; o dono ouviu \"que\" no início do render 63e49a26"
+    },
+    {
+      "wordIds": [
+        "w0067"
+      ],
+      "start": 27.36,
+      "end": 27.6,
+      "reason": "tempo do ASR",
+      "by": "operator",
+      "evidence": "espectro de 10 ms do bruto (4–10 kHz) e re-transcrição por ponto de início; o dono ouviu \"que\" no início do render 63e49a26"
     }
   ],
   "captions": {
@@ -173,10 +214,6 @@
       {
         "wordId": "w0077",
         "reason": "'Mas' (confiança 0,05) não se confirma: 4 re-transcrições ouvem hesitação ou nada, e a legenda humana da referência não tem a palavra; áudio mantido, aguarda escuta"
-      },
-      {
-        "wordId": "w0177",
-        "reason": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado"
       }
     ],
     "breakBefore": [
@@ -309,6 +346,21 @@
           }
         }
       ]
+    },
+    {
+      "id": "cta",
+      "kind": "cta",
+      "at": {
+        "match": "ou tempo"
+      },
+      "durationSec": 10,
+      "position": {
+        "y": 0.777
+      },
+      "title": "E VOCÊ, O QUE ACHA?",
+      "style": {
+        "bg": "rgb(18,22,20)"
+      }
     }
   ],
   "transitions": [],
@@ -327,7 +379,8 @@
         66.401
       ],
       "region": "bottom",
-      "text": "E VOCÊ, O QUE ACHA?"
+      "text": "E VOCÊ, O QUE ACHA?",
+      "coveredBy": "cta"
     }
   ],
   "audio": {

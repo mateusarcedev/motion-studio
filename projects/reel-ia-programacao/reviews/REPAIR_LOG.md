@@ -89,3 +89,18 @@ Pareceres sem edição em `critic/round-0.json` e `critic/round-1.json` (selados
 | C9, N1 | menor | chip ilegível / card escurece por 1 quadro no cross-fade | mantido (transitório) | persiste |
 
 A produção parou: o único impedimento depende do dono do projeto.
+
+## Rodadas 2 e 3 (após as decisões do dono)
+
+Decidido: terminar em "ou ambos"; CTA só como texto; abertura movida mantida.
+
+| # | Origem | Defeito | Ação | Estado |
+|---|---|---|---|---|
+| C2 | Crítico 0 | fim sem complemento | cortado em "ou ambos" | resolvido |
+| E1 | escuta do dono, 0,1 s | "que" antes de "se você" | folga da abertura não volta para fala removida; corte exato em 27,12 s | aguarda nova escuta |
+| E2 | medição | abertura 3,7 dB acima da sequência | nível ajustado (−2,33 dB): diferença de 1,8 dB | aguarda escuta |
+| N2 | Crítico 2 | texto queimado visível atrás do card do CTA | card opaco | resolvido |
+| C6, C9, N1, N3, N4, N5 | Críticos | menores (ver `findings.md`) | mantidos | aceitos pelo Crítico 3 |
+
+Rodada 3: **aprovado** para o MP4 `e745f550…`. A escuta humana desse arquivo ainda não foi feita: a reprovação em
+`listening.json` refere-se ao render `63e49a26…`.

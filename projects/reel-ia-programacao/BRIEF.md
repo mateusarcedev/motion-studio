@@ -34,7 +34,7 @@ Ditada pela fala após os cortes (alvo: 55–62 s). Sem esticar nem acelerar a v
 2. Contexto: "já é uma realidade, não temos para onde fugir"; não é mais opcional desde 2022 (ChatGPT); vieram Antigravity, Codex, Claude Code.
 3. Benefícios e mudança de foco: código → regra de negócio → produto.
 4. Problema do dev (foco demais na tecnologia) × o que o cliente quer.
-5. Fecho: economizar dinheiro, tempo, ou ambos.
+5. Fecho: economizar dinheiro, tempo, ou ambos. Termina aí; CTA só como texto na tela.
 
 ## Restrições
 

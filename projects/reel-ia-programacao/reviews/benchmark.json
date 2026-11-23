@@ -22,22 +22,22 @@
     },
     "motion": {
       "path": "out/final/reel.mp4",
-      "sha256": "ab69fff2f230e6d5c7776f9935fee57186884782b497b7759b69428af323a3a5",
-      "durationSec": 53.467,
+      "sha256": "e745f550a127ad4a6b997b2323d5aca1ebceb5b26a4fbf8177a76949d8243eac",
+      "durationSec": 51.4,
       "video": "1080×1920 h264 30fps",
       "audio": "aac 48000Hz 2ch",
       "loudness": {
         "integratedLufs": -14.09,
-        "truePeakDbtp": -1.71,
-        "lraLu": 2.4
+        "truePeakDbtp": -1.65,
+        "lraLu": 2.6
       },
-      "speechSec": 48.35,
-      "speechRatio": 0.904,
+      "speechSec": 46.99,
+      "speechRatio": 0.914,
       "pausesOver300ms": 4,
-      "pauseSecOver300ms": 1.48,
-      "speechToPauseDb": 13.45,
-      "noiseFloorDb": -29.8,
-      "sceneCuts": 19
+      "pauseSecOver300ms": 1.47,
+      "speechToPauseDb": 12.99,
+      "noiseFloorDb": -29.7,
+      "sceneCuts": 16
     },
     "reference": {
       "status": "BLOCKED",
@@ -65,18 +65,18 @@
     },
     "motion": {
       "overSpeech": 1,
-      "items": 45,
-      "medianOnsetOffsetSec": 0,
-      "pages": 45,
-      "words": 153,
+      "items": 44,
+      "medianOnsetOffsetSec": -0.0030000000000001137,
+      "pages": 44,
+      "words": 147,
       "source": "páginas da timeline (ASR revisado)"
     }
   },
   "edit": {
-    "removedSec": 12.934,
+    "removedSec": 15.001,
     "cuts": 5,
     "zoomCuts": 10,
-    "overlays": 4,
+    "overlays": 5,
     "decisions": [
       {
         "what": "17 borda(s) de fala estendida(s) por energia > 4000 Hz (fim 1.94→2.14s, início 2.16→1.96s, fim 4.55→4.68s, início 4.74→4.59s, fim 9.79→9.82s, fim 15.97→16.09s, fim 17.35→17.46s, fim 21.5→21.55s, fim 22.1→22.3s, fim 29.46→29.55s, início 29.68→29.67s, fim 33.35→33.52s, início 33.65→33.45s, início 35.91→35.88s, início 41.99→41.93s, início 50.57→50.51s, fim 64.58→64.66s)",
@@ -94,17 +94,22 @@
         "by": "operator"
       },
       {
-        "what": "excluir 24.68–26.9s",
+        "what": "excluir 24.68–27.12s",
         "why": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'",
         "by": "operator"
       },
       {
-        "what": "gancho: 26.8–29.57s abre o vídeo",
+        "what": "excluir 64.67–66.4s",
+        "why": "decisão do dono (2026-11-23): termina em 'ou ambos'; a gravação acaba no meio da frase seguinte",
+        "by": "operator"
+      },
+      {
+        "what": "gancho: 27.13–29.57s abre o vídeo",
         "why": "abertura definida no BRIEF (custom)",
         "by": "operator"
       },
       {
-        "what": "1 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s)",
+        "what": "2 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s, 64.7→64.667s)",
         "why": "evitar quadro órfão/micro-plano junto a emenda do celular",
         "by": "engine"
       },
@@ -114,17 +119,22 @@
         "by": "operator"
       },
       {
+        "what": "ênfase (zoom 1) em \"dinheiro ou tempo\" (s16)",
+        "why": "fecho sem punch-in: o card do CTA cobre o texto queimado inteiro e o card do topo não encosta no cabelo",
+        "by": "operator"
+      },
+      {
+        "what": "abertura -2.33 dB (-17.2 → -20.5 dBFS na emenda)",
+        "why": "sem salto de volume entre a abertura movida e a sequência",
+        "by": "engine"
+      },
+      {
         "what": "palavra w0077 sem legenda",
         "why": "'Mas' (confiança 0,05) não se confirma: 4 re-transcrições ouvem hesitação ou nada, e a legenda humana da referência não tem a palavra; áudio mantido, aguarda escuta",
         "by": "operator"
       },
       {
-        "what": "palavra w0177 sem legenda",
-        "why": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado",
-        "by": "operator"
-      },
-      {
-        "what": "7 palavra(s) legendada(s) em linha única (y 0.696) enquanto o texto queimado está na base",
+        "what": "2 palavra(s) legendada(s) em linha única (y 0.696) enquanto o texto queimado está na base",
         "why": "manter a fala legendada sem colidir com o texto do autor",
         "by": "engine"
       }

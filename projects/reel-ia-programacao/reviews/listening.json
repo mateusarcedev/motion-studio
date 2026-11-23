@@ -1,0 +1,14 @@
+{
+  "schema": "motion.human.listening",
+  "schemaVersion": 1,
+  "approved": false,
+  "by": "dono do projeto",
+  "at": "2026-11-23",
+  "sha256": "63e49a26217d388649ee2734967b13b5a244ed42dfb000a19819b64196682ef9",
+  "issues": [
+    {
+      "t": 0.1,
+      "text": "ouço um \"que\" antes de \"se você\""
+    }
+  ]
+}

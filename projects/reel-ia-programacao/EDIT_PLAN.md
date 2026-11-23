@@ -9,10 +9,11 @@ Tempos em segundos do **bruto** (`reels-motion.mp4`); os tempos finais saem da t
 |---|---|---|---|
 | 1 | 0,00–8,50 "Então, eu gostaria de falar sobre a importância de utilizar a IA na programação hoje em dia" | excluir | tomada recomeçada (o motor detecta o recomeço em 24,68 s); abertura lenta; contém o texto queimado "ESCUTA ISSO" |
 | 2 | 8,56–9,94 primeira ocorrência de "Já é uma realidade" | excluir (automático) | frase repetida em sequência (falso começo) |
-| 3 | 24,68–26,89 "Então, eu gostaria de falar que" | excluir | muleta de recomeço; a frase-chave começa em "se você dev…" |
+| 3 | 24,68–27,12 "Então, eu gostaria de falar que" | excluir | muleta de recomeço; a frase-chave começa em "se você dev…" |
 | 4 | 52,88–54,18 "refinar, refinar, refinar, refinar" | **manter** | repetição enfática (o motor classifica sequências ≥ 3 do mesmo termo como ênfase, não como falso começo) |
-| 5 | 63,90–66,40 (texto queimado "E VOCÊ, O QUE ACHA?") | **manter** o trecho; legenda cede a base ao CTA do autor (≈ 2,5 s legível); card do cliente segue no topo e acende "ambos" | reparo 1 do Crítico (B1): a versão anterior cortava o fim e deixava o CTA 0,87 s empilhado sob a legenda; a palavra final irreconhecível fica sem legenda |
-| 6 | 26,80–29,57 "se você dev … ficando para trás" | **abre o vídeo** (aceito em 2026-11-23) | virada do argumento, fala com quem assiste; a frase não se repete no lugar de origem |
+| 5 | 64,67–66,40 "então esse é o meu…" | **excluir** (dono, 2026-11-23) | a gravação acaba no meio da frase; o filme termina em "ou ambos", no salto da fonte em 64,667 s |
+| 5b | CTA queimado "E VOCÊ, O QUE ACHA?" (63,90 s em diante) | coberto por card com o mesmo texto, sem fala, desde "ou tempo" | sem o fim, o texto queimado ficaria 0,77 s na tela |
+| 6 | 27,13–29,57 "se você dev … ficando para trás" | **abre o vídeo** (aceito em 2026-11-23) | virada do argumento, fala com quem assiste; a frase não se repete no lugar de origem |
 | 7 | "Mas" (29,6 s) | áudio mantido, sem legenda | confiança 0,05; re-transcrições ouvem hesitação; aguarda escuta |
 | 8 | pausas > 0,32 s | remover (automático) | ritmo; sempre com 90 ms antes / 130 ms depois da fala |
 

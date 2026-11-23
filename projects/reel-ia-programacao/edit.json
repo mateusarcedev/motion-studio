@@ -62,8 +62,8 @@
     "width": 1080,
     "height": 1920,
     "fps": 30,
-    "durationSec": 53.466667,
-    "frames": 1604,
+    "durationSec": 51.4,
+    "frames": 1542,
     "aspect": "1080:1920"
   },
   "burnedText": [
@@ -74,9 +74,10 @@
       ],
       "region": "bottom",
       "text": "E VOCÊ, O QUE ACHA?",
+      "coveredBy": "cta",
       "dst": [
-        50.967,
-        53.467
+        50.633,
+        51.4
       ]
     }
   ],
@@ -94,15 +95,15 @@
     {
       "id": "s01",
       "src": [
-        26.8,
+        27.133333,
         29.566667
       ],
       "reason": "hook",
       "zoomCut": false,
-      "frames": 83,
+      "frames": 73,
       "dst": [
         0,
-        2.766667
+        2.433333
       ],
       "cutBefore": false,
       "zoom": {
@@ -112,7 +113,8 @@
         "cy": 0.535,
         "easeInFrames": 0
       },
-      "emphasis": "se você dev não está utilizando"
+      "emphasis": "se você dev não está utilizando",
+      "gainDb": -2.33
     },
     {
       "id": "s02",
@@ -124,8 +126,8 @@
       "zoomCut": false,
       "frames": 97,
       "dst": [
-        2.766667,
-        6
+        2.433333,
+        5.666667
       ],
       "cutBefore": true,
       "zoom": {
@@ -146,8 +148,8 @@
       "zoomCut": true,
       "frames": 153,
       "dst": [
-        6,
-        11.1
+        5.666667,
+        10.766667
       ],
       "cutBefore": false,
       "zoom": {
@@ -168,8 +170,8 @@
       "zoomCut": false,
       "frames": 114,
       "dst": [
-        11.1,
-        14.9
+        10.766667,
+        14.566667
       ],
       "cutBefore": true,
       "zoom": {
@@ -190,8 +192,8 @@
       "zoomCut": false,
       "frames": 56,
       "dst": [
-        14.9,
-        16.766667
+        14.566667,
+        16.433333
       ],
       "cutBefore": true,
       "zoom": {
@@ -212,8 +214,8 @@
       "zoomCut": false,
       "frames": 89,
       "dst": [
-        16.766667,
-        19.733333
+        16.433333,
+        19.4
       ],
       "cutBefore": true,
       "zoom": {
@@ -234,8 +236,8 @@
       "zoomCut": true,
       "frames": 122,
       "dst": [
-        19.733333,
-        23.8
+        19.4,
+        23.466667
       ],
       "cutBefore": false,
       "zoom": {
@@ -256,8 +258,8 @@
       "zoomCut": true,
       "frames": 81,
       "dst": [
-        23.8,
-        26.5
+        23.466667,
+        26.166667
       ],
       "cutBefore": false,
       "zoom": {
@@ -278,8 +280,8 @@
       "zoomCut": true,
       "frames": 75,
       "dst": [
-        26.5,
-        29
+        26.166667,
+        28.666667
       ],
       "cutBefore": false,
       "zoom": {
@@ -300,8 +302,8 @@
       "zoomCut": true,
       "frames": 87,
       "dst": [
-        29,
-        31.9
+        28.666667,
+        31.566667
       ],
       "cutBefore": false,
       "zoom": {
@@ -322,8 +324,8 @@
       "zoomCut": true,
       "frames": 99,
       "dst": [
-        31.9,
-        35.2
+        31.566667,
+        34.866667
       ],
       "cutBefore": false,
       "zoom": {
@@ -344,8 +346,8 @@
       "zoomCut": true,
       "frames": 69,
       "dst": [
-        35.2,
-        37.5
+        34.866667,
+        37.166667
       ],
       "cutBefore": false,
       "zoom": {
@@ -366,8 +368,8 @@
       "zoomCut": true,
       "frames": 137,
       "dst": [
-        37.5,
-        42.066667
+        37.166667,
+        41.733333
       ],
       "cutBefore": false,
       "zoom": {
@@ -388,8 +390,8 @@
       "zoomCut": false,
       "frames": 96,
       "dst": [
-        42.066667,
-        45.266667
+        41.733333,
+        44.933333
       ],
       "cutBefore": true,
       "zoom": {
@@ -404,14 +406,14 @@
       "id": "s15",
       "src": [
         58.2,
-        63.133333
+        62.033333
       ],
       "reason": "speech",
       "zoomCut": true,
-      "frames": 148,
+      "frames": 115,
       "dst": [
-        45.266667,
-        50.2
+        44.933333,
+        48.766667
       ],
       "cutBefore": false,
       "zoom": {
@@ -425,24 +427,25 @@
     {
       "id": "s16",
       "src": [
-        63.133333,
-        66.4
+        62.033333,
+        64.666667
       ],
       "reason": "speech",
       "zoomCut": true,
-      "frames": 98,
+      "frames": 79,
       "dst": [
-        50.2,
-        53.466667
+        48.766667,
+        51.4
       ],
       "cutBefore": false,
       "zoom": {
-        "from": 1.12,
-        "to": 1.12,
+        "from": 1,
+        "to": 1,
         "cx": 0.49,
         "cy": 0.535,
         "easeInFrames": 0
-      }
+      },
+      "emphasis": "dinheiro ou tempo"
     }
   ],
   "removed": [
@@ -565,21 +568,27 @@
     {
       "src": [
         24.68,
-        26.83
+        27.12
       ],
       "reason": "operator",
       "confidence": 1,
       "requested": [
         24.68,
-        26.89
+        27.12
       ],
-      "boundaryRefined": {
-        "from": [
-          24.68,
-          26.9
-        ],
-        "by": "energy-minimum ±80 ms"
-      }
+      "exact": true
+    },
+    {
+      "src": [
+        64.667,
+        66.401
+      ],
+      "reason": "operator",
+      "confidence": 1,
+      "requested": [
+        64.667,
+        66.401
+      ]
     }
   ],
   "transcript": {
@@ -813,6 +822,54 @@
         "reason": "'quando' cobria a pausa 54,72–55,08 s e virava legenda dupla",
         "by": "operator",
         "evidence": "re-transcrição local (faster-whisper small, 2 recortes independentes, com e sem hotwords) + energia de 10 ms da fonte"
+      },
+      {
+        "before": "que",
+        "after": "que",
+        "wordIds": [
+          "w0065"
+        ],
+        "start": 26.76,
+        "end": 27.1,
+        "from": [
+          26.54,
+          26.9
+        ],
+        "reason": "tempo do ASR: 'que' vai até 27,10 s",
+        "by": "operator",
+        "evidence": "espectro de 10 ms do bruto (4–10 kHz) e re-transcrição por ponto de início; o dono ouviu \"que\" no início do render 63e49a26"
+      },
+      {
+        "before": "se",
+        "after": "se",
+        "wordIds": [
+          "w0066"
+        ],
+        "start": 27.12,
+        "end": 27.36,
+        "from": [
+          26.9,
+          27.28
+        ],
+        "reason": "tempo do ASR: o /s/ de 'se' começa em 27,12 s",
+        "by": "operator",
+        "evidence": "espectro de 10 ms do bruto (4–10 kHz) e re-transcrição por ponto de início; o dono ouviu \"que\" no início do render 63e49a26"
+      },
+      {
+        "before": "você",
+        "after": "você",
+        "wordIds": [
+          "w0067"
+        ],
+        "start": 27.36,
+        "end": 27.6,
+        "from": [
+          27.28,
+          27.48
+        ],
+        "reason": "tempo do ASR",
+        "by": "operator",
+        "evidence": "espectro de 10 ms do bruto (4–10 kHz) e re-transcrição por ponto de início; o dono ouviu \"que\" no início do render 63e49a26"
       }
     ],
     "words": [
@@ -1421,29 +1478,32 @@
       {
         "id": "w0065",
         "text": "que",
-        "start": 26.54,
-        "end": 26.9,
+        "start": 26.76,
+        "end": 27.1,
         "confidence": 0.8611,
         "timing": "word",
-        "segment": 4
+        "segment": 4,
+        "timingCorrected": true
       },
       {
         "id": "w0066",
         "text": "se",
-        "start": 26.9,
-        "end": 27.28,
+        "start": 27.12,
+        "end": 27.36,
         "confidence": 0.801,
         "timing": "word",
-        "segment": 4
+        "segment": 4,
+        "timingCorrected": true
       },
       {
         "id": "w0067",
         "text": "você",
-        "start": 27.28,
-        "end": 27.48,
+        "start": 27.36,
+        "end": 27.6,
         "confidence": 0.9967,
         "timing": "word",
-        "segment": 4
+        "segment": 4,
+        "timingCorrected": true
       },
       {
         "id": "w0068",
@@ -2824,10 +2884,6 @@
         {
           "wordId": "w0077",
           "reason": "'Mas' (confiança 0,05) não se confirma: 4 re-transcrições ouvem hesitação ou nada, e a legenda humana da referência não tem a palavra; áudio mantido, aguarda escuta"
-        },
-        {
-          "wordId": "w0177",
-          "reason": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado"
         }
       ],
       "breakBefore": [
@@ -2859,8 +2915,8 @@
     "pages": [
       {
         "index": 0,
-        "start": 0.1,
-        "end": 0.96,
+        "start": 0.127,
+        "end": 0.627,
         "lines": [
           3
         ],
@@ -2869,8 +2925,8 @@
             "id": "w0066",
             "text": "se",
             "display": "SE",
-            "start": 0.1,
-            "end": 0.48,
+            "start": 0.127,
+            "end": 0.227,
             "keyword": false,
             "confidence": 0.801
           },
@@ -2878,8 +2934,8 @@
             "id": "w0067",
             "text": "você",
             "display": "VOCÊ",
-            "start": 0.48,
-            "end": 0.6,
+            "start": 0.227,
+            "end": 0.467,
             "keyword": false,
             "confidence": 0.9967
           },
@@ -2887,8 +2943,8 @@
             "id": "w0068",
             "text": "dev",
             "display": "DEV",
-            "start": 0.68,
-            "end": 0.96,
+            "start": 0.347,
+            "end": 0.627,
             "keyword": false,
             "confidence": null
           }
@@ -2896,8 +2952,8 @@
       },
       {
         "index": 1,
-        "start": 0.96,
-        "end": 1.96,
+        "start": 0.627,
+        "end": 1.627,
         "lines": [
           2,
           1
@@ -2907,8 +2963,8 @@
             "id": "w0069",
             "text": "não",
             "display": "NÃO",
-            "start": 0.96,
-            "end": 1.14,
+            "start": 0.627,
+            "end": 0.807,
             "keyword": false,
             "confidence": 0.8049
           },
@@ -2916,8 +2972,8 @@
             "id": "w0070",
             "text": "está",
             "display": "ESTÁ",
-            "start": 1.14,
-            "end": 1.25,
+            "start": 0.807,
+            "end": 0.917,
             "keyword": false,
             "confidence": 0.5868
           },
@@ -2925,8 +2981,8 @@
             "id": "w0071",
             "text": "utilizando,",
             "display": "UTILIZANDO",
-            "start": 1.39,
-            "end": 1.86,
+            "start": 1.057,
+            "end": 1.527,
             "keyword": false,
             "confidence": 0.994
           }
@@ -2934,8 +2990,8 @@
       },
       {
         "index": 2,
-        "start": 1.96,
-        "end": 2.26,
+        "start": 1.627,
+        "end": 1.927,
         "lines": [
           2
         ],
@@ -2944,8 +3000,8 @@
             "id": "w0072",
             "text": "você",
             "display": "VOCÊ",
-            "start": 1.96,
-            "end": 2.04,
+            "start": 1.627,
+            "end": 1.707,
             "keyword": false,
             "confidence": 0.9497
           },
@@ -2953,8 +3009,8 @@
             "id": "w0073",
             "text": "está",
             "display": "ESTÁ",
-            "start": 2.11,
-            "end": 2.16,
+            "start": 1.777,
+            "end": 1.827,
             "keyword": false,
             "confidence": 0.8927
           }
@@ -2962,8 +3018,8 @@
       },
       {
         "index": 3,
-        "start": 2.26,
-        "end": 2.873,
+        "start": 1.927,
+        "end": 2.54,
         "lines": [
           1,
           2
@@ -2973,8 +3029,8 @@
             "id": "w0074",
             "text": "ficando",
             "display": "FICANDO",
-            "start": 2.26,
-            "end": 2.32,
+            "start": 1.927,
+            "end": 1.987,
             "keyword": false,
             "confidence": 0.8989
           },
@@ -2982,8 +3038,8 @@
             "id": "w0075",
             "text": "para",
             "display": "PARA",
-            "start": 2.32,
-            "end": 2.44,
+            "start": 1.987,
+            "end": 2.107,
             "keyword": false,
             "confidence": 0.7393
           },
@@ -2991,8 +3047,8 @@
             "id": "w0076",
             "text": "trás",
             "display": "TRÁS",
-            "start": 2.44,
-            "end": 2.63,
+            "start": 2.107,
+            "end": 2.297,
             "keyword": true,
             "confidence": 0.9832
           }
@@ -3000,8 +3056,8 @@
       },
       {
         "index": 4,
-        "start": 2.873,
-        "end": 3.673,
+        "start": 2.54,
+        "end": 3.34,
         "lines": [
           3,
           1
@@ -3011,8 +3067,8 @@
             "id": "w0022",
             "text": "já",
             "display": "JÁ",
-            "start": 2.873,
-            "end": 2.973,
+            "start": 2.54,
+            "end": 2.64,
             "keyword": false,
             "confidence": 0.7302
           },
@@ -3020,8 +3076,8 @@
             "id": "w0023",
             "text": "é",
             "display": "É",
-            "start": 2.973,
-            "end": 3.093,
+            "start": 2.64,
+            "end": 2.76,
             "keyword": false,
             "confidence": 0.8718
           },
@@ -3029,8 +3085,8 @@
             "id": "w0024",
             "text": "uma",
             "display": "UMA",
-            "start": 3.093,
-            "end": 3.123,
+            "start": 2.76,
+            "end": 2.79,
             "keyword": false,
             "confidence": 0.9929
           },
@@ -3038,8 +3094,8 @@
             "id": "w0025",
             "text": "realidade,",
             "display": "REALIDADE",
-            "start": 3.133,
-            "end": 3.533,
+            "start": 2.8,
+            "end": 3.2,
             "keyword": false,
             "confidence": 0.9968
           }
@@ -3047,8 +3103,8 @@
       },
       {
         "index": 5,
-        "start": 3.673,
-        "end": 4.903,
+        "start": 3.34,
+        "end": 4.57,
         "lines": [
           3,
           2
@@ -3058,8 +3114,8 @@
             "id": "w0026",
             "text": "não",
             "display": "NÃO",
-            "start": 3.673,
-            "end": 3.793,
+            "start": 3.34,
+            "end": 3.46,
             "keyword": false,
             "confidence": 0.6013
           },
@@ -3067,8 +3123,8 @@
             "id": "w0027",
             "text": "temos",
             "display": "TEMOS",
-            "start": 3.793,
-            "end": 3.973,
+            "start": 3.46,
+            "end": 3.64,
             "keyword": false,
             "confidence": 0.8595
           },
@@ -3076,8 +3132,8 @@
             "id": "w0028",
             "text": "para",
             "display": "PARA",
-            "start": 3.973,
-            "end": 4.193,
+            "start": 3.64,
+            "end": 3.86,
             "keyword": false,
             "confidence": 0.5276
           },
@@ -3085,8 +3141,8 @@
             "id": "w0029",
             "text": "onde",
             "display": "ONDE",
-            "start": 4.193,
-            "end": 4.293,
+            "start": 3.86,
+            "end": 3.96,
             "keyword": false,
             "confidence": 0.964
           },
@@ -3094,8 +3150,8 @@
             "id": "w0030",
             "text": "fugir",
             "display": "FUGIR",
-            "start": 4.453,
-            "end": 4.703,
+            "start": 4.12,
+            "end": 4.37,
             "keyword": false,
             "confidence": 0.9933
           }
@@ -3103,8 +3159,8 @@
       },
       {
         "index": 6,
-        "start": 4.903,
-        "end": 6.253,
+        "start": 4.57,
+        "end": 5.92,
         "lines": [
           2,
           2
@@ -3114,8 +3170,8 @@
             "id": "w0031",
             "text": "Não",
             "display": "NÃO",
-            "start": 4.903,
-            "end": 5.073,
+            "start": 4.57,
+            "end": 4.74,
             "keyword": false,
             "confidence": 0.5655
           },
@@ -3123,8 +3179,8 @@
             "id": "w0032",
             "text": "é",
             "display": "É",
-            "start": 5.073,
-            "end": 5.313,
+            "start": 4.74,
+            "end": 4.98,
             "keyword": false,
             "confidence": 0.9889
           },
@@ -3132,8 +3188,8 @@
             "id": "w0033",
             "text": "mais",
             "display": "MAIS",
-            "start": 5.313,
-            "end": 6.003,
+            "start": 4.98,
+            "end": 5.67,
             "keyword": false,
             "confidence": 0.9654
           },
@@ -3141,8 +3197,8 @@
             "id": "w0034",
             "text": "algo",
             "display": "ALGO",
-            "start": 6.073,
-            "end": 6.253,
+            "start": 5.74,
+            "end": 5.92,
             "keyword": false,
             "confidence": 0.9762
           }
@@ -3150,8 +3206,8 @@
       },
       {
         "index": 7,
-        "start": 6.253,
-        "end": 7.293,
+        "start": 5.92,
+        "end": 6.96,
         "lines": [
           1,
           2
@@ -3161,8 +3217,8 @@
             "id": "w0035",
             "text": "opcional",
             "display": "OPCIONAL",
-            "start": 6.253,
-            "end": 6.633,
+            "start": 5.92,
+            "end": 6.3,
             "keyword": false,
             "confidence": 0.9846
           },
@@ -3170,8 +3226,8 @@
             "id": "w0036",
             "text": "como",
             "display": "COMO",
-            "start": 6.633,
-            "end": 6.993,
+            "start": 6.3,
+            "end": 6.66,
             "keyword": false,
             "confidence": 0.9017
           },
@@ -3179,8 +3235,8 @@
             "id": "w0037",
             "text": "era",
             "display": "ERA",
-            "start": 6.993,
-            "end": 7.293,
+            "start": 6.66,
+            "end": 6.96,
             "keyword": false,
             "confidence": 0.9118
           }
@@ -3188,8 +3244,8 @@
       },
       {
         "index": 8,
-        "start": 7.293,
-        "end": 8.913,
+        "start": 6.96,
+        "end": 8.58,
         "lines": [
           3
         ],
@@ -3198,8 +3254,8 @@
             "id": "w0038",
             "text": "ali",
             "display": "ALI",
-            "start": 7.293,
-            "end": 7.533,
+            "start": 6.96,
+            "end": 7.2,
             "keyword": false,
             "confidence": 0.5824
           },
@@ -3207,8 +3263,8 @@
             "id": "w0039",
             "text": "em",
             "display": "EM",
-            "start": 7.533,
-            "end": 7.633,
+            "start": 7.2,
+            "end": 7.3,
             "keyword": false,
             "confidence": 0.9785
           },
@@ -3216,8 +3272,8 @@
             "id": "w0040",
             "text": "2022",
             "display": "2022",
-            "start": 7.653,
-            "end": 8.663,
+            "start": 7.32,
+            "end": 8.33,
             "keyword": false,
             "confidence": 0.982
           }
@@ -3225,8 +3281,8 @@
       },
       {
         "index": 9,
-        "start": 8.933,
-        "end": 11.207,
+        "start": 8.6,
+        "end": 10.873,
         "lines": [
           2,
           2
@@ -3236,8 +3292,8 @@
             "id": "w0041",
             "text": "quando",
             "display": "QUANDO",
-            "start": 8.933,
-            "end": 9.613,
+            "start": 8.6,
+            "end": 9.28,
             "keyword": false,
             "confidence": 0.6138
           },
@@ -3245,8 +3301,8 @@
             "id": "w0042",
             "text": "o",
             "display": "O",
-            "start": 9.613,
-            "end": 9.913,
+            "start": 9.28,
+            "end": 9.58,
             "keyword": false,
             "confidence": 0.8293
           },
@@ -3254,8 +3310,8 @@
             "id": "w0043",
             "text": "ChatGPT",
             "display": "CHATGPT",
-            "start": 9.993,
-            "end": 10.433,
+            "start": 9.66,
+            "end": 10.1,
             "keyword": false,
             "confidence": null
           },
@@ -3263,8 +3319,8 @@
             "id": "w0044",
             "text": "surgiu",
             "display": "SURGIU",
-            "start": 10.433,
-            "end": 10.973,
+            "start": 10.1,
+            "end": 10.64,
             "keyword": false,
             "confidence": 0.9831
           }
@@ -3272,8 +3328,8 @@
       },
       {
         "index": 10,
-        "start": 11.207,
-        "end": 12.007,
+        "start": 10.873,
+        "end": 11.673,
         "lines": [
           2,
           2
@@ -3283,8 +3339,8 @@
             "id": "w0045",
             "text": "E",
             "display": "E",
-            "start": 11.207,
-            "end": 11.307,
+            "start": 10.873,
+            "end": 10.973,
             "keyword": false,
             "confidence": 0.329
           },
@@ -3292,8 +3348,8 @@
             "id": "w0046",
             "text": "logo",
             "display": "LOGO",
-            "start": 11.307,
-            "end": 11.447,
+            "start": 10.973,
+            "end": 11.113,
             "keyword": false,
             "confidence": 0.2813
           },
@@ -3301,8 +3357,8 @@
             "id": "w0047",
             "text": "após",
             "display": "APÓS",
-            "start": 11.447,
-            "end": 11.727,
+            "start": 11.113,
+            "end": 11.393,
             "keyword": false,
             "confidence": 0.9668
           },
@@ -3310,8 +3366,8 @@
             "id": "w0048",
             "text": "isso",
             "display": "ISSO",
-            "start": 11.727,
-            "end": 11.867,
+            "start": 11.393,
+            "end": 11.533,
             "keyword": false,
             "confidence": 0.9951
           }
@@ -3319,8 +3375,8 @@
       },
       {
         "index": 11,
-        "start": 12.007,
-        "end": 13.127,
+        "start": 11.673,
+        "end": 12.793,
         "lines": [
           2,
           1
@@ -3330,8 +3386,8 @@
             "id": "w0049",
             "text": "vieram",
             "display": "VIERAM",
-            "start": 12.007,
-            "end": 12.267,
+            "start": 11.673,
+            "end": 11.933,
             "keyword": false,
             "confidence": 0.6627
           },
@@ -3339,8 +3395,8 @@
             "id": "w0050",
             "text": "outras",
             "display": "OUTRAS",
-            "start": 12.267,
-            "end": 12.507,
+            "start": 11.933,
+            "end": 12.173,
             "keyword": false,
             "confidence": 0.8031
           },
@@ -3348,8 +3404,8 @@
             "id": "w0051",
             "text": "ferramentas,",
             "display": "FERRAMENTAS",
-            "start": 12.507,
-            "end": 12.987,
+            "start": 12.173,
+            "end": 12.653,
             "keyword": false,
             "confidence": 0.9812
           }
@@ -3357,8 +3413,8 @@
       },
       {
         "index": 12,
-        "start": 13.127,
-        "end": 14.817,
+        "start": 12.793,
+        "end": 14.483,
         "lines": [
           2,
           2
@@ -3368,8 +3424,8 @@
             "id": "w0052",
             "text": "como",
             "display": "COMO",
-            "start": 13.127,
-            "end": 13.187,
+            "start": 12.793,
+            "end": 12.853,
             "keyword": false,
             "confidence": 0.9167
           },
@@ -3377,8 +3433,8 @@
             "id": "w0053",
             "text": "o",
             "display": "O",
-            "start": 13.187,
-            "end": 13.307,
+            "start": 12.853,
+            "end": 12.973,
             "keyword": false,
             "confidence": 0.3049
           },
@@ -3386,8 +3442,8 @@
             "id": "w0054",
             "text": "Antigravity,",
             "display": "ANTIGRAVITY",
-            "start": 13.307,
-            "end": 13.897,
+            "start": 12.973,
+            "end": 13.563,
             "keyword": false,
             "confidence": null
           },
@@ -3395,8 +3451,8 @@
             "id": "w0055",
             "text": "Codex,",
             "display": "CODEX",
-            "start": 14.187,
-            "end": 14.567,
+            "start": 13.853,
+            "end": 14.233,
             "keyword": false,
             "confidence": 0.7591
           }
@@ -3404,8 +3460,8 @@
       },
       {
         "index": 13,
-        "start": 15.017,
-        "end": 16.14,
+        "start": 14.683,
+        "end": 15.806,
         "lines": [
           2,
           2
@@ -3415,8 +3471,8 @@
             "id": "w0056",
             "text": "o",
             "display": "O",
-            "start": 15.017,
-            "end": 15.23,
+            "start": 14.683,
+            "end": 14.896,
             "keyword": false,
             "confidence": null
           },
@@ -3424,8 +3480,8 @@
             "id": "w0056.1",
             "text": "próprio",
             "display": "PRÓPRIO",
-            "start": 15.23,
-            "end": 15.497,
+            "start": 14.896,
+            "end": 15.163,
             "keyword": false,
             "confidence": null
           },
@@ -3433,8 +3489,8 @@
             "id": "w0056.2",
             "text": "Claude",
             "display": "CLAUDE",
-            "start": 15.647,
-            "end": 15.817,
+            "start": 15.313,
+            "end": 15.483,
             "keyword": false,
             "confidence": null
           },
@@ -3442,8 +3498,8 @@
             "id": "w0056.3",
             "text": "Code",
             "display": "CODE",
-            "start": 15.887,
-            "end": 16.14,
+            "start": 15.553,
+            "end": 15.806,
             "keyword": false,
             "confidence": null
           }
@@ -3451,8 +3507,8 @@
       },
       {
         "index": 14,
-        "start": 16.14,
-        "end": 16.907,
+        "start": 15.806,
+        "end": 16.573,
         "lines": [
           2
         ],
@@ -3461,8 +3517,8 @@
             "id": "w0056.4",
             "text": "da",
             "display": "DA",
-            "start": 16.14,
-            "end": 16.437,
+            "start": 15.806,
+            "end": 16.103,
             "keyword": false,
             "confidence": null
           },
@@ -3470,8 +3526,8 @@
             "id": "w0056.5",
             "text": "Anthropic",
             "display": "ANTHROPIC",
-            "start": 16.517,
-            "end": 16.657,
+            "start": 16.183,
+            "end": 16.323,
             "keyword": false,
             "confidence": null
           }
@@ -3479,8 +3535,8 @@
       },
       {
         "index": 15,
-        "start": 17.26,
-        "end": 18.65,
+        "start": 16.927,
+        "end": 18.317,
         "lines": [
           3
         ],
@@ -3489,8 +3545,8 @@
             "id": "w0078",
             "text": "utilizar",
             "display": "UTILIZAR",
-            "start": 17.26,
-            "end": 18.06,
+            "start": 16.927,
+            "end": 17.727,
             "keyword": false,
             "confidence": 0.4695
           },
@@ -3498,8 +3554,8 @@
             "id": "w0079",
             "text": "IA",
             "display": "IA",
-            "start": 18.06,
-            "end": 18.36,
+            "start": 17.727,
+            "end": 18.027,
             "keyword": false,
             "confidence": null
           },
@@ -3507,8 +3563,8 @@
             "id": "w0080",
             "text": "te",
             "display": "TE",
-            "start": 18.36,
-            "end": 18.53,
+            "start": 18.027,
+            "end": 18.197,
             "keyword": false,
             "confidence": 0.084
           }
@@ -3516,8 +3572,8 @@
       },
       {
         "index": 16,
-        "start": 18.65,
-        "end": 20.79,
+        "start": 18.317,
+        "end": 20.457,
         "lines": [
           2,
           1
@@ -3527,8 +3583,8 @@
             "id": "w0081",
             "text": "traz",
             "display": "TRAZ",
-            "start": 18.65,
-            "end": 18.8,
+            "start": 18.317,
+            "end": 18.467,
             "keyword": false,
             "confidence": 0.9904
           },
@@ -3536,8 +3592,8 @@
             "id": "w0082",
             "text": "muitos",
             "display": "MUITOS",
-            "start": 18.8,
-            "end": 19.26,
+            "start": 18.467,
+            "end": 18.927,
             "keyword": false,
             "confidence": 0.7565
           },
@@ -3545,8 +3601,8 @@
             "id": "w0083",
             "text": "benefícios,",
             "display": "BENEFÍCIOS",
-            "start": 19.26,
-            "end": 20.54,
+            "start": 18.927,
+            "end": 20.207,
             "keyword": false,
             "confidence": 0.9772
           }
@@ -3554,8 +3610,8 @@
       },
       {
         "index": 17,
-        "start": 20.88,
-        "end": 22.09,
+        "start": 20.547,
+        "end": 21.757,
         "lines": [
           2,
           1
@@ -3565,8 +3621,8 @@
             "id": "w0084",
             "text": "traz",
             "display": "TRAZ",
-            "start": 20.88,
-            "end": 21.05,
+            "start": 20.547,
+            "end": 20.717,
             "keyword": false,
             "confidence": null
           },
@@ -3574,8 +3630,8 @@
             "id": "w0084.1",
             "text": "muitas",
             "display": "MUITAS",
-            "start": 21.05,
-            "end": 21.22,
+            "start": 20.717,
+            "end": 20.887,
             "keyword": false,
             "confidence": null
           },
@@ -3583,8 +3639,8 @@
             "id": "w0085",
             "text": "possibilidades,",
             "display": "POSSIBILIDADES",
-            "start": 21.22,
-            "end": 21.84,
+            "start": 20.887,
+            "end": 21.507,
             "keyword": false,
             "confidence": 0.9981
           }
@@ -3592,8 +3648,8 @@
       },
       {
         "index": 18,
-        "start": 22.29,
-        "end": 24.48,
+        "start": 21.957,
+        "end": 24.147,
         "lines": [
           2,
           1
@@ -3603,8 +3659,8 @@
             "id": "w0086",
             "text": "traz",
             "display": "TRAZ",
-            "start": 22.29,
-            "end": 22.51,
+            "start": 21.957,
+            "end": 22.177,
             "keyword": false,
             "confidence": null
           },
@@ -3612,8 +3668,8 @@
             "id": "w0086.1",
             "text": "muita",
             "display": "MUITA",
-            "start": 22.58,
-            "end": 22.88,
+            "start": 22.247,
+            "end": 22.547,
             "keyword": false,
             "confidence": null
           },
@@ -3621,8 +3677,8 @@
             "id": "w0087",
             "text": "rapidez",
             "display": "RAPIDEZ",
-            "start": 22.88,
-            "end": 24.48,
+            "start": 22.547,
+            "end": 24.147,
             "keyword": false,
             "confidence": 0.7097
           }
@@ -3630,8 +3686,8 @@
       },
       {
         "index": 19,
-        "start": 24.48,
-        "end": 25.48,
+        "start": 24.147,
+        "end": 25.147,
         "lines": [
           2,
           1
@@ -3641,8 +3697,8 @@
             "id": "w0088",
             "text": "nas",
             "display": "NAS",
-            "start": 24.48,
-            "end": 24.68,
+            "start": 24.147,
+            "end": 24.347,
             "keyword": false,
             "confidence": 0.9517
           },
@@ -3650,8 +3706,8 @@
             "id": "w0089",
             "text": "suas",
             "display": "SUAS",
-            "start": 24.68,
-            "end": 24.82,
+            "start": 24.347,
+            "end": 24.487,
             "keyword": false,
             "confidence": 0.9722
           },
@@ -3659,8 +3715,8 @@
             "id": "w0090",
             "text": "entregas.",
             "display": "ENTREGAS",
-            "start": 24.82,
-            "end": 25.32,
+            "start": 24.487,
+            "end": 24.987,
             "keyword": false,
             "confidence": 0.9836
           }
@@ -3668,8 +3724,8 @@
       },
       {
         "index": 20,
-        "start": 25.48,
-        "end": 26.32,
+        "start": 25.147,
+        "end": 25.987,
         "lines": [
           2,
           2
@@ -3679,8 +3735,8 @@
             "id": "w0091",
             "text": "Você",
             "display": "VOCÊ",
-            "start": 25.48,
-            "end": 25.58,
+            "start": 25.147,
+            "end": 25.247,
             "keyword": false,
             "confidence": 0.9791
           },
@@ -3688,8 +3744,8 @@
             "id": "w0092",
             "text": "passa",
             "display": "PASSA",
-            "start": 25.58,
-            "end": 25.78,
+            "start": 25.247,
+            "end": 25.447,
             "keyword": false,
             "confidence": 0.9809
           },
@@ -3697,8 +3753,8 @@
             "id": "w0093",
             "text": "a",
             "display": "A",
-            "start": 25.78,
-            "end": 25.93,
+            "start": 25.447,
+            "end": 25.597,
             "keyword": false,
             "confidence": 0.9852
           },
@@ -3706,8 +3762,8 @@
             "id": "w0094",
             "text": "focar",
             "display": "FOCAR",
-            "start": 26.04,
-            "end": 26.32,
+            "start": 25.707,
+            "end": 25.987,
             "keyword": false,
             "confidence": 0.9941
           }
@@ -3715,8 +3771,8 @@
       },
       {
         "index": 21,
-        "start": 26.32,
-        "end": 27.15,
+        "start": 25.987,
+        "end": 26.817,
         "lines": [
           2
         ],
@@ -3725,8 +3781,8 @@
             "id": "w0095",
             "text": "não",
             "display": "NÃO",
-            "start": 26.32,
-            "end": 26.72,
+            "start": 25.987,
+            "end": 26.387,
             "keyword": false,
             "confidence": 0.6492
           },
@@ -3734,8 +3790,8 @@
             "id": "w0096",
             "text": "somente",
             "display": "SOMENTE",
-            "start": 26.72,
-            "end": 27.06,
+            "start": 26.387,
+            "end": 26.727,
             "keyword": false,
             "confidence": 0.9116
           }
@@ -3743,8 +3799,8 @@
       },
       {
         "index": 22,
-        "start": 27.15,
-        "end": 28.08,
+        "start": 26.817,
+        "end": 27.747,
         "lines": [
           2,
           2
@@ -3754,8 +3810,8 @@
             "id": "w0097",
             "text": "em",
             "display": "EM",
-            "start": 27.15,
-            "end": 27.21,
+            "start": 26.817,
+            "end": 26.877,
             "keyword": false,
             "confidence": 0.9883
           },
@@ -3763,8 +3819,8 @@
             "id": "w0098",
             "text": "código,",
             "display": "CÓDIGO",
-            "start": 27.31,
-            "end": 27.5,
+            "start": 26.977,
+            "end": 27.167,
             "keyword": false,
             "confidence": 0.9712
           },
@@ -3772,8 +3828,8 @@
             "id": "w0099",
             "text": "mas",
             "display": "MAS",
-            "start": 27.74,
-            "end": 27.78,
+            "start": 27.407,
+            "end": 27.447,
             "keyword": false,
             "confidence": 0.9907
           },
@@ -3781,8 +3837,8 @@
             "id": "w0100",
             "text": "também",
             "display": "TAMBÉM",
-            "start": 27.78,
-            "end": 28.08,
+            "start": 27.447,
+            "end": 27.747,
             "keyword": false,
             "confidence": 0.8987
           }
@@ -3790,8 +3846,8 @@
       },
       {
         "index": 23,
-        "start": 28.08,
-        "end": 29.96,
+        "start": 27.747,
+        "end": 29.627,
         "lines": [
           2,
           2
@@ -3801,8 +3857,8 @@
             "id": "w0101",
             "text": "na",
             "display": "NA",
-            "start": 28.08,
-            "end": 28.72,
+            "start": 27.747,
+            "end": 28.387,
             "keyword": false,
             "confidence": 0.8661
           },
@@ -3810,8 +3866,8 @@
             "id": "w0102",
             "text": "regra",
             "display": "REGRA",
-            "start": 28.72,
-            "end": 29.44,
+            "start": 28.387,
+            "end": 29.107,
             "keyword": false,
             "confidence": 0.8746
           },
@@ -3819,8 +3875,8 @@
             "id": "w0103",
             "text": "de",
             "display": "DE",
-            "start": 29.44,
-            "end": 29.58,
+            "start": 29.107,
+            "end": 29.247,
             "keyword": false,
             "confidence": 0.9795
           },
@@ -3828,8 +3884,8 @@
             "id": "w0104",
             "text": "negócio",
             "display": "NEGÓCIO",
-            "start": 29.58,
-            "end": 29.96,
+            "start": 29.247,
+            "end": 29.627,
             "keyword": false,
             "confidence": 0.9267
           }
@@ -3837,8 +3893,8 @@
       },
       {
         "index": 24,
-        "start": 29.96,
-        "end": 30.81,
+        "start": 29.627,
+        "end": 30.477,
         "lines": [
           2
         ],
@@ -3847,8 +3903,8 @@
             "id": "w0105",
             "text": "e",
             "display": "E",
-            "start": 29.96,
-            "end": 30.46,
+            "start": 29.627,
+            "end": 30.127,
             "keyword": false,
             "confidence": 0.5075
           },
@@ -3856,8 +3912,8 @@
             "id": "w0106",
             "text": "muito",
             "display": "MUITO",
-            "start": 30.46,
-            "end": 30.76,
+            "start": 30.127,
+            "end": 30.427,
             "keyword": false,
             "confidence": 0.9261
           }
@@ -3865,8 +3921,8 @@
       },
       {
         "index": 25,
-        "start": 30.81,
-        "end": 31.88,
+        "start": 30.477,
+        "end": 31.547,
         "lines": [
           2,
           2
@@ -3876,8 +3932,8 @@
             "id": "w0107",
             "text": "mais",
             "display": "MAIS",
-            "start": 30.81,
-            "end": 31.04,
+            "start": 30.477,
+            "end": 30.707,
             "keyword": false,
             "confidence": 0.9981
           },
@@ -3885,8 +3941,8 @@
             "id": "w0108",
             "text": "do",
             "display": "DO",
-            "start": 31.04,
-            "end": 31.18,
+            "start": 30.707,
+            "end": 30.847,
             "keyword": false,
             "confidence": 0.9763
           },
@@ -3894,8 +3950,8 @@
             "id": "w0109",
             "text": "que",
             "display": "QUE",
-            "start": 31.3,
-            "end": 31.34,
+            "start": 30.967,
+            "end": 31.007,
             "keyword": false,
             "confidence": 0.9995
           },
@@ -3903,8 +3959,8 @@
             "id": "w0110",
             "text": "isso.",
             "display": "ISSO",
-            "start": 31.34,
-            "end": 31.63,
+            "start": 31.007,
+            "end": 31.297,
             "keyword": false,
             "confidence": 0.9846
           }
@@ -3912,8 +3968,8 @@
       },
       {
         "index": 26,
-        "start": 32.03,
-        "end": 33.2,
+        "start": 31.697,
+        "end": 32.867,
         "lines": [
           2,
           2
@@ -3923,8 +3979,8 @@
             "id": "w0111",
             "text": "Você",
             "display": "VOCÊ",
-            "start": 32.03,
-            "end": 32.26,
+            "start": 31.697,
+            "end": 31.927,
             "keyword": false,
             "confidence": 0.9867
           },
@@ -3932,8 +3988,8 @@
             "id": "w0112",
             "text": "passa",
             "display": "PASSA",
-            "start": 32.26,
-            "end": 32.56,
+            "start": 31.927,
+            "end": 32.227,
             "keyword": false,
             "confidence": 0.9927
           },
@@ -3941,8 +3997,8 @@
             "id": "w0113",
             "text": "a",
             "display": "A",
-            "start": 32.56,
-            "end": 32.86,
+            "start": 32.227,
+            "end": 32.527,
             "keyword": false,
             "confidence": 0.9904
           },
@@ -3950,8 +4006,8 @@
             "id": "w0114",
             "text": "focar",
             "display": "FOCAR",
-            "start": 32.86,
-            "end": 33.2,
+            "start": 32.527,
+            "end": 32.867,
             "keyword": false,
             "confidence": 0.99
           }
@@ -3959,8 +4015,8 @@
       },
       {
         "index": 27,
-        "start": 33.2,
-        "end": 33.96,
+        "start": 32.867,
+        "end": 33.627,
         "lines": [
           2
         ],
@@ -3969,8 +4025,8 @@
             "id": "w0115",
             "text": "no",
             "display": "NO",
-            "start": 33.2,
-            "end": 33.46,
+            "start": 32.867,
+            "end": 33.127,
             "keyword": false,
             "confidence": 0.9891
           },
@@ -3978,8 +4034,8 @@
             "id": "w0116",
             "text": "produto",
             "display": "PRODUTO",
-            "start": 33.46,
-            "end": 33.96,
+            "start": 33.127,
+            "end": 33.627,
             "keyword": false,
             "confidence": 0.9969
           }
@@ -3987,8 +4043,8 @@
       },
       {
         "index": 28,
-        "start": 33.96,
-        "end": 35.05,
+        "start": 33.627,
+        "end": 34.717,
         "lines": [
           3,
           1
@@ -3998,8 +4054,8 @@
             "id": "w0117",
             "text": "e",
             "display": "E",
-            "start": 33.96,
-            "end": 34.18,
+            "start": 33.627,
+            "end": 33.847,
             "keyword": false,
             "confidence": 0.6812
           },
@@ -4007,8 +4063,8 @@
             "id": "w0118",
             "text": "não",
             "display": "NÃO",
-            "start": 34.18,
-            "end": 34.24,
+            "start": 33.847,
+            "end": 33.907,
             "keyword": false,
             "confidence": 0.5359
           },
@@ -4016,8 +4072,8 @@
             "id": "w0119",
             "text": "na",
             "display": "NA",
-            "start": 34.24,
-            "end": 34.36,
+            "start": 33.907,
+            "end": 34.027,
             "keyword": false,
             "confidence": 0.9664
           },
@@ -4025,8 +4081,8 @@
             "id": "w0120",
             "text": "tecnologia.",
             "display": "TECNOLOGIA",
-            "start": 34.36,
-            "end": 34.8,
+            "start": 34.027,
+            "end": 34.467,
             "keyword": false,
             "confidence": 0.9982
           }
@@ -4034,8 +4090,8 @@
       },
       {
         "index": 29,
-        "start": 35.26,
-        "end": 35.86,
+        "start": 34.927,
+        "end": 35.527,
         "lines": [
           1,
           1
@@ -4045,8 +4101,8 @@
             "id": "w0121",
             "text": "Nós",
             "display": "NÓS",
-            "start": 35.26,
-            "end": 35.34,
+            "start": 34.927,
+            "end": 35.007,
             "keyword": false,
             "confidence": 0.8881
           },
@@ -4054,8 +4110,8 @@
             "id": "w0122",
             "text": "desenvolvedores",
             "display": "DESENVOLVEDORES",
-            "start": 35.34,
-            "end": 35.86,
+            "start": 35.007,
+            "end": 35.527,
             "keyword": false,
             "confidence": 0.9247
           }
@@ -4063,8 +4119,8 @@
       },
       {
         "index": 30,
-        "start": 35.86,
-        "end": 36.7,
+        "start": 35.527,
+        "end": 36.367,
         "lines": [
           1,
           2
@@ -4074,8 +4130,8 @@
             "id": "w0123",
             "text": "geralmente",
             "display": "GERALMENTE",
-            "start": 35.86,
-            "end": 36.25,
+            "start": 35.527,
+            "end": 35.917,
             "keyword": false,
             "confidence": 0.8962
           },
@@ -4083,8 +4139,8 @@
             "id": "w0124",
             "text": "temos",
             "display": "TEMOS",
-            "start": 36.37,
-            "end": 36.44,
+            "start": 36.037,
+            "end": 36.107,
             "keyword": false,
             "confidence": 0.9474
           },
@@ -4092,8 +4148,8 @@
             "id": "w0125",
             "text": "esse",
             "display": "ESSE",
-            "start": 36.44,
-            "end": 36.57,
+            "start": 36.107,
+            "end": 36.237,
             "keyword": false,
             "confidence": 0.942
           }
@@ -4101,8 +4157,8 @@
       },
       {
         "index": 31,
-        "start": 36.7,
-        "end": 38.72,
+        "start": 36.367,
+        "end": 38.387,
         "lines": [
           2,
           3
@@ -4112,8 +4168,8 @@
             "id": "w0126",
             "text": "problema",
             "display": "PROBLEMA",
-            "start": 36.7,
-            "end": 36.94,
+            "start": 36.367,
+            "end": 36.607,
             "keyword": false,
             "confidence": 0.9966
           },
@@ -4121,8 +4177,8 @@
             "id": "w0127",
             "text": "de",
             "display": "DE",
-            "start": 36.94,
-            "end": 37.24,
+            "start": 36.607,
+            "end": 36.907,
             "keyword": false,
             "confidence": 0.9352
           },
@@ -4130,8 +4186,8 @@
             "id": "w0128",
             "text": "que",
             "display": "QUE",
-            "start": 37.24,
-            "end": 38.14,
+            "start": 36.907,
+            "end": 37.807,
             "keyword": false,
             "confidence": 0.7908
           },
@@ -4139,8 +4195,8 @@
             "id": "w0129",
             "text": "a",
             "display": "A",
-            "start": 38.14,
-            "end": 38.6,
+            "start": 37.807,
+            "end": 38.267,
             "keyword": false,
             "confidence": 0.9306
           },
@@ -4148,8 +4204,8 @@
             "id": "w0130",
             "text": "gente",
             "display": "GENTE",
-            "start": 38.61,
-            "end": 38.72,
+            "start": 38.277,
+            "end": 38.387,
             "keyword": false,
             "confidence": 0.9997
           }
@@ -4157,8 +4213,8 @@
       },
       {
         "index": 32,
-        "start": 38.72,
-        "end": 39.77,
+        "start": 38.387,
+        "end": 39.437,
         "lines": [
           2,
           2
@@ -4168,8 +4224,8 @@
             "id": "w0131",
             "text": "foca",
             "display": "FOCA",
-            "start": 38.72,
-            "end": 38.96,
+            "start": 38.387,
+            "end": 38.627,
             "keyword": false,
             "confidence": 0.9701
           },
@@ -4177,8 +4233,8 @@
             "id": "w0132",
             "text": "muito",
             "display": "MUITO",
-            "start": 38.99,
-            "end": 39.16,
+            "start": 38.657,
+            "end": 38.827,
             "keyword": false,
             "confidence": 0.9717
           },
@@ -4186,8 +4242,8 @@
             "id": "w0133",
             "text": "na",
             "display": "NA",
-            "start": 39.16,
-            "end": 39.28,
+            "start": 38.827,
+            "end": 38.947,
             "keyword": false,
             "confidence": 0.9454
           },
@@ -4195,8 +4251,8 @@
             "id": "w0134",
             "text": "tecnologia",
             "display": "TECNOLOGIA",
-            "start": 39.28,
-            "end": 39.76,
+            "start": 38.947,
+            "end": 39.427,
             "keyword": false,
             "confidence": 0.9979
           }
@@ -4204,8 +4260,8 @@
       },
       {
         "index": 33,
-        "start": 39.77,
-        "end": 40.54,
+        "start": 39.437,
+        "end": 40.207,
         "lines": [
           3
         ],
@@ -4214,8 +4270,8 @@
             "id": "w0135",
             "text": "e",
             "display": "E",
-            "start": 39.77,
-            "end": 39.89,
+            "start": 39.437,
+            "end": 39.557,
             "keyword": false,
             "confidence": 0.2452
           },
@@ -4223,8 +4279,8 @@
             "id": "w0136",
             "text": "quer",
             "display": "QUER",
-            "start": 40.01,
-            "end": 40.08,
+            "start": 39.677,
+            "end": 39.747,
             "keyword": false,
             "confidence": 0.911
           },
@@ -4232,8 +4288,8 @@
             "id": "w0137",
             "text": "refinar,",
             "display": "REFINAR",
-            "start": 40.08,
-            "end": 40.42,
+            "start": 39.747,
+            "end": 40.087,
             "keyword": false,
             "confidence": 0.8105
           }
@@ -4241,8 +4297,8 @@
       },
       {
         "index": 34,
-        "start": 40.54,
-        "end": 41.63,
+        "start": 40.207,
+        "end": 41.297,
         "lines": [
           1,
           2
@@ -4252,8 +4308,8 @@
             "id": "w0138",
             "text": "refinar,",
             "display": "REFINAR",
-            "start": 40.54,
-            "end": 40.76,
+            "start": 40.207,
+            "end": 40.427,
             "keyword": false,
             "confidence": 0.9768
           },
@@ -4261,8 +4317,8 @@
             "id": "w0139",
             "text": "refinar,",
             "display": "REFINAR",
-            "start": 40.86,
-            "end": 41.08,
+            "start": 40.527,
+            "end": 40.747,
             "keyword": false,
             "confidence": 0.9841
           },
@@ -4270,8 +4326,8 @@
             "id": "w0140",
             "text": "refinar,",
             "display": "REFINAR",
-            "start": 41.12,
-            "end": 41.38,
+            "start": 40.787,
+            "end": 41.047,
             "keyword": false,
             "confidence": 0.7133
           }
@@ -4279,8 +4335,8 @@
       },
       {
         "index": 35,
-        "start": 41.68,
-        "end": 42.407,
+        "start": 41.347,
+        "end": 42.073,
         "lines": [
           2
         ],
@@ -4289,8 +4345,8 @@
             "id": "w0141",
             "text": "mas",
             "display": "MAS",
-            "start": 41.68,
-            "end": 41.9,
+            "start": 41.347,
+            "end": 41.567,
             "keyword": false,
             "confidence": 0.3088
           },
@@ -4298,8 +4354,8 @@
             "id": "w0142",
             "text": "quando",
             "display": "QUANDO",
-            "start": 42.177,
-            "end": 42.407,
+            "start": 41.843,
+            "end": 42.073,
             "keyword": false,
             "confidence": 0.856
           }
@@ -4307,8 +4363,8 @@
       },
       {
         "index": 36,
-        "start": 42.407,
-        "end": 43.327,
+        "start": 42.073,
+        "end": 42.993,
         "lines": [
           2,
           1
@@ -4318,8 +4374,8 @@
             "id": "w0143",
             "text": "pro",
             "display": "PRO",
-            "start": 42.407,
-            "end": 42.637,
+            "start": 42.073,
+            "end": 42.303,
             "keyword": false,
             "confidence": null
           },
@@ -4327,8 +4383,8 @@
             "id": "w0143.1",
             "text": "próprio",
             "display": "PRÓPRIO",
-            "start": 42.787,
-            "end": 43.02,
+            "start": 42.453,
+            "end": 42.686,
             "keyword": false,
             "confidence": null
           },
@@ -4336,8 +4392,8 @@
             "id": "w0143.2",
             "text": "cliente",
             "display": "CLIENTE",
-            "start": 43.02,
-            "end": 43.327,
+            "start": 42.686,
+            "end": 42.993,
             "keyword": false,
             "confidence": null
           }
@@ -4345,8 +4401,8 @@
       },
       {
         "index": 37,
-        "start": 43.327,
-        "end": 44.227,
+        "start": 42.993,
+        "end": 43.893,
         "lines": [
           2,
           2
@@ -4356,8 +4412,8 @@
             "id": "w0147",
             "text": "aquilo",
             "display": "AQUILO",
-            "start": 43.327,
-            "end": 43.587,
+            "start": 42.993,
+            "end": 43.253,
             "keyword": false,
             "confidence": 0.899
           },
@@ -4365,8 +4421,8 @@
             "id": "w0148",
             "text": "não",
             "display": "NÃO",
-            "start": 43.587,
-            "end": 43.747,
+            "start": 43.253,
+            "end": 43.413,
             "keyword": false,
             "confidence": 0.461
           },
@@ -4374,8 +4430,8 @@
             "id": "w0149",
             "text": "é",
             "display": "É",
-            "start": 43.747,
-            "end": 43.827,
+            "start": 43.413,
+            "end": 43.493,
             "keyword": false,
             "confidence": 0.9543
           },
@@ -4383,8 +4439,8 @@
             "id": "w0150",
             "text": "importante",
             "display": "IMPORTANTE",
-            "start": 43.827,
-            "end": 44.227,
+            "start": 43.493,
+            "end": 43.893,
             "keyword": false,
             "confidence": 0.9883
           }
@@ -4392,8 +4448,8 @@
       },
       {
         "index": 38,
-        "start": 44.227,
-        "end": 45.397,
+        "start": 43.893,
+        "end": 45.063,
         "lines": [
           2,
           3
@@ -4403,8 +4459,8 @@
             "id": "w0151",
             "text": "porque",
             "display": "PORQUE",
-            "start": 44.227,
-            "end": 44.587,
+            "start": 43.893,
+            "end": 44.253,
             "keyword": false,
             "confidence": 0.8569
           },
@@ -4412,8 +4468,8 @@
             "id": "w0152",
             "text": "o",
             "display": "O",
-            "start": 44.587,
-            "end": 44.667,
+            "start": 44.253,
+            "end": 44.333,
             "keyword": false,
             "confidence": 0.9316
           },
@@ -4421,8 +4477,8 @@
             "id": "w0153",
             "text": "que",
             "display": "QUE",
-            "start": 44.707,
-            "end": 44.747,
+            "start": 44.373,
+            "end": 44.413,
             "keyword": false,
             "confidence": 0.7702
           },
@@ -4430,8 +4486,8 @@
             "id": "w0154",
             "text": "ele",
             "display": "ELE",
-            "start": 44.757,
-            "end": 44.907,
+            "start": 44.423,
+            "end": 44.573,
             "keyword": false,
             "confidence": 0.8417
           },
@@ -4439,8 +4495,8 @@
             "id": "w0155",
             "text": "quer,",
             "display": "QUER",
-            "start": 45.017,
-            "end": 45.147,
+            "start": 44.683,
+            "end": 44.813,
             "keyword": false,
             "confidence": 0.9867
           }
@@ -4448,8 +4504,8 @@
       },
       {
         "index": 39,
-        "start": 45.447,
-        "end": 46.567,
+        "start": 45.113,
+        "end": 46.233,
         "lines": [
           2,
           1
@@ -4459,8 +4515,8 @@
             "id": "w0156",
             "text": "o",
             "display": "O",
-            "start": 45.447,
-            "end": 45.497,
+            "start": 45.113,
+            "end": 45.163,
             "keyword": false,
             "confidence": 0.9671
           },
@@ -4468,8 +4524,8 @@
             "id": "w0157",
             "text": "sistema",
             "display": "SISTEMA",
-            "start": 45.677,
-            "end": 45.727,
+            "start": 45.343,
+            "end": 45.393,
             "keyword": false,
             "confidence": 0.9925
           },
@@ -4477,8 +4533,8 @@
             "id": "w0158",
             "text": "funcionando,",
             "display": "FUNCIONANDO",
-            "start": 45.727,
-            "end": 46.357,
+            "start": 45.393,
+            "end": 46.023,
             "keyword": false,
             "confidence": 0.9599
           }
@@ -4486,8 +4542,8 @@
       },
       {
         "index": 40,
-        "start": 46.567,
-        "end": 47.447,
+        "start": 46.233,
+        "end": 47.113,
         "lines": [
           3,
           2
@@ -4497,8 +4553,8 @@
             "id": "w0159",
             "text": "ele",
             "display": "ELE",
-            "start": 46.567,
-            "end": 46.647,
+            "start": 46.233,
+            "end": 46.313,
             "keyword": false,
             "confidence": 0.937
           },
@@ -4506,8 +4562,8 @@
             "id": "w0160",
             "text": "quer",
             "display": "QUER",
-            "start": 46.647,
-            "end": 46.827,
+            "start": 46.313,
+            "end": 46.493,
             "keyword": false,
             "confidence": 0.9934
           },
@@ -4515,8 +4571,8 @@
             "id": "w0161",
             "text": "que",
             "display": "QUE",
-            "start": 46.827,
-            "end": 46.877,
+            "start": 46.493,
+            "end": 46.543,
             "keyword": false,
             "confidence": 0.9132
           },
@@ -4524,8 +4580,8 @@
             "id": "w0162",
             "text": "o",
             "display": "O",
-            "start": 46.947,
-            "end": 47.007,
+            "start": 46.613,
+            "end": 46.673,
             "keyword": false,
             "confidence": 0.95
           },
@@ -4533,8 +4589,8 @@
             "id": "w0163",
             "text": "sistema",
             "display": "SISTEMA",
-            "start": 47.027,
-            "end": 47.447,
+            "start": 46.693,
+            "end": 47.113,
             "keyword": false,
             "confidence": 0.9988
           }
@@ -4542,8 +4598,8 @@
       },
       {
         "index": 41,
-        "start": 47.447,
-        "end": 49.607,
+        "start": 47.113,
+        "end": 49.273,
         "lines": [
           2,
           1
@@ -4553,8 +4609,8 @@
             "id": "w0164",
             "text": "faça",
             "display": "FAÇA",
-            "start": 47.447,
-            "end": 49.107,
+            "start": 47.113,
+            "end": 48.773,
             "keyword": false,
             "confidence": 0.9526
           },
@@ -4562,8 +4618,8 @@
             "id": "w0165",
             "text": "ele",
             "display": "ELE",
-            "start": 49.107,
-            "end": 49.187,
+            "start": 48.773,
+            "end": 48.853,
             "keyword": false,
             "confidence": 0.667
           },
@@ -4571,8 +4627,8 @@
             "id": "w0166",
             "text": "economizar",
             "display": "ECONOMIZAR",
-            "start": 49.187,
-            "end": 49.607,
+            "start": 48.853,
+            "end": 49.273,
             "keyword": false,
             "confidence": 0.933
           }
@@ -4580,8 +4636,8 @@
       },
       {
         "index": 42,
-        "start": 49.607,
-        "end": 50.957,
+        "start": 49.273,
+        "end": 50.623,
         "lines": [
           1,
           2
@@ -4591,8 +4647,8 @@
             "id": "w0167",
             "text": "dinheiro,",
             "display": "DINHEIRO",
-            "start": 49.607,
-            "end": 50.027,
+            "start": 49.273,
+            "end": 49.693,
             "keyword": false,
             "confidence": 0.9904
           },
@@ -4600,8 +4656,8 @@
             "id": "w0168",
             "text": "ou",
             "display": "OU",
-            "start": 50.347,
-            "end": 50.367,
+            "start": 50.013,
+            "end": 50.033,
             "keyword": false,
             "confidence": 0.7035
           },
@@ -4609,8 +4665,8 @@
             "id": "w0169",
             "text": "tempo,",
             "display": "TEMPO",
-            "start": 50.347,
-            "end": 50.707,
+            "start": 50.013,
+            "end": 50.373,
             "keyword": false,
             "confidence": 0.9728
           }
@@ -4618,18 +4674,18 @@
       },
       {
         "index": 43,
-        "start": 51.067,
-        "end": 52.267,
+        "start": 50.733,
+        "end": 51.4,
         "lines": [
-          3
+          2
         ],
         "words": [
           {
             "id": "w0170",
             "text": "ou",
             "display": "OU",
-            "start": 51.067,
-            "end": 51.207,
+            "start": 50.733,
+            "end": 50.873,
             "keyword": false,
             "confidence": 0.9967
           },
@@ -4637,67 +4693,10 @@
             "id": "w0171",
             "text": "ambos,",
             "display": "AMBOS",
-            "start": 51.207,
-            "end": 51.547,
+            "start": 50.873,
+            "end": 51.213,
             "keyword": false,
             "confidence": 0.9776
-          },
-          {
-            "id": "w0172",
-            "text": "então",
-            "display": "ENTÃO",
-            "start": 51.887,
-            "end": 52.267,
-            "keyword": false,
-            "confidence": 0.9642
-          }
-        ],
-        "y": 0.696,
-        "reason": "acima do texto queimado do autor"
-      },
-      {
-        "index": 44,
-        "start": 52.267,
-        "end": 53.457,
-        "lines": [
-          4
-        ],
-        "words": [
-          {
-            "id": "w0173",
-            "text": "esse",
-            "display": "ESSE",
-            "start": 52.267,
-            "end": 53.027,
-            "keyword": false,
-            "confidence": 0.644
-          },
-          {
-            "id": "w0174",
-            "text": "é",
-            "display": "É",
-            "start": 53.047,
-            "end": 53.127,
-            "keyword": false,
-            "confidence": 0.9465
-          },
-          {
-            "id": "w0175",
-            "text": "o",
-            "display": "O",
-            "start": 53.127,
-            "end": 53.147,
-            "keyword": false,
-            "confidence": 0.7546
-          },
-          {
-            "id": "w0176",
-            "text": "meu",
-            "display": "MEU",
-            "start": 53.147,
-            "end": 53.207,
-            "keyword": false,
-            "confidence": 0.9804
           }
         ],
         "y": 0.696,
@@ -4708,38 +4707,40 @@
       {
         "id": "w0066",
         "text": "se",
-        "start": 0.1,
-        "end": 0.48,
+        "start": 0.127,
+        "end": 0.227,
         "confidence": 0.801,
         "timing": "word",
         "segment": "s01",
+        "timingCorrected": true,
         "refined": true,
-        "srcStart": 26.9,
-        "srcEnd": 27.28,
-        "clipped": false,
-        "retimed": false,
-        "afterCut": false
-      },
-      {
-        "id": "w0067",
-        "text": "você",
-        "start": 0.48,
-        "end": 0.6,
-        "confidence": 0.9967,
-        "timing": "word",
-        "segment": "s01",
-        "refined": true,
-        "srcStart": 27.28,
-        "srcEnd": 27.48,
+        "srcStart": 27.12,
+        "srcEnd": 27.36,
         "clipped": false,
         "retimed": true,
         "afterCut": false
       },
       {
+        "id": "w0067",
+        "text": "você",
+        "start": 0.227,
+        "end": 0.467,
+        "confidence": 0.9967,
+        "timing": "word",
+        "segment": "s01",
+        "timingCorrected": true,
+        "refined": true,
+        "srcStart": 27.36,
+        "srcEnd": 27.6,
+        "clipped": false,
+        "retimed": false,
+        "afterCut": false
+      },
+      {
         "id": "w0068",
         "text": "dev",
-        "start": 0.68,
-        "end": 0.96,
+        "start": 0.347,
+        "end": 0.627,
         "confidence": null,
         "timing": "word",
         "segment": "s01",
@@ -4754,8 +4755,8 @@
       {
         "id": "w0069",
         "text": "não",
-        "start": 0.96,
-        "end": 1.14,
+        "start": 0.627,
+        "end": 0.807,
         "confidence": 0.8049,
         "timing": "word",
         "segment": "s01",
@@ -4769,8 +4770,8 @@
       {
         "id": "w0070",
         "text": "está",
-        "start": 1.14,
-        "end": 1.25,
+        "start": 0.807,
+        "end": 0.917,
         "confidence": 0.5868,
         "timing": "word",
         "segment": "s01",
@@ -4784,8 +4785,8 @@
       {
         "id": "w0071",
         "text": "utilizando,",
-        "start": 1.39,
-        "end": 1.86,
+        "start": 1.057,
+        "end": 1.527,
         "confidence": 0.994,
         "timing": "word",
         "segment": "s01",
@@ -4799,8 +4800,8 @@
       {
         "id": "w0072",
         "text": "você",
-        "start": 1.96,
-        "end": 2.04,
+        "start": 1.627,
+        "end": 1.707,
         "confidence": 0.9497,
         "timing": "word",
         "segment": "s01",
@@ -4814,8 +4815,8 @@
       {
         "id": "w0073",
         "text": "está",
-        "start": 2.11,
-        "end": 2.16,
+        "start": 1.777,
+        "end": 1.827,
         "confidence": 0.8927,
         "timing": "word",
         "segment": "s01",
@@ -4830,8 +4831,8 @@
       {
         "id": "w0074",
         "text": "ficando",
-        "start": 2.26,
-        "end": 2.32,
+        "start": 1.927,
+        "end": 1.987,
         "confidence": 0.8989,
         "timing": "word",
         "segment": "s01",
@@ -4846,8 +4847,8 @@
       {
         "id": "w0075",
         "text": "para",
-        "start": 2.32,
-        "end": 2.44,
+        "start": 1.987,
+        "end": 2.107,
         "confidence": 0.7393,
         "timing": "word",
         "segment": "s01",
@@ -4861,8 +4862,8 @@
       {
         "id": "w0076",
         "text": "trás",
-        "start": 2.44,
-        "end": 2.63,
+        "start": 2.107,
+        "end": 2.297,
         "confidence": 0.9832,
         "timing": "word",
         "segment": "s01",
@@ -4876,8 +4877,8 @@
       {
         "id": "w0022",
         "text": "já",
-        "start": 2.873,
-        "end": 2.973,
+        "start": 2.54,
+        "end": 2.64,
         "confidence": 0.7302,
         "timing": "word",
         "segment": "s02",
@@ -4891,8 +4892,8 @@
       {
         "id": "w0023",
         "text": "é",
-        "start": 2.973,
-        "end": 3.093,
+        "start": 2.64,
+        "end": 2.76,
         "confidence": 0.8718,
         "timing": "word",
         "segment": "s02",
@@ -4906,8 +4907,8 @@
       {
         "id": "w0024",
         "text": "uma",
-        "start": 3.093,
-        "end": 3.123,
+        "start": 2.76,
+        "end": 2.79,
         "confidence": 0.9929,
         "timing": "word",
         "segment": "s02",
@@ -4921,8 +4922,8 @@
       {
         "id": "w0025",
         "text": "realidade,",
-        "start": 3.133,
-        "end": 3.533,
+        "start": 2.8,
+        "end": 3.2,
         "confidence": 0.9968,
         "timing": "word",
         "segment": "s02",
@@ -4936,8 +4937,8 @@
       {
         "id": "w0026",
         "text": "não",
-        "start": 3.673,
-        "end": 3.793,
+        "start": 3.34,
+        "end": 3.46,
         "confidence": 0.6013,
         "timing": "word",
         "segment": "s02",
@@ -4951,8 +4952,8 @@
       {
         "id": "w0027",
         "text": "temos",
-        "start": 3.793,
-        "end": 3.973,
+        "start": 3.46,
+        "end": 3.64,
         "confidence": 0.8595,
         "timing": "word",
         "segment": "s02",
@@ -4966,8 +4967,8 @@
       {
         "id": "w0028",
         "text": "para",
-        "start": 3.973,
-        "end": 4.193,
+        "start": 3.64,
+        "end": 3.86,
         "confidence": 0.5276,
         "timing": "word",
         "segment": "s02",
@@ -4981,8 +4982,8 @@
       {
         "id": "w0029",
         "text": "onde",
-        "start": 4.193,
-        "end": 4.293,
+        "start": 3.86,
+        "end": 3.96,
         "confidence": 0.964,
         "timing": "word",
         "segment": "s02",
@@ -4996,8 +4997,8 @@
       {
         "id": "w0030",
         "text": "fugir",
-        "start": 4.453,
-        "end": 4.703,
+        "start": 4.12,
+        "end": 4.37,
         "confidence": 0.9933,
         "timing": "word",
         "segment": "s02",
@@ -5011,8 +5012,8 @@
       {
         "id": "w0031",
         "text": "Não",
-        "start": 4.903,
-        "end": 5.073,
+        "start": 4.57,
+        "end": 4.74,
         "confidence": 0.5655,
         "timing": "word",
         "segment": "s02",
@@ -5026,8 +5027,8 @@
       {
         "id": "w0032",
         "text": "é",
-        "start": 5.073,
-        "end": 5.313,
+        "start": 4.74,
+        "end": 4.98,
         "confidence": 0.9889,
         "timing": "word",
         "segment": "s02",
@@ -5041,8 +5042,8 @@
       {
         "id": "w0033",
         "text": "mais",
-        "start": 5.313,
-        "end": 6.003,
+        "start": 4.98,
+        "end": 5.67,
         "confidence": 0.9654,
         "timing": "word",
         "segment": "s02",
@@ -5056,8 +5057,8 @@
       {
         "id": "w0034",
         "text": "algo",
-        "start": 6.073,
-        "end": 6.253,
+        "start": 5.74,
+        "end": 5.92,
         "confidence": 0.9762,
         "timing": "word",
         "segment": "s03",
@@ -5071,8 +5072,8 @@
       {
         "id": "w0035",
         "text": "opcional",
-        "start": 6.253,
-        "end": 6.633,
+        "start": 5.92,
+        "end": 6.3,
         "confidence": 0.9846,
         "timing": "word",
         "segment": "s03",
@@ -5086,8 +5087,8 @@
       {
         "id": "w0036",
         "text": "como",
-        "start": 6.633,
-        "end": 6.993,
+        "start": 6.3,
+        "end": 6.66,
         "confidence": 0.9017,
         "timing": "word",
         "segment": "s03",
@@ -5101,8 +5102,8 @@
       {
         "id": "w0037",
         "text": "era",
-        "start": 6.993,
-        "end": 7.293,
+        "start": 6.66,
+        "end": 6.96,
         "confidence": 0.9118,
         "timing": "word",
         "segment": "s03",
@@ -5116,8 +5117,8 @@
       {
         "id": "w0038",
         "text": "ali",
-        "start": 7.293,
-        "end": 7.533,
+        "start": 6.96,
+        "end": 7.2,
         "confidence": 0.5824,
         "timing": "word",
         "segment": "s03",
@@ -5131,8 +5132,8 @@
       {
         "id": "w0039",
         "text": "em",
-        "start": 7.533,
-        "end": 7.633,
+        "start": 7.2,
+        "end": 7.3,
         "confidence": 0.9785,
         "timing": "word",
         "segment": "s03",
@@ -5146,8 +5147,8 @@
       {
         "id": "w0040",
         "text": "2022",
-        "start": 7.653,
-        "end": 8.663,
+        "start": 7.32,
+        "end": 8.33,
         "confidence": 0.982,
         "timing": "word",
         "segment": "s03",
@@ -5161,8 +5162,8 @@
       {
         "id": "w0041",
         "text": "quando",
-        "start": 8.933,
-        "end": 9.613,
+        "start": 8.6,
+        "end": 9.28,
         "confidence": 0.6138,
         "timing": "word",
         "segment": "s03",
@@ -5176,8 +5177,8 @@
       {
         "id": "w0042",
         "text": "o",
-        "start": 9.613,
-        "end": 9.913,
+        "start": 9.28,
+        "end": 9.58,
         "confidence": 0.8293,
         "timing": "word",
         "segment": "s03",
@@ -5191,8 +5192,8 @@
       {
         "id": "w0043",
         "text": "ChatGPT",
-        "start": 9.993,
-        "end": 10.433,
+        "start": 9.66,
+        "end": 10.1,
         "confidence": null,
         "timing": "word",
         "segment": "s03",
@@ -5207,8 +5208,8 @@
       {
         "id": "w0044",
         "text": "surgiu",
-        "start": 10.433,
-        "end": 10.973,
+        "start": 10.1,
+        "end": 10.64,
         "confidence": 0.9831,
         "timing": "word",
         "segment": "s03",
@@ -5222,8 +5223,8 @@
       {
         "id": "w0045",
         "text": "E",
-        "start": 11.207,
-        "end": 11.307,
+        "start": 10.873,
+        "end": 10.973,
         "confidence": 0.329,
         "timing": "word",
         "segment": "s04",
@@ -5237,8 +5238,8 @@
       {
         "id": "w0046",
         "text": "logo",
-        "start": 11.307,
-        "end": 11.447,
+        "start": 10.973,
+        "end": 11.113,
         "confidence": 0.2813,
         "timing": "word",
         "segment": "s04",
@@ -5252,8 +5253,8 @@
       {
         "id": "w0047",
         "text": "após",
-        "start": 11.447,
-        "end": 11.727,
+        "start": 11.113,
+        "end": 11.393,
         "confidence": 0.9668,
         "timing": "word",
         "segment": "s04",
@@ -5267,8 +5268,8 @@
       {
         "id": "w0048",
         "text": "isso",
-        "start": 11.727,
-        "end": 11.867,
+        "start": 11.393,
+        "end": 11.533,
         "confidence": 0.9951,
         "timing": "word",
         "segment": "s04",
@@ -5282,8 +5283,8 @@
       {
         "id": "w0049",
         "text": "vieram",
-        "start": 12.007,
-        "end": 12.267,
+        "start": 11.673,
+        "end": 11.933,
         "confidence": 0.6627,
         "timing": "word",
         "segment": "s04",
@@ -5297,8 +5298,8 @@
       {
         "id": "w0050",
         "text": "outras",
-        "start": 12.267,
-        "end": 12.507,
+        "start": 11.933,
+        "end": 12.173,
         "confidence": 0.8031,
         "timing": "word",
         "segment": "s04",
@@ -5312,8 +5313,8 @@
       {
         "id": "w0051",
         "text": "ferramentas,",
-        "start": 12.507,
-        "end": 12.987,
+        "start": 12.173,
+        "end": 12.653,
         "confidence": 0.9812,
         "timing": "word",
         "segment": "s04",
@@ -5327,8 +5328,8 @@
       {
         "id": "w0052",
         "text": "como",
-        "start": 13.127,
-        "end": 13.187,
+        "start": 12.793,
+        "end": 12.853,
         "confidence": 0.9167,
         "timing": "word",
         "segment": "s04",
@@ -5342,8 +5343,8 @@
       {
         "id": "w0053",
         "text": "o",
-        "start": 13.187,
-        "end": 13.307,
+        "start": 12.853,
+        "end": 12.973,
         "confidence": 0.3049,
         "timing": "word",
         "segment": "s04",
@@ -5357,8 +5358,8 @@
       {
         "id": "w0054",
         "text": "Antigravity,",
-        "start": 13.307,
-        "end": 13.897,
+        "start": 12.973,
+        "end": 13.563,
         "confidence": null,
         "timing": "word",
         "segment": "s04",
@@ -5373,8 +5374,8 @@
       {
         "id": "w0055",
         "text": "Codex,",
-        "start": 14.187,
-        "end": 14.567,
+        "start": 13.853,
+        "end": 14.233,
         "confidence": 0.7591,
         "timing": "word",
         "segment": "s04",
@@ -5388,8 +5389,8 @@
       {
         "id": "w0056",
         "text": "o",
-        "start": 15.017,
-        "end": 15.23,
+        "start": 14.683,
+        "end": 14.896,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s05",
@@ -5404,8 +5405,8 @@
       {
         "id": "w0056.1",
         "text": "próprio",
-        "start": 15.23,
-        "end": 15.497,
+        "start": 14.896,
+        "end": 15.163,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s05",
@@ -5420,8 +5421,8 @@
       {
         "id": "w0056.2",
         "text": "Claude",
-        "start": 15.647,
-        "end": 15.817,
+        "start": 15.313,
+        "end": 15.483,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s05",
@@ -5436,8 +5437,8 @@
       {
         "id": "w0056.3",
         "text": "Code",
-        "start": 15.887,
-        "end": 16.14,
+        "start": 15.553,
+        "end": 15.806,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s05",
@@ -5452,8 +5453,8 @@
       {
         "id": "w0056.4",
         "text": "da",
-        "start": 16.14,
-        "end": 16.437,
+        "start": 15.806,
+        "end": 16.103,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s05",
@@ -5468,8 +5469,8 @@
       {
         "id": "w0056.5",
         "text": "Anthropic",
-        "start": 16.517,
-        "end": 16.657,
+        "start": 16.183,
+        "end": 16.323,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s05",
@@ -5484,8 +5485,8 @@
       {
         "id": "w0077",
         "text": "Mas",
-        "start": 16.87,
-        "end": 17.26,
+        "start": 16.537,
+        "end": 16.927,
         "confidence": 0.0516,
         "timing": "word",
         "segment": "s06",
@@ -5499,8 +5500,8 @@
       {
         "id": "w0078",
         "text": "utilizar",
-        "start": 17.26,
-        "end": 18.06,
+        "start": 16.927,
+        "end": 17.727,
         "confidence": 0.4695,
         "timing": "word",
         "segment": "s06",
@@ -5514,8 +5515,8 @@
       {
         "id": "w0079",
         "text": "IA",
-        "start": 18.06,
-        "end": 18.36,
+        "start": 17.727,
+        "end": 18.027,
         "confidence": null,
         "timing": "word",
         "segment": "s06",
@@ -5530,8 +5531,8 @@
       {
         "id": "w0080",
         "text": "te",
-        "start": 18.36,
-        "end": 18.53,
+        "start": 18.027,
+        "end": 18.197,
         "confidence": 0.084,
         "timing": "word",
         "segment": "s06",
@@ -5545,8 +5546,8 @@
       {
         "id": "w0081",
         "text": "traz",
-        "start": 18.65,
-        "end": 18.8,
+        "start": 18.317,
+        "end": 18.467,
         "confidence": 0.9904,
         "timing": "word",
         "segment": "s06",
@@ -5560,8 +5561,8 @@
       {
         "id": "w0082",
         "text": "muitos",
-        "start": 18.8,
-        "end": 19.26,
+        "start": 18.467,
+        "end": 18.927,
         "confidence": 0.7565,
         "timing": "word",
         "segment": "s06",
@@ -5575,8 +5576,8 @@
       {
         "id": "w0083",
         "text": "benefícios,",
-        "start": 19.26,
-        "end": 20.54,
+        "start": 18.927,
+        "end": 20.207,
         "confidence": 0.9772,
         "timing": "word",
         "segment": "s06",
@@ -5590,8 +5591,8 @@
       {
         "id": "w0084",
         "text": "traz",
-        "start": 20.88,
-        "end": 21.05,
+        "start": 20.547,
+        "end": 20.717,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s07",
@@ -5606,8 +5607,8 @@
       {
         "id": "w0084.1",
         "text": "muitas",
-        "start": 21.05,
-        "end": 21.22,
+        "start": 20.717,
+        "end": 20.887,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s07",
@@ -5622,8 +5623,8 @@
       {
         "id": "w0085",
         "text": "possibilidades,",
-        "start": 21.22,
-        "end": 21.84,
+        "start": 20.887,
+        "end": 21.507,
         "confidence": 0.9981,
         "timing": "word",
         "segment": "s07",
@@ -5637,8 +5638,8 @@
       {
         "id": "w0086",
         "text": "traz",
-        "start": 22.29,
-        "end": 22.51,
+        "start": 21.957,
+        "end": 22.177,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s07",
@@ -5653,8 +5654,8 @@
       {
         "id": "w0086.1",
         "text": "muita",
-        "start": 22.58,
-        "end": 22.88,
+        "start": 22.247,
+        "end": 22.547,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s07",
@@ -5669,8 +5670,8 @@
       {
         "id": "w0087",
         "text": "rapidez",
-        "start": 22.88,
-        "end": 24.48,
+        "start": 22.547,
+        "end": 24.147,
         "confidence": 0.7097,
         "timing": "word",
         "segment": "s07",
@@ -5684,8 +5685,8 @@
       {
         "id": "w0088",
         "text": "nas",
-        "start": 24.48,
-        "end": 24.68,
+        "start": 24.147,
+        "end": 24.347,
         "confidence": 0.9517,
         "timing": "word",
         "segment": "s08",
@@ -5699,8 +5700,8 @@
       {
         "id": "w0089",
         "text": "suas",
-        "start": 24.68,
-        "end": 24.82,
+        "start": 24.347,
+        "end": 24.487,
         "confidence": 0.9722,
         "timing": "word",
         "segment": "s08",
@@ -5714,8 +5715,8 @@
       {
         "id": "w0090",
         "text": "entregas.",
-        "start": 24.82,
-        "end": 25.32,
+        "start": 24.487,
+        "end": 24.987,
         "confidence": 0.9836,
         "timing": "word",
         "segment": "s08",
@@ -5729,8 +5730,8 @@
       {
         "id": "w0091",
         "text": "Você",
-        "start": 25.48,
-        "end": 25.58,
+        "start": 25.147,
+        "end": 25.247,
         "confidence": 0.9791,
         "timing": "word",
         "segment": "s08",
@@ -5744,8 +5745,8 @@
       {
         "id": "w0092",
         "text": "passa",
-        "start": 25.58,
-        "end": 25.78,
+        "start": 25.247,
+        "end": 25.447,
         "confidence": 0.9809,
         "timing": "word",
         "segment": "s08",
@@ -5759,8 +5760,8 @@
       {
         "id": "w0093",
         "text": "a",
-        "start": 25.78,
-        "end": 25.93,
+        "start": 25.447,
+        "end": 25.597,
         "confidence": 0.9852,
         "timing": "word",
         "segment": "s08",
@@ -5774,8 +5775,8 @@
       {
         "id": "w0094",
         "text": "focar",
-        "start": 26.04,
-        "end": 26.32,
+        "start": 25.707,
+        "end": 25.987,
         "confidence": 0.9941,
         "timing": "word",
         "segment": "s08",
@@ -5789,8 +5790,8 @@
       {
         "id": "w0095",
         "text": "não",
-        "start": 26.32,
-        "end": 26.72,
+        "start": 25.987,
+        "end": 26.387,
         "confidence": 0.6492,
         "timing": "word",
         "segment": "s08",
@@ -5804,8 +5805,8 @@
       {
         "id": "w0096",
         "text": "somente",
-        "start": 26.72,
-        "end": 27.06,
+        "start": 26.387,
+        "end": 26.727,
         "confidence": 0.9116,
         "timing": "word",
         "segment": "s09",
@@ -5819,8 +5820,8 @@
       {
         "id": "w0097",
         "text": "em",
-        "start": 27.15,
-        "end": 27.21,
+        "start": 26.817,
+        "end": 26.877,
         "confidence": 0.9883,
         "timing": "word",
         "segment": "s09",
@@ -5834,8 +5835,8 @@
       {
         "id": "w0098",
         "text": "código,",
-        "start": 27.31,
-        "end": 27.5,
+        "start": 26.977,
+        "end": 27.167,
         "confidence": 0.9712,
         "timing": "word",
         "segment": "s09",
@@ -5849,8 +5850,8 @@
       {
         "id": "w0099",
         "text": "mas",
-        "start": 27.74,
-        "end": 27.78,
+        "start": 27.407,
+        "end": 27.447,
         "confidence": 0.9907,
         "timing": "word",
         "segment": "s09",
@@ -5863,8 +5864,8 @@
       {
         "id": "w0100",
         "text": "também",
-        "start": 27.78,
-        "end": 28.08,
+        "start": 27.447,
+        "end": 27.747,
         "confidence": 0.8987,
         "timing": "word",
         "segment": "s09",
@@ -5878,8 +5879,8 @@
       {
         "id": "w0101",
         "text": "na",
-        "start": 28.08,
-        "end": 28.72,
+        "start": 27.747,
+        "end": 28.387,
         "confidence": 0.8661,
         "timing": "word",
         "segment": "s09",
@@ -5893,8 +5894,8 @@
       {
         "id": "w0102",
         "text": "regra",
-        "start": 28.72,
-        "end": 29.44,
+        "start": 28.387,
+        "end": 29.107,
         "confidence": 0.8746,
         "timing": "word",
         "segment": "s09",
@@ -5908,8 +5909,8 @@
       {
         "id": "w0103",
         "text": "de",
-        "start": 29.44,
-        "end": 29.58,
+        "start": 29.107,
+        "end": 29.247,
         "confidence": 0.9795,
         "timing": "word",
         "segment": "s10",
@@ -5923,8 +5924,8 @@
       {
         "id": "w0104",
         "text": "negócio",
-        "start": 29.58,
-        "end": 29.96,
+        "start": 29.247,
+        "end": 29.627,
         "confidence": 0.9267,
         "timing": "word",
         "segment": "s10",
@@ -5938,8 +5939,8 @@
       {
         "id": "w0105",
         "text": "e",
-        "start": 29.96,
-        "end": 30.46,
+        "start": 29.627,
+        "end": 30.127,
         "confidence": 0.5075,
         "timing": "word",
         "segment": "s10",
@@ -5953,8 +5954,8 @@
       {
         "id": "w0106",
         "text": "muito",
-        "start": 30.46,
-        "end": 30.76,
+        "start": 30.127,
+        "end": 30.427,
         "confidence": 0.9261,
         "timing": "word",
         "segment": "s10",
@@ -5968,8 +5969,8 @@
       {
         "id": "w0107",
         "text": "mais",
-        "start": 30.81,
-        "end": 31.04,
+        "start": 30.477,
+        "end": 30.707,
         "confidence": 0.9981,
         "timing": "word",
         "segment": "s10",
@@ -5983,8 +5984,8 @@
       {
         "id": "w0108",
         "text": "do",
-        "start": 31.04,
-        "end": 31.18,
+        "start": 30.707,
+        "end": 30.847,
         "confidence": 0.9763,
         "timing": "word",
         "segment": "s10",
@@ -5998,8 +5999,8 @@
       {
         "id": "w0109",
         "text": "que",
-        "start": 31.3,
-        "end": 31.34,
+        "start": 30.967,
+        "end": 31.007,
         "confidence": 0.9995,
         "timing": "word",
         "segment": "s10",
@@ -6013,8 +6014,8 @@
       {
         "id": "w0110",
         "text": "isso.",
-        "start": 31.34,
-        "end": 31.63,
+        "start": 31.007,
+        "end": 31.297,
         "confidence": 0.9846,
         "timing": "word",
         "segment": "s10",
@@ -6028,8 +6029,8 @@
       {
         "id": "w0111",
         "text": "Você",
-        "start": 32.03,
-        "end": 32.26,
+        "start": 31.697,
+        "end": 31.927,
         "confidence": 0.9867,
         "timing": "word",
         "segment": "s11",
@@ -6043,8 +6044,8 @@
       {
         "id": "w0112",
         "text": "passa",
-        "start": 32.26,
-        "end": 32.56,
+        "start": 31.927,
+        "end": 32.227,
         "confidence": 0.9927,
         "timing": "word",
         "segment": "s11",
@@ -6058,8 +6059,8 @@
       {
         "id": "w0113",
         "text": "a",
-        "start": 32.56,
-        "end": 32.86,
+        "start": 32.227,
+        "end": 32.527,
         "confidence": 0.9904,
         "timing": "word",
         "segment": "s11",
@@ -6073,8 +6074,8 @@
       {
         "id": "w0114",
         "text": "focar",
-        "start": 32.86,
-        "end": 33.2,
+        "start": 32.527,
+        "end": 32.867,
         "confidence": 0.99,
         "timing": "word",
         "segment": "s11",
@@ -6088,8 +6089,8 @@
       {
         "id": "w0115",
         "text": "no",
-        "start": 33.2,
-        "end": 33.46,
+        "start": 32.867,
+        "end": 33.127,
         "confidence": 0.9891,
         "timing": "word",
         "segment": "s11",
@@ -6103,8 +6104,8 @@
       {
         "id": "w0116",
         "text": "produto",
-        "start": 33.46,
-        "end": 33.96,
+        "start": 33.127,
+        "end": 33.627,
         "confidence": 0.9969,
         "timing": "word",
         "segment": "s11",
@@ -6118,8 +6119,8 @@
       {
         "id": "w0117",
         "text": "e",
-        "start": 33.96,
-        "end": 34.18,
+        "start": 33.627,
+        "end": 33.847,
         "confidence": 0.6812,
         "timing": "word",
         "segment": "s11",
@@ -6133,8 +6134,8 @@
       {
         "id": "w0118",
         "text": "não",
-        "start": 34.18,
-        "end": 34.24,
+        "start": 33.847,
+        "end": 33.907,
         "confidence": 0.5359,
         "timing": "word",
         "segment": "s11",
@@ -6148,8 +6149,8 @@
       {
         "id": "w0119",
         "text": "na",
-        "start": 34.24,
-        "end": 34.36,
+        "start": 33.907,
+        "end": 34.027,
         "confidence": 0.9664,
         "timing": "word",
         "segment": "s11",
@@ -6163,8 +6164,8 @@
       {
         "id": "w0120",
         "text": "tecnologia.",
-        "start": 34.36,
-        "end": 34.8,
+        "start": 34.027,
+        "end": 34.467,
         "confidence": 0.9982,
         "timing": "word",
         "segment": "s11",
@@ -6178,8 +6179,8 @@
       {
         "id": "w0121",
         "text": "Nós",
-        "start": 35.26,
-        "end": 35.34,
+        "start": 34.927,
+        "end": 35.007,
         "confidence": 0.8881,
         "timing": "word",
         "segment": "s12",
@@ -6193,8 +6194,8 @@
       {
         "id": "w0122",
         "text": "desenvolvedores",
-        "start": 35.34,
-        "end": 35.86,
+        "start": 35.007,
+        "end": 35.527,
         "confidence": 0.9247,
         "timing": "word",
         "segment": "s12",
@@ -6208,8 +6209,8 @@
       {
         "id": "w0123",
         "text": "geralmente",
-        "start": 35.86,
-        "end": 36.25,
+        "start": 35.527,
+        "end": 35.917,
         "confidence": 0.8962,
         "timing": "word",
         "segment": "s12",
@@ -6223,8 +6224,8 @@
       {
         "id": "w0124",
         "text": "temos",
-        "start": 36.37,
-        "end": 36.44,
+        "start": 36.037,
+        "end": 36.107,
         "confidence": 0.9474,
         "timing": "word",
         "segment": "s12",
@@ -6238,8 +6239,8 @@
       {
         "id": "w0125",
         "text": "esse",
-        "start": 36.44,
-        "end": 36.57,
+        "start": 36.107,
+        "end": 36.237,
         "confidence": 0.942,
         "timing": "word",
         "segment": "s12",
@@ -6253,8 +6254,8 @@
       {
         "id": "w0126",
         "text": "problema",
-        "start": 36.7,
-        "end": 36.94,
+        "start": 36.367,
+        "end": 36.607,
         "confidence": 0.9966,
         "timing": "word",
         "segment": "s12",
@@ -6268,8 +6269,8 @@
       {
         "id": "w0127",
         "text": "de",
-        "start": 36.94,
-        "end": 37.24,
+        "start": 36.607,
+        "end": 36.907,
         "confidence": 0.9352,
         "timing": "word",
         "segment": "s12",
@@ -6283,8 +6284,8 @@
       {
         "id": "w0128",
         "text": "que",
-        "start": 37.24,
-        "end": 38.14,
+        "start": 36.907,
+        "end": 37.807,
         "confidence": 0.7908,
         "timing": "word",
         "segment": "s12",
@@ -6298,8 +6299,8 @@
       {
         "id": "w0129",
         "text": "a",
-        "start": 38.14,
-        "end": 38.6,
+        "start": 37.807,
+        "end": 38.267,
         "confidence": 0.9306,
         "timing": "word",
         "segment": "s13",
@@ -6313,8 +6314,8 @@
       {
         "id": "w0130",
         "text": "gente",
-        "start": 38.61,
-        "end": 38.72,
+        "start": 38.277,
+        "end": 38.387,
         "confidence": 0.9997,
         "timing": "word",
         "segment": "s13",
@@ -6328,8 +6329,8 @@
       {
         "id": "w0131",
         "text": "foca",
-        "start": 38.72,
-        "end": 38.96,
+        "start": 38.387,
+        "end": 38.627,
         "confidence": 0.9701,
         "timing": "word",
         "segment": "s13",
@@ -6343,8 +6344,8 @@
       {
         "id": "w0132",
         "text": "muito",
-        "start": 38.99,
-        "end": 39.16,
+        "start": 38.657,
+        "end": 38.827,
         "confidence": 0.9717,
         "timing": "word",
         "segment": "s13",
@@ -6358,8 +6359,8 @@
       {
         "id": "w0133",
         "text": "na",
-        "start": 39.16,
-        "end": 39.28,
+        "start": 38.827,
+        "end": 38.947,
         "confidence": 0.9454,
         "timing": "word",
         "segment": "s13",
@@ -6373,8 +6374,8 @@
       {
         "id": "w0134",
         "text": "tecnologia",
-        "start": 39.28,
-        "end": 39.76,
+        "start": 38.947,
+        "end": 39.427,
         "confidence": 0.9979,
         "timing": "word",
         "segment": "s13",
@@ -6388,8 +6389,8 @@
       {
         "id": "w0135",
         "text": "e",
-        "start": 39.77,
-        "end": 39.89,
+        "start": 39.437,
+        "end": 39.557,
         "confidence": 0.2452,
         "timing": "word",
         "segment": "s13",
@@ -6403,8 +6404,8 @@
       {
         "id": "w0136",
         "text": "quer",
-        "start": 40.01,
-        "end": 40.08,
+        "start": 39.677,
+        "end": 39.747,
         "confidence": 0.911,
         "timing": "word",
         "segment": "s13",
@@ -6418,8 +6419,8 @@
       {
         "id": "w0137",
         "text": "refinar,",
-        "start": 40.08,
-        "end": 40.42,
+        "start": 39.747,
+        "end": 40.087,
         "confidence": 0.8105,
         "timing": "word",
         "segment": "s13",
@@ -6433,8 +6434,8 @@
       {
         "id": "w0138",
         "text": "refinar,",
-        "start": 40.54,
-        "end": 40.76,
+        "start": 40.207,
+        "end": 40.427,
         "confidence": 0.9768,
         "timing": "word",
         "segment": "s13",
@@ -6448,8 +6449,8 @@
       {
         "id": "w0139",
         "text": "refinar,",
-        "start": 40.86,
-        "end": 41.08,
+        "start": 40.527,
+        "end": 40.747,
         "confidence": 0.9841,
         "timing": "word",
         "segment": "s13",
@@ -6463,8 +6464,8 @@
       {
         "id": "w0140",
         "text": "refinar,",
-        "start": 41.12,
-        "end": 41.38,
+        "start": 40.787,
+        "end": 41.047,
         "confidence": 0.7133,
         "timing": "word",
         "segment": "s13",
@@ -6478,8 +6479,8 @@
       {
         "id": "w0141",
         "text": "mas",
-        "start": 41.68,
-        "end": 41.9,
+        "start": 41.347,
+        "end": 41.567,
         "confidence": 0.3088,
         "timing": "word",
         "segment": "s13",
@@ -6494,8 +6495,8 @@
       {
         "id": "w0142",
         "text": "quando",
-        "start": 42.177,
-        "end": 42.407,
+        "start": 41.843,
+        "end": 42.073,
         "confidence": 0.856,
         "timing": "word",
         "segment": "s14",
@@ -6510,8 +6511,8 @@
       {
         "id": "w0143",
         "text": "pro",
-        "start": 42.407,
-        "end": 42.637,
+        "start": 42.073,
+        "end": 42.303,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s14",
@@ -6526,8 +6527,8 @@
       {
         "id": "w0143.1",
         "text": "próprio",
-        "start": 42.787,
-        "end": 43.02,
+        "start": 42.453,
+        "end": 42.686,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s14",
@@ -6542,8 +6543,8 @@
       {
         "id": "w0143.2",
         "text": "cliente",
-        "start": 43.02,
-        "end": 43.327,
+        "start": 42.686,
+        "end": 42.993,
         "confidence": null,
         "timing": "interpolated",
         "segment": "s14",
@@ -6558,8 +6559,8 @@
       {
         "id": "w0147",
         "text": "aquilo",
-        "start": 43.327,
-        "end": 43.587,
+        "start": 42.993,
+        "end": 43.253,
         "confidence": 0.899,
         "timing": "word",
         "segment": "s14",
@@ -6573,8 +6574,8 @@
       {
         "id": "w0148",
         "text": "não",
-        "start": 43.587,
-        "end": 43.747,
+        "start": 43.253,
+        "end": 43.413,
         "confidence": 0.461,
         "timing": "word",
         "segment": "s14",
@@ -6588,8 +6589,8 @@
       {
         "id": "w0149",
         "text": "é",
-        "start": 43.747,
-        "end": 43.827,
+        "start": 43.413,
+        "end": 43.493,
         "confidence": 0.9543,
         "timing": "word",
         "segment": "s14",
@@ -6603,8 +6604,8 @@
       {
         "id": "w0150",
         "text": "importante",
-        "start": 43.827,
-        "end": 44.227,
+        "start": 43.493,
+        "end": 43.893,
         "confidence": 0.9883,
         "timing": "word",
         "segment": "s14",
@@ -6618,8 +6619,8 @@
       {
         "id": "w0151",
         "text": "porque",
-        "start": 44.227,
-        "end": 44.587,
+        "start": 43.893,
+        "end": 44.253,
         "confidence": 0.8569,
         "timing": "word",
         "segment": "s14",
@@ -6633,8 +6634,8 @@
       {
         "id": "w0152",
         "text": "o",
-        "start": 44.587,
-        "end": 44.667,
+        "start": 44.253,
+        "end": 44.333,
         "confidence": 0.9316,
         "timing": "word",
         "segment": "s14",
@@ -6648,8 +6649,8 @@
       {
         "id": "w0153",
         "text": "que",
-        "start": 44.707,
-        "end": 44.747,
+        "start": 44.373,
+        "end": 44.413,
         "confidence": 0.7702,
         "timing": "word",
         "segment": "s14",
@@ -6662,8 +6663,8 @@
       {
         "id": "w0154",
         "text": "ele",
-        "start": 44.757,
-        "end": 44.907,
+        "start": 44.423,
+        "end": 44.573,
         "confidence": 0.8417,
         "timing": "word",
         "segment": "s14",
@@ -6677,8 +6678,8 @@
       {
         "id": "w0155",
         "text": "quer,",
-        "start": 45.017,
-        "end": 45.147,
+        "start": 44.683,
+        "end": 44.813,
         "confidence": 0.9867,
         "timing": "word",
         "segment": "s14",
@@ -6692,8 +6693,8 @@
       {
         "id": "w0156",
         "text": "o",
-        "start": 45.447,
-        "end": 45.497,
+        "start": 45.113,
+        "end": 45.163,
         "confidence": 0.9671,
         "timing": "word",
         "segment": "s15",
@@ -6707,8 +6708,8 @@
       {
         "id": "w0157",
         "text": "sistema",
-        "start": 45.677,
-        "end": 45.727,
+        "start": 45.343,
+        "end": 45.393,
         "confidence": 0.9925,
         "timing": "word",
         "segment": "s15",
@@ -6722,8 +6723,8 @@
       {
         "id": "w0158",
         "text": "funcionando,",
-        "start": 45.727,
-        "end": 46.357,
+        "start": 45.393,
+        "end": 46.023,
         "confidence": 0.9599,
         "timing": "word",
         "segment": "s15",
@@ -6737,8 +6738,8 @@
       {
         "id": "w0159",
         "text": "ele",
-        "start": 46.567,
-        "end": 46.647,
+        "start": 46.233,
+        "end": 46.313,
         "confidence": 0.937,
         "timing": "word",
         "segment": "s15",
@@ -6752,8 +6753,8 @@
       {
         "id": "w0160",
         "text": "quer",
-        "start": 46.647,
-        "end": 46.827,
+        "start": 46.313,
+        "end": 46.493,
         "confidence": 0.9934,
         "timing": "word",
         "segment": "s15",
@@ -6767,8 +6768,8 @@
       {
         "id": "w0161",
         "text": "que",
-        "start": 46.827,
-        "end": 46.877,
+        "start": 46.493,
+        "end": 46.543,
         "confidence": 0.9132,
         "timing": "word",
         "segment": "s15",
@@ -6782,8 +6783,8 @@
       {
         "id": "w0162",
         "text": "o",
-        "start": 46.947,
-        "end": 47.007,
+        "start": 46.613,
+        "end": 46.673,
         "confidence": 0.95,
         "timing": "word",
         "segment": "s15",
@@ -6797,8 +6798,8 @@
       {
         "id": "w0163",
         "text": "sistema",
-        "start": 47.027,
-        "end": 47.447,
+        "start": 46.693,
+        "end": 47.113,
         "confidence": 0.9988,
         "timing": "word",
         "segment": "s15",
@@ -6812,8 +6813,8 @@
       {
         "id": "w0164",
         "text": "faça",
-        "start": 47.447,
-        "end": 49.107,
+        "start": 47.113,
+        "end": 48.773,
         "confidence": 0.9526,
         "timing": "word",
         "segment": "s15",
@@ -6827,11 +6828,11 @@
       {
         "id": "w0165",
         "text": "ele",
-        "start": 49.107,
-        "end": 49.187,
+        "start": 48.773,
+        "end": 48.853,
         "confidence": 0.667,
         "timing": "word",
-        "segment": "s15",
+        "segment": "s16",
         "refined": true,
         "srcStart": 62.04,
         "srcEnd": 62.12,
@@ -6842,11 +6843,11 @@
       {
         "id": "w0166",
         "text": "economizar",
-        "start": 49.187,
-        "end": 49.607,
+        "start": 48.853,
+        "end": 49.273,
         "confidence": 0.933,
         "timing": "word",
-        "segment": "s15",
+        "segment": "s16",
         "refined": true,
         "srcStart": 62.12,
         "srcEnd": 62.54,
@@ -6857,11 +6858,11 @@
       {
         "id": "w0167",
         "text": "dinheiro,",
-        "start": 49.607,
-        "end": 50.027,
+        "start": 49.273,
+        "end": 49.693,
         "confidence": 0.9904,
         "timing": "word",
-        "segment": "s15",
+        "segment": "s16",
         "refined": true,
         "srcStart": 62.54,
         "srcEnd": 62.96,
@@ -6872,8 +6873,8 @@
       {
         "id": "w0168",
         "text": "ou",
-        "start": 50.347,
-        "end": 50.367,
+        "start": 50.013,
+        "end": 50.033,
         "confidence": 0.7035,
         "timing": "word",
         "segment": "s16",
@@ -6886,8 +6887,8 @@
       {
         "id": "w0169",
         "text": "tempo,",
-        "start": 50.347,
-        "end": 50.707,
+        "start": 50.013,
+        "end": 50.373,
         "confidence": 0.9728,
         "timing": "word",
         "segment": "s16",
@@ -6901,8 +6902,8 @@
       {
         "id": "w0170",
         "text": "ou",
-        "start": 51.067,
-        "end": 51.207,
+        "start": 50.733,
+        "end": 50.873,
         "confidence": 0.9967,
         "timing": "word",
         "segment": "s16",
@@ -6916,8 +6917,8 @@
       {
         "id": "w0171",
         "text": "ambos,",
-        "start": 51.207,
-        "end": 51.547,
+        "start": 50.873,
+        "end": 51.213,
         "confidence": 0.9776,
         "timing": "word",
         "segment": "s16",
@@ -6927,99 +6928,10 @@
         "clipped": false,
         "retimed": false,
         "afterCut": false
-      },
-      {
-        "id": "w0172",
-        "text": "então",
-        "start": 51.887,
-        "end": 52.267,
-        "confidence": 0.9642,
-        "timing": "word",
-        "segment": "s16",
-        "refined": true,
-        "srcStart": 64.82,
-        "srcEnd": 65.2,
-        "clipped": false,
-        "retimed": false,
-        "afterCut": false
-      },
-      {
-        "id": "w0173",
-        "text": "esse",
-        "start": 52.267,
-        "end": 53.027,
-        "confidence": 0.644,
-        "timing": "word",
-        "segment": "s16",
-        "refined": true,
-        "srcStart": 65.2,
-        "srcEnd": 65.98,
-        "clipped": false,
-        "retimed": false,
-        "afterCut": false
-      },
-      {
-        "id": "w0174",
-        "text": "é",
-        "start": 53.047,
-        "end": 53.127,
-        "confidence": 0.9465,
-        "timing": "word",
-        "segment": "s16",
-        "refined": true,
-        "srcStart": 65.98,
-        "srcEnd": 66.06,
-        "clipped": false,
-        "retimed": false,
-        "afterCut": false
-      },
-      {
-        "id": "w0175",
-        "text": "o",
-        "start": 53.127,
-        "end": 53.147,
-        "confidence": 0.7546,
-        "timing": "word",
-        "segment": "s16",
-        "srcStart": 66.06,
-        "srcEnd": 66.08,
-        "clipped": false,
-        "retimed": false,
-        "afterCut": false
-      },
-      {
-        "id": "w0176",
-        "text": "meu",
-        "start": 53.147,
-        "end": 53.207,
-        "confidence": 0.9804,
-        "timing": "word",
-        "segment": "s16",
-        "refined": true,
-        "srcStart": 66.08,
-        "srcEnd": 66.14,
-        "clipped": false,
-        "retimed": false,
-        "afterCut": false
-      },
-      {
-        "id": "w0177",
-        "text": "ruim.",
-        "start": 53.207,
-        "end": 53.347,
-        "confidence": 0.0769,
-        "timing": "word",
-        "segment": "s16",
-        "refined": true,
-        "srcStart": 66.14,
-        "srcEnd": 66.28,
-        "clipped": false,
-        "retimed": false
       }
     ],
     "hiddenWords": [
-      "w0077",
-      "w0177"
+      "w0077"
     ],
     "fontsDir": "fonts"
   },
@@ -7035,11 +6947,11 @@
       },
       "title": "Não é mais opcional",
       "dst": [
-        4.9,
-        11.2
+        4.566667,
+        10.866667
       ],
       "anchor": {
-        "t": 4.903,
+        "t": 4.57,
         "how": "match",
         "word": "w0031",
         "endWordIdx": 20
@@ -7065,27 +6977,27 @@
           "at": {
             "match": "Antigravity"
           },
-          "dst": 13.3
+          "dst": 12.966666666666667
         },
         {
           "at": {
             "match": "Codex"
           },
-          "dst": 14.2
+          "dst": 13.866666666666667
         },
         {
           "at": {
             "match": "Claude Code"
           },
-          "dst": 15.633333333333333
+          "dst": 15.3
         }
       ],
       "dst": [
-        13.3,
-        17.266667
+        12.966667,
+        16.933333
       ],
       "anchor": {
-        "t": 12.007,
+        "t": 11.673,
         "how": "match",
         "word": "w0049",
         "endWordIdx": 38
@@ -7110,21 +7022,21 @@
           "at": {
             "match": "regra de negócio"
           },
-          "dst": 28.733333333333334
+          "dst": 28.4
         },
         {
           "at": {
             "match": "no produto"
           },
-          "dst": 33.2
+          "dst": 32.86666666666667
         }
       ],
       "dst": [
-        28.733333,
-        35.266667
+        28.4,
+        34.933333
       ],
       "anchor": {
-        "t": 28.72,
+        "t": 28.387,
         "how": "match",
         "word": "w0102",
         "endWordIdx": 78
@@ -7149,30 +7061,55 @@
           "at": {
             "match": "dinheiro"
           },
-          "dst": 49.6
+          "dst": 49.266666666666666
         },
         {
           "at": {
             "match": "tempo"
           },
-          "dst": 50.333333333333336
+          "dst": 50
         },
         {
           "at": {
             "match": "ambos"
           },
-          "dst": 51.2
+          "dst": 50.86666666666667
         }
       ],
       "dst": [
-        45.433333,
-        53.466667
+        45.1,
+        51.4
       ],
       "anchor": {
-        "t": 44.587,
+        "t": 44.253,
         "how": "match",
         "word": "w0152",
         "endWordIdx": 127
+      }
+    },
+    {
+      "id": "cta",
+      "kind": "cta",
+      "at": {
+        "match": "ou tempo"
+      },
+      "durationSec": 10,
+      "position": {
+        "y": 0.777
+      },
+      "title": "E VOCÊ, O QUE ACHA?",
+      "style": {
+        "bg": "rgb(18,22,20)"
+      },
+      "dst": [
+        50,
+        51.4
+      ],
+      "anchor": {
+        "t": 50.013,
+        "how": "match",
+        "word": "w0168",
+        "endWordIdx": 143
       }
     }
   ],
@@ -7222,19 +7159,24 @@
   },
   "stats": {
     "sourceSec": 66.401,
-    "outputSec": 53.466667,
-    "removedSec": 12.934,
+    "outputSec": 51.4,
+    "removedSec": 15.001,
     "cuts": 5,
     "zoomCuts": 10,
-    "wordsKept": 153,
-    "wordsRemovedByDecision": 27,
+    "wordsKept": 147,
+    "wordsRemovedByDecision": 33,
     "wordsLostUnexpected": 0
   },
   "opening": {
     "mode": "custom",
     "proposals": [],
     "applied": true,
-    "approval": null
+    "approval": null,
+    "level": {
+      "openingDb": -17.22,
+      "nextDb": -20.55,
+      "gainDb": -2.33
+    }
   },
   "qa": {
     "loudness": {
@@ -7350,8 +7292,8 @@
         18.84
       ],
       "dst": [
-        11.207,
-        11.307
+        10.873,
+        10.973
       ],
       "reason": "baixa confiança no reconhecimento: \"E\" (0.33)",
       "by": "engine"
@@ -7362,8 +7304,8 @@
         18.98
       ],
       "dst": [
-        11.307,
-        11.447
+        10.973,
+        11.113
       ],
       "reason": "baixa confiança no reconhecimento: \"logo\" (0.28)",
       "by": "engine"
@@ -7374,8 +7316,8 @@
         20.84
       ],
       "dst": [
-        13.187,
-        13.307
+        12.853,
+        12.973
       ],
       "reason": "baixa confiança no reconhecimento: \"o\" (0.3)",
       "by": "engine"
@@ -7386,8 +7328,8 @@
         30.06
       ],
       "dst": [
-        16.87,
-        17.26
+        16.537,
+        16.927
       ],
       "reason": "baixa confiança no reconhecimento: \"Mas\" (0.05)",
       "by": "engine"
@@ -7398,8 +7340,8 @@
         30.86
       ],
       "dst": [
-        17.26,
-        18.06
+        16.927,
+        17.727
       ],
       "reason": "baixa confiança no reconhecimento: \"utilizar\" (0.47)",
       "by": "engine"
@@ -7410,8 +7352,8 @@
         31.36
       ],
       "dst": [
-        18.36,
-        18.53
+        18.027,
+        18.197
       ],
       "reason": "baixa confiança no reconhecimento: \"te\" (0.08)",
       "by": "engine"
@@ -7422,8 +7364,8 @@
         52.78
       ],
       "dst": [
-        39.77,
-        39.89
+        39.437,
+        39.557
       ],
       "reason": "baixa confiança no reconhecimento: \"e\" (0.25)",
       "by": "engine"
@@ -7434,8 +7376,8 @@
         54.7
       ],
       "dst": [
-        41.68,
-        41.9
+        41.347,
+        41.567
       ],
       "reason": "baixa confiança no reconhecimento: \"mas\" (0.31)",
       "by": "engine"
@@ -7446,22 +7388,10 @@
         56.68
       ],
       "dst": [
-        43.587,
-        43.747
+        43.253,
+        43.413
       ],
       "reason": "baixa confiança no reconhecimento: \"não\" (0.46)",
-      "by": "engine"
-    },
-    {
-      "src": [
-        66.14,
-        66.28
-      ],
-      "dst": [
-        53.207,
-        53.347
-      ],
-      "reason": "baixa confiança no reconhecimento: \"ruim.\" (0.08)",
       "by": "engine"
     },
     {
@@ -7470,8 +7400,8 @@
         16.09
       ],
       "dst": [
-        7.653,
-        8.663
+        7.32,
+        8.33
       ],
       "reason": "\"2022\" dura 1.01 s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)",
       "by": "engine"
@@ -7482,8 +7412,8 @@
         33.42
       ],
       "dst": [
-        19.26,
-        20.54
+        18.927,
+        20.207
       ],
       "reason": "\"benefícios,\" dura 1.28 s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)",
       "by": "engine"
@@ -7494,8 +7424,8 @@
         37.28
       ],
       "dst": [
-        22.88,
-        24.48
+        22.547,
+        24.147
       ],
       "reason": "\"rapidez\" dura 1.6 s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)",
       "by": "engine"
@@ -7506,8 +7436,8 @@
         62.04
       ],
       "dst": [
-        47.447,
-        49.107
+        47.113,
+        48.773
       ],
       "reason": "\"faça\" dura 1.66 s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)",
       "by": "engine"
@@ -7530,17 +7460,22 @@
       "by": "operator"
     },
     {
-      "what": "excluir 24.68–26.9s",
+      "what": "excluir 24.68–27.12s",
       "why": "muleta de recomeço 'Então, eu gostaria de falar que'; a frase-chave começa em 'se você dev'",
       "by": "operator"
     },
     {
-      "what": "gancho: 26.8–29.57s abre o vídeo",
+      "what": "excluir 64.67–66.4s",
+      "why": "decisão do dono (2026-11-23): termina em 'ou ambos'; a gravação acaba no meio da frase seguinte",
+      "by": "operator"
+    },
+    {
+      "what": "gancho: 27.13–29.57s abre o vídeo",
       "why": "abertura definida no BRIEF (custom)",
       "by": "operator"
     },
     {
-      "what": "1 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s)",
+      "what": "2 borda(s) de corte encaixada(s) em saltos já existentes na fonte (18.4→18.367s, 64.7→64.667s)",
       "why": "evitar quadro órfão/micro-plano junto a emenda do celular",
       "by": "engine"
     },
@@ -7550,17 +7485,22 @@
       "by": "operator"
     },
     {
+      "what": "ênfase (zoom 1) em \"dinheiro ou tempo\" (s16)",
+      "why": "fecho sem punch-in: o card do CTA cobre o texto queimado inteiro e o card do topo não encosta no cabelo",
+      "by": "operator"
+    },
+    {
+      "what": "abertura -2.33 dB (-17.2 → -20.5 dBFS na emenda)",
+      "why": "sem salto de volume entre a abertura movida e a sequência",
+      "by": "engine"
+    },
+    {
       "what": "palavra w0077 sem legenda",
       "why": "'Mas' (confiança 0,05) não se confirma: 4 re-transcrições ouvem hesitação ou nada, e a legenda humana da referência não tem a palavra; áudio mantido, aguarda escuta",
       "by": "operator"
     },
     {
-      "what": "palavra w0177 sem legenda",
-      "why": "última palavra irreconhecível ('ruim', confiança 0,08) sem evidência; não exibir texto não verificado",
-      "by": "operator"
-    },
-    {
-      "what": "7 palavra(s) legendada(s) em linha única (y 0.696) enquanto o texto queimado está na base",
+      "what": "2 palavra(s) legendada(s) em linha única (y 0.696) enquanto o texto queimado está na base",
       "why": "manter a fala legendada sem colidir com o texto do autor",
       "by": "engine"
     }
@@ -7576,9 +7516,9 @@
     "analysisSchema": "motion.reel.analysis",
     "transcriptProvider": "faster-whisper"
   },
-  "hash": "da737e2adcb146693a87ddf12b633df0c0306e5c0f9c9f9e2665ee1f8deaadec",
+  "hash": "3020686b0862078866bcdf997752e9d8e3a18f73a8bf574504584b24442f36e1",
   "brief": {
     "path": "BRIEF.md",
-    "sha256": "a8b3962308f6a8db1bf0756c90c4f12a49773d737b786a298d25eb2e194e9fce"
+    "sha256": "6e8474373a7d80e37d3af5393fa4e5916fd0366ed0b2bfcd551a9b26c99f6e5c"
   }
 }

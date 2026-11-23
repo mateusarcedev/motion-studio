@@ -337,6 +337,31 @@
       "path": "reviews/critic/round-1.seal.json",
       "role": "evidence",
       "required": false
+    },
+    {
+      "path": "reviews/listening.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-2.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-2.seal.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-3.json",
+      "role": "evidence",
+      "required": false
+    },
+    {
+      "path": "reviews/critic/round-3.seal.json",
+      "role": "evidence",
+      "required": false
     }
   ],
   "fonts": [
