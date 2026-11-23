@@ -224,7 +224,11 @@ describe("Timeline, cortes e legendas", () => {
   test("legendas: paginação, linhas equilibradas, posição fora de olhos/boca e da UI do app", () => {
     const words = "você passa a focar não somente em código".split(" ").map((text, i) => ({ id: `w${i}`, text, start: i * 0.3, end: i * 0.3 + 0.25 }));
     const pages = R.buildPages(words, { maxWordsPerPage: 3 });
-    assert.ok(pages.every((p) => p.words.length <= 3));
+    assert.ok(pages.every((p) => p.words.length <= 5), "até 3 palavras; até 5 só para fundir páginas-relâmpago");
+    assert.ok(pages.slice(0, -1).every((p) => !["a", "em", "de", "e", "o"].includes(p.words.at(-1).text)), pages.map((p) => p.words.map((w) => w.text).join(" ")).join(" / "));
+    assert.ok(pages.every((p) => p.end - p.start >= 0.6), "sem páginas-relâmpago");
+    const slow = "uma frase falada devagar com pausas".split(" ").map((text, i) => ({ id: `s${i}`, text, start: i * 0.9, end: i * 0.9 + 0.7 }));
+    assert.ok(R.buildPages(slow, { maxWordsPerPage: 3 }).every((p) => p.words.length <= 3), "fala lenta não é fundida");
     assert.ok(pages.every((p, i) => !i || p.start >= pages[i - 1].end));
     assert.deepEqual(R.balanceLines(["NÃO", "SOMENTE", "EM"], 10, 2), [1, 2]);
     const pl = R.placeCaptions({ width: 1080, height: 1920, faceBox: { x: 0.18, y: 0.31, w: 0.62, h: 0.5 } });

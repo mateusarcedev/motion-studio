@@ -299,6 +299,19 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   // slivers (shorter than minSegment) survive only if they hold most of a recognized word
   const holdsWord = ([a, b]) => refineWordTiming(words, speech).some((w) => Math.min(b, w.end) - Math.max(a, w.start) >= 0.6 * Math.max(0.02, w.end - w.start));
   ranges = union(ranges).filter(([a, b]) => b - a >= Math.max(2 / fps, cut.minSegment) || (words.length ? holdsWord([a, b]) : speechish.some(([x, y]) => y > a && x < b)));
+  // no micro-shots: a kept range shorter than minShotSec that sits next to a short removed
+  // pause absorbs the pause instead (the cut would cost more rhythm than the pause it saves)
+  const minShot = (P.zoom?.minShotSec ?? 0.7);
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 0; i < ranges.length; i++) {
+      const [a, b] = ranges[i];
+      if (b - a >= minShot) continue;
+      const prevGap = i > 0 ? a - ranges[i - 1][1] : Infinity, nextGap = i + 1 < ranges.length ? ranges[i + 1][0] - b : Infinity;
+      const decidedIn = (x, y) => removals.some((r) => !["pause", "leading-silence", "trailing-silence"].includes(r.reason) && r.src[1] > x + 1e-3 && r.src[0] < y - 1e-3);
+      if (prevGap <= nextGap && prevGap < 0.8 && !decidedIn(ranges[i - 1][1], a)) { ranges[i - 1][1] = b; ranges.splice(i, 1); i--; }
+      else if (nextGap < 0.8 && !decidedIn(b, ranges[i + 1][0])) { ranges[i + 1][0] = a; ranges.splice(i, 1); i--; }
+    }
+  }
   if (hookRange) ranges.unshift(toGrid(hookRange));
   if (!ranges.length) throw reelError(REEL_ERRORS.INPUT_INVALID, "Nenhum trecho com fala foi encontrado para manter.", { hint: "Confira se o áudio tem fala audível ou ajuste --cut." });
 
@@ -307,6 +320,14 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   const zoomCfg = { ...P.zoom, ...(opt.zoom ?? {}) };
   const faceBox = opt.faceBox ?? P.faceBox ?? null;
   const refinedWords = refineWordTiming(words, speech);
+  // emphasis spans (phrase → until phrase) stay in one shot
+  const emphasisSpans = (opt.emphasis ?? []).map((e) => {
+    const i = findPhrase(refinedWords, e.match);
+    if (i < 0) return null;
+    let j = i + String(e.match).split(/\s+/).length - 1;
+    if (e.until) { const k = findPhrase(refinedWords, e.until, i); if (k >= 0) j = k + String(e.until).split(/\s+/).length - 1; }
+    return { ...e, src: [refinedWords[i].start, refinedWords[Math.min(j, refinedWords.length - 1)].end] };
+  }).filter(Boolean);
   const pieces = [];
   ranges.forEach(([a, b], i) => {
     const isHook = Boolean(hookRange) && i === 0;
@@ -318,7 +339,9 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       // pauses and punctuation are preferred
       const gap = Math.max(0, inside[k + 1].start - inside[k].end);
       const punct = /[,.;:!?]$/.test(inside[k].text);
-      cands.push({ t: Math.round(((inside[k].end + inside[k + 1].start) / 2) * fps) / fps, score: gap + (punct ? 0.3 : 0) });
+      const t = Math.round(((inside[k].end + inside[k + 1].start) / 2) * fps) / fps;
+      if (emphasisSpans.some((e) => t > e.src[0] - 0.05 && t < e.src[1] + 0.15)) continue;
+      cands.push({ t, score: gap + (punct ? 0.3 : 0) });
     }
     let start = a;
     while (b - start > zoomCfg.maxShotSec) {
@@ -349,11 +372,11 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   }
   // operator emphasis: [{match:"ficando para trás", zoom:1.2}] sets the zoom of the shot holding that phrase
   for (const e of opt.emphasis ?? []) {
-    const idx = findPhrase(refinedWords, e.match);
-    if (idx < 0) { warnings.push(`Ênfase "${e.match}" não encontrada na transcrição.`); continue; }
-    const t = refinedWords[idx].start;
-    const seg = segments.find((s) => t >= s.src[0] && t < s.src[1]);
-    if (seg) { seg.zoom.from = seg.zoom.to = e.zoom; seg.emphasis = e.match; decisions.push({ what: `ênfase (zoom ${e.zoom}) em "${e.match}"`, why: e.why ?? "frase-chave", by: "operator" }); }
+    const span = emphasisSpans.find((x) => x.match === e.match);
+    if (!span) { warnings.push(`Ênfase "${e.match}" não encontrada na transcrição.`); continue; }
+    const segs = segments.filter((s) => s.src[1] > span.src[0] + 0.02 && s.src[0] < span.src[1] - 0.02);
+    for (const seg of segs) { seg.zoom.from = seg.zoom.to = e.zoom; seg.emphasis = e.match; }
+    if (segs.length) decisions.push({ what: `ênfase (zoom ${e.zoom}) em "${e.match}${e.until ? ` … ${e.until}` : ""}" (${segs.map((x) => x.id).join(", ")})`, why: e.why ?? "frase-chave", by: "operator" });
   }
   const frames = totalFrames(segments);
   const outDur = round(frames / fps, 6);
@@ -374,7 +397,19 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   const capStyle = { ...DEFAULT_CAPTION_STYLE, ...P.captions, ...(opt.captions ?? {}), keywords: opt.keywords ?? opt.captions?.keywords ?? [] };
   const width = opt.output?.width ?? 1080, height = opt.output?.height ?? 1920;
   const placement = placeCaptions({ width, height, faceBox, platform: capStyle.platform, lines: capStyle.maxLines, fontSize: capStyle.fontSize, override: opt.captions?.position });
-  const pages = dstWords.length ? buildPages(dstWords, capStyle) : [];
+  // Text already burned into the source (phone app titles, creator CTA): map to dst. Captions
+  // in the same screen half and every card stay clear while it is visible.
+  const burned = [];
+  for (const b of opt.burnedText ?? []) {
+    for (const s of segments) {
+      const a = Math.max(b.src[0], s.src[0]), e = Math.min(b.src[1], s.src[1]);
+      if (e - a > 1 / fps) burned.push({ ...b, dst: [round(s.dst[0] + (a - s.src[0]), 3), round(s.dst[0] + (e - s.src[0]), 3)] });
+    }
+  }
+  const capWords = burned.length ? dstWords.filter((w) => !burned.some((b) => (b.region ?? "bottom") === "bottom" && w.end > b.dst[0] && w.start < b.dst[1])) : dstWords;
+  if (capWords.length < dstWords.length) decisions.push({ what: `${dstWords.length - capWords.length} palavra(s) sem legenda enquanto o texto queimado da fonte está visível`, why: "não colidir com texto do autor já presente no vídeo", by: "engine" });
+  const pages = capWords.length ? buildPages(capWords, capStyle) : [];
+  for (const b of burned) for (const p of pages) if (p.end > b.dst[0] && p.start < b.dst[0]) p.end = round(b.dst[0], 3);
 
   // overlays (cards/titles/CTA) anchored to words
   const overlays = [];
@@ -391,6 +426,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     overlays.push({ ...o, id: o.id ?? `ov${String(i + 1).padStart(2, "0")}`, dst: [round(start, 6), round(end, 6)], anchor, steps: steps.length ? steps : undefined });
   }
 
+  for (const b of burned) for (const o of overlays) if ((b.region ?? "bottom") === (o.region ?? "top") && o.dst[1] > b.dst[0] && o.dst[0] < b.dst[0]) { o.dst[1] = Math.round(b.dst[0] * fps) / fps; warnings.push(`Card ${o.id} encerrado antes do texto queimado "${b.text ?? ""}".`); }
   overlays.sort((a, b) => a.dst[0] - b.dst[0]);
   for (let i = 1; i < overlays.length; i++) {
     const prev = overlays[i - 1], cur = overlays[i];
@@ -407,6 +443,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     preset,
     source: { path: path.resolve(sourcePath), sha256, bytes: probe.bytes, durationSec: dur, probe: { video: probe.video, audio: probe.audio, container: probe.container } },
     output: { width, height, fps, durationSec: outDur, frames, aspect: `${width}:${height}` },
+    burnedText: burned,
     framing: { faceBox, faceBoxSource: opt.faceBox ? (opt.faceBoxSource ?? "operator") : P.faceBox ? "preset-default" : null, reframe: "cover" },
     segments,
     removed: union(removals.map((r) => r.src)).length ? removals.map((r) => ({ ...r, src: [round(Math.max(0, r.src[0]), 3), round(Math.min(dur, r.src[1]), 3)] })) : [],

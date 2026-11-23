@@ -23,17 +23,21 @@ export const DEFAULT_OVERLAY_STYLE = Object.freeze({
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 function cardBody(o, step, st) {
-  const chip = (t, on) => `<span class="chip${on ? " on" : ""}">${esc(t)}</span>`;
+  // progressive states reserve the final layout (hidden items keep their space), so a
+  // cross-fade between states never shows two card outlines of different sizes
+  const chip = (t, on, hidden) => `<span class="chip${on ? " on" : ""}"${hidden ? ' style="visibility:hidden"' : ""}>${esc(t)}</span>`;
+  const shown = (i) => step === null || i <= step;
   switch (o.kind) {
     case "title":
       return `<div class="title">${(o.lines ?? []).map((l) => `<div class="tl${l.accent ? " acc" : ""}">${esc(l.text)}</div>`).join("")}</div>`;
     case "label": {
-      const chips = (o.chips ?? []).slice(0, step === null ? undefined : step + 1); // step -1 → empty state
-      return `${o.eyebrow ? `<div class="eyebrow"><i></i>${esc(o.eyebrow)}</div>` : ""}${o.title ? `<div class="ct">${o.strike ? `<s>${esc(o.strike)}</s>` : ""}${esc(o.title)}</div>` : ""}${chips.length ? `<div class="chips">${chips.map((c, i) => chip(c, i === chips.length - 1 && step !== null)).join("")}</div>` : ""}`;
+      const chips = o.chips ?? []; // step -1 → empty state (all hidden)
+      return `${o.eyebrow ? `<div class="eyebrow"><i></i>${esc(o.eyebrow)}</div>` : ""}${o.title ? `<div class="ct">${o.strike ? `<s>${esc(o.strike)}</s>` : ""}${esc(o.title)}</div>` : ""}${chips.length ? `<div class="chips">${chips.map((c, i) => chip(c, step !== null && i === step, !shown(i))).join("")}</div>` : ""}`;
     }
     case "list": {
-      const items = (o.items ?? []).slice(0, step === null ? undefined : step + 1);
-      return `${o.eyebrow ? `<div class="eyebrow"><i></i>${esc(o.eyebrow)}</div>` : ""}<div class="list">${items.map((t, i) => `<div class="li${i === items.length - 1 ? " on" : ""}"><b>${i + 1}</b>${esc(t)}</div>`).join("")}</div>`;
+      const items = o.items ?? [];
+      const active = step === null ? items.length - 1 : step;
+      return `${o.eyebrow ? `<div class="eyebrow"><i></i>${esc(o.eyebrow)}</div>` : ""}<div class="list">${items.map((t, i) => `<div class="li${i === active ? " on" : ""}"${shown(i) ? "" : ' style="visibility:hidden"'}><b>${i + 1}</b>${esc(t)}</div>`).join("")}</div>`;
     }
     case "cta":
       return `<div class="cta"><div class="ct big acc">${esc(o.title)}</div>${o.subtitle ? `<div class="sub">${esc(o.subtitle)}</div>` : ""}${o.footer ? `<div class="foot">${esc(o.footer)}</div>` : ""}</div>`;
@@ -50,21 +54,21 @@ export function overlayHtml(o, { width, height, style: styleIn = {}, step = null
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 ${fontCss}
 html,body{margin:0;width:${width}px;height:${height}px;background:transparent;overflow:hidden}
-.card{position:absolute;left:50%;top:${y}px;transform:translateX(-50%);max-width:${Math.round(s.maxWidth * width)}px;box-sizing:border-box;
+.card{position:absolute;left:0;right:0;margin:0 auto;width:max-content;top:${y}px;max-width:${Math.round(s.maxWidth * width)}px;box-sizing:border-box;
   background:${s.bg};border:${2 * scale}px solid ${s.border};border-radius:${s.radius * scale}px;padding:${26 * scale}px ${34 * scale}px;box-shadow:${s.shadow};
   font-family:'${s.fontFamily}',system-ui,sans-serif;color:${s.text};-webkit-font-smoothing:antialiased}
-.eyebrow{font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${28 * scale}px;color:${s.muted};display:flex;align-items:center;gap:${12 * scale}px;margin-bottom:${14 * scale}px;letter-spacing:.01em}
+.eyebrow{white-space:nowrap;font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${32 * scale}px;color:${s.muted};display:flex;align-items:center;gap:${12 * scale}px;margin-bottom:${14 * scale}px;letter-spacing:.01em}
 .eyebrow i{width:${10 * scale}px;height:${10 * scale}px;border-radius:50%;background:${s.accent};display:inline-block}
 .ct{font-weight:700;font-size:${46 * scale}px;line-height:1.12;letter-spacing:-.01em}
 .ct s{color:${s.muted};text-decoration-color:${s.accent};text-decoration-thickness:${4 * scale}px;margin-right:${14 * scale}px}
 .big{font-size:${58 * scale}px}.acc{color:${s.accent}}
 .title{text-align:center}.tl{font-weight:800;font-size:${64 * scale}px;line-height:1.08;letter-spacing:-.015em;text-transform:uppercase}
 .chips{display:flex;flex-wrap:wrap;gap:${12 * scale}px;margin-top:${4 * scale}px}
-.chip{font-family:'${s.monoFamily}',ui-monospace,monospace;font-weight:700;font-size:${28 * scale}px;padding:${8 * scale}px ${16 * scale}px;border-radius:${10 * scale}px;background:rgba(255,255,255,.07);border:${2 * scale}px solid rgba(255,255,255,.12)}
+.chip{font-family:'${s.monoFamily}',ui-monospace,monospace;font-weight:700;font-size:${32 * scale}px;padding:${8 * scale}px ${16 * scale}px;border-radius:${10 * scale}px;background:rgba(255,255,255,.07);border:${2 * scale}px solid rgba(255,255,255,.12)}
 .chip.on{background:${s.accent};color:${s.accentInk};border-color:${s.accent}}
 .list{display:flex;flex-direction:column;gap:${12 * scale}px}
 .li{display:flex;align-items:center;gap:${16 * scale}px;font-weight:700;font-size:${40 * scale}px;color:rgba(255,255,255,.62)}
-.li b{font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${24 * scale}px;width:${42 * scale}px;height:${42 * scale}px;border-radius:${10 * scale}px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:${s.muted}}
+.li b{font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${28 * scale}px;width:${42 * scale}px;height:${42 * scale}px;border-radius:${10 * scale}px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:${s.muted}}
 .li.on{color:${s.text}}.li.on b{background:${s.accent};color:${s.accentInk}}
 .cta{text-align:center}.sub{font-weight:700;font-size:${36 * scale}px;margin-top:${8 * scale}px}.foot{font-family:'${s.monoFamily}',ui-monospace,monospace;font-size:${24 * scale}px;color:${s.muted};margin-top:${14 * scale}px}
 </style></head><body><div class="card" data-kind="${esc(o.kind)}">${cardBody(o, step, s)}</div></body></html>`;

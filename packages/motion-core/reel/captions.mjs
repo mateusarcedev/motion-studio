@@ -14,10 +14,12 @@ import { srtTime, toSrt } from "./stt/index.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 export const DEFAULT_CAPTION_STYLE = Object.freeze({
-  fontFamily: "Inter", fontWeight: 700, fontSize: 74, uppercase: true,
+  fontFamily: "Inter", fontWeight: 700, fontSize: 96, uppercase: true,
   color: "#FFFFFF", activeColor: "#2EE6A6", keywordColor: "#2EE6A6",
-  outlineColor: "#000000", outlineWidth: 5, shadow: 2, shadowColor: "#000000",
-  maxWordsPerPage: 3, maxCharsPerLine: 14, maxLines: 2, minPageSec: 0.45, maxGapSec: 0.45,
+  outlineColor: "#000000", outlineWidth: 6, shadow: 2, shadowColor: "#000000",
+  maxWordsPerPage: 3, maxCharsPerLine: 14, maxLines: 2, minPageSec: 0.65, maxGapSec: 0.45,
+  // libass metrics measured for Inter 700: cap height ≈ 0.567 × size, mean uppercase advance ≈ 0.466 em
+  advanceEm: 0.47,
   holdSec: 0.25, punctuation: "minimal", animation: "pop", keywords: [],
   platform: "instagram-reels",
 });
@@ -41,22 +43,45 @@ export function displayWord(text, style) {
  * Groups words into caption pages: break on long gaps, sentence punctuation, word/char
  * budgets. Lines are balanced inside a page.
  */
+const FUNCTION_WORDS = new Set(["e", "o", "a", "os", "as", "de", "do", "da", "dos", "das", "que", "se", "em", "no", "na", "nos", "nas", "um", "uma", "pra", "para", "por", "com", "ao", "mas", "ou", "como", "quando", "porque", "the", "a", "of", "and", "to", "in"]);
+const isFunctionWord = (t) => FUNCTION_WORDS.has(normalizeWord(t));
+
 export function buildPages(words, styleIn = {}) {
   const style = { ...DEFAULT_CAPTION_STYLE, ...styleIn };
-  const pages = [];
-  let cur = [];
+  const usable = words.filter((w) => !w.suspect); // suspected hallucination never becomes a caption
   const chars = (ws) => ws.map((w) => displayWord(w.text, style)).join(" ").length;
-  const flush = () => { if (cur.length) pages.push(cur); cur = []; };
-  for (let i = 0; i < words.length; i++) {
-    const w = words[i];
-    if (w.suspect) continue; // suspected hallucination never becomes a caption
+  const budget = style.maxCharsPerLine * style.maxLines;
+  let groups = [];
+  let cur = [];
+  for (const w of usable) {
     const prev = cur.at(-1);
     const gap = prev ? w.start - prev.end : 0;
-    const budget = style.maxCharsPerLine * style.maxLines;
-    if (cur.length && (gap > style.maxGapSec || cur.length >= style.maxWordsPerPage || chars([...cur, w]) > budget || /[.!?…]$/u.test(prev.text))) flush();
+    const full = cur.length >= style.maxWordsPerPage || chars([...cur, w]) > budget;
+    const sentenceEnd = prev && /[.!?…]$/u.test(prev.text);
+    const clauseEnd = prev && /[,;:]$/u.test(prev.text) && cur.length >= 2;
+    if (cur.length && (gap > style.maxGapSec || full || sentenceEnd || clauseEnd)) {
+      // never end a page on a dangling function word ("… SURGIU E"): carry it to the next page
+      let carry = [];
+      if (full && !sentenceEnd && !clauseEnd && gap <= style.maxGapSec) while (cur.length > 1 && isFunctionWord(cur.at(-1).text)) carry.unshift(cur.pop());
+      groups.push(cur);
+      cur = carry;
+    }
     cur.push(w);
   }
-  flush();
+  if (cur.length) groups.push(cur);
+  // flash pages (< minPageSec of speech) merge with a neighbour when the budget allows
+  const dur = (g) => g.at(-1).end - g[0].start;
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 0; i < groups.length; i++) {
+      const g = groups[i];
+      if (dur(g) >= style.minPageSec) continue;
+      const fits = (a, b) => a.length + b.length <= style.maxWordsPerPage + 2 && chars([...a, ...b]) <= budget && b[0].start - a.at(-1).end <= style.maxGapSec;
+      const next = groups[i + 1], prev = groups[i - 1];
+      if (next && fits(g, next) && !/[.!?…]$/u.test(g.at(-1).text)) { groups.splice(i, 2, [...g, ...next]); i--; }
+      else if (prev && fits(prev, g) && !/[.!?…]$/u.test(prev.at(-1).text)) { groups.splice(i - 1, 2, [...prev, ...g]); i -= 2; }
+    }
+  }
+  const pages = groups;
   const kw = new Set((style.keywords ?? []).map(normalizeWord));
   return pages.map((ws, i) => {
     const next = pages[i + 1];
@@ -65,9 +90,9 @@ export function buildPages(words, styleIn = {}) {
     if (next) end = Math.min(end, next[0].start);
     end = Math.max(end, start + style.minPageSec);
     if (next) end = Math.min(end, next[0].start);
+    const lines = balanceLines(ws.map((w) => displayWord(w.text, style)), style.maxCharsPerLine, style.maxLines);
     return {
-      index: i, start: round(start), end: round(end),
-      lines: balanceLines(ws.map((w) => displayWord(w.text, style)), style.maxCharsPerLine, style.maxLines),
+      index: i, start: round(start), end: round(end), lines,
       words: ws.map((w) => ({ id: w.id, text: w.text, display: displayWord(w.text, style), start: w.start, end: w.end, keyword: kw.has(normalizeWord(w.text)), confidence: w.confidence ?? null })),
     };
   });
@@ -89,10 +114,10 @@ export function balanceLines(tokens, maxChars, maxLines) {
  * Vertical placement (0..1, block centre). Avoids the eyes→mouth band of the face box and
  * stays inside the platform's safe area (above bottom UI, left of side controls).
  */
-export function placeCaptions({ width, height, faceBox = null, platform = "instagram-reels", lines = 2, fontSize = 74, override = null }) {
+export function placeCaptions({ width, height, faceBox = null, platform = "instagram-reels", lines = 2, fontSize = 96, override = null }) {
   const sz = loadSafeZonePreset(platform);
   const top = sz.margins.top / 100, bottom = 1 - sz.margins.bottom / 100;
-  const blockH = (lines * fontSize * 1.18) / height;
+  const blockH = (lines * fontSize * 0.95) / height; // libass line height ≈ 0.95 × size for Inter
   const reserved = sz.reservedRegions.map((r) => ({ ...r, x0: r.x / 100, x1: (r.x + r.width) / 100, y0: r.y / 100, y1: (r.y + r.height) / 100 }));
   const side = reserved.filter((r) => r.x0 > 0.5).reduce((m, r) => Math.min(m, r.x0), 1 - sz.margins.right / 100);
   const maxWidthPx = Math.floor(2 * (side - 0.5) * width) - 16;
@@ -151,7 +176,13 @@ export function buildAss(pages, { width, height, styleIn = {}, placement }) {
         }
         return parts.join(" ");
       });
-      const intro = i === 0 && s.animation === "pop" ? "\\fscx86\\fscy86\\t(0,90,\\fscx100\\fscy100)\\fad(60,0)" : "";
+      // auto-fit: a long word must never push the page into the side controls
+      let k2 = 0;
+      const longest = Math.max(...p.lines.map((n) => { const t = words.slice(k2, k2 + n).map((w) => w.display).join(" "); k2 += n; return t.length; }));
+      const estW = longest * s.advanceEm * s.fontSize + 2 * s.outlineWidth;
+      const fit = placement.maxWidthPx && estW > placement.maxWidthPx ? Math.floor((placement.maxWidthPx / estW) * 100) : 100;
+      const base = fit < 100 ? `\\fscx${fit}\\fscy${fit}` : "";
+      const intro = i === 0 && s.animation === "pop" ? `\\fscx${Math.round(fit * 0.86)}\\fscy${Math.round(fit * 0.86)}\\t(0,90,\\fscx${fit}\\fscy${fit})\\fad(60,0)` : base;
       events.push(`Dialogue: 0,${assTime(st)},${assTime(en)},Caption,,0,0,0,,{\\an5\\pos(${x},${y})${intro}}${lineTexts.join("\\N")}`);
     }
   }
