@@ -8,11 +8,16 @@ O histórico de instalação e descoberta continua em `AGENT_COMPATIBILITY.md`.
 | Cliente | Versão | CLI | MCP `motion mcp` (stdio) | Evidência |
 |---|---|---|---|---|
 | Claude Code | 2.1.330 | funcionou | funcionou | CLI pela sessão da missão; MCP por `claude -p --strict-mcp-config`: 5 etapas, QA WARN (43 PASS, 1 WARN, 0 FAIL, 3 NOT_TESTED), 22 turnos, US$ 0,49 |
-| Codex CLI | 0.171.0 | não testado | não testado | execução não autorizada pelo dono (consome cota) |
-| OpenCode | 2.2.5 | não testado | não testado | idem |
-| Antigravity (`agy`) | não lida | não testado | não testado | idem |
+| Codex CLI | 0.171.0 | funcionou* | funcionou | 1 execução, sandbox `workspace-write`; MCP: QA WARN (43 PASS, 1 WARN, 0 FAIL, 3 NOT_TESTED). Consumo: 936.317 tokens de entrada (889.856 em cache), 3.530 de saída |
+| OpenCode | 2.2.5 | funcionou | funcionou | 1 execução; mesmo QA. Consumo informado: 40.070 de entrada, 1.673 de saída, custo 0. MCP declarado com `opencode mcp add` (o formato v2 usa `mcp.servers`; o formato antigo `mcp.motion` não é lido) |
+| Antigravity (`agy`) | 1.5.14 | funcionou | funcionou | 1 execução, 362 s; mesmo QA. Consumo: 83.327 de entrada, 14.535 de saída, 749.375 de cache. Só leu o MCP da configuração global (`agy mcp add`), não de `.agents/mcp_config.json`; a configuração foi restaurada |
 | Gemini CLI | — | não testado | não testado | não instalado |
 | Harness dos testes | Node 24.16 | funcionou | funcionou | `tests/mcp_parity.test.mjs`: mesma timeline, quadros e veredito nos dois caminhos |
+
+\* O Codex relatou não ter capturado a saída do comando ("no output or completion status captured"), mas os
+arquivos provam que o fluxo terminou: `qa.json` com WARN (43 PASS, 1 WARN, 0 FAIL, 3 NOT_TESTED).
+
+As execuções de Codex, OpenCode e Antigravity foram autorizadas pelo dono: uma por cliente, só fixture sintética.
 
 ## Só funciona com servidor local
 
@@ -44,5 +49,6 @@ act workflow_dispatch -j determinism -P ubuntu-24.04=catthehacker/ubuntu:act-24.
 act workflow_dispatch -j test --matrix node:22 -P ubuntu-24.04=catthehacker/ubuntu:act-24.04
 ```
 
-Os testes de transcrição real são pulados e listados (o CI não baixa modelo). GitHub Actions: `NOT_TESTED`
-até o primeiro push.
+Os testes de transcrição real são pulados e listados (o CI não baixa modelo). Resultado em 2026-11-23, commit
+`70a9e4b`: Node 20, 22 e 24 com 268 aprovados, 0 falhos e 2 pulados; determinismo PASS. GitHub Actions:
+`NOT_TESTED` até o primeiro push.
