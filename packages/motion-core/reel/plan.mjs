@@ -224,9 +224,10 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   if (transcript && words.length) for (const r of findRestarts(transcript, words)) review.push({ src: r.first, reason: `possível recomeço: "${r.opening}…" também começa em ${r.later[0]}s — avalie excluir uma das tomadas`, by: "engine" });
 
   // operator ranges
-  for (const [a, b] of opt.exclude ?? []) {
-    const [s, e] = words.length ? snapRangeToWords(a, b, words, { padBefore: 0, padAfter: 0 }) : [a, b];
-    removals.push({ src: [s, e], reason: "operator", confidence: 1, requested: [a, b] });
+  for (const [a, b, how] of opt.exclude ?? []) {
+    // "exact": the operator measured the boundary (a weak /s/ has little broadband energy)
+    const [s, e] = words.length && how !== "exact" ? snapRangeToWords(a, b, words, { padBefore: 0, padAfter: 0 }) : [a, b];
+    removals.push({ src: [s, e], reason: "operator", confidence: 1, requested: [a, b], ...(how === "exact" ? { exact: true } : {}) });
     decisions.push({ what: `excluir ${round(s, 2)}–${round(e, 2)}s`, why: opt.excludeReasons?.[`${a}-${b}`] ?? "decisão do operador", by: "operator" });
   }
 
@@ -242,7 +243,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       for (let i = Math.max(0, Math.round((t - cut.quietestWindowSec) * 100)); i <= Math.min(env.length - 1, Math.round((t + cut.quietestWindowSec) * 100)); i++) if (env[i] < bestV) { bestV = env[i]; best = i / 100; }
       return round(best, 3);
     };
-    for (const r of decided) {
+    for (const r of decided.filter((x) => !x.exact)) {
       const before = [...r.src];
       if (r.src[0] > 0.05 && inSpeech(r.src[0])) r.src[0] = quietest(r.src[0]);
       if (r.src[1] < dur - 0.05 && inSpeech(r.src[1])) r.src[1] = quietest(r.src[1]);
@@ -293,7 +294,10 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     hookRange = [Math.max(0, hookRange[0]), Math.min(dur, hookRange[1])];
     // on the frame grid before it leaves its place, so no frame plays twice; a recording jump near
     // its end closes it when nothing is said in between
+    // the padding never reaches back into speech somebody decided to remove
+    const cutEnd = removals.filter((r) => ["operator", "repeated-phrase", "stutter", "filler"].includes(r.reason) && r.src[1] > hookRange[0] + 1e-6 && r.src[0] < hookRange[0] + 1e-6).map((r) => r.src[1]).sort((x, y) => y - x)[0];
     hookRange = toGrid(hookRange);
+    if (cutEnd !== undefined && cutEnd < hookRange[1]) hookRange[0] = Math.ceil(cutEnd * fps - 1e-6) / fps;
     const jump = sourceCuts.filter((c) => c < hookRange[1] - 1e-6 && hookRange[1] - c <= cut.snapToSourceCutSec && c > hookRange[0]).at(-1);
     if (jump !== undefined && !speechIn(jump, hookRange[1])) hookRange[1] = jump;
     kept = subtract(kept, [hookRange]);

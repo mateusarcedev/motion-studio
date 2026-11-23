@@ -111,6 +111,9 @@ obrigatórios.
 - `corrections`: `{wordIds, text, reason, by, evidence}`. Com `start`/`end` (segundos da fonte), corrige também o
   tempo. Sem `text`, só o tempo de uma palavra: ela mantém a confiança e continua na revisão. Tempo fora da
   ordem da fala é recusado.
+- `exclude`: `[início, fim]` encaixa em palavras e no mínimo de energia; `[início, fim, "exact"]` usa o tempo medido
+  pelo operador (um /s/ fraco tem pouca energia de banda larga).
+- `overlays[].style`: estilo só daquele card, por exemplo `{ "bg": "rgb(18,22,20)" }` para cobrir texto queimado.
 - `captions.breakBefore`: ids de palavras que abrem uma página. `captions.noBreakBefore`: ids que ficam com a
   palavra anterior. A abertura movida nunca divide página com a sequência.
 - `qa`: sobrescreve limites só no projeto, por exemplo `{ "captions": { "cps": { "fail": 32 } } }`.

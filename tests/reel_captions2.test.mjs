@@ -180,3 +180,17 @@ describe("Cards ancorados na fala", () => {
 test("audioRanges: ganho próprio da abertura não se mistura com o trecho seguinte", () => {
   assert.deepEqual(R.audioRanges([{ src: [1, 2], gainDb: -2 }, { src: [2, 3] }, { src: [3, 4] }]), [[1, 2, -2], [2, 4]]);
 });
+
+test("card: estilo próprio (fundo opaco) só naquele card", () => {
+  const o = { kind: "cta", title: "E você?", style: { bg: "rgb(1,2,3)" } };
+  assert.match(R.overlayHtml(o, { width: 1080, height: 1920 }), /rgb\(1,2,3\)/);
+  assert.doesNotMatch(R.overlayHtml({ ...o, style: undefined }, { width: 1080, height: 1920 }), /rgb\(1,2,3\)/);
+});
+
+test("exclude exact: borda medida pelo operador não é movida, e a abertura não volta para dentro dela", async () => {
+  const ws = transcript.words, first = ws[0], k = ws.findIndex((w) => w.start > 1);
+  const text = ws.slice(k, k + 2).map((w) => w.text).join(" "), end = ws[k].start;
+  const t = await plan({ exclude: [[first.start, end, "exact"]], opening: "custom", openingText: text });
+  assert.equal(t.removed.find((r) => r.reason === "operator").src[1], Math.round(end * 1000) / 1000);
+  assert.ok(t.segments[0].src[0] >= end - 1e-3, `${t.segments[0].src[0]} < ${end}`);
+});

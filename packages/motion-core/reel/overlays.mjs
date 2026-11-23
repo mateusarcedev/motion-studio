@@ -49,7 +49,7 @@ function cardBody(o, step, st) {
 
 /** Full-frame transparent HTML for one overlay state. */
 export function overlayHtml(o, { width, height, style: styleIn = {}, step = null, fontCss = "" }) {
-  const s = { ...DEFAULT_OVERLAY_STYLE, ...styleIn };
+  const s = { ...DEFAULT_OVERLAY_STYLE, ...styleIn, ...(o.style ?? {}) };
   const y = Math.round((o.position?.y ?? s.topY) * height);
   const scale = width / 1080;
   return `<!doctype html><html><head><meta charset="utf-8"><style>
