@@ -34,7 +34,7 @@ async function writeProgress(file, data) {
 
 async function ff(args, what, { onProgress } = {}) {
   const r = await run("ffmpeg", ["-hide_banner", "-nostats", "-y", ...args], { onStderr: onProgress });
-  if (r.code !== 0) throw reelError(REEL_ERRORS.RENDER_FAILED, `FFmpeg falhou: ${what}`, { details: r.stderr.trim().split("\n").slice(-6).join(" | ") });
+  if (r.code !== 0) throw reelError(REEL_ERRORS.RENDER_FAILED, `FFmpeg falhou: ${what}`, { details: r.stderr.trim().split("\n").filter((l) => !/^[a-z_0-9]+=/.test(l)).slice(-6).join(" | ") });
   return r;
 }
 
@@ -214,7 +214,7 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   graph.push(`${cur}format=yuv420p[vout]`);
   const v = timeline.export.video, a = timeline.export.audio;
   const enc = mode === "preview" ? ["-preset", timeline.export.preview.preset, "-crf", String(timeline.export.preview.crf)] : ["-preset", v.preset, "-crf", String(v.crf)];
-  args.push("-filter_complex", graph.join(";"), "-map", "[vout]");
+  args.push("-progress", "pipe:2", "-filter_complex", graph.join(";"), "-map", "[vout]");
   if (aIdx !== null) args.push("-map", `${aIdx}:a`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6));
   args.push("-frames:v", String(timeline.output.frames), "-r", String(fps), "-fps_mode", "cfr", "-c:v", "libx264", "-profile:v", v.profile, "-pix_fmt", "yuv420p", ...enc, "-g", String(v.gop),
     "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-threads", "4",

@@ -17,7 +17,7 @@ export const DEFAULT_OVERLAY_STYLE = Object.freeze({
   bg: "rgba(18,22,20,0.94)", border: "rgba(46,230,166,0.35)", text: "#FFFFFF", muted: "#9FB3AA", accent: "#2EE6A6",
   accentInk: "#06140E", radius: 26, fontFamily: "Inter", monoFamily: "JetBrains Mono",
   fonts: [], // [{family, weight, file}] relative to fontsDir
-  topY: 0.095, maxWidth: 0.78, shadow: "0 18px 50px rgba(0,0,0,.45)",
+  topY: 0.15, maxWidth: 0.78, shadow: "0 18px 50px rgba(0,0,0,.45)",
 });
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

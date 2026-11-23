@@ -6,7 +6,7 @@
  * repeated phrases, operator ranges) are recorded as decisions and listed for review.
  */
 import path from "node:path";
-import { analyzeMedia } from "./analyze.mjs";
+import { analyzeMedia, energyEnvelope } from "./analyze.mjs";
 import { buildPages, placeCaptions, DEFAULT_CAPTION_STYLE } from "./captions.mjs";
 import { computeDst, refineWordTiming, remapWords, TIMELINE_SCHEMA, TIMELINE_VERSION, timelineHash, totalFrames } from "./timeline.mjs";
 import { normalizeWord, probeMedia, reelError, REEL_ERRORS, round, sha256File, ffmpegTools } from "./util.mjs";
@@ -251,6 +251,26 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     const [s, e] = words.length ? snapRangeToWords(a, b, words, { padBefore: 0, padAfter: 0 }) : [a, b];
     removals.push({ src: [s, e], reason: "operator", confidence: 1, requested: [a, b] });
     decisions.push({ what: `excluir ${round(s, 2)}–${round(e, 2)}s`, why: opt.excludeReasons?.[`${a}-${b}`] ?? "decisão do operador", by: "operator" });
+  }
+
+  // Removals that start/end inside continuous speech (operator ranges, repetitions, fillers)
+  // are moved to the quietest 10 ms frame within ±80 ms: recognizer word boundaries are
+  // approximate and a cut on a word onset would clip it.
+  const inSpeech = (t) => speech.some((s) => t > s.start + 0.01 && t < s.end - 0.01);
+  const decided = removals.filter((r) => ["operator", "repeated-phrase", "stutter", "filler"].includes(r.reason));
+  if (decided.some((r) => inSpeech(r.src[0]) || inSpeech(r.src[1]))) {
+    const env = await energyEnvelope(sourcePath, { channels: probe.audio?.channels });
+    const quietest = (t) => {
+      let best = t, bestV = Infinity;
+      for (let i = Math.max(0, Math.round((t - 0.08) * 100)); i <= Math.min(env.length - 1, Math.round((t + 0.08) * 100)); i++) if (env[i] < bestV) { bestV = env[i]; best = i / 100; }
+      return round(best, 3);
+    };
+    for (const r of decided) {
+      const before = [...r.src];
+      if (r.src[0] > 0.05 && inSpeech(r.src[0])) r.src[0] = quietest(r.src[0]);
+      if (r.src[1] < dur - 0.05 && inSpeech(r.src[1])) r.src[1] = quietest(r.src[1]);
+      if (before[0] !== r.src[0] || before[1] !== r.src[1]) r.boundaryRefined = { from: before, by: "energy-minimum ±80 ms" };
+    }
   }
 
   // kept = complement, then trim each kept range to its own speech (normalizes boundaries)
