@@ -312,6 +312,19 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       else if (nextGap < 0.8 && !decidedIn(b, ranges[i + 1][0])) { ranges[i + 1][0] = a; ranges.splice(i, 1); i--; }
     }
   }
+  // Source discontinuities (splices/jumps already in the recording): a boundary within 0.7 s
+  // of one snaps onto it when the frames given up carry no speech, so no orphan frame or
+  // micro-shot survives next to a cut the recording already has.
+  const sourceCuts = (analysis.video?.sourceCuts ?? []).map((c) => Math.round(c.t * fps) / fps);
+  const speechIn = (x, y) => speech.some((sp) => sp.end > x + 0.005 && sp.start < y - 0.005);
+  const snaps = [];
+  for (const r of ranges) {
+    const nearEnd = sourceCuts.filter((c) => c < r[1] - 1e-6 && r[1] - c <= minShot && c - r[0] >= minShot).at(-1);
+    if (nearEnd !== undefined && !speechIn(nearEnd, r[1])) { snaps.push({ from: r[1], to: nearEnd, edge: "end" }); r[1] = nearEnd; }
+    const nearStart = sourceCuts.find((c) => c > r[0] + 1e-6 && c - r[0] <= minShot && r[1] - c >= minShot);
+    if (nearStart !== undefined && !speechIn(r[0], nearStart)) { snaps.push({ from: r[0], to: nearStart, edge: "start" }); r[0] = nearStart; }
+  }
+  if (snaps.length) decisions.push({ what: `${snaps.length} borda(s) de corte encaixada(s) em saltos já existentes na fonte (${snaps.map((x) => `${round(x.from, 3)}→${round(x.to, 3)}s`).join(", ")})`, why: "evitar quadro órfão/micro-plano junto a emenda do celular", by: "engine" });
   if (hookRange) ranges.unshift(toGrid(hookRange));
   if (!ranges.length) throw reelError(REEL_ERRORS.INPUT_INVALID, "Nenhum trecho com fala foi encontrado para manter.", { hint: "Confira se o áudio tem fala audível ou ajuste --cut." });
 
@@ -343,6 +356,10 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       if (emphasisSpans.some((e) => t > e.src[0] - 0.05 && t < e.src[1] + 0.15)) continue;
       cands.push({ t, score: gap + (punct ? 0.3 : 0) });
     }
+    // a zoom cut placed ON a source jump hides it; one placed near a jump would create a micro-shot
+    const jumps = sourceCuts.filter((c) => c > a + 1e-6 && c < b - 1e-6);
+    for (let k = cands.length - 1; k >= 0; k--) if (jumps.some((j) => Math.abs(cands[k].t - j) < (P.zoom?.minShotSec ?? 0.7) && Math.abs(cands[k].t - j) > 1e-6)) cands.splice(k, 1);
+    for (const j of jumps) if (!emphasisSpans.some((e) => j > e.src[0] - 0.05 && j < e.src[1] + 0.15)) cands.push({ t: j, score: 1.5, sourceCut: true });
     let start = a;
     while (b - start > zoomCfg.maxShotSec) {
       const ok = cands.filter((c) => c.t - start >= zoomCfg.minZoomCutSec && c.t - start <= zoomCfg.maxShotSec && b - c.t >= zoomCfg.minZoomCutSec);
@@ -388,6 +405,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   const unexpectedLost = lost.filter((w) => !inDecision(w));
   for (const w of unexpectedLost) review.push({ src: [w.start, w.end], reason: `palavra "${w.text}" ficou fora da edição sem decisão explícita`, by: "engine", severity: "high" });
   for (const w of dstWords) if (w.confidence !== null && w.confidence !== undefined && w.confidence < 0.5 && !w.corrected) review.push({ src: [w.srcStart, w.srcEnd], dst: [w.start, w.end], reason: `baixa confiança no reconhecimento: "${w.text}" (${round(w.confidence, 2)})`, by: "engine" });
+  for (const w of dstWords) if (w.end - w.start > 1.0) review.push({ src: [w.srcStart, w.srcEnd], dst: [w.start, w.end], reason: `"${w.text}" dura ${round(w.end - w.start, 2)} s sobre fala contínua — possível palavra não reconhecida pelo ASR (ouvir)`, by: "engine" });
   if (words.length) for (const s of speech) {
     const covered = words.some((w) => w.end > s.start && w.start < s.end);
     if (!covered && s.end - s.start >= 0.5) review.push({ src: [s.start, s.end], reason: "fala detectada sem palavras transcritas (lacuna do STT)", by: "engine" });
@@ -406,10 +424,30 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
       if (e - a > 1 / fps) burned.push({ ...b, dst: [round(s.dst[0] + (a - s.src[0]), 3), round(s.dst[0] + (e - s.src[0]), 3)] });
     }
   }
-  const capWords = burned.length ? dstWords.filter((w) => !burned.some((b) => (b.region ?? "bottom") === "bottom" && w.end > b.dst[0] && w.start < b.dst[1])) : dstWords;
-  if (capWords.length < dstWords.length) decisions.push({ what: `${dstWords.length - capWords.length} palavra(s) sem legenda enquanto o texto queimado da fonte está visível`, why: "não colidir com texto do autor já presente no vídeo", by: "engine" });
-  const pages = capWords.length ? buildPages(capWords, capStyle) : [];
+  // operator-hidden words (unverifiable recognition), always with a reason
+  const hidden = new Map((opt.captions?.hideWords ?? []).map((h) => (typeof h === "string" ? [h, "decisão do operador"] : [h.wordId, h.reason])));
+  const visibleWords = dstWords.filter((w) => !hidden.has(w.id.split("#")[0]));
+  for (const [id, why] of hidden) decisions.push({ what: `palavra ${id} sem legenda`, why, by: "operator" });
+  // words spoken while burned-in text sits in the bottom half get one-line pages placed just
+  // below the mouth, clear of the author's text
+  const inBurned = (w) => burned.find((b) => (b.region ?? "bottom") === "bottom" && w.end > b.dst[0] && w.start < b.dst[1]);
+  // first word after a time cut: pages prefer to break there instead of straddling the cut
+  const segById = new Map(segments.map((sg) => [sg.id, sg]));
+  visibleWords.forEach((w, i) => { const prev = visibleWords[i - 1]; w.afterCut = Boolean(prev && prev.segment !== w.segment && segById.get(w.segment)?.cutBefore); });
+  const mainWords = visibleWords.filter((w) => !inBurned(w));
+  const burnedWords = visibleWords.filter((w) => inBurned(w));
+  const pages = mainWords.length ? buildPages(mainWords, capStyle) : [];
   for (const b of burned) for (const p of pages) if (p.end > b.dst[0] && p.start < b.dst[0]) p.end = round(b.dst[0], 3);
+  if (burnedWords.length) {
+    const lineH = (capStyle.fontSize * 0.95) / height;
+    const band = placement.faceBand ?? [0.5, 0.62];
+    const altY = round(band[1] + lineH / 2 + 0.012, 3);
+    const extra = buildPages(burnedWords, { ...capStyle, maxLines: 1, maxWordsPerPage: 3 }).map((p) => ({ ...p, y: altY, reason: "acima do texto queimado do autor" }));
+    pages.push(...extra);
+    pages.sort((x, y) => x.start - y.start);
+    pages.forEach((p, i) => { p.index = i; if (pages[i + 1] && p.end > pages[i + 1].start) p.end = pages[i + 1].start; });
+    decisions.push({ what: `${burnedWords.length} palavra(s) legendada(s) em linha única (y ${altY}) enquanto o texto queimado está na base`, why: "manter a fala legendada sem colidir com o texto do autor", by: "engine" });
+  }
 
   // overlays (cards/titles/CTA) anchored to words
   const overlays = [];
@@ -441,7 +479,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
   const timeline = {
     schema: TIMELINE_SCHEMA, schemaVersion: TIMELINE_VERSION,
     preset,
-    source: { path: path.resolve(sourcePath), sha256, bytes: probe.bytes, durationSec: dur, probe: { video: probe.video, audio: probe.audio, container: probe.container } },
+    source: { path: path.resolve(sourcePath), sha256, bytes: probe.bytes, durationSec: dur, probe: { video: probe.video, audio: probe.audio, container: probe.container }, sourceCuts },
     output: { width, height, fps, durationSec: outDur, frames, aspect: `${width}:${height}` },
     burnedText: burned,
     framing: { faceBox, faceBoxSource: opt.faceBox ? (opt.faceBoxSource ?? "operator") : P.faceBox ? "preset-default" : null, reframe: "cover" },
@@ -449,7 +487,7 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     removed: union(removals.map((r) => r.src)).length ? removals.map((r) => ({ ...r, src: [round(Math.max(0, r.src[0]), 3), round(Math.min(dur, r.src[1]), 3)] })) : [],
     transcript: transcriptInfo,
     audio: { preset: opt.audio?.preset ?? P.audio.preset, overrides: opt.audio?.overrides ?? {}, denoiser: opt.audio?.denoiser ?? "auto", music: opt.audio?.music ?? null },
-    captions: { enabled: pages.length > 0 && opt.captions?.enabled !== false, style: capStyle, placement, pages, words: dstWords, fontsDir: opt.captions?.fontsDir ?? null },
+    captions: { enabled: pages.length > 0 && opt.captions?.enabled !== false, style: capStyle, placement, pages, words: dstWords, hiddenWords: [...hidden.keys()], fontsDir: opt.captions?.fontsDir ?? null },
     overlays,
     overlayStyle: opt.overlayStyle ?? null,
     transitions: opt.transitions ?? [],

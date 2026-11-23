@@ -242,6 +242,25 @@ describe("Timeline, cortes e legendas", () => {
   });
 });
 
+describe("Saltos da fonte e paginação semântica (Crítico rodada 2)", () => {
+  test("descontinuidade já existente na fonte é detectada (emenda de app de celular)", { skip: !haveFfmpeg }, async () => {
+    const spliced = path.join(tmp, "spliced.mp4");
+    const r = ff(["-f", "lavfi", "-i", "testsrc2=s=360x640:r=30:d=2", "-f", "lavfi", "-i", "mandelbrot=s=360x640:r=30", "-filter_complex", "[1:v]trim=duration=2,setpts=PTS-STARTPTS[b];[0:v][b]concat=n=2:v=1[v]", "-map", "[v]", "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p", spliced]);
+    assert.equal(r.status, 0, r.stderr);
+    const cuts = await R.detectSourceCuts(spliced, { fps: 30 });
+    assert.ok(cuts.some((c) => Math.abs(c.t - 2) < 0.05), JSON.stringify(cuts));
+  });
+  test("paginação: não termina em artigo/quantificador, não quebra nome próprio composto, quebra no corte", () => {
+    const text = "como o Antigravity Codex o próprio Claude Code da Anthropic se você dev não está utilizando te traz muitos benefícios";
+    const words = text.split(" ").map((t, i) => ({ id: `w${i}`, text: t, start: i * 0.3, end: i * 0.3 + 0.27, afterCut: t === "se" }));
+    const pages = R.buildPages(words, {});
+    const shown = pages.map((p) => p.words.map((w) => w.text).join(" "));
+    for (const p of pages.slice(0, -1)) assert.ok(!["o", "da", "muitos", "próprio", "se"].includes(p.words.at(-1).text), shown.join(" / "));
+    assert.ok(!pages.some((p, i) => pages[i + 1] && p.words.at(-1).text === "Claude"), "Claude Code inteiro: " + shown.join(" / "));
+    assert.ok(pages.some((p) => p.words[0].text === "se"), "quebra preferida no corte: " + shown.join(" / "));
+  });
+});
+
 describe("Cards, render determinístico e QA do reel", () => {
   test("cards progressivos: estado vazio, passos e HTML escapado", () => {
     const layers = R.overlayLayers([{ id: "c", kind: "label", dst: [1, 6], chips: ["a", "b"], steps: [{ dst: 2 }, { dst: 3 }] }]);

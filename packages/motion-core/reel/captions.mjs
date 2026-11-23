@@ -43,44 +43,66 @@ export function displayWord(text, style) {
  * Groups words into caption pages: break on long gaps, sentence punctuation, word/char
  * budgets. Lines are balanced inside a page.
  */
-const FUNCTION_WORDS = new Set(["e", "o", "a", "os", "as", "de", "do", "da", "dos", "das", "que", "se", "em", "no", "na", "nos", "nas", "um", "uma", "pra", "para", "por", "com", "ao", "mas", "ou", "como", "quando", "porque", "the", "a", "of", "and", "to", "in"]);
-const isFunctionWord = (t) => FUNCTION_WORDS.has(normalizeWord(t));
+// Words that must not end a page (they lean on the next word): articles, prepositions,
+// conjunctions, quantifiers, demonstratives and a few modifiers.
+const CARRY = new Set(["e", "o", "a", "os", "as", "de", "do", "da", "dos", "das", "que", "se", "em", "no", "na", "nos", "nas", "um", "uma", "pra", "pro", "para", "por", "com", "ao", "mas", "ou", "como", "quando", "porque",
+  "muito", "muita", "muitos", "muitas", "esse", "essa", "este", "esta", "aquele", "aquela", "nao", "proprio", "propria", "seu", "sua", "meu", "minha", "mais", "the", "of", "and", "to", "in"]);
+const CONJ = new Set(["e", "mas", "ou", "porque", "quando", "que", "como", "se"]);
+const GENITIVE = new Set(["de", "da", "do", "das", "dos"]);
+const isFunctionWord = (t) => CARRY.has(normalizeWord(t));
 
+/**
+ * Pages by dynamic programming over break positions: hard limits (≤ 5 words, char budget,
+ * no long gap or sentence end inside a page) and costs that prefer 2–3 words, ≥ minPageSec,
+ * breaks at punctuation/pauses/before conjunctions, and never after a function word or
+ * inside "noun de noun" compounds.
+ */
 export function buildPages(words, styleIn = {}) {
   const style = { ...DEFAULT_CAPTION_STYLE, ...styleIn };
   const usable = words.filter((w) => !w.suspect); // suspected hallucination never becomes a caption
-  const chars = (ws) => ws.map((w) => displayWord(w.text, style)).join(" ").length;
+  const n = usable.length;
+  const disp = usable.map((w) => displayWord(w.text, style));
   const budget = style.maxCharsPerLine * style.maxLines;
-  let groups = [];
-  let cur = [];
-  for (const w of usable) {
-    const prev = cur.at(-1);
-    const gap = prev ? w.start - prev.end : 0;
-    const full = cur.length >= style.maxWordsPerPage || chars([...cur, w]) > budget;
-    const sentenceEnd = prev && /[.!?…]$/u.test(prev.text);
-    const clauseEnd = prev && /[,;:]$/u.test(prev.text) && cur.length >= 2;
-    if (cur.length && (gap > style.maxGapSec || full || sentenceEnd || clauseEnd)) {
-      // never end a page on a dangling function word ("… SURGIU E"): carry it to the next page
-      let carry = [];
-      if (full && !sentenceEnd && !clauseEnd && gap <= style.maxGapSec) while (cur.length > 1 && isFunctionWord(cur.at(-1).text)) carry.unshift(cur.pop());
-      groups.push(cur);
-      cur = carry;
+  const hardMax = Math.max(style.maxWordsPerPage, Math.min(5, style.maxWordsPerPage + 2));
+  const breakCost = (j) => { // break between usable[j-1] and usable[j]
+    if (j >= n) return 0;
+    const prev = usable[j - 1], next = usable[j];
+    if (next.afterCut) return -0.5; // the picture changes here anyway
+    if (/[.!?…]$/u.test(prev.text)) return -0.5;
+    if (/[,;:]$/u.test(prev.text)) return 0;
+    if (next.start - prev.end > 0.3) return 0;
+    if (isFunctionWord(prev.text)) return 12;
+    // proper-noun compounds ("Claude Code", "regra de Negócio" excluded): two capitalized words in a row
+    if (/^\p{Lu}/u.test(prev.text) && /^\p{Lu}/u.test(next.text) && !/[.!?…]$/u.test(usable[j - 2]?.text ?? ".")) return 12;
+    if (GENITIVE.has(normalizeWord(next.text))) return 5;
+    if (CONJ.has(normalizeWord(next.text))) return 0.5;
+    return 1.5;
+  };
+  const pageCost = (i, j) => { // usable[i..j-1]
+    const k = j - i;
+    if (k > hardMax) return Infinity;
+    if (disp.slice(i, j).join(" ").length > budget && k > 1) return Infinity;
+    for (let x = i; x < j - 1; x++) {
+      const gap = usable[x + 1].start - usable[x].end;
+      // a leaning word (article, quantifier…) may bridge a slightly longer pause to stay with its noun
+      if (gap > style.maxGapSec && !(isFunctionWord(usable[x].text) && gap < 0.9)) return Infinity;
+      if (/[.!?…]$/u.test(usable[x].text)) return Infinity;
     }
-    cur.push(w);
+    let crossCut = 0;
+    for (let x = i + 1; x < j; x++) if (usable[x].afterCut) crossCut += 4;
+    const lenCost = ([0, 2.5, 0.4, 0, 1.2, 2.8][k] ?? 5) + crossCut;
+    const dur = usable[j - 1].end - usable[i].start;
+    const durCost = dur < 0.4 ? 9 : dur < style.minPageSec ? 2.5 + (style.minPageSec - dur) * 6 : dur > 2.4 ? 1.5 : 0;
+    return lenCost + durCost;
+  };
+  const best = new Array(n + 1).fill(Infinity), from = new Array(n + 1).fill(-1);
+  best[0] = 0;
+  for (let j = 1; j <= n; j++) for (let i = Math.max(0, j - hardMax); i < j; i++) {
+    const c = best[i] + pageCost(i, j) + breakCost(j);
+    if (c < best[j]) { best[j] = c; from[j] = i; }
   }
-  if (cur.length) groups.push(cur);
-  // flash pages (< minPageSec of speech) merge with a neighbour when the budget allows
-  const dur = (g) => g.at(-1).end - g[0].start;
-  for (let pass = 0; pass < 3; pass++) {
-    for (let i = 0; i < groups.length; i++) {
-      const g = groups[i];
-      if (dur(g) >= style.minPageSec) continue;
-      const fits = (a, b) => a.length + b.length <= style.maxWordsPerPage + 2 && chars([...a, ...b]) <= budget && b[0].start - a.at(-1).end <= style.maxGapSec;
-      const next = groups[i + 1], prev = groups[i - 1];
-      if (next && fits(g, next) && !/[.!?…]$/u.test(g.at(-1).text)) { groups.splice(i, 2, [...g, ...next]); i--; }
-      else if (prev && fits(prev, g) && !/[.!?…]$/u.test(prev.at(-1).text)) { groups.splice(i - 1, 2, [...prev, ...g]); i -= 2; }
-    }
-  }
+  const groups = [];
+  for (let j = n; j > 0; j = from[j]) { const i = from[j] >= 0 ? from[j] : j - 1; groups.unshift(usable.slice(i, j)); if (from[j] < 0) from[j] = j - 1; }
   const pages = groups;
   const kw = new Set((style.keywords ?? []).map(normalizeWord));
   return pages.map((ws, i) => {
@@ -139,8 +161,10 @@ const assColor = (hex, alpha = 0) => {
   const [r, g, b] = [h.slice(0, 2), h.slice(2, 4), h.slice(4, 6)];
   return `&H${alpha.toString(16).padStart(2, "0").toUpperCase()}${b}${g}${r}`.toUpperCase();
 };
+// floor to the 10 ms ASS grid for both start and end: consistent (no 1-frame gaps between pages)
+// and an end placed exactly on a frame never leaks into that frame
 const assTime = (t) => {
-  const cs = Math.max(0, Math.round(t * 100));
+  const cs = Math.max(0, Math.floor(t * 100 + 1e-6));
   return `${Math.floor(cs / 360000)}:${String(Math.floor(cs / 6000) % 60).padStart(2, "0")}:${String(Math.floor(cs / 100) % 60).padStart(2, "0")}.${String(cs % 100).padStart(2, "0")}`;
 };
 const escapeAss = (s) => s.replace(/\\/g, "\\\\").replace(/\{/g, "(").replace(/\}/g, ")");
@@ -158,9 +182,10 @@ export function buildAss(pages, { width, height, styleIn = {}, placement }) {
     `Style: Caption,${s.fontFamily},${s.fontSize},${assColor(s.color)},${assColor(s.color)},${assColor(s.outlineColor)},${assColor(s.shadowColor, 0x60)},${s.fontWeight >= 600 ? -1 : 0},0,0,0,100,100,0,0,1,${s.outlineWidth},${s.shadow},5,0,0,0,1`,
     "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
   ];
-  const x = Math.round(width / 2), y = Math.round(placement.y * height);
+  const x = Math.round(width / 2);
   const events = [];
   for (const p of pages) {
+    const y = Math.round((p.y ?? placement.y) * height);
     const words = p.words;
     for (let i = 0; i < words.length; i++) {
       const st = i === 0 ? p.start : words[i].start;

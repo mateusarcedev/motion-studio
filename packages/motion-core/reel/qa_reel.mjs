@@ -89,6 +89,20 @@ export async function qaReel(mp4, o = {}) {
   if (!existsSync(t.source.path)) report.add({ id: "source.preserved", title: "Arquivo original preservado (SHA-256)", status: "BLOCKED", details: `original não encontrado em ${t.source.path}`, reproduce: "Disponibilize o original no caminho da timeline e rode motion qa reel de novo." });
   else { const h = await sha256File(t.source.path); report.add({ id: "source.preserved", title: "Arquivo original preservado (SHA-256)", status: h === t.source.sha256 ? "PASS" : "FAIL", details: h === t.source.sha256 ? h.slice(0, 16) + "…" : "o original mudou desde a timeline" }); }
 
+  // visual shots = timeline segments split by discontinuities already inside the source
+  {
+    const cuts = t.source.sourceCuts ?? [];
+    const shots = [];
+    for (const sg of t.segments) {
+      const inner = cuts.filter((c) => c > sg.src[0] + 1e-6 && c < sg.src[1] - 1e-6).map((c) => sg.dst[0] + (c - sg.src[0]));
+      const b = [sg.dst[0], ...inner, sg.dst[1]];
+      for (let i = 0; i + 1 < b.length; i++) shots.push({ start: b[i], end: b[i + 1], frames: Math.round((b[i + 1] - b[i]) * fps), seg: sg.id });
+    }
+    const orphan = shots.filter((x) => x.frames < 3), short = shots.filter((x) => x.frames >= 3 && x.end - x.start < 0.7);
+    report.add({ id: "shots.orphan", title: "Sem planos de 1–2 quadros (cortes + saltos da fonte)", status: orphan.length ? "FAIL" : "PASS", details: orphan.length ? orphan.map((x) => `${round(x.start, 2)}s (${x.frames} q)`).join(", ") : `${shots.length} planos visuais; ${cuts.length} saltos da fonte considerados` });
+    report.add({ id: "shots.min", title: "Planos visuais ≥ 0,7 s", heuristic: true, status: short.length ? "WARN" : "PASS", details: short.length ? short.map((x) => `${round(x.start, 2)}–${round(x.end, 2)}s (${x.frames} q)`).join(", ") : null });
+  }
+
   // speech vs cuts (measured on the source)
   if (existsSync(t.source.path) && t.source.probe?.audio) {
     const env = await energyEnvelope(t.source.path, { channels: t.source.probe.audio.channels });
@@ -122,6 +136,12 @@ export async function qaReel(mp4, o = {}) {
     report.add({ id: "captions.bounds", title: "Legendas dentro da duração final", status: beyond.length ? "FAIL" : "PASS", details: beyond.length ? `${beyond.length} páginas passam do fim` : `${t.captions.pages.length} páginas` });
     const overlaps = t.captions.pages.filter((p, i) => i && p.start < t.captions.pages[i - 1].end - 1e-3);
     report.add({ id: "captions.overlap", title: "Sem páginas de legenda sobrepostas", status: overlaps.length ? "FAIL" : "PASS", details: overlaps.length ? `${overlaps.length} sobreposições` : null });
+    const shownIds = new Set(t.captions.pages.flatMap((p) => p.words.map((w) => w.id)));
+    const hiddenIds = new Set(t.captions.hiddenWords ?? []);
+    const uncovered = words.filter((w) => !shownIds.has(w.id) && !hiddenIds.has(w.id.split("#")[0]));
+    report.add({ id: "captions.coverage", title: "Toda palavra falada tem página de legenda (exceto ocultas por decisão)", status: uncovered.length ? "WARN" : "PASS", details: uncovered.length ? `${uncovered.length} sem página: ${uncovered.slice(0, 8).map((w) => `"${w.text}"@${w.start}s`).join(", ")}` : `${hiddenIds.size} oculta(s) por decisão registrada` });
+    const long = words.filter((w) => w.end - w.start > 1.0);
+    report.add({ id: "captions.long-words", title: "Palavras com duração plausível (≤ 1 s)", heuristic: true, status: long.length ? "WARN" : "PASS", details: long.length ? `possíveis palavras não reconhecidas: ${long.map((w) => `"${w.text}" ${round(w.end - w.start, 2)}s @${w.start}s`).join(", ")}` : null });
     const low = words.filter((w) => w.confidence !== null && w.confidence !== undefined && w.confidence < 0.5 && !w.corrected);
     report.add({ id: "captions.confidence", title: "Palavras de baixa confiança revisadas", status: low.length ? "WARN" : "PASS", required: false, details: low.length ? `${low.length} palavras < 0,5 sem revisão: ${low.slice(0, 8).map((w) => `"${w.text}"@${w.start}s`).join(", ")}${low.length > 8 ? "…" : ""}` : "nenhuma" });
     // measured placement

@@ -174,6 +174,26 @@ export async function detectHum(file, pauses, { channels = null, minExcessDb = 8
 }
 
 /**
+ * Discontinuities already inside the source (phone-app splices, dropped frames): frames whose
+ * scene score is far above the local median. They behave like hard cuts the editor did not
+ * make, so the planner must not leave orphan frames or micro-shots around them.
+ */
+export async function detectSourceCuts(file, { fps = null, minScore = 0.05, ratio = 15 } = {}) {
+  const r = await run("ffmpeg", ["-hide_banner", "-nostats", "-i", file, "-an", "-vf", "scale=180:-2,select='gte(scene,0)',metadata=print:key=lavfi.scene_score", "-f", "null", "-"]);
+  const t = [], v = [];
+  const re = /pts_time:([\d.]+)[\s\S]*?scene_score=([\d.]+)/g;
+  let m;
+  while ((m = re.exec(r.stderr))) { t.push(Number(m[1])); v.push(Number(m[2])); }
+  const out = [];
+  for (let i = 1; i < v.length; i++) {
+    const win = v.slice(Math.max(0, i - 15), i + 16).filter((_, k, arr) => k !== Math.min(i, 15)).sort((a, b) => a - b);
+    const med = win[Math.floor(win.length / 2)] ?? 0;
+    if (v[i] >= Math.max(minScore, ratio * Math.max(med, 0.001))) out.push({ t: round(t[i], 4), frame: fps ? Math.round(t[i] * fps) : null, score: round(v[i], 3), localMedian: round(med, 4) });
+  }
+  return out;
+}
+
+/**
  * Full analysis of a source video/audio file.
  * @returns JSON-serializable report (schema motion.reel.analysis@1)
  */
@@ -214,6 +234,10 @@ export async function analyzeMedia(file, { stillsDir = null, stills = 6, loudnes
     if (loud.integratedLufs !== null && loud.integratedLufs < -30) result.warnings.push(`Gravação muito baixa (${loud.integratedLufs} LUFS): o ruído subirá junto com a normalização.`);
   } else {
     result.warnings.push("Arquivo sem áudio: transcrição, cortes por pausa e Voice Studio indisponíveis.");
+  }
+  if (probe.video) {
+    result.video = { sourceCuts: await detectSourceCuts(file, { fps: Math.round(probe.video.fps) }) };
+    if (result.video.sourceCuts.length) result.warnings.push(`${result.video.sourceCuts.length} descontinuidade(s) já existentes na fonte (emendas/saltos): ${result.video.sourceCuts.map((c) => `${c.t}s`).join(", ")}.`);
   }
   if (stillsDir && probe.video) {
     await mkdir(stillsDir, { recursive: true });
