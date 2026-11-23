@@ -45,6 +45,8 @@ export const SKILL_PROFILES = {
     "design",
     "design-system",
     "shorts-director",
+    "reel-editor",
+    "voice-studio",
     "explainer-motion",
     "video-shotcraft",
     "brag",

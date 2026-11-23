@@ -21,10 +21,12 @@
     "skills/explainer-motion/**",
     "skills/feed-studio/**",
     "skills/motion-director/**",
+    "skills/reel-editor/**",
     "skills/shorts-director/**",
     "skills/story-studio/**",
     "skills/studio-director/**",
     "skills/thermo-nuclear-code-quality-review/**",
+    "skills/voice-studio/**",
     "skills/web-director/**"
   ],
   "keywords": [

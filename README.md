@@ -9,7 +9,7 @@
 [![Playwright QA](https://img.shields.io/badge/QA-Playwright%205--Viewport-emerald.svg)](https://playwright.dev/)
 [![Engine: CFR 30fps](https://img.shields.io/badge/Video-CFR%2030FPS%20Deterministic-purple.svg)](docs/PRODUCTION_GUIDE.md)
 
-*51 local Agent Skills · 11 public Skills · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
+*53 local Agent Skills · 13 public Skills · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
 
 🌐 Site: [motion.mateusarce.dev](https://motion.mateusarce.dev) · source: [mateusarcedev/motion-landing](https://github.com/mateusarcedev/motion-landing)
 
@@ -113,7 +113,7 @@ Instale o MOTION em qualquer projeto consumidor existente (Next.js, Vite, React,
 npx @technomanceer/motion-studio init
 ```
 
-Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **11 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
+Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **13 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
 > [!NOTE]
 > **Versão estável publicada `1.1.1`.** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
@@ -190,7 +190,7 @@ Comandos:
 
 ## 🎯 Skill Distribution & Selective Profiles / Perfis de Skills
 
-O monorepo mantém 51 pastas de Skills; o pacote npm distribui somente as 11 autorizadas no `public-skills.json`. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote público. Sem `--profile`, o padrão `all` instala as 11 Skills públicas.
+O monorepo mantém 53 pastas de Skills; o pacote npm distribui somente as 13 autorizadas no `public-skills.json`. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote público. Sem `--profile`, o padrão `all` instala as 13 Skills públicas.
 
 | Perfil | Skills Instaladas | Foco |
 |---|---|---|
@@ -201,7 +201,7 @@ O monorepo mantém 51 pastas de Skills; o pacote npm distribui somente as 11 aut
 | **`3d`** | 5 públicas: `studio-director`, `motion-director`, `web-director`, `3d-scene-director`, `anatomy` | Cenas 3D procedurais WebGL e anatomia visual. |
 | **`blender`** | As mesmas 5 Skills públicas de `3d` | Pipelines com Blender opcional. |
 | **`interactive`** | 4 públicas: `studio-director`, `motion-director`, `web-director`, `explainer-motion` | Experiências e conteúdo explicativo interativo. |
-| **`all`** *(padrão)* | Todas as 11 Skills públicas | Instalação completa do catálogo autorizado para distribuição. |
+| **`all`** *(padrão)* | Todas as 13 Skills públicas | Instalação completa do catálogo autorizado para distribuição. |
 
 Para selecionar o perfil na inicialização:
 ```bash

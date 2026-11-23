@@ -17,7 +17,7 @@ test("public Skills manifest identifies exactly the installable catalog", async 
 
   assert.equal(manifest.package.version, "1.1.1");
   assert.equal(publicSkills.length, manifest.skills.length);
-  assert.equal(localSkills.length, 51, "the complete local catalog remains intact");
+  assert.equal(localSkills.length, 53, "the complete local catalog remains intact");
   assert.deepEqual(publicSkills.map(({ name }) => name).sort(), manifest.skills.map(({ name }) => name).sort());
 
   for (const skill of manifest.skills) {
@@ -33,7 +33,7 @@ test("installer copies only Skills authorized by the public manifest", async () 
   try {
     const result = await installSkills({ targetDir, profile: "all", agents: ["agents"] });
     const installed = await readdir(path.join(targetDir, ".agents", "skills"));
-    assert.equal(installed.length, 11);
+    assert.equal(installed.length, 13);
     assert.deepEqual(installed.sort(), result.installed.slice().sort());
     assert.ok(!installed.some((name) => name.startsWith("remotion-")));
     assert.ok(!installed.includes("ui-styling"));
