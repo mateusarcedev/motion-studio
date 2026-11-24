@@ -1,0 +1,45 @@
+name: Paridade CLI×MCP (repetição)
+
+on:
+  workflow_dispatch:
+    inputs:
+      repeat:
+        description: Quantas vezes rodar mcp_parity
+        default: "10"
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    name: mcp_parity repetido (Node 24)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 1, persist-credentials: false }
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with: { node-version: 24, cache: npm }
+      - name: CPU do runner
+        run: |
+          lscpu | tee cpu.txt
+          { echo "### CPU do runner"; echo '```'; grep -E "Model name|^CPU\(s\)|Vendor" cpu.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg fonts-dejavu-core && ffmpeg -version | head -1
+      - run: npm ci --no-audit --no-fund
+      - name: Chromium
+        run: npx playwright-core install --with-deps chromium
+      - name: mcp_parity em repetição
+        env:
+          REPEAT: ${{ inputs.repeat || '10' }}
+        shell: bash
+        run: |
+          # every round runs, even after a failure; any failure fails the job
+          [[ "$REPEAT" =~ ^[1-9][0-9]*$ ]] || { echo "repeat inválido"; exit 2; }
+          bad=0
+          for ((i = 1; i <= REPEAT; i++)); do
+            echo "=== rodada $i/$REPEAT"
+            node --test tests/mcp_parity.test.mjs || { bad=$((bad + 1)); echo "=== rodada $i FALHOU"; }
+          done
+          echo "RESULTADO: $bad falhas em $REPEAT rodadas" | tee -a "$GITHUB_STEP_SUMMARY"
+          [ "$bad" -eq 0 ]
