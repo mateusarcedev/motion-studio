@@ -25,10 +25,15 @@
     "./lottie": "./design-system/lottie-motion.js",
     "./providers": "./visual-assets/providers/index.mjs",
     "./reel": "./reel/index.mjs",
-    "./reel/stt": "./reel/stt/index.mjs"
+    "./reel/stt": "./reel/stt/index.mjs",
+    "./bridge": "./bridge/index.js"
   },
   "files": [
     "index.js",
+    "bridge/*.js",
+    "bridge/*.mjs",
+    "bridge/adapters/*.mjs",
+    "bridge/schemas/*.json",
     "intent/*.js",
     "renderers/*.mjs",
     "reel/stt/*.py",

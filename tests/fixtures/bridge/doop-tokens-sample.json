@@ -1,0 +1,39 @@
+{
+  "themes": ["dark"],
+  "tokens": [
+    { "name": "--color-slate-950", "type": "color", "value": "#0E1116", "description": "Deep mineral slate" },
+    { "name": "--color-linen-50", "type": "color", "value": "#F7F4EE", "description": "Unbleached linen ground" },
+    { "name": "--color-pine-600", "type": "color", "value": "#1F6F50", "description": "Forest accent" },
+    {
+      "name": "--color-ground",
+      "type": "color",
+      "value": "var(--color-linen-50)",
+      "themes": { "dark": "var(--color-slate-950)" },
+      "description": "Page canvas ground"
+    },
+    {
+      "name": "--color-ink",
+      "type": "color",
+      "value": "var(--color-slate-950)",
+      "themes": { "dark": "var(--color-linen-50)" },
+      "description": "Primary body ink"
+    },
+    {
+      "name": "--color-primary",
+      "type": "color",
+      "value": "var(--color-pine-600)",
+      "description": "Primary action"
+    },
+    { "name": "--color-accent", "type": "color", "value": "#D97706", "description": "Highlight accent" },
+    { "name": "--font-display", "type": "fontFamily", "value": "\"Instrument Serif\", Georgia, serif" },
+    { "name": "--font-body", "type": "fontFamily", "value": "\"Geist\", system-ui, sans-serif" },
+    { "name": "--text-hero", "type": "fontSize", "value": "56px" },
+    { "name": "--spacing-section", "type": "spacing", "value": "64px" },
+    { "name": "--radius-card", "type": "radius", "value": "12px" },
+    { "name": "--leading-tight", "type": "lineHeight", "value": "1.1" },
+    { "name": "--tracking-tight", "type": "letterSpacing", "value": "-0.02em" },
+    { "name": "--opacity-muted", "type": "opacity", "value": "0.72" },
+    { "name": "--container-page", "type": "container", "value": "1200px" },
+    { "name": "--breakpoint-md", "type": "breakpoint", "value": "768px" }
+  ]
+}

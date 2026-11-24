@@ -1,0 +1,11 @@
+{
+  "id": "frm_hero_01",
+  "canvasId": "cnv_lab_01",
+  "pageId": "pg_web",
+  "name": "Landing Hero",
+  "width": 1280,
+  "height": 800,
+  "approvalStatus": "ready_for_dev",
+  "updatedAt": 1795541854324,
+  "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"default\"><head><style>*{margin:0;box-sizing:border-box}@keyframes pulse{0%{opacity:.8}100%{opacity:1}}.hero-badge{animation:pulse 2s infinite}</style></head><body style=\"background:var(--color-ground);color:var(--color-ink);font-family:var(--font-body)\"><main data-doop-id=\"el_main\" style=\"padding:var(--spacing-section)\"><div class=\"hero-badge\"><doop-use id=\"cmp_badge_1\" component=\"Badge\" label=\"New Release\" tone=\"accent\"></doop-use></div><h1 data-doop-id=\"el_h1\" style=\"font-family:var(--font-display);font-size:var(--text-hero)\">Precision Agro Logistics</h1><img data-doop-id=\"el_hero_img\" src=\"https://doop.design/a/hero-field.jpg\" alt=\"Aerial grain silo view\" /><button data-doop-id=\"el_cta\" data-doop-on=\"click\" data-doop-action=\"navigate:frm_demo_02\" data-doop-transition=\"push-left\" data-doop-duration=\"350\">Watch Product Tour</button></main></body></html>"
+}

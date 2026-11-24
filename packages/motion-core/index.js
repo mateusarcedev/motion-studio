@@ -49,6 +49,7 @@ export { listTransitions, renderTransition } from "./transitions/index.js";
 export { CRITIC_JSON_SCHEMA, validateCritic, recordCritic, verifyCritic, criticMarkdown } from "./quality/critic.mjs";
 export { verifyDeterminism } from "./quality/determinism.mjs";
 export * as reel from "./reel/index.mjs";
+export * as bridge from "./bridge/index.js";
 export {
   analyzeSafeZones,
   createSafeZoneOverlaySvg,
