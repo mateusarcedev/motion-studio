@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/export-compatibility-report.v1.json",
+  "title": "ExportCompatibilityReport@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "classifications", "items", "tokenConflicts", "privacyBlocked", "warnings", "unverifiedCapabilities", "normalizationReport"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "classifications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["editable", "rasterized", "referential", "blocked"],
+      "properties": {
+        "editable": { "type": "integer", "minimum": 0 },
+        "rasterized": { "type": "integer", "minimum": 0 },
+        "referential": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "tokenConflicts": { "type": "array", "items": { "type": "object" } },
+    "privacyBlocked": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "unverifiedCapabilities": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "normalizationReport": { "type": ["object", "null"] }
+  }
+}

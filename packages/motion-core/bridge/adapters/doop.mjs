@@ -4,6 +4,7 @@
  * Purely deterministic, offline-capable, zero network calls or AI dependencies.
  */
 import { ERROR_CODES, MotionError } from "../../lib/errors.mjs";
+import { createHash } from "node:crypto";
 import { assertEditorAdapter } from "../adapter.mjs";
 import {
   extractAliasTarget,
@@ -18,6 +19,20 @@ import {
 } from "../security.mjs";
 
 const TOKEN_TYPE_SET = new Set(TOKEN_TYPES);
+
+/** Tool names verified against the connected Doop MCP schemas on 2026-11-24. */
+export const DOOP_MCP_TOOL_NAMES = Object.freeze({
+  getCanvas: "get_canvas",
+  getFrame: "get_frame",
+  createFrame: "create_frame",
+  setFrameHtml: "set_frame_html",
+  appendFrameHtml: "append_frame_html",
+  editFrameHtml: "edit_frame_html",
+  uploadAsset: "upload_asset",
+  getFrameScreenshot: "get_frame_screenshot",
+  getPrototype: "get_prototype",
+  saveDecision: "save_decision",
+});
 
 function normalizeDoopTokenName(rawName) {
   const cleaned = String(rawName ?? "").trim().replace(/\s+/g, "-");
@@ -180,7 +195,7 @@ function tokenPriorityRank(tok) {
   return 3 + TOKEN_TYPES.indexOf(tok.type);
 }
 
-/** Topological + semantic ordering required by Doop create_tokens. */
+/** Topological + semantic ordering for deterministic token handoff. */
 function orderTokensForDoop(tokens) {
   const remaining = new Map(tokens.map((t) => [t.cssVar, t]));
   const placed = new Set();
@@ -307,14 +322,43 @@ function buildReferencedAssets(extractedAssets, { allowLoopback = false } = {}) 
   return assets;
 }
 
-export function createDoopAdapter() {
+export function splitHtmlChunks(html, chunkBytes = 3072) {
+  const source = Buffer.from(String(html ?? ""), "utf8");
+  if (source.length <= chunkBytes) return [source.toString("utf8")];
+  const chunks = [];
+  let offset = 0;
+  while (offset < source.length) {
+    let end = Math.min(source.length, offset + chunkBytes);
+    while (end < source.length && (source[end] & 0xc0) === 0x80) end--;
+    if (end < source.length) {
+      const boundary = source.lastIndexOf(0x3e, end - 1);
+      if (boundary > offset + 256) end = boundary + 1;
+    }
+    chunks.push(source.subarray(offset, end).toString("utf8"));
+    offset = end;
+  }
+  return chunks;
+}
+
+export function createDoopAdapter({
+  mcpClient = null,
+  agentName = "MotionStudio",
+  assetUploadTransport = null,
+  uploadRateLimitScope = mcpClient,
+} = {}) {
   return assertEditorAdapter({
     editor: "doop",
+    uploadRateLimitScope: uploadRateLimitScope ?? undefined,
     capabilities: {
       tokens: true,
       frames: true,
       components: true,
       prototypes: true,
+      export: true,
+      remoteTokenRead: false,
+      remoteComponentRead: false,
+      tokenWrite: false,
+      componentWrite: false,
     },
 
     importTokens(rawInput, { brandSlug = "doop-brand", webFonts = [], customFonts = [] } = {}) {
@@ -472,6 +516,225 @@ export function createDoopAdapter() {
         blockingDiagnostics,
         warnings,
       };
+    },
+
+    async inspectRemoteState({ documentId, frameIds = [] } = {}) {
+      if (typeof mcpClient !== "function") {
+        return { verified: false, documentId, pages: [], tokens: [], components: [], frames: {}, approvedFrameCount: 0 };
+      }
+      const canvas = await mcpClient(DOOP_MCP_TOOL_NAMES.getCanvas, { canvas_id: documentId, agent_name: agentName });
+      const tokenSourceAvailable = Array.isArray(canvas?.tokens) || Array.isArray(canvas?.designTokens) || Array.isArray(canvas?.tokenBundle?.tokens);
+      const rawTokens = canvas?.tokens ?? canvas?.designTokens ?? canvas?.tokenBundle?.tokens ?? [];
+      const parsedTokens = Array.isArray(rawTokens) ? rawTokens : [];
+      const componentSourceAvailable = Array.isArray(canvas?.components) || Array.isArray(canvas?.componentLibrary) || Array.isArray(canvas?.workspaceLibraries);
+      const rawComponents = canvas?.components ?? canvas?.componentLibrary ?? canvas?.workspaceLibraries ?? [];
+      const frames = {};
+      const allFrameMeta = Array.isArray(canvas?.frames) ? canvas.frames : [];
+      const approvedFrameCount = allFrameMeta.filter((f) => f?.approvalStatus === "ready_for_dev").length;
+      for (const fm of allFrameMeta) {
+        if (fm?.id) frames[fm.id] = { ...fm };
+      }
+      for (const fid of frameIds) {
+        if (!fid) continue;
+        const full = await mcpClient(DOOP_MCP_TOOL_NAMES.getFrame, { frame_id: fid, agent_name: agentName });
+        if (full) {
+          frames[fid] = { ...(frames[fid] ?? {}), ...full };
+        }
+      }
+      return {
+        verified: true,
+        documentId,
+        pages: Array.isArray(canvas?.pages) ? canvas.pages : [],
+        tokens: parsedTokens,
+        tokensVerified: tokenSourceAvailable,
+        components: Array.isArray(rawComponents) ? rawComponents : [],
+        componentsVerified: componentSourceAvailable,
+        frames,
+        approvedFrameCount,
+      };
+    },
+
+    async planExport(inspected, options = {}) {
+      const { planExportToEditor } = await import("../export-to-editor.mjs");
+      return planExportToEditor(inspected, { ...options, adapter: this, agentName: options.agentName ?? agentName });
+    },
+
+    async executeExportOperation(op, { signal, assetBuffer = null } = {}) {
+      if (signal?.aborted) {
+        throw Object.assign(new MotionError(ERROR_CODES.BRIDGE_ASSET_FAILED, `Operação Doop cancelada: ${op.id}`), { preCommit: true });
+      }
+      if (typeof mcpClient !== "function") {
+        throw Object.assign(new MotionError(
+          ERROR_CODES.BRIDGE_ADAPTER_INVALID,
+          `DoopAdapter exige mcpClient injetado para executar operação '${op.kind}' sem simulação dry-run.`
+        ), { preCommit: true });
+      }
+      const p = op.payload ?? {};
+      const actor = p.agent_name ?? agentName;
+      switch (op.kind) {
+        case "upload_asset": {
+          if (typeof assetUploadTransport !== "function") {
+            throw Object.assign(new MotionError(ERROR_CODES.BRIDGE_ADAPTER_INVALID, "Upload local requer assetUploadTransport injetado; o MCP do Doop só emite o grant local e comando de transferência."), { preCommit: true });
+          }
+          if (!Buffer.isBuffer(assetBuffer)) {
+            throw Object.assign(new MotionError(ERROR_CODES.BRIDGE_ADAPTER_INVALID, `Bytes do asset '${op.source?.path ?? op.id}' não foram resolvidos para upload.`), { preCommit: true });
+          }
+          let grant;
+          try {
+            grant = await mcpClient(DOOP_MCP_TOOL_NAMES.uploadAsset, {
+              canvas_id: p.canvas_id,
+              local_file: true,
+              agent_name: actor,
+            });
+          } catch (err) {
+            if (err?.preCommit !== true && err?.status !== 429) err.ambiguousOutcome = true;
+            throw err;
+          }
+          try {
+            const uploaded = await assetUploadTransport({
+              grant,
+              buffer: assetBuffer,
+              sha256: op.source?.sha256 ?? p.sha256,
+              mime: p.mime,
+              fileName: p.file_name ?? op.source?.path,
+              signal,
+            });
+            if (typeof uploaded?.url !== "string" || !uploaded.url) {
+              throw Object.assign(new MotionError(ERROR_CODES.BRIDGE_EXPORT_BLOCKED, "O transporte de upload não confirmou uma URL do asset."), { ambiguousOutcome: true });
+            }
+            return { assetId: uploaded?.id ?? grant?.id ?? null, url: uploaded?.url ?? null, raw: uploaded };
+          } catch (err) {
+            if (err?.preCommit !== true) err.ambiguousOutcome = true;
+            throw err;
+          }
+        }
+        case "create_frame": {
+          const html = String(p.html ?? "");
+          if (p.stream === true && Buffer.byteLength(html, "utf8") > 4096) {
+            let created;
+            try {
+              created = await mcpClient(DOOP_MCP_TOOL_NAMES.createFrame, {
+              canvas_id: p.canvas_id,
+              name: p.name,
+              width: p.width,
+              height: p.height,
+              ...(p.pageId ? { pageId: p.pageId } : {}),
+              html: "<!doctype html><html><body></body></html>",
+              agent_name: actor,
+              });
+            } catch (err) {
+              if (err?.preCommit !== true && err?.status !== 429) err.ambiguousOutcome = true;
+              throw err;
+            }
+            const frameId = created?.id ?? created?.frameId ?? null;
+            if (!frameId) {
+              throw Object.assign(new MotionError(ERROR_CODES.BRIDGE_EXPORT_BLOCKED, "create_frame não retornou um id para continuar o stream."), { ambiguousOutcome: true });
+            }
+            try {
+              const chunks = splitHtmlChunks(html, 3072);
+              for (let i = 0; i < chunks.length; i++) {
+                await mcpClient(DOOP_MCP_TOOL_NAMES.appendFrameHtml, {
+                  frame_id: frameId,
+                  html_chunk: chunks[i],
+                  start: i === 0,
+                  done: i === chunks.length - 1,
+                  agent_name: actor,
+                });
+              }
+            } catch (err) {
+              err.ambiguousOutcome = true;
+              err.partialFrameId = frameId;
+              throw err;
+            }
+            return { frameId, pageId: p.pageId ?? created?.pageId ?? null, image_url: created?.image_url ?? null, streamed: true };
+          }
+          let r;
+          try {
+            r = await mcpClient(DOOP_MCP_TOOL_NAMES.createFrame, {
+              canvas_id: p.canvas_id,
+              name: p.name,
+              width: p.width,
+              height: p.height,
+              ...(p.pageId ? { pageId: p.pageId } : {}),
+              html,
+              agent_name: actor,
+            });
+          } catch (err) {
+            if (err?.preCommit !== true && err?.status !== 429) err.ambiguousOutcome = true;
+            throw err;
+          }
+          const frameId = r?.id ?? r?.frameId ?? null;
+          if (!frameId) throw Object.assign(new MotionError(ERROR_CODES.BRIDGE_EXPORT_BLOCKED, "create_frame não retornou ID; estado remoto desconhecido."), { ambiguousOutcome: true });
+          return { frameId, pageId: p.pageId ?? r?.pageId ?? null, image_url: r?.image_url ?? null, raw: r };
+        }
+        case "set_frame_html": {
+          let r;
+          try {
+            r = await mcpClient(DOOP_MCP_TOOL_NAMES.setFrameHtml, { frame_id: p.frame_id, html: p.html, agent_name: actor });
+          } catch (err) {
+            if (err?.preCommit !== true && err?.status !== 429) err.ambiguousOutcome = true;
+            throw err;
+          }
+          return { frameId: p.frame_id, image_url: r?.image_url ?? null, raw: r };
+        }
+        case "append_frame_html": {
+        let r;
+        try {
+          r = await mcpClient(DOOP_MCP_TOOL_NAMES.appendFrameHtml, { frame_id: p.frame_id, html_chunk: p.html_chunk, start: Boolean(p.start), done: Boolean(p.done), agent_name: actor });
+        } catch (err) {
+          if (err?.preCommit !== true && err?.status !== 429) err.ambiguousOutcome = true;
+          throw err;
+        }
+          return { frameId: p.frame_id, raw: r };
+        }
+        case "edit_frame_html": {
+          let r;
+          try {
+            r = await mcpClient(DOOP_MCP_TOOL_NAMES.editFrameHtml, { frame_id: p.frame_id, old_str: p.old_str, new_str: p.new_str, agent_name: actor });
+          } catch (err) {
+            if (err?.preCommit !== true && err?.status !== 429) err.ambiguousOutcome = true;
+            throw err;
+          }
+          return { frameId: p.frame_id, raw: r };
+        }
+        case "get_frame_screenshot": {
+          const r = await mcpClient(DOOP_MCP_TOOL_NAMES.getFrameScreenshot, { frame_id: p.frame_id, scale: p.scale ?? 1, agent_name: actor });
+          return { frameId: p.frame_id, url: r?.image_url ?? r?.url ?? null, raw: r };
+        }
+        case "get_frame": {
+          const r = await mcpClient(DOOP_MCP_TOOL_NAMES.getFrame, { frame_id: p.frame_id, agent_name: actor });
+          return { frameId: p.frame_id, frame: r, raw: r };
+        }
+        case "save_decision": {
+          const r = await mcpClient(DOOP_MCP_TOOL_NAMES.saveDecision, { canvas_id: p.canvas_id, decision: String(p.decision ?? "").slice(0, 500), agent_name: actor });
+          return { raw: r };
+        }
+        case "get_prototype": {
+          const r = await mcpClient(DOOP_MCP_TOOL_NAMES.getPrototype, { canvas_id: p.canvas_id, agent_name: actor });
+          return { raw: r };
+        }
+        default:
+          throw new MotionError(ERROR_CODES.INVALID_ARGUMENT, `Operação Doop não suportada: ${op.kind}`);
+      }
+    },
+
+    async verifyExportedState(op, execResult) {
+      if (typeof mcpClient !== "function") return { ok: true };
+      const frameId = op?.target?.frameId ?? execResult?.frameId ?? null;
+      if (!frameId) return { ok: true };
+      try {
+        if (typeof execResult?.url !== "string" || !execResult.url) return { ok: false, frameId, reason: "get_frame_screenshot não retornou uma URL de screenshot." };
+        assertSafeRemoteUrl(execResult.url);
+        const frame = await mcpClient(DOOP_MCP_TOOL_NAMES.getFrame, { frame_id: frameId, agent_name: agentName });
+        if (!frame || typeof frame.html !== "string") return { ok: false, frameId, reason: "get_frame não retornou HTML." };
+        const expectedHash = op?.preconditions?.expectedHtmlSha256;
+        const actualHash = createHash("sha256").update(frame.html).digest("hex");
+        if (expectedHash && actualHash !== expectedHash) return { ok: false, frameId, reason: "HTML remoto difere do payload planejado." };
+        if (frame.approvalStatus === "ready_for_dev") return { ok: false, frameId, reason: "O frame permaneceu ready_for_dev após a escrita." };
+        return { ok: true, frameId, actualHash, approvalStatus: frame.approvalStatus ?? null };
+      } catch (err) {
+        return { ok: false, frameId, reason: err.message };
+      }
     },
   });
 }

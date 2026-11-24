@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/export-plan.v1.json",
+  "title": "ExportPlan@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "planId",
+    "planHash",
+    "targetEditor",
+    "documentId",
+    "policy",
+    "dryRun",
+    "authorization",
+    "compatibilityReport",
+    "operations"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "planId": { "type": "string", "minLength": 1 },
+    "planHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "targetEditor": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "documentId": { "type": "string", "minLength": 1 },
+    "policy": {
+      "type": "string",
+      "enum": [
+        "create-new-frame",
+        "update-existing-frame",
+        "duplicate-as-draft",
+        "export-assets-only",
+        "dry-run"
+      ]
+    },
+    "dryRun": { "type": "boolean" },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowUpdateExisting",
+        "allowTokenMutation",
+        "allowComponentMutation",
+        "allowPublicUpload",
+        "approvedFrameOverride"
+      ],
+      "properties": {
+        "allowUpdateExisting": { "type": "boolean" },
+        "allowTokenMutation": { "type": "boolean" },
+        "allowComponentMutation": { "type": "boolean" },
+        "allowPublicUpload": { "type": "boolean" },
+        "approvedFrameOverride": { "type": "boolean" }
+      }
+    },
+    "compatibilityReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "classifications", "items", "tokenConflicts", "privacyBlocked", "warnings", "unverifiedCapabilities", "normalizationReport"],
+      "properties": {
+        "schemaVersion": { "const": "1.0.0" },
+        "classifications": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["editable", "rasterized", "referential", "blocked"],
+          "properties": {
+            "editable": { "type": "integer", "minimum": 0 },
+            "rasterized": { "type": "integer", "minimum": 0 },
+            "referential": { "type": "integer", "minimum": 0 },
+            "blocked": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "items": { "type": "array" },
+        "tokenConflicts": { "type": "array" },
+        "privacyBlocked": { "type": "array" },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "unverifiedCapabilities": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "normalizationReport": { "type": ["object", "null"] }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": { "$ref": "export-operation.v1.json" }
+    }
+  }
+}

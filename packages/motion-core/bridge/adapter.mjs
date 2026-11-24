@@ -12,9 +12,16 @@ export const REQUIRED_ADAPTER_METHODS = Object.freeze([
   "validateTargetReadiness",
 ]);
 
+export const OPTIONAL_EXPORT_METHODS = Object.freeze([
+  "inspectRemoteState",
+  "planExport",
+  "executeExportOperation",
+  "verifyExportedState",
+]);
+
 const EDITOR_ID_RE = /^[a-z0-9-]+$/;
 
-/** Asserts that an adapter satisfies the EditorAdapter contract. */
+/** Asserts that an adapter satisfies the EditorAdapter contract (backward compatible with M1 adapters). */
 export function assertEditorAdapter(adapter) {
   if (!adapter || typeof adapter !== "object") {
     throw new MotionError(ERROR_CODES.BRIDGE_ADAPTER_INVALID, "EditorAdapter deve ser um objeto.");
@@ -33,7 +40,25 @@ export function assertEditorAdapter(adapter) {
       );
     }
   }
+  if (adapter.capabilities.export === true) {
+    for (const method of OPTIONAL_EXPORT_METHODS) {
+      if (typeof adapter[method] !== "function") {
+        throw new MotionError(
+          ERROR_CODES.BRIDGE_ADAPTER_INVALID,
+          `Adapter '${adapter.editor}' declara capabilities.export=true mas não implementa '${method}()'.`
+        );
+      }
+    }
+  }
   return adapter;
+}
+
+/** Checks whether an adapter supports optional Motion-to-Design export operations. */
+export function supportsExportOperations(adapter) {
+  return Boolean(
+    adapter?.capabilities?.export === true &&
+    OPTIONAL_EXPORT_METHODS.every((m) => typeof adapter[m] === "function")
+  );
 }
 
 /** Creates an isolated registry of EditorAdapter instances (no global mutable state required). */

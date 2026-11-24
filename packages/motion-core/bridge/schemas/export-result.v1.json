@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/export-result.v1.json",
+  "title": "ExportResult@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "planId",
+    "planHash",
+    "targetEditor",
+    "documentId",
+    "policy",
+    "dryRun",
+    "status",
+    "operations",
+    "uploadedAssets",
+    "createdFrames",
+    "reconciliation",
+    "rollbackNote"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "planId": { "type": "string", "minLength": 1 },
+    "planHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "targetEditor": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "documentId": { "type": "string", "minLength": 1 },
+    "policy": { "type": "string" },
+    "dryRun": { "type": "boolean" },
+    "status": {
+      "type": "string",
+      "enum": ["DRY_RUN", "COMPLETED", "PARTIAL", "FAILED", "BLOCKED", "CANCELLED"]
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "status", "attempts", "reversible"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "type": "string", "minLength": 1 },
+          "status": {
+            "type": "string",
+            "enum": ["planned", "skipped", "succeeded", "failed", "ambiguous"]
+          },
+          "attempts": { "type": "integer", "minimum": 0 },
+          "reversible": { "type": "boolean" },
+          "remoteId": { "type": ["string", "null"] },
+          "remoteUrl": { "type": ["string", "null"] },
+          "errorCode": { "type": ["string", "null"] },
+          "errorMessage": { "type": ["string", "null"] },
+          "verified": { "type": ["boolean", "null"] },
+          "writtenHtmlSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
+    "uploadedAssets": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "createdFrames": { "type": "array" },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["completedCount", "skippedCount", "failedCount", "ambiguousCount", "resumable"],
+      "properties": {
+        "completedCount": { "type": "integer", "minimum": 0 },
+        "skippedCount": { "type": "integer", "minimum": 0 },
+        "failedCount": { "type": "integer", "minimum": 0 },
+        "ambiguousCount": { "type": "integer", "minimum": 0 },
+        "resumable": { "type": "boolean" }
+      }
+    },
+    "rollbackNote": { "type": "string", "minLength": 1 }
+  }
+}

@@ -5,16 +5,24 @@
  */
 export {
   REQUIRED_ADAPTER_METHODS,
+  OPTIONAL_EXPORT_METHODS,
   assertEditorAdapter,
   createAdapterRegistry,
+  supportsExportOperations,
 } from "./adapter.mjs";
 export {
+  EXPORT_POLICIES,
   SCHEMA_VERSION,
   TOKEN_TYPES,
   computeDesignIRHash,
+  computeExportPlanHash,
   extractAliasTarget,
   validateAssetProvenance,
   validateDesignIR,
+  validateExportCompatibilityReport,
+  validateExportOperation,
+  validateExportPlan,
+  validateExportResult,
   validateTokenBundle,
 } from "./contracts.mjs";
 export {
@@ -50,4 +58,14 @@ export {
   writeStoryboardMarkdown,
 } from "./prototype-to-storyboard.mjs";
 export { compareVisualFidelity } from "./fidelity.mjs";
-export { createDoopAdapter, toMotionBrandTokens } from "./adapters/doop.mjs";
+export {
+  executeExportPlan,
+  exportToEditor,
+  inspectExportSource,
+  planExportToEditor,
+  prepareOutgoingFrameHtml,
+  stripImageMetadata,
+  stripPngMetadata,
+  validateExportPlanAndPreconditions,
+} from "./export-to-editor.mjs";
+export { createDoopAdapter, DOOP_MCP_TOOL_NAMES, splitHtmlChunks, toMotionBrandTokens } from "./adapters/doop.mjs";

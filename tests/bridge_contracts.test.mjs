@@ -12,11 +12,59 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const schemasDir = path.join(root, "packages", "motion-core", "bridge", "schemas");
 
 test("JSON schemas on disk are valid and versioned 1.0.0", async () => {
-  for (const name of ["design-ir.v1.json", "token-bundle.v1.json", "asset-provenance.v1.json"]) {
+  for (const name of [
+    "design-ir.v1.json",
+    "token-bundle.v1.json",
+    "asset-provenance.v1.json",
+    "export-plan.v1.json",
+    "export-result.v1.json",
+  ]) {
     const schema = JSON.parse(await readFile(path.join(schemasDir, name), "utf8"));
     assert.equal(schema.properties.schemaVersion.const, "1.0.0", name);
     assert.equal(schema.additionalProperties, false, name);
   }
+  for (const name of ["export-operation.v1.json", "export-compatibility-report.v1.json"]) {
+    const schema = JSON.parse(await readFile(path.join(schemasDir, name), "utf8"));
+    assert.equal(schema.additionalProperties, false, name);
+    assert.match(schema.title, /@1$/, name);
+  }
+});
+
+test("ExportOperation@1 and ExportCompatibilityReport@1 validate hashes and classifications", () => {
+  const operationInput = {
+    id: "op-001-12345678",
+    kind: "create_frame",
+    source: { kind: "editable-html", path: "screen.html" },
+    target: { canvasId: "cnv_1" },
+    dependsOn: [],
+    preconditions: { neverAutoApprove: true },
+    payload: { html: "<div>hello</div>" },
+    reversible: false,
+    compensable: false,
+    expectedOutcome: "Criar frame rascunho.",
+  };
+  operationInput.inputHash = B.sha256Json({
+    kind: operationInput.kind,
+    source: operationInput.source,
+    target: operationInput.target,
+    preconditions: operationInput.preconditions,
+    payload: operationInput.payload,
+  });
+  assert.equal(B.validateExportOperation(operationInput).inputHash, operationInput.inputHash);
+  assert.throws(() => B.validateExportOperation({ ...operationInput, inputHash: "0".repeat(64) }), (e) => e.code === ERROR_CODES.BRIDGE_SCHEMA_INVALID);
+
+  const report = B.validateExportCompatibilityReport({
+    schemaVersion: "1.0.0",
+    classifications: { editable: 1, rasterized: 2, referential: 0, blocked: 1 },
+    items: [],
+    tokenConflicts: [],
+    privacyBlocked: [],
+    warnings: ["Leitura de componentes não verificada."],
+    unverifiedCapabilities: ["remote-component-read"],
+  });
+  assert.equal(report.classifications.rasterized, 2);
+  assert.deepEqual(report.unverifiedCapabilities, ["remote-component-read"]);
+  assert.throws(() => B.validateExportCompatibilityReport({ ...report, classifications: { editable: -1, rasterized: 0, referential: 0, blocked: 0 } }), (e) => e.code === ERROR_CODES.BRIDGE_SCHEMA_INVALID);
 });
 
 test("security: path traversal vectors are rejected", () => {

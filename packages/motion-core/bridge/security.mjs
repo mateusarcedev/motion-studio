@@ -333,6 +333,7 @@ function classifyCssOrHtmlUrl(rawCandidate, { allowLoopback = false } = {}) {
   const decoded = normalizeControlAndSpace(rawCandidate);
   if (!decoded) return { kind: "empty", safe: false, reason: "URL vazia" };
   if (decoded.startsWith("#")) return { kind: "fragment", safe: true, url: decoded };
+  if (/^\{\{uploaded:[a-f0-9]{64}\}\}$/.test(decoded)) return { kind: "hydrated-asset", safe: true, url: decoded };
   if (/^(?:javascript|vbscript):/i.test(decoded)) {
     return { kind: "unsafe-scheme", safe: false, reason: `Esquema script bloqueado: ${decoded.slice(0, 32)}` };
   }

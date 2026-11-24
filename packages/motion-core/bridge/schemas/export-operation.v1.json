@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/export-operation.v1.json",
+  "title": "ExportOperation@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "source", "target", "dependsOn", "preconditions", "payload", "inputHash", "reversible", "compensable", "expectedOutcome"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^op-[0-9]{3,}-[a-f0-9]{8}$" },
+    "kind": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+    "source": { "type": "object" },
+    "target": { "type": "object" },
+    "dependsOn": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "preconditions": { "type": "object" },
+    "payload": { "type": "object" },
+    "inputHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "reversible": { "type": "boolean" },
+    "compensable": { "type": "boolean" },
+    "expectedOutcome": { "type": "string", "minLength": 1 }
+  }
+}
