@@ -4,7 +4,7 @@
  * Every intermediate (segments, card PNG, captions, voice) is kept and hashed, so a difference is
  * located by stage; the folder is uploaded by the CI when the gate fails.
  */
-import { appendFile, chmod, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { appendFile, chmod, mkdir, mkdtemp, readdir, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import os from "node:os";
@@ -14,9 +14,9 @@ import { reel as R } from "../packages/motion-core/index.js";
 import { launchBrowser } from "../packages/motion-core/lib/browser.mjs";
 import { burstTranscript, noisySpeechWav, verticalVideo } from "../tests/helpers/reel-fixtures.mjs";
 
-const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "tests", "tmp", "ci-determinism");
-await rm(root, { recursive: true, force: true });
-await mkdir(root, { recursive: true });
+const tempRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "tests", "tmp");
+await mkdir(tempRoot, { recursive: true });
+const root = await mkdtemp(path.join(tempRoot, "ci-determinism-"));
 
 const sh = (cmd, args) => { const r = spawnSync(cmd, args, { encoding: "utf8", maxBuffer: 1 << 28 }); return { ok: r.status === 0, out: r.stdout ?? "", err: r.stderr ?? r.error?.message ?? "" }; };
 const attempt = async (fn) => { try { return await fn(); } catch (e) { return { error: e.message }; } };
@@ -42,7 +42,7 @@ for (const k of ["a", "b"]) {
   const saved = await R.saveTimeline(plan, path.join(dir, "edit.json"));
   const timeline = await R.loadTimeline(path.join(dir, "edit.json"));
   const report = await R.renderTimeline(timeline, { output: path.join(dir, "reel.mp4"), keepWork: true });
-  runs.push({ dir, work: path.join(dir, "reel.work"), hash: saved.hash, file: report.output, sha256: report.sha256 });
+  runs.push({ dir, work: report.workDir, hash: saved.hash, file: report.output, sha256: report.sha256 });
 }
 process.env.PATH = oldPath;
 
@@ -100,11 +100,12 @@ env.captionFonts = existsSync(ass) ? [...new Set(sh("ffmpeg", ["-hide_banner", "
 env.systemFonts = sh("fc-list", ["--format", "%{file} %{family} %{style}\n"]).out.trim().split("\n").filter(Boolean).sort();
 
 const cmp = await R.compareRenders(runs[0].file, runs[1].file);
-const ok = cmp.identical && runs[0].hash === runs[1].hash;
+const uniqueWorkspaces = runs[0].work !== runs[1].work;
+const ok = cmp.identical && runs[0].hash === runs[1].hash && uniqueWorkspaces;
 const firstDiff = stages.find((s) => !s.identical)?.stage ?? null;
 const { systemFonts, ...envShort } = env;
-const text = `Determinismo: ${ok ? "PASS" : "FAIL"}\ntimeline ${runs[0].hash} / ${runs[1].hash}\nprimeira etapa diferente: ${firstDiff ?? "nenhuma"}\nambiente ${JSON.stringify({ ...envShort, systemFonts: systemFonts.length }, null, 2)}\netapas ${JSON.stringify(stages, null, 2)}\ncomparação ${JSON.stringify(cmp, null, 2)}\n`;
-await writeFile(path.join(root, "report.json"), JSON.stringify({ ok, firstDiff, env, stages, compare: cmp }, null, 2));
+const text = `Determinismo: ${ok ? "PASS" : "FAIL"}\nworkspaces únicos: ${uniqueWorkspaces}\ntimeline ${runs[0].hash} / ${runs[1].hash}\nprimeira etapa diferente: ${firstDiff ?? "nenhuma"}\nambiente ${JSON.stringify({ ...envShort, systemFonts: systemFonts.length }, null, 2)}\netapas ${JSON.stringify(stages, null, 2)}\ncomparação ${JSON.stringify(cmp, null, 2)}\n`;
+await writeFile(path.join(root, "report.json"), JSON.stringify({ ok, uniqueWorkspaces, firstDiff, env, stages, compare: cmp }, null, 2));
 console.log(text);
 console.log(`fontes do sistema:\n${systemFonts.join("\n")}`);
 if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, `### Determinismo\n\n\`\`\`\n${text}\`\`\`\n`);

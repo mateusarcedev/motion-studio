@@ -9,7 +9,8 @@
  * Progress is written to <output>.progress.json for CLI/MCP polling.
  */
 import { existsSync } from "node:fs";
-import { mkdir, rename, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, mkdtemp, rename, rm, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { buildAss, captionsJson, pagesToSrt, wordsToSrt } from "./captions.mjs";
 import { renderOverlayLayers } from "./overlays.mjs";
@@ -30,9 +31,21 @@ export function audioRanges(segments) {
   return out;
 }
 
-async function writeProgress(file, data) {
+async function atomicWriteFile(file, data, runId) {
+  const temp = `${file}.${runId}.${randomUUID()}.tmp`;
+  await writeFile(temp, data);
+  await rename(temp, file);
+}
+
+async function atomicCopyFile(source, file, runId) {
+  const temp = `${file}.${runId}.${randomUUID()}.tmp`;
+  await copyFile(source, temp);
+  await rename(temp, file);
+}
+
+async function writeProgress(file, data, runId) {
   if (!file) return;
-  await writeFile(file, JSON.stringify({ ...data, updatedAt: new Date().toISOString() }, null, 2)).catch(() => {});
+  await atomicWriteFile(file, JSON.stringify({ ...data, updatedAt: new Date().toISOString() }, null, 2), runId).catch(() => {});
 }
 
 async function ff(args, what, { onProgress } = {}) {
@@ -109,11 +122,19 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   const outDir = path.dirname(outFile);
   const base = outFile.replace(/\.mp4$/i, "");
   const progress = `${outFile}.progress.json`;
-  const work = path.resolve(workDir ?? `${base}.work`);
-  await mkdir(work, { recursive: true });
+  const runId = randomUUID();
+  const workRoot = path.resolve(workDir ?? `${base}.work`);
+  await mkdir(workRoot, { recursive: true });
   await mkdir(outDir, { recursive: true });
+  const work = await mkdtemp(path.join(workRoot, `render-${runId}-`));
+  const stagedOutput = path.join(outDir, `.${path.basename(base)}.${runId}.tmp.mp4`);
   const t0 = Date.now();
-  const stage = async (name, done, total, extra = {}) => writeProgress(progress, { status: "running", mode, stage: name, done, total, percent: round((done / Math.max(1, total)) * 100, 1), ...extra });
+  let progressQueue = Promise.resolve();
+  const stage = (name, done, total, extra = {}) => {
+    const data = { status: "running", mode, stage: name, done, total, percent: round((done / Math.max(1, total)) * 100, 1), ...extra };
+    progressQueue = progressQueue.then(() => writeProgress(progress, data, runId));
+    return progressQueue;
+  };
 
   // 0) source integrity
   if (!existsSync(timeline.source.path)) throw reelError(REEL_ERRORS.INPUT_INVALID, `Fonte não encontrada: ${timeline.source.path}`);
@@ -125,11 +146,13 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   const outH = mode === "preview" ? timeline.export.preview.height : timeline.output.height;
   const durationSec = timeline.segments.reduce((n, s) => n + s.frames, 0) / fps;
   const report = { schema: "motion.reel.render", schemaVersion: 1, mode, timelineHash: timelineHash(timeline), source: { path: timeline.source.path, sha256: srcHash }, output: outFile, width: outW, height: outH, fps, frames: timeline.output.frames, durationSec: round(durationSec, 6), ffmpeg: tools.version, files: {}, timings: {}, warnings: [] };
+  if (keepWork) report.workDir = work;
 
   // 1) voice (treated + cut + normalized)
   await stage("audio", 0, 4);
   const audioOffset = (probe.audio?.startTime ?? 0) - (probe.video?.startTime ?? 0);
-  const voiceWav = `${base}.voice.wav`;
+  const voiceWav = path.join(work, "voice.wav");
+  const publishedVoiceWav = `${base}.voice.wav`;
   let voice = null;
   if (probe.audio) {
     const t = Date.now();
@@ -139,7 +162,7 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
       music: timeline.audio.music ? { ...timeline.audio.music, path: resolveFrom(timeline, timeline.audio.music.path) } : null,
       channels: timeline.export.audio.channels, abDir: voiceAbDir, workDir: path.join(work, "voice"),
     });
-    report.files.voice = voiceWav;
+    report.files.voice = publishedVoiceWav;
     report.voice = { qa: voice.qa, after: voice.after.loudness, chain: voice.chain, latency: voice.latency, denoiser: voice.denoiser, denoiserFallback: voice.denoiserFallback, chainVersion: voice.chainVersion, params: voice.params, speechToPause: voice.speechToPause, loudnessPass: voice.loudnessPass, ab: voice.ab };
     if (voice.denoiserFallback) report.warnings.push(voice.denoiserFallback);
     report.timings.audioSec = round((Date.now() - t) / 1000, 2);
@@ -174,13 +197,16 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   // 4) captions
   let assFile = null, fontsDir = null;
   if (!skipCaptions && timeline.captions?.enabled && timeline.captions.pages?.length) {
-    assFile = `${base}.captions.ass`;
+    assFile = path.join(work, "captions.ass");
+    const captionsSrt = path.join(work, "captions.srt");
+    const captionsWordsSrt = path.join(work, "captions.words.srt");
+    const captionsJsonFile = path.join(work, "captions.json");
     await writeFile(assFile, buildAss(timeline.captions.pages, { width: timeline.output.width, height: timeline.output.height, styleIn: timeline.captions.style, placement: timeline.captions.placement }));
-    await writeFile(`${base}.captions.srt`, pagesToSrt(timeline.captions.pages));
+    await writeFile(captionsSrt, pagesToSrt(timeline.captions.pages));
     const hiddenIds = new Set(timeline.captions.hiddenWords ?? []);
-    await writeFile(`${base}.captions.words.srt`, wordsToSrt(timeline.captions.words.filter((w) => !hiddenIds.has(String(w.id).split("#")[0]))));
-    await writeFile(`${base}.captions.json`, JSON.stringify(captionsJson(timeline.captions.pages, { placement: timeline.captions.placement, style: timeline.captions.style, timelineHash: report.timelineHash }), null, 2));
-    report.files.captionsAss = assFile; report.files.captionsSrt = `${base}.captions.srt`; report.files.captionsWordsSrt = `${base}.captions.words.srt`; report.files.captionsJson = `${base}.captions.json`;
+    await writeFile(captionsWordsSrt, wordsToSrt(timeline.captions.words.filter((w) => !hiddenIds.has(String(w.id).split("#")[0]))));
+    await writeFile(captionsJsonFile, JSON.stringify(captionsJson(timeline.captions.pages, { placement: timeline.captions.placement, style: timeline.captions.style, timelineHash: report.timelineHash }), null, 2));
+    report.files.captionsAss = `${base}.captions.ass`; report.files.captionsSrt = `${base}.captions.srt`; report.files.captionsWordsSrt = `${base}.captions.words.srt`; report.files.captionsJson = `${base}.captions.json`;
     fontsDir = timeline.captions.fontsDir ? resolveFrom(timeline, timeline.captions.fontsDir) : null;
     if (!fontsDir) report.warnings.push("Legendas sem fontsDir: a fonte vem do sistema (fontconfig) e pode variar entre máquinas.");
   }
@@ -224,22 +250,22 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   if (aIdx !== null) args.push("-map", `${aIdx}:a`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6));
   args.push("-frames:v", String(timeline.output.frames), "-r", String(fps), "-fps_mode", "cfr", "-c:v", "libx264", "-profile:v", v.profile, "-pix_fmt", "yuv420p", ...enc, "-g", String(v.gop),
     "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-threads", "4",
-    "-fflags", "+bitexact", "-flags:v", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", outFile);
+    "-fflags", "+bitexact", "-flags:v", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", stagedOutput);
   const total = timeline.output.frames;
   await ff(args, "composição final", { onProgress: (s) => { const m = s.match(/frame=\s*(\d+)/g); if (m) { const n = Number(m.at(-1).replace(/\D/g, "")); stage("compose", n, total); } } });
   // 6) true peak is judged on the delivered AAC: the encoder adds inter-sample overshoot that no
   // limiter upstream can guarantee. Over the ceiling → less gain, audio re-encoded, video copied.
   if (aIdx !== null) {
     const ceiling = timeline.export.loudness.truePeakDb, cfg = { ...PRESETS.render.truePeak, ...(timeline.export.truePeak ?? {}) };
-    let tp = (await measureLoudness(outFile)).truePeakDbtp, trim = 0;
+    let tp = (await measureLoudness(stagedOutput)).truePeakDbtp, trim = 0;
     const attempts = [{ gainDb: 0, truePeakDbtp: tp }];
     while (tp > ceiling && attempts.length <= cfg.maxReencodes) {
       trim -= tp - ceiling + cfg.marginDb;
-      const tmpOut = `${base}.tp.mp4`;
-      await ff(["-i", outFile, "-i", voiceWav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af", `volume=${trim.toFixed(3)}dB`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6),
+      const tmpOut = path.join(work, "true-peak.mp4");
+      await ff(["-i", stagedOutput, "-i", voiceWav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af", `volume=${trim.toFixed(3)}dB`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6),
         "-fflags", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", tmpOut], "recodificação do áudio (true peak)");
-      await rename(tmpOut, outFile);
-      tp = (await measureLoudness(outFile)).truePeakDbtp;
+      await rename(tmpOut, stagedOutput);
+      tp = (await measureLoudness(stagedOutput)).truePeakDbtp;
       attempts.push({ gainDb: round(trim, 3), truePeakDbtp: tp });
     }
     report.truePeak = { ceilingDbtp: ceiling, attempts, ok: tp <= ceiling };
@@ -247,18 +273,28 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   }
   report.timings.composeSec = round((Date.now() - t2) / 1000, 2);
   report.timings.totalSec = round((Date.now() - t0) / 1000, 2);
-  report.sha256 = await sha256File(outFile);
+  report.sha256 = await sha256File(stagedOutput);
   report.files.video = outFile;
   const timelineCopy = `${base}.timeline.json`;
   const { __file, ...clean } = timeline;
-  await writeFile(timelineCopy, JSON.stringify(clean, null, 2) + "\n");
+  const timelineText = JSON.stringify(clean, null, 2) + "\n";
   report.files.timeline = timelineCopy;
   const srcAfter = await sha256File(timeline.source.path);
   report.source.unchanged = srcAfter === srcHash;
-  await writeFile(`${base}.render.json`, JSON.stringify(report, null, 2));
   report.files.report = `${base}.render.json`;
+  if (voice) await atomicCopyFile(voiceWav, publishedVoiceWav, runId);
+  if (assFile) {
+    await atomicCopyFile(assFile, report.files.captionsAss, runId);
+    await atomicCopyFile(path.join(work, "captions.srt"), report.files.captionsSrt, runId);
+    await atomicCopyFile(path.join(work, "captions.words.srt"), report.files.captionsWordsSrt, runId);
+    await atomicCopyFile(path.join(work, "captions.json"), report.files.captionsJson, runId);
+  }
+  await atomicWriteFile(timelineCopy, timelineText, runId);
+  await rename(stagedOutput, outFile);
+  await atomicWriteFile(report.files.report, JSON.stringify(report, null, 2), runId);
   if (!keepWork) await rm(work, { recursive: true, force: true });
-  await writeProgress(progress, { status: "done", mode, stage: "done", done: 1, total: 1, percent: 100, output: outFile, report: report.files.report });
+  await progressQueue;
+  await writeProgress(progress, { status: "done", mode, stage: "done", done: 1, total: 1, percent: 100, output: outFile, report: report.files.report }, runId);
   return report;
 }
 

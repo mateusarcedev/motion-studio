@@ -57,11 +57,11 @@ Auditado e aprovado com 100% PASS em 5 viewports distintas (Mobile-S 360px, Mobi
 | ![Kronos Orbit Desktop](docs/assets/demo/website-desktop.png) | ![Kronos Orbit Mobile](docs/assets/demo/website-mobile.png) |
 
 ### 2. Deterministic CFR Video (15s @ 30 FPS — 450 Frames)
-Renderização determinística bit-a-bit quadro a quadro, montagem CFR FFmpeg YUV420p e folha de contato (contact sheet) para inspeção do crítico:
+Renderização reproduzível quadro a quadro na mesma máquina, montagem CFR FFmpeg YUV420p e folha de contato (contact sheet) para inspeção do crítico:
 
 <div align="center">
   <img src="docs/assets/demo/video-contact-sheet.png" alt="Contact Sheet Vídeo 15s" width="80%">
-  <p><em>Contact Sheet de Produção — 450 quadros inspecionados com determinismo visual absoluto.</em></p>
+  <p><em>Contact Sheet de Produção — 450 quadros inspecionados para equivalência visual.</em></p>
 </div>
 
 ### 3. High-Res Social Carousel (5 Slides 1080×1350 & 2160×2700)
@@ -84,6 +84,8 @@ Carrossel editorial com roteiro, tipografia calibrada, legendas e pacote ZIP de 
 - **🧩 Assets Visuais & SVG**: Resolver por intenção para ícones e ilustrações, com estilo consistente e origem/licença registradas; ferramentas para validar, sanitizar, otimizar e animar SVGs de forma determinística.
 - **✅ QA & Integridade de Entrega**: Relatórios de qualidade para projetos e mídia, contratos de entrega, manifesto SHA-256 e verificação do conteúdo real do ZIP antes de concluir a exportação.
 - **🔒 Isolamento de Marcas & Memória Visual**: Cada projeto consumidor possui seus próprios tokens (`tokens.json`), tom de voz (`PROFILE.md`) e galeria local isolada.
+
+Determinismo de vídeo: **idêntico na mesma máquina; visualmente igual entre máquinas**. Veja [docs/DETERMINISM.md](docs/DETERMINISM.md).
 
 ---
 

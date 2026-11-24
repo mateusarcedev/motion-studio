@@ -173,13 +173,21 @@ function projectRoot(file) {
  */
 export function timelineHash(t, { file = t.__file } = {}) {
   // as stored on disk: undefined fields vanish there, so they cannot count in memory either
+  const anchor = file ?? t.source?.path ?? process.cwd();
   const { provenance, hash, __file, ...rest } = JSON.parse(JSON.stringify(t));
   for (const x of [rest.source, rest.brief]) if (x?.sha256) delete x.path;
-  if (file) {
-    const root = projectRoot(file), dir = path.dirname(path.resolve(file));
-    const fix = (o, k) => { if (o?.[k]) o[k] = path.relative(root, path.resolve(dir, o[k])).split(path.sep).join("/") || "."; };
-    fix(rest.captions, "fontsDir"); fix(rest.captions?.style, "fontsDir"); fix(rest.overlayStyle, "fontsDir"); fix(rest.audio?.music, "path");
-  }
+  const root = projectRoot(anchor);
+  const dir = file ? path.dirname(path.resolve(file)) : null;
+  const fix = (o, k) => {
+    if (typeof o?.[k] !== "string" || !o[k]) return;
+    if (!dir && !path.isAbsolute(o[k])) {
+      o[k] = path.posix.normalize(o[k].replace(/\\/g, "/"));
+      return;
+    }
+    const absolute = dir ? path.resolve(dir, o[k]) : path.resolve(o[k]);
+    o[k] = path.relative(root, absolute).split(path.sep).join("/") || ".";
+  };
+  fix(rest.captions, "fontsDir"); fix(rest.captions?.style, "fontsDir"); fix(rest.overlayStyle, "fontsDir"); fix(rest.audio?.music, "path");
   return sha256Text(canonical(rest));
 }
 

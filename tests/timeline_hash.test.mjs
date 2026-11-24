@@ -28,6 +28,30 @@ test("mesmo hash em outra pasta, outra profundidade e outro projeto", async () =
   const loaded = await R.loadTimeline(path.join(p1, "out", "edit.json"));
   assert.equal(R.timelineHash(loaded), h, "carregada do disco");
 });
+test("hash de timeline em memória normaliza assets sem depender do caminho absoluto do projeto", () => {
+  const make = (dir) => {
+    const t = base(dir, "");
+    t.captions.fontsDir = path.join(dir, "fonts");
+    t.captions.style.fontsDir = path.join(dir, "fonts");
+    t.overlayStyle.fontsDir = path.join(dir, "fonts");
+    t.audio.music.path = path.join(dir, "music", "a.wav");
+    return t;
+  };
+  const a = make(path.join(tmp, "p1")), b = make(path.join(tmp, "p2"));
+  assert.equal(R.timelineHash(a), R.timelineHash(b));
+  assert.equal(R.timelineHash(a), R.timelineHash(a, { file: path.join(tmp, "p1", "out", "edit.json") }));
+});
+test("hash sem local de arquivo preserva caminhos relativos sem resolvê-los contra o cwd", () => {
+  const a = base(path.join(tmp, "p1"), "");
+  const b = base(path.join(tmp, "p2"), "");
+  for (const t of [a, b]) {
+    t.captions.fontsDir = "fonts";
+    t.captions.style.fontsDir = "fonts";
+    t.overlayStyle.fontsDir = "fonts";
+    t.audio.music.path = "music/a.wav";
+  }
+  assert.equal(R.timelineHash(a), R.timelineHash(b));
+});
 test("conteúdo diferente continua mudando o hash", async () => {
   const p1 = path.join(tmp, "p1"), h = await save(p1, "", "");
   assert.notEqual(await save(p1, "", "", (t) => { t.source.sha256 = "c".repeat(64); return t; }), h);

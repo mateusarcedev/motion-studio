@@ -48,7 +48,7 @@ jobs:
         run: npm run skills:verify
 
   determinism:
-    name: Determinismo (dois renders)
+    name: Determinismo (mesma máquina)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -69,4 +69,4 @@ jobs:
       - name: Intermediários do determinismo
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with: { name: determinism-intermediates, path: tests/tmp/ci-determinism, retention-days: 14, if-no-files-found: warn }
+        with: { name: determinism-intermediates, path: tests/tmp/ci-determinism-*, retention-days: 14, if-no-files-found: warn }

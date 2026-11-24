@@ -43,9 +43,10 @@ export async function buildPlan(R, video, o) {
   const analysis = o.analysis ? await readJson(o.analysis) : null;
   const { corrections, preset: cfgPreset, ...opts } = config;
   if (brief) for (const k of ["opening", "openingText", "openingApproval", "keywords"]) if (brief[k] !== undefined && opts[k] === undefined) opts[k] = brief[k];
-  const t = await R.planEdit(video, { analysis, transcript, preset: o.preset || cfgPreset || "talking-head", ...opts });
+  const t = await R.planEdit(video, { analysis, transcript, preset: o.preset || cfgPreset || "talking-head", ...opts, timelineFile: output });
   for (const g of suggestions) t.review.push({ src: [g.start, g.end], reason: `glossário sugere "${g.term}" para "${g.heard}" (semelhança ${g.similarity}, confiança ${g.confidence}); não aplicado`, by: "engine" });
   if (brief) t.brief = { path: path.relative(path.dirname(output), path.resolve(o.brief)), sha256: brief.sha256 };
+  t.hash = R.timelineHash(t, { file: output });
   await mkdir(path.dirname(output), { recursive: true });
   return { timeline: t, saved: await R.saveTimeline(t, output), output };
 }
