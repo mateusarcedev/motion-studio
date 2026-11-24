@@ -41,6 +41,7 @@ jobs:
       - name: Dependências Python
         run: python3 -m pip install --quiet pillow -r packages/motion-skills/skills/cinematic-product-director/scripts/requirements.txt
       - name: Suíte completa
+        env: { MOTION_TEST_CONCURRENCY: 1 }
         run: npm run test:ci
       - name: Testes Python
         run: npm run test:py
