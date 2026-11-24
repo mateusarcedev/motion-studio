@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/asset-provenance.v1.json",
+  "title": "AssetProvenanceManifest@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "assets"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "localPath", "sha256", "kind", "origin", "license", "sanitized", "trademark"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-zA-Z0-9._-]+$" },
+          "sourceUrl": { "type": ["string", "null"] },
+          "localPath": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "kind": { "type": "string", "enum": ["image", "svg", "font", "lottie", "video", "audio"] },
+          "origin": { "type": "string", "minLength": 1 },
+          "license": {
+            "type": "object",
+            "properties": {
+              "spdx": { "type": "string", "minLength": 1 },
+              "scope": { "type": "string", "enum": ["code", "assets"] },
+              "attributionRequired": { "type": "boolean" },
+              "attribution": { "type": ["string", "null"] },
+              "trademark": { "type": "boolean" },
+              "grant": { "type": "string" },
+              "commercialUse": { "type": "boolean" }
+            }
+          },
+          "sanitized": { "type": "boolean" },
+          "trademark": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/design-ir.v1.json",
+  "title": "MotionDesignIR@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "source",
+    "viewport",
+    "componentsUsed",
+    "prototypeFlows",
+    "referencedAssets",
+    "sanitizedHtml",
+    "securityFindings",
+    "compatibilityDiagnostics",
+    "irHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["editor", "documentId", "frameId"],
+      "properties": {
+        "editor": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "workspaceId": { "type": ["string", "null"] },
+        "documentId": { "type": "string", "minLength": 1 },
+        "pageId": { "type": ["string", "null"] },
+        "frameId": { "type": "string", "minLength": 1 },
+        "frameName": { "type": ["string", "null"] },
+        "revision": { "type": ["string", "number", "null"] },
+        "approvalStatus": { "type": ["string", "null"], "enum": ["draft", "needs_review", "ready_for_dev", null] },
+        "capturedAt": { "type": ["string", "null"] }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height", "theme", "deviceScaleFactor"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1, "maximum": 16384 },
+        "height": { "type": "integer", "minimum": 1, "maximum": 32768 },
+        "theme": { "type": "string", "minLength": 1 },
+        "deviceScaleFactor": { "type": "number", "minimum": 0.5, "maximum": 8 }
+      }
+    },
+    "tokensRef": { "type": ["string", "null"] },
+    "assetsRef": { "type": ["string", "null"] },
+    "componentsUsed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["component", "props"],
+        "properties": {
+          "id": { "type": ["string", "null"] },
+          "component": { "type": "string", "minLength": 1 },
+          "props": { "type": "object" }
+        }
+      }
+    },
+    "prototypeFlows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fromFrameId", "on", "action"],
+        "properties": {
+          "fromFrameId": { "type": "string", "minLength": 1 },
+          "triggerElementId": { "type": ["string", "null"] },
+          "on": { "type": "string", "minLength": 1 },
+          "action": { "type": "string", "minLength": 1 },
+          "targetFrameId": { "type": ["string", "null"] },
+          "transition": { "type": ["string", "null"] },
+          "durationMs": { "type": ["integer", "null"], "minimum": 0, "maximum": 30000 }
+        }
+      }
+    },
+    "referencedAssets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url", "kind", "safe"],
+        "properties": {
+          "url": { "type": "string", "minLength": 1 },
+          "kind": { "type": "string", "enum": ["image", "svg", "font", "background", "unknown"] },
+          "safe": { "type": "boolean" },
+          "blockedReason": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "sanitizedHtml": { "type": "string" },
+    "securityFindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "code", "message"],
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "warn", "blocked"] },
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "detail": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "compatibilityDiagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "code", "message"],
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "warn", "error"] },
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "action": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "irHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

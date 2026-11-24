@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion.mateusarce.dev/schemas/token-bundle.v1.json",
+  "title": "DesignTokenBundle@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceEditor", "brandSlug", "themes", "tokens"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "sourceEditor": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "brandSlug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "themes": {
+      "type": "array",
+      "maxItems": 8,
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+    },
+    "fonts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "custom": { "type": "array", "items": { "type": "string" } },
+        "webFonts": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["cssVar", "type", "value"],
+        "properties": {
+          "cssVar": { "type": "string", "pattern": "^--[a-zA-Z0-9_-]+$" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "color", "opacity", "radius", "spacing", "container", "breakpoint",
+              "fontFamily", "fontWeight", "fontSize", "lineHeight", "letterSpacing"
+            ]
+          },
+          "value": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "themes": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 512 } },
+          "aliasOf": { "type": ["string", "null"] },
+          "description": { "type": ["string", "null"] },
+          "motionGroup": { "type": ["string", "null"] },
+          "motionKey": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}
