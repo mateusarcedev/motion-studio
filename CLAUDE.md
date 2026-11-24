@@ -127,3 +127,7 @@ mistake twice — or a rendered film reveals a better default — convert the le
 - or a new review check in the Critic stage.
 
 Every finished film should leave the studio better than it found it.
+
+## Repository Git workflow
+
+The permanent cross-agent Git and release rules live in [`docs/WORKFLOW.md`](docs/WORKFLOW.md) and apply to Claude Code as well as Codex, Antigravity, Gemini CLI, and other agents. Work directly on `main`; do not create auxiliary branches or worktrees. Preserve local and untracked user content, make small atomic commits, keep documentation versioned, and complete the required quality gates before pushing.
