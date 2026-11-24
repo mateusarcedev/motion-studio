@@ -277,47 +277,34 @@ function extractPrototypeFlows(html, fromFrameId) {
 
 function inferUrlKind(url, tagOrContext) {
   const lower = url.toLowerCase();
-  if (/\.(?:woff2?|ttf|otf)(\?|$)/.test(lower)) return "font";
-  if (/\.svg(\?|$)|api\.iconify\.design/i.test(lower)) return "svg";
-  if (tagOrContext === "img" || /\.(?:png|jpe?g|webp|gif|avif)(\?|$)/.test(lower)) return "image";
-  if (tagOrContext === "css") return "background";
+  if (tagOrContext === "font" || /\.(?:woff2?|ttf|otf)(\?|$)/.test(lower)) return "font";
+  if (tagOrContext === "svg" || /\.svg(\?|$)|api\.iconify\.design/i.test(lower)) return "svg";
+  if (tagOrContext === "img" || tagOrContext === "image" || tagOrContext === "svg-image" || /\.(?:png|jpe?g|webp|gif|avif)(\?|$)/.test(lower)) return "image";
+  if (tagOrContext === "css" || tagOrContext === "background") return "background";
   return "unknown";
 }
 
-function extractReferencedAssets(html, { allowLoopback = false } = {}) {
-  const candidates = [];
-  for (const m of html.matchAll(/<img\b[^>]*\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
-    const u = (m[1] ?? m[2] ?? "").trim();
-    if (u && !u.startsWith("data:") && !u.startsWith("#")) candidates.push({ url: u, ctx: "img" });
-  }
-  for (const m of html.matchAll(/url\(\s*(?:"([^"]*)"|'([^']*)'|([^)"'\s]+))\s*\)/gi)) {
-    const u = (m[1] ?? m[2] ?? m[3] ?? "").trim();
-    if (u && !u.startsWith("data:") && !u.startsWith("#")) candidates.push({ url: u, ctx: "css" });
-  }
-
+function buildReferencedAssets(extractedAssets, { allowLoopback = false } = {}) {
   const seen = new Set();
   const assets = [];
-  const securityFindings = [];
 
-  for (const c of candidates) {
-    if (seen.has(c.url)) continue;
-    seen.add(c.url);
-    const kind = inferUrlKind(c.url, c.ctx);
+  for (const entry of extractedAssets) {
+    if (!entry?.url || seen.has(entry.url)) continue;
+    seen.add(entry.url);
+    const kind = inferUrlKind(entry.url, entry.ctx);
+    if (!entry.safe) {
+      assets.push({ url: entry.url, kind, safe: false, blockedReason: entry.blockedReason ?? "Blocked URL" });
+      continue;
+    }
     try {
-      const normalizedUrl = assertSafeRemoteUrl(c.url, { allowLoopback });
+      const normalizedUrl = assertSafeRemoteUrl(entry.url, { allowLoopback });
       assets.push({ url: normalizedUrl, kind, safe: true, blockedReason: null });
     } catch (err) {
-      assets.push({ url: c.url, kind, safe: false, blockedReason: err.message });
-      securityFindings.push({
-        severity: "blocked",
-        code: err.code ?? ERROR_CODES.BRIDGE_UNSAFE_URL,
-        message: `URL de asset bloqueada na importação: ${c.url}`,
-        detail: err.message,
-      });
+      assets.push({ url: entry.url, kind, safe: false, blockedReason: err.message });
     }
   }
 
-  return { assets, securityFindings };
+  return assets;
 }
 
 export function createDoopAdapter() {
@@ -414,8 +401,8 @@ export function createDoopAdapter() {
       }
 
       const rawHtml = String(rawFrame.html ?? "");
-      const { sanitizedHtml, securityFindings, compatibilityDiagnostics } = scanUntrustedHtml(rawHtml);
-      const { assets: referencedAssets, securityFindings: urlFindings } = extractReferencedAssets(sanitizedHtml, { allowLoopback });
+      const { sanitizedHtml, securityFindings, compatibilityDiagnostics, extractedAssets } = scanUntrustedHtml(rawHtml, { allowLoopback });
+      const referencedAssets = buildReferencedAssets(extractedAssets, { allowLoopback });
 
       if (referencedAssets.some((a) => a.safe)) {
         compatibilityDiagnostics.push({
@@ -459,7 +446,7 @@ export function createDoopAdapter() {
         prototypeFlows,
         referencedAssets,
         sanitizedHtml,
-        securityFindings: [...securityFindings, ...urlFindings],
+        securityFindings,
         compatibilityDiagnostics,
       }, { verifyHash: false });
     },

@@ -74,15 +74,37 @@ async function main() {
   const { browser } = await launchBrowser({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
   try {
     const browserVersion = browser.version();
-    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
+    const context = await browser.newContext({
+      viewport: { width, height },
+      deviceScaleFactor: scale,
+      ...(args.offline ? { serviceWorkers: "block" } : {}),
+    });
+    const page = await context.newPage();
     const monitor = createHealthMonitor(page, { optionalAssets: parseOptionalAssets(args["optional-assets"]) });
+    const localOrigin = `http://127.0.0.1:${port}`;
+    if (args.offline) {
+      await context.route("**/*", (route) => {
+        const reqUrl = route.request().url();
+        if (reqUrl.startsWith(`${localOrigin}/`) || reqUrl === localOrigin || /^(?:data|blob):/i.test(reqUrl)) {
+          return route.continue();
+        }
+        monitor.addFinding({
+          severity: "error",
+          code: ERROR_CODES.RENDER_ASSET_FAILED,
+          resourceType: route.request().resourceType(),
+          url: reqUrl,
+          message: `Requisição de rede externa bloqueada no modo offline: ${reqUrl}`,
+        });
+        return route.abort("blockedbyclient");
+      });
+    }
 
     await page.addInitScript((init) => {
       window.__MOTION_DRIVEN__ = true;
       window.__MOTION__ = init;
     }, { fps, totalFrames, seed, frame: 0, time: 0, progress: 0 });
 
-    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load" });
+    await page.goto(`${localOrigin}/`, { waitUntil: "load" });
     await page.evaluate(() => Promise.all([
       document.fonts.ready,
       Promise.all(Array.from(document.images).map((img) =>

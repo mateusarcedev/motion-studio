@@ -8,6 +8,7 @@
  *   - <style> content is rejected if it imports or references external URLs
  * Sanitizing never silently hides what happened: every removal becomes a finding.
  */
+import { parse as parseCss, walk as walkCss } from "css-tree";
 import { optimize } from "svgo";
 import { ERROR_CODES, MotionError } from "../lib/errors.mjs";
 
@@ -22,9 +23,66 @@ const DANGEROUS_ELEMENTS = new Set(["script", "foreignObject", "iframe", "object
 const URL_ATTRS = new Set(["href", "xlink:href", "src"]);
 const URL_FN = /url\(\s*(['"]?)([^)'"]*)\1\s*\)/gi;
 
-const isSafeRef = (value) => /^#[\w.:-]+$/.test(value.trim());
-const isSafeDataImage = (value) => /^data:image\/(?:png|jpe?g|webp|gif|avif);base64,[a-z0-9+/=\s]+$/i.test(value.trim());
-const isSafeUrlFn = (value) => { for (const m of value.matchAll(URL_FN)) if (!isSafeRef(m[2]) && !isSafeDataImage(m[2])) return false; return true; };
+function decodeEntitiesAndStripCtrl(value) {
+  return String(value ?? "")
+    .replace(/&#x([0-9a-f]+);?/gi, (_, hex) => {
+      const cp = Number.parseInt(hex, 16);
+      return Number.isFinite(cp) && cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : "";
+    })
+    .replace(/&#([0-9]+);?/g, (_, dec) => {
+      const cp = Number.parseInt(dec, 10);
+      return Number.isFinite(cp) && cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : "";
+    })
+    .replace(/[\u0000-\u001f\u007f]/g, "")
+    .trim();
+}
+
+const isSafeRef = (value) => /^#[\w.:-]+$/.test(decodeEntitiesAndStripCtrl(value));
+const isSafeDataImage = (value) => /^data:image\/(?:png|jpe?g|webp|gif|avif);base64,[a-z0-9+/=\s]+$/i.test(decodeEntitiesAndStripCtrl(value));
+const isSafeUrlTarget = (url) => isSafeRef(url) || isSafeDataImage(url);
+
+function decodeCssEscapes(value) {
+  return String(value ?? "").replace(/\\([0-9a-f]{1,6})\s?|\\([^\n\r\f0-9a-f])/gi, (_, hex, ch) => {
+    if (hex) {
+      const cp = Number.parseInt(hex, 16);
+      return Number.isFinite(cp) && cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : "";
+    }
+    return ch ?? "";
+  });
+}
+
+function hasUnsafeCss(css, context = "stylesheet") {
+  let unsafe = false;
+  const normalizedRaw = decodeCssEscapes(css);
+  try {
+    const ast = parseCss(css, {
+      context,
+      onParseError: () => { unsafe = true; },
+    });
+    walkCss(ast, (node) => {
+      if (node.type === "Atrule" && decodeCssEscapes(node.name).toLowerCase() === "import") unsafe = true;
+      if (node.type === "Declaration" && /^(?:behavior|-moz-binding)$/i.test(decodeCssEscapes(node.property))) unsafe = true;
+      if (node.type === "Function" && /^(?:expression|-moz-binding|url)$/i.test(decodeCssEscapes(node.name))) {
+        if (decodeCssEscapes(node.name).toLowerCase() !== "url") unsafe = true;
+      }
+      if (node.type === "Raw") {
+        const rawDec = decodeCssEscapes(node.value);
+        if (/url\s*\(|expression\s*\(|https?:|javascript:|vbscript:|file:|@import/i.test(rawDec)) unsafe = true;
+      }
+      if (node.type === "Url" && !isSafeUrlTarget(decodeCssEscapes(node.value))) unsafe = true;
+      if (node.type === "String") {
+        const s = decodeCssEscapes(node.value);
+        if (/^(?:https?:|javascript:|vbscript:|file:|data\s*:\s*text\/html)/i.test(s.trim())) unsafe = true;
+      }
+    });
+  } catch {
+    return true;
+  }
+  if (unsafe) return true;
+  if (/@import|expression\s*\(|javascript:|vbscript:|behavior\s*:|-moz-binding\s*:/i.test(normalizedRaw)) return true;
+  for (const m of normalizedRaw.matchAll(URL_FN)) if (!isSafeUrlTarget(m[2])) return true;
+  return false;
+}
 
 function walk(node, fn, parent = null) {
   fn(node, parent);
@@ -52,20 +110,21 @@ function sanitizerPlugin(findings) {
               }
               if (name === "style") {
                 const css = (node.children ?? []).map((c) => c.value ?? "").join("");
-                if (/@import|expression\s*\(|javascript:|behavior\s*:/i.test(css) || !isSafeUrlFn(css)) {
+                if (hasUnsafeCss(css, "stylesheet")) {
                   findings.push({ severity: "unsafe", code: ERROR_CODES.SVG_UNSAFE, message: "<style> com @import/URL externa removido", element: "style" });
                   if (parent) removeNode(parent, node);
                   return;
                 }
               }
               for (const [attr, value] of Object.entries(node.attributes)) {
-                const lower = attr.toLowerCase();
+                const lower = decodeEntitiesAndStripCtrl(attr).toLowerCase();
+                const decodedVal = decodeEntitiesAndStripCtrl(value);
                 let bad = null;
                 if (lower.startsWith("on")) bad = "manipulador de evento";
-                else if (URL_ATTRS.has(lower) && !isSafeRef(value) && !(name === "image" && isSafeDataImage(value))) bad = "URL externa ou insegura";
-                else if (/javascript:|vbscript:|data:text\/html/i.test(value)) bad = "URL de script";
-                else if (!isSafeUrlFn(value)) bad = "url() externa";
-                else if (lower === "style" && /expression\s*\(|behavior\s*:/i.test(value)) bad = "estilo inseguro";
+                else if (URL_ATTRS.has(lower) && !isSafeRef(decodedVal) && !(name === "image" && isSafeDataImage(decodedVal))) bad = "URL externa ou insegura";
+                else if (/javascript:|vbscript:|data\s*:\s*text\/html|data\s*:\s*image\/svg\+xml/i.test(decodedVal)) bad = "URL de script";
+                else if (lower === "style" && hasUnsafeCss(decodedVal, "declarationList")) bad = "estilo inseguro";
+                else if (lower !== "style" && /url\s*\(/i.test(decodedVal) && hasUnsafeCss(`x:${decodedVal};`, "declarationList")) bad = "url() externa";
                 if (bad) {
                   findings.push({ severity: "unsafe", code: ERROR_CODES.SVG_UNSAFE, message: `Atributo ${attr} removido (${bad})`, element: name, attribute: attr });
                   delete node.attributes[attr];

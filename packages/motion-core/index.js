@@ -113,6 +113,7 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.qaVisual) args.push("--qa-visual");
   if (options.qaContext) args.push(`--qa-context=${options.qaContext}`);
   if (options.transparent) args.push("--transparent");
+  if (options.offline) args.push("--offline");
   return runProcess("node", args);
 }
 
@@ -127,6 +128,7 @@ export async function renderFrames(inputHtml, outdir, options = {}) {
   if (options.start !== undefined) args.push(`--start=${options.start}`);
   if (options.end !== undefined) args.push(`--end=${options.end}`);
   if (options.transparent) args.push("--transparent");
+  if (options.offline) args.push("--offline");
   if (options.sampleFrames !== undefined && options.sampleFrames !== null) {
     const spec = Array.isArray(options.sampleFrames) ? options.sampleFrames.join(",") : String(options.sampleFrames);
     args.push(`--sample-frames=${spec}`);

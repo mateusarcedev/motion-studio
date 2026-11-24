@@ -61,9 +61,31 @@ async function main() {
   const port = await listen();
   const { browser } = await launchBrowser();
   try {
-    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
+    const context = await browser.newContext({
+      viewport: { width, height },
+      deviceScaleFactor: scale,
+      ...(args.offline ? { serviceWorkers: "block" } : {}),
+    });
+    const page = await context.newPage();
     const monitor = createHealthMonitor(page, { optionalAssets: parseOptionalAssets(args["optional-assets"]) });
-    const url = `http://127.0.0.1:${port}/${path.basename(input)}`;
+    const localOrigin = `http://127.0.0.1:${port}`;
+    if (args.offline) {
+      await context.route("**/*", (route) => {
+        const reqUrl = route.request().url();
+        if (reqUrl.startsWith(`${localOrigin}/`) || reqUrl === localOrigin || /^(?:data|blob):/i.test(reqUrl)) {
+          return route.continue();
+        }
+        monitor.addFinding({
+          severity: "error",
+          code: ERROR_CODES.RENDER_ASSET_FAILED,
+          resourceType: route.request().resourceType(),
+          url: reqUrl,
+          message: `Requisição de rede externa bloqueada no modo offline: ${reqUrl}`,
+        });
+        return route.abort("blockedbyclient");
+      });
+    }
+    const url = `${localOrigin}/${path.basename(input)}`;
 
     // Injeção determinística: injeta estado alvo (frame/time/seed).
     // A composição NÃO deve auto-chamar __onFrame__ no load (usa window.__MOTION_DRIVEN__).

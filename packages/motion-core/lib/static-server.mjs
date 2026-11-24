@@ -14,7 +14,7 @@
  *   "@technomanceer/motion-core/lottie"      → /@motion/design-system/lottie-motion.js
  */
 import { createServer } from "node:http";
-import { readFile, stat } from "node:fs/promises";
+import { lstat, readFile, realpath, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -38,6 +38,24 @@ const TYPES = {
 };
 
 const within = (root, file) => { const rel = path.relative(root, file); return rel && !rel.startsWith("..") && !path.isAbsolute(rel); };
+async function withinRealRoot(roots, file) {
+  let st;
+  try {
+    st = await lstat(file);
+  } catch (err) {
+    if (err?.code === "ENOENT") return "missing";
+    return false;
+  }
+  if (st.isSymbolicLink()) return false;
+  try {
+    const realFile = await realpath(file);
+    for (const r of roots) {
+      const realRoot = await realpath(r).catch(() => null);
+      if (realRoot && (realFile === realRoot || within(realRoot, realFile))) return true;
+    }
+    return false;
+  } catch { return false; }
+}
 async function isFile(p) { try { return (await stat(p)).isFile(); } catch { return false; } }
 
 function injectImportMap(html) {
@@ -67,6 +85,9 @@ export function createStaticServer(inputPath) {
       } else file = path.join(rootDir, pathname);
       const allowed = [rootDir, CORE_DIR, REPO_CREATIVE_CORE].some((r) => within(r, file) || file === inputAbs);
       if (!allowed) { res.writeHead(403); res.end("forbidden"); return; }
+      const realState = await withinRealRoot([rootDir, CORE_DIR, REPO_CREATIVE_CORE], file);
+      if (realState === "missing") { res.writeHead(404); res.end("not found"); return; }
+      if (!realState) { res.writeHead(403); res.end("forbidden"); return; }
       let data = await readFile(file);
       const ext = path.extname(file).slice(1).toLowerCase();
       if (file === inputAbs && ext.startsWith("htm")) data = Buffer.from(injectImportMap(data.toString("utf8")));
