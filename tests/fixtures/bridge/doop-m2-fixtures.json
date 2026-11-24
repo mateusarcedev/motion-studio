@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "1.0.0",
+  "tokenBundle": {
+    "schemaVersion": "1.0.0",
+    "sourceEditor": "doop",
+    "brandSlug": "bora-campo-m2",
+    "themes": ["dark"],
+    "fonts": {
+      "custom": [],
+      "webFonts": []
+    },
+    "tokens": [
+      { "cssVar": "--color-ground", "type": "color", "value": "#F7F4EE", "themes": { "dark": "#101418" }, "aliasOf": null, "motionGroup": "color", "motionKey": "background" },
+      { "cssVar": "--color-surface", "type": "color", "value": "#FFFFFF", "themes": { "dark": "#182028" }, "aliasOf": null, "motionGroup": "color", "motionKey": "surface" },
+      { "cssVar": "--color-ink", "type": "color", "value": "#14201A", "themes": { "dark": "#F2F6F4" }, "aliasOf": null, "motionGroup": "color", "motionKey": "text" },
+      { "cssVar": "--color-primary", "type": "color", "value": "#1F6F50", "themes": { "dark": "#38B884" }, "aliasOf": null, "motionGroup": "color", "motionKey": "primary" },
+      { "cssVar": "--color-accent", "type": "color", "value": "#D97706", "themes": { "dark": "#F59E0B" }, "aliasOf": null, "motionGroup": "color", "motionKey": "accent" },
+      { "cssVar": "--font-display", "type": "fontFamily", "value": "\"BridgeTestFont\", Georgia, serif", "aliasOf": null, "motionGroup": "typography", "motionKey": "headline.family" },
+      { "cssVar": "--font-body", "type": "fontFamily", "value": "system-ui, sans-serif", "aliasOf": null, "motionGroup": "typography", "motionKey": "body.family" },
+      { "cssVar": "--spacing-section", "type": "spacing", "value": "48px", "aliasOf": null, "motionGroup": "spacing", "motionKey": "spacing-section" },
+      { "cssVar": "--radius-card", "type": "radius", "value": "16px", "aliasOf": null, "motionGroup": "radius", "motionKey": "radius-card" }
+    ]
+  },
+  "frames": {
+    "landingDesktop": {
+      "id": "frm_landing_desktop",
+      "canvasId": "cnv_m2_lab",
+      "pageId": "pg_landing",
+      "name": "Landing Desktop",
+      "width": 1280,
+      "height": 800,
+      "approvalStatus": "ready_for_dev",
+      "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"default\"><head><style>@keyframes heroFade{0%{opacity:0.8}100%{opacity:1}}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;padding:48px;background:var(--color-ground);color:var(--color-ink);font-family:var(--font-body);min-height:800px}.hero-title{font-family:var(--font-display);font-size:56px;line-height:1.08;margin:16px 0;animation:heroFade 1.2s ease-out}.cta{display:inline-flex;align-items:center;min-height:48px;padding:14px 28px;border-radius:var(--radius-card);background:var(--color-primary);color:#fff;font-weight:700;text-decoration:none}@media (max-width:768px){.hero{grid-template-columns:1fr;padding:24px;min-height:auto}.hero-title{font-size:32px}}</style></head><body><main class=\"hero\" data-doop-id=\"el_landing_main\"><div><doop-use id=\"cmp_pill\" component=\"Badge\" label=\"Safra 2026\" tone=\"accent\"></doop-use><h1 class=\"hero-title\" data-doop-id=\"el_landing_h1\">Telemetria Agrícola Determinística</h1><p style=\"font-size:20px;line-height:1.5;max-width:520px\">Controle de frota e armazenagem com previsibilidade operacional.</p><a class=\"cta\" href=\"#detalhes\" data-doop-id=\"el_landing_cta\" data-doop-on=\"click\" data-doop-action=\"navigate:frm_dashboard_01\" data-doop-transition=\"push-left\" data-doop-duration=\"400\">Abrir Painel</a></div><div style=\"display:flex;align-items:center;justify-content:center;background:var(--color-surface);border-radius:var(--radius-card);padding:24px\"><svg viewBox=\"0 0 240 160\" width=\"240\" height=\"160\" style=\"max-width:100%;height:auto\"><path data-motion-path=\"route\" d=\"M20 120 Q120 20 220 90\" fill=\"none\" stroke=\"#1F6F50\" stroke-width=\"6\" stroke-linecap=\"round\"/><circle data-layer=\"node\" cx=\"220\" cy=\"90\" r=\"10\" fill=\"#D97706\"/></svg></div></main></body></html>"
+    },
+    "dashboardDesktop": {
+      "id": "frm_dashboard_01",
+      "canvasId": "cnv_m2_lab",
+      "pageId": "pg_app",
+      "name": "Dashboard Operacional",
+      "width": 1280,
+      "height": 800,
+      "approvalStatus": "needs_review",
+      "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"default\"><head><style>.dash{padding:36px;background:var(--color-ground);color:var(--color-ink);font-family:var(--font-body);min-height:800px}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px}.card{background:var(--color-surface);padding:20px;border-radius:var(--radius-card);border:1px solid rgba(20,32,26,.12)}.kpi-val{font-size:36px;font-weight:700;color:var(--color-primary)}table{width:100%;border-collapse:collapse;background:var(--color-surface);border-radius:12px;overflow:hidden}th,td{padding:14px 16px;text-align:left;border-bottom:1px solid rgba(20,32,26,.08)}</style></head><body><section class=\"dash\" data-doop-id=\"el_dash\"><h2 style=\"margin:0 0 20px;font-family:var(--font-display);font-size:34px\">Operação em Tempo Real</h2><div class=\"kpis\"><div class=\"card\"><div style=\"font-size:14px;opacity:.7\">Unidades Ativas</div><div class=\"kpi-val\">42</div></div><div class=\"card\"><div style=\"font-size:14px;opacity:.7\">Eficiência Média</div><div class=\"kpi-val\">98.4%</div></div><div class=\"card\"><div style=\"font-size:14px;opacity:.7\">Alertas Críticos</div><div class=\"kpi-val\">0</div></div></div><table><thead><tr><th>Rota</th><th>Carga</th><th>Status</th></tr></thead><tbody><tr><td>Sul-01</td><td>18.4 t</td><td>Concluída</td></tr><tr><td>Oeste-04</td><td>22.1 t</td><td>Em trânsito</td></tr></tbody></table><button style=\"margin-top:20px;padding:14px 24px;border:0;border-radius:12px;background:var(--color-accent);color:#14201A;font-weight:700\" data-doop-id=\"el_open_detail\" data-doop-on=\"click\" data-doop-action=\"overlay:frm_state_detail\" data-doop-transition=\"fade\" data-doop-duration=\"250\">Ver Detalhe</button></section></body></html>"
+    },
+    "mobileInterface": {
+      "id": "frm_mobile_01",
+      "canvasId": "cnv_m2_lab",
+      "pageId": "pg_mobile",
+      "name": "Mobile Field App",
+      "width": 390,
+      "height": 844,
+      "approvalStatus": "draft",
+      "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"default\"><head><style>.mob{width:390px;min-height:844px;padding:24px;background:var(--color-ground);color:var(--color-ink);font-family:var(--font-body);display:flex;flex-direction:column;gap:16px}.mob-card{background:var(--color-surface);padding:20px;border-radius:var(--radius-card)}.mob-btn{margin-top:auto;min-height:48px;border-radius:12px;background:var(--color-primary);color:#fff;font-size:16px;font-weight:700;border:0}</style></head><body><section class=\"mob\" data-doop-id=\"el_mob\"><div style=\"font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary);font-weight:700\">Campo · Mobile</div><h1 style=\"margin:0;font-size:32px;font-family:var(--font-display)\">Checklist de Embarque</h1><div class=\"mob-card\"><strong>Lote #408</strong><p style=\"margin:8px 0 0\">Umidade 12.1% · Aprovado</p></div><button class=\"mob-btn\" data-doop-id=\"el_mob_confirm\">Confirmar Carga</button></section></body></html>"
+    },
+    "componentsShowcase": {
+      "id": "frm_components_01",
+      "canvasId": "cnv_m2_lab",
+      "pageId": "pg_components",
+      "name": "Reusable Components",
+      "width": 1080,
+      "height": 1080,
+      "approvalStatus": "ready_for_dev",
+      "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"default\"><head><style>.grid{padding:48px;background:var(--color-ground);color:var(--color-ink);font-family:var(--font-body);display:flex;flex-direction:column;gap:24px}</style></head><body><div class=\"grid\"><doop-use id=\"cmp_card_1\" component=\"StatusPill\" label=\"Sistema Nominal\" tone=\"primary\"></doop-use><doop-use id=\"cmp_card_2\" component=\"MetricBadge\" label=\"SLA 99.9%\" tone=\"accent\"></doop-use></div></body></html>"
+    },
+    "prototypeDetailState": {
+      "id": "frm_state_detail",
+      "canvasId": "cnv_m2_lab",
+      "pageId": "pg_app",
+      "name": "Detail Overlay State",
+      "width": 1280,
+      "height": 800,
+      "approvalStatus": "draft",
+      "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"default\"><body><section data-doop-id=\"el_detail_panel\" data-doop-state=\"expanded\" style=\"padding:48px;background:var(--color-surface);color:var(--color-ink);font-family:var(--font-body)\"><h2>Detalhe da Carga Oeste-04</h2><p>Telemetria validada em rota.</p><button data-doop-id=\"el_back_dash\" data-doop-on=\"delay\" data-doop-action=\"navigate:frm_landing_desktop\" data-doop-transition=\"dissolve\" data-doop-duration=\"1500\">Retornar</button></section></body></html>"
+    },
+    "darkThemeScreen": {
+      "id": "frm_dark_theme",
+      "canvasId": "cnv_m2_lab",
+      "pageId": "pg_themes",
+      "name": "Dark Theme Mode",
+      "width": 1280,
+      "height": 800,
+      "approvalStatus": "ready_for_dev",
+      "theme": "dark",
+      "html": "<!doctype html><html lang=\"en\" data-doop-theme=\"dark\"><head><style>.wrap{padding:48px;min-height:800px;background:var(--color-ground);color:var(--color-ink);font-family:var(--font-body)}.panel{background:var(--color-surface);padding:32px;border-radius:var(--radius-card);border:1px solid rgba(255,255,255,.12)}</style></head><body><section class=\"wrap\"><div class=\"panel\"><h1 style=\"margin:0 0 12px;color:var(--color-primary);font-family:var(--font-display);font-size:44px\">Modo Noturno de Campo</h1><p style=\"font-size:20px;margin:0\">Contraste calibrado para operação noturna em cabine.</p></div></section></body></html>"
+    }
+  }
+}
