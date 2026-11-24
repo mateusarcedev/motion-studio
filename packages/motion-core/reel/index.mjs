@@ -10,7 +10,7 @@ export {
   sttPython, sttModelsDir, normalizeFasterWhisper, longestRepeatRun,
 } from "./stt/index.mjs";
 export { VOICE_PRESETS, listVoicePresets, resolveVoiceParams, buildVoiceChain, processVoice, measureLatency, speechSuppression, pauseNoiseRatio, speechToPauseCheck, pickAbWindows, expanderGraph, cutWav, VOICE_CHAIN_VERSION, deepFilterBinary } from "./voice.mjs";
-export { TIMELINE_SCHEMA, TIMELINE_VERSION, computeDst, remapWords, audioRuns, refineWordTiming, srcToDst, validateTimeline, assertTimeline, timelineHash, loadTimeline, saveTimeline } from "./timeline.mjs";
+export { TIMELINE_SCHEMA, TIMELINE_VERSION, computeDst, remapWords, audioRuns, refineWordTiming, srcToDst, validateTimeline, assertTimeline, timelineHash, legacyTimelineHash, timelineHashMatches, loadTimeline, saveTimeline } from "./timeline.mjs";
 export { DEFAULT_CAPTION_STYLE, buildPages, buildAss, placeCaptions, pagesToSrt, wordsToSrt, captionsJson, displayWord, balanceLines, pageFit, assertCaptionColors, buildWordBoxAss } from "./captions.mjs";
 export { EDIT_PRESETS, listEditPresets, planEdit, findRepetitions, findRestarts, findPhrase } from "./plan.mjs";
 export { DEFAULT_OVERLAY_STYLE, OVERLAY_KINDS, overlayHtml, overlayLayers, layerTexts, renderOverlayLayers } from "./overlays.mjs";

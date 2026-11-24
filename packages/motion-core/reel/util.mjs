@@ -46,9 +46,9 @@ export function run(cmd, args, { timeoutMs = 0, binary = false, onStdout, onStde
     child.stderr.on("data", (d) => { const s = d.toString(); stderr += s; if (stderr.length > 8e6) stderr = stderr.slice(-4e6); onStderr?.(s); });
     const finish = (payload) => { if (settled) return; settled = true; if (timer) clearTimeout(timer); resolve(payload); };
     child.on("error", (error) => finish({ code: -1, stdout: binary ? Buffer.alloc(0) : "", stderr, error }));
-    child.on("close", (code) => {
+    child.on("close", (code, signal) => {
       const out = Buffer.concat(chunks);
-      finish({ code, stdout: binary ? out : out.toString("utf8"), stderr });
+      finish({ code, signal, stdout: binary ? out : out.toString("utf8"), stderr });
     });
   });
 }

@@ -66,7 +66,8 @@ campaign art**, through the same departments, independent critic and repair poli
   never hardcoded inside skill instructions.
 - **Recomposition ≠ crop:** every aspect ratio gets its own hierarchy.
 - **Honest editability:** only claim "editable" when the source (HTML/code) ships with the export.
-- **Code-driven determinism (video/animated):** frame N reproduces bit-for-bit. Use
+- **Code-driven determinism (video/animated):** output is identical on the same machine and
+  visually equivalent across machines; cross-CPU byte identity is not promised. Use
   `render_frames.mjs` (batch, one browser) + `assemble_video.py` ( CFR 30fps, audio aligned to
   the same time grid, t=0 = frame 0) + `design-system/frame.js` (pure per-frame state — never
   `Math.random()`/CSS keyframes in video). Seed and frame count go in the BRIEF.
