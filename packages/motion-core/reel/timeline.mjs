@@ -6,6 +6,7 @@
  * multiples of 1/fps and the audio cut points fall on whole samples (48 kHz / 30 fps =
  * 1600 samples per frame). The same timeline + the same input files reproduce the same edit.
  */
+import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { PRESETS } from "./presets.mjs";
@@ -155,10 +156,42 @@ function canonical(v) {
   return JSON.stringify(v);
 }
 
-/** Content hash of everything that affects the render (provenance excluded). */
-export function timelineHash(t) {
-  const { provenance, hash, ...rest } = t;
+const PROJECT_MARKERS = ["delivery.contract.json", "BRIEF.md", ".motion", "package.json", ".git"];
+/** Nearest ancestor of the timeline file that looks like a project; its own folder otherwise. */
+function projectRoot(file) {
+  const start = path.dirname(path.resolve(file));
+  for (let d = start; ; d = path.dirname(d)) {
+    if (PROJECT_MARKERS.some((m) => existsSync(path.join(d, m)))) return d;
+    if (path.dirname(d) === d) return start;
+  }
+}
+
+/**
+ * Content hash of everything that affects the render (provenance excluded). It does not depend on
+ * where the project or edit.json lives: the source and the brief count by SHA-256, and the other
+ * paths are taken relative to the project root (when the timeline file is known).
+ */
+export function timelineHash(t, { file = t.__file } = {}) {
+  // as stored on disk: undefined fields vanish there, so they cannot count in memory either
+  const { provenance, hash, __file, ...rest } = JSON.parse(JSON.stringify(t));
+  for (const x of [rest.source, rest.brief]) if (x?.sha256) delete x.path;
+  if (file) {
+    const root = projectRoot(file), dir = path.dirname(path.resolve(file));
+    const fix = (o, k) => { if (o?.[k]) o[k] = path.relative(root, path.resolve(dir, o[k])).split(path.sep).join("/") || "."; };
+    fix(rest.captions, "fontsDir"); fix(rest.captions?.style, "fontsDir"); fix(rest.overlayStyle, "fontsDir"); fix(rest.audio?.music, "path");
+  }
   return sha256Text(canonical(rest));
+}
+
+/** Hash written by earlier versions (raw paths); only used to recognize an untouched old timeline. */
+export function legacyTimelineHash(t) {
+  const { provenance, hash, __file, ...rest } = t;
+  return sha256Text(canonical(rest));
+}
+
+/** True when the stored hash matches the content, in the current or the earlier form. */
+export function timelineHashMatches(t, file = t.__file) {
+  return !t.hash || t.hash === timelineHash(t, { file }) || t.hash === legacyTimelineHash(t);
 }
 
 export async function loadTimeline(file) {
@@ -173,7 +206,7 @@ export async function loadTimeline(file) {
 
 export async function saveTimeline(t, file) {
   const { __file, ...clean } = t;
-  clean.hash = timelineHash(clean);
+  clean.hash = timelineHash(clean, { file });
   await writeFile(file, JSON.stringify(clean, null, 2) + "\n");
   return clean;
 }

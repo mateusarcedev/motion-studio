@@ -127,7 +127,7 @@ export async function runEdit(sub, args, flags) {
         if (!args[0]) throw new TypeError("Uso: motion edit validate <edit.json>");
         const t = await readJson(args[0]);
         const errors = R.validateTimeline(t);
-        const hashOk = !t.hash || t.hash === R.timelineHash(t);
+        const hashOk = R.timelineHashMatches(t, args[0]);
         if (errors.length || !hashOk) process.exitCode = 2;
         return out(flags, command, { valid: !errors.length, errors, hashMatches: hashOk }, errors.length ? `Timeline inválida:\n${errors.map((e) => `- ${e}`).join("\n")}` : `Timeline válida${hashOk ? "" : " (hash difere: arquivo editado à mão — será recalculado no próximo plan/save)"}.`);
       }
