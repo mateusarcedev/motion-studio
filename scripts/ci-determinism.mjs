@@ -4,8 +4,7 @@
  * Every intermediate (segments, card PNG, captions, voice) is kept and hashed, so a difference is
  * located by stage; the folder is uploaded by the CI when the gate fails.
  */
-import { appendFile, chmod, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
-import { createHash } from "node:crypto";
+import { appendFile, chmod, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import os from "node:os";
@@ -34,7 +33,7 @@ const video = await verticalVideo(root, wav);
 const transcript = burstTranscript(await R.sha256File(video), video);
 const runs = [];
 const oldPath = process.env.PATH;
-process.env.PATH = `${bin}${path.delimiter}${oldPath}`;
+if (process.env.MOTION_DETERMINISM_WRAPPER !== "0") process.env.PATH = `${bin}${path.delimiter}${oldPath}`;
 for (const k of ["a", "b"]) {
   const dir = path.join(root, k);
   await mkdir(dir, { recursive: true });
@@ -64,9 +63,7 @@ const [fa, fb] = [await listing(runs[0]), await listing(runs[1])];
 const stages = [];
 for (const name of new Set([...Object.keys(fa), ...Object.keys(fb)])) {
   const [x, y] = [fa[name], fb[name]];
-  // the JSON records a timelineHash that depends on the folder of edit.json; it never reaches the video
-  const digest = async (f) => { if (name !== "caption:json") return R.sha256File(f); const { timelineHash, ...rest } = JSON.parse(await readFile(f, "utf8")); return createHash("sha256").update(JSON.stringify(rest)).digest("hex"); };
-  const s = { stage: name, a: x ? await digest(x) : null, b: y ? await digest(y) : null };
+  const s = { stage: name, a: x ? await R.sha256File(x) : null, b: y ? await R.sha256File(y) : null };
   s.identical = s.a !== null && s.a === s.b;
   if (!s.identical && x && y && /^(segment|card|final)/.test(name)) {
     const [ha, hb] = [frames(x), frames(y)];
@@ -76,7 +73,7 @@ for (const name of new Set([...Object.keys(fa), ...Object.keys(fb)])) {
   stages.push(s);
 }
 
-const env = { cpu: os.cpus()[0]?.model ?? null, cpus: os.cpus().length, flags: sh("lscpu", []).out.match(/^Flags:\s*(.*)$/m)?.[1].split(" ").filter((f) => /^(sse|ssse|avx|fma|bmi)/.test(f)).join(" ") ?? null, memGb: Math.round(os.totalmem() / 2 ** 30), node: process.version, ffmpeg: sh("ffmpeg", ["-version"]).out.split("\n")[0] };
+const env = { wrapper: process.env.MOTION_DETERMINISM_WRAPPER !== "0", cpu: os.cpus()[0]?.model ?? null, cpus: os.cpus().length, flags: sh("lscpu", []).out.match(/^Flags:\s*(.*)$/m)?.[1].split(" ").filter((f) => /^(sse|ssse|avx|fma|bmi)/.test(f)).join(" ") ?? null, memGb: Math.round(os.totalmem() / 2 ** 30), node: process.version, ffmpeg: sh("ffmpeg", ["-version"]).out.split("\n")[0] };
 const cardHtml = existsSync(path.join(runs[0].work, "overlays")) ? (await readdir(path.join(runs[0].work, "overlays"))).filter((f) => f.endsWith(".html")) : [];
 env.chromium = await attempt(async () => {
   const { browser } = await launchBrowser();

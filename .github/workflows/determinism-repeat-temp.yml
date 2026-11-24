@@ -10,13 +10,15 @@ permissions:
 
 jobs:
   repeat:
-    name: Determinismo ${{ matrix.n }}
+    name: Determinismo w${{ matrix.wrapper }} l${{ matrix.load }} n${{ matrix.n }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 40
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        n: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        wrapper: [0, 1]
+        load: [0, 1]
+        n: [1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with: { fetch-depth: 1, persist-credentials: false }
@@ -27,11 +29,19 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Chromium
         run: npx playwright-core install --with-deps chromium
-      - name: Determinismo até falhar (máx. 10 rodadas)
+      - name: Determinismo até falhar (máx. 5 rodadas)
         shell: bash
+        env:
+          MOTION_DETERMINISM_WRAPPER: ${{ matrix.wrapper }}
+          LOAD: ${{ matrix.load }}
         run: |
-          for i in $(seq 1 10); do echo "=== rodada $i"; npm run -s test:determinism || { echo "=== FALHOU na rodada $i"; exit 1; }; done
+          if [ "$LOAD" = 1 ]; then for k in $(seq $(( $(nproc) * 2 ))); do (while :; do dd if=/dev/urandom bs=1M count=64 2>/dev/null | sha256sum >/dev/null; done) & done; fi
+          trap 'kill $(jobs -p) 2>/dev/null || true' EXIT
+          for i in $(seq 1 5); do echo "=== rodada $i"; npm run -s test:determinism || { echo "=== FALHOU na rodada $i"; exit 1; }; done
       - name: Intermediários
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with: { name: "determinism-repeat-${{ matrix.n }}", path: tests/tmp/ci-determinism, retention-days: 14 }
+        with: { name: "determinism-w${{ matrix.wrapper }}-l${{ matrix.load }}-n${{ matrix.n }}", path: tests/tmp/ci-determinism, retention-days: 14 }
+      - name: Custo por variante de CPU
+        if: always() && matrix.load == 0
+        run: node scripts/bench-cpu-temp.mjs 3
