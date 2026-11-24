@@ -5,7 +5,7 @@
 
 ---
 
-## Missão M1 — Documentação Persistente, Contratos, Segurança Base & `DoopAdapter` (Em Execução)
+## Missão M1 — Documentação Persistente, Contratos, Segurança Base & `DoopAdapter` (Concluída)
 1. Persistir documentação técnica, PRD, ADRs, contratos, matriz e plano no repositório Git.
 2. Implementar `packages/motion-core/bridge/`:
    - `schemas/design-ir.v1.json`, `token-bundle.v1.json`, `asset-provenance.v1.json`.
@@ -17,15 +17,17 @@
 3. Adicionar fixtures representativas e adversariais em `tests/fixtures/bridge/`.
 4. Validar com testes unitários/contrato, determinismo de serialização e suíte completa existente (`npm run test:ci`, `npm run test:py`, `npm run skills:verify`, `npm run test:determinism`).
 
-## Missão M2 — Asset Hydrator & Normalizador `Design-to-Motion`
-- Hidratação offline segura de URLs remotas para `assets/` (anti-SSRF + limites de tamanho/MIME + `sha256` + `assessLicense` + `assertSafeSvg`).
-- Conversor determinístico de HTML/CSS de frames Doop para composições `frame.js` / `svg-motion.js` / `carousel` / `story` / `web-director`.
-- Conversor `prototypeFlows` (`data-doop-*`) → `STORYBOARD.md` + beats de cena.
-- Testes de integração garantindo `verifyDeterminism` PASS na composição convertida.
+## Missão M2 — Asset Hydrator & Normalizador `Design-to-Motion` (Concluída)
+- Hidratação offline segura de URLs remotas para `assets/` (`bridge/assets.mjs`: anti-SSRF + pinagem DNS + limites de tamanho/bomba de descompressão/MIME/assinatura binária + deduplicação SHA-256 + escrita atômica + `assessLicense` + `assertSafeSvg` + `AssetProvenanceManifest@1` + `assets.manifest.json`).
+- Sanitização estruturada com tokenizador HTML + `css-tree` AST + `svgo` (`bridge/security.mjs` e `svg/svg-tools.mjs`), eliminando dependência exclusiva de regex.
+- Conversor determinístico (`bridge/normalize.mjs`) para composições `frame.js` / `svg-motion.js` / `carousel` / `story` / `web-director` com relatório estruturado e zero URLs externas.
+- Conversor `prototypeFlows` (`data-doop-*`) → `STORYBOARD.md` + beats de cena (`bridge/prototype-to-storyboard.mjs`).
+- Renderização offline (`--offline` em `render_static.mjs` / `render_frames.mjs` bloqueando *service workers* e rede externa), comparação visual (`bridge/fidelity.mjs`) e suíte cobrindo 8 fixtures representativas + `verifyDeterminism` PASS + pendência `.venv`/NumPy resolvida em `scripts/ci_python_tests.py`.
 
-## Missão M3 — Exportador Seguro `Motion-to-Design`
-- Conversor de saídas Motion (stills representativos, contact sheets, slides, tokens derivados, SVGs `<= 20 KB` ou fila de upload respeitando 15/min) para payloads compatíveis com Doop.
-- Garantias: zero `base64`, preservação de `data-doop-id`, proteção a frames `ready_for_dev` e páginas dedicadas.
+## Missão M3 — Exportador Seguro `Motion-to-Design` (Próxima)
+- Conversor `packages/motion-core/bridge/export-to-editor.mjs` de saídas Motion (stills representativos, contact sheets, slides, tokens derivados via `DoopAdapter.exportTokens`, SVGs `<= 20 KB` inline ou fila de upload respeitando 15/min) para payloads compatíveis com editores (`EditorAdapter`).
+- Pré-condições herdadas da M2: consumo direto de `AssetProvenanceManifest@1`, `NormalizationReport` e `prototypeToStoryboard` para garantir zero `base64` inline em HTML Doop, preservação de `data-doop-id`, proteção estrita de frames `ready_for_dev` e publicação em páginas dedicadas sem sobrescrever originais.
+- Validação offline com fixtures e verificação de integridade (zero perda de atributos, zero URL insegura, respeito a marcas `trademark: true`).
 
 ## Missão M4 — Evolução do `motion mcp` Server v2 (`stdio` + Streamable HTTP)
 1. **Fase 4A (`stdio`):** expor motores determinísticos (`render_static`, `render_frames`, `render_video`, `render_carousel`, `qa_determinism`, `qa_safe_zones`, `qa_viewports`, `svg_validate`, `bridge_*`) em `packages/motion-cli/lib/mcp.mjs` mantendo as 11 tools atuais intactas e ampliando `tests/mcp_parity.test.mjs`.

@@ -53,3 +53,12 @@ Os testes de transcrição real são pulados e listados (o CI não baixa modelo)
 `e91e30a` (Missão 22), clone limpo: Node 20, 22 e 24 com 299 aprovados, 0 falhos e 2 pulados; 25 testes Python;
 catálogo com 14 Skills; determinismo PASS. GitHub Actions: PASS em `7a7947b` (Missões 21 e 21.1;
 [execução](https://github.com/mateusarcedev/motion-studio/actions/runs/45273665669)).
+
+## Bridge Design ↔ Motion (Missão M1 & M2, 2026-11-24)
+
+- **Escopo verificado localmente (Linux x64 / Node 24.16.0 / Chromium Playwright / FFmpeg / Python 3.14.5t em `.venv`):**
+  - `Asset Hydrator` (`packages/motion-core/bridge/assets.mjs`): download por streaming com pinagem DNS em tempo de socket (defesa contra SSRF e DNS rebinding A+AAAA), bloqueio padrão de loopback/IPs privados/notações alternativas IPv4 e IPv6, validação manual de redirecionamentos sem vazamento de `Authorization`/`Cookie`, TLS estrito, proteção contra bomba de descompressão/respostas truncadas, checagem de assinatura binária + MIME, sanitização SVGO e emissão de `AssetProvenanceManifest@1` + `assets.manifest.json`.
+  - Sanitização estruturada (`packages/motion-core/bridge/security.mjs` + `svg/svg-tools.mjs`): tokenizador HTML + decodificação de entidades + AST CSS (`css-tree`) + `svgo`.
+  - Normalizador (`packages/motion-core/bridge/normalize.mjs`) & `Prototype-to-Storyboard` (`packages/motion-core/bridge/prototype-to-storyboard.mjs`): conversão determinística para `frame.js`, `svg-motion.js`, `carousel`, `story` e `web-director`, além de geração de `STORYBOARD.md` sem inventar interações.
+  - Renderização offline (`--offline` em `render_static.mjs` e `render_frames.mjs`): `serviceWorkers: "block"` + interceptação `context.route("**/*")` abortando qualquer requisição externa fora da origem local do estúdio; determinismo verificado via `verifyDeterminism` em duas sessões Chromium independentes no mesmo ambiente (não afirma identidade binária entre sistemas operacionais ou builds distintos de Chromium/fontes).
+  - Suíte Python (`npm run test:py`): 25/25 testes aprovados com `.venv` isolado (`numpy 2.5.5`, `scipy 1.18.1`, `pillow 13.0.0`); CI permanece fixado em Python `3.12`.

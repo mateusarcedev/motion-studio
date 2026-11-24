@@ -117,8 +117,11 @@ Skills que você não modificou são atualizadas; as modificadas são preservada
 
 ## Dependências Python opcionais
 
-O mapa de batidas da Skill `cinematic-product-director` usa numpy e scipy:
+O mapa de batidas da Skill `cinematic-product-director` usa `numpy` (`>=2.0,<3`) e `scipy` (`>=1.13,<2`), e a suíte Python (`npm run test:py`) também utiliza `pillow`:
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r .agents/skills/cinematic-product-director/scripts/requirements.txt
+python3 -m venv .venv
+.venv/bin/pip install pillow -r packages/motion-skills/skills/cinematic-product-director/scripts/requirements.txt
 ```
+
+> Compatibilidade verificada: Python `3.12` (CI Ubuntu 24.04) e Python `3.14.5t` (venv local isolado, `numpy 2.5.5`, `scipy 1.18.1`, `pillow 13.0.0`). Quando `.venv/` existe no repositório, `scripts/ci_python_tests.py` delega automaticamente para o interpretador isolado da `.venv` sem alterar o Python global.
