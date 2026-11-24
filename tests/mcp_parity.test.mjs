@@ -49,7 +49,10 @@ test("fluxo completo por CLI e por MCP: mesma timeline, mesmos quadros e mesmo v
     const [tc, tm] = await Promise.all(Object.values(dirs).map(async (d) => JSON.parse(await readFile(`${d}/edit.json`, "utf8"))));
     assert.equal(tm.captions.fontsDir, "../conf/fonts", "o MCP também corrige caminhos do config");
     assert.equal(tc.hash, tm.hash);
-    assert.equal((await R.compareRenders(`${dirs.cli}/reel.mp4`, `${dirs.mcp}/reel.mp4`)).identical, true);
+    const cmp = await R.compareRenders(`${dirs.cli}/reel.mp4`, `${dirs.mcp}/reel.mp4`);
+    const evidence = JSON.stringify(cmp, null, 2);
+    assert.notEqual(cmp.status, "read-error", `erro de leitura, não diferença de render: ${evidence}`);
+    assert.equal(cmp.status, "identical", `streams diferentes (${cmp.different.join(", ")}): ${evidence}`);
     const strip = (r) => r.checks.map((c) => [c.id, c.status]);
     assert.deepEqual(strip(qm), strip(qc));
     assert.notEqual(qm.status, "FAIL", JSON.stringify(qm.checks.filter((c) => c.status === "FAIL")));

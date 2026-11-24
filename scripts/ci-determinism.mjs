@@ -27,7 +27,7 @@ for (const k of ["a", "b"]) {
 }
 const cmp = await R.compareRenders(runs[0].file, runs[1].file);
 const ok = cmp.identical && runs[0].hash === runs[1].hash;
-const text = `Determinismo: ${ok ? "PASS" : "FAIL"}\ntimeline ${runs[0].hash} / ${runs[1].hash}\nA ${cmp.a}\nB ${cmp.b}\n`;
+const text = `Determinismo: ${ok ? "PASS" : "FAIL"}\ntimeline ${runs[0].hash} / ${runs[1].hash}\n${JSON.stringify(cmp, null, 2)}\n`;
 console.log(text);
 if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, `### Determinismo\n\n\`\`\`\n${text}\`\`\`\n`);
 process.exit(ok ? 0 : 1);
