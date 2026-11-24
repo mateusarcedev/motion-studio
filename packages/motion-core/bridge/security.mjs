@@ -29,17 +29,51 @@ function isPrivateIpv4(ip) {
   return false;
 }
 
+function parseIpv6Hextets(ip) {
+  const noZone = ip.toLowerCase().split("%")[0];
+  const halves = noZone.split("::");
+  if (halves.length > 2) return null;
+  const parseSide = (side) => {
+    if (!side) return [];
+    const parts = side.split(":");
+    const out = [];
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (i === parts.length - 1 && part.includes(".") && net.isIPv4(part)) {
+        const octets = part.split(".").map(Number);
+        out.push((octets[0] << 8) | octets[1], (octets[2] << 8) | octets[3]);
+      } else {
+        const val = parseInt(part, 16);
+        if (Number.isNaN(val) || val < 0 || val > 0xffff) return null;
+        out.push(val);
+      }
+    }
+    return out;
+  };
+  const left = parseSide(halves[0]);
+  if (!left) return null;
+  if (halves.length === 1) return left.length === 8 ? left : null;
+  const right = parseSide(halves[1]);
+  if (!right) return null;
+  const missing = 8 - (left.length + right.length);
+  if (missing < 1) return null;
+  return [...left, ...Array(missing).fill(0), ...right];
+}
+
 function isPrivateIpv6(ip) {
-  const lower = ip.toLowerCase().split("%")[0];
-  if (lower === "::" || lower === "::1") return true;
-  if (lower.startsWith("::ffff:")) {
-    const mapped = lower.slice(7);
-    if (net.isIPv4(mapped)) return isPrivateIpv4(mapped);
+  const h = parseIpv6Hextets(ip);
+  if (!h) return true;
+  const allZeroPrefix = h.slice(0, 5).every((x) => x === 0);
+  // :: or ::1
+  if (allZeroPrefix && h[5] === 0 && h[6] === 0 && (h[7] === 0 || h[7] === 1)) return true;
+  // IPv4-mapped (::ffff:w.x.y.z) or IPv4-compatible (::w.x.y.z)
+  if (allZeroPrefix && (h[5] === 0xffff || h[5] === 0)) {
+    const v4 = `${h[6] >> 8}.${h[6] & 0xff}.${h[7] >> 8}.${h[7] & 0xff}`;
+    return isPrivateIpv4(v4);
   }
-  const firstHextet = parseInt(lower.split(":")[0] || "0", 16);
-  if ((firstHextet & 0xfe00) === 0xfc00) return true; // fc00::/7 unique local
-  if ((firstHextet & 0xffc0) === 0xfe80) return true; // fe80::/10 link-local
-  if (firstHextet >= 0xff00) return true; // multicast
+  if ((h[0] & 0xfe00) === 0xfc00) return true; // fc00::/7 unique local
+  if ((h[0] & 0xffc0) === 0xfe80) return true; // fe80::/10 link-local
+  if (h[0] >= 0xff00) return true; // ff00::/8 multicast
   return false;
 }
 
