@@ -83,3 +83,4 @@ __pycache__/
 /projects/*/stills/
 dist/packages/SHA256SUMS-*.txt
 /projects/*/reviews/determinism/
+.venv/
