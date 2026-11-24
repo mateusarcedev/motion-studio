@@ -50,14 +50,46 @@ export async function measureCaptionBoxes(timeline, { workDir, resolveFont = nul
   return { boxes, ok: r.code === 0, stderr: r.code === 0 ? null : r.stderr.split("\n").slice(-3).join(" ") };
 }
 
-/** Frame/sample hashes of two renders (decoded content, not container bytes). */
+/**
+ * Compares two renders stream by stream. Three layers, so a difference can be located:
+ *   decoded   frames/samples (the determinism criterion: `identical`)
+ *   packets   encoded bitstream, without the container
+ *   container SHA-256 of the file
+ * A file that could not be read is `status: "read-error"` (never reported as a difference).
+ */
 export async function compareRenders(a, b) {
-  const h = async (f) => {
-    const r = await run("ffmpeg", ["-v", "error", "-i", f, "-map", "0:v", "-map", "0:a?", "-f", "streamhash", "-hash", "sha256", "-"]);
-    return r.code === 0 ? r.stdout.trim() : null;
+  const hash = async (f, stream, copy) => {
+    const r = await run("ffmpeg", ["-v", "error", "-xerror", "-i", f, "-map", `0:${stream}`, ...(copy ? ["-c", "copy"] : []), "-f", "streamhash", "-hash", "sha256", "-"]);
+    const hex = r.stdout.trim().match(/=([0-9a-f]{64})$/i)?.[1] ?? null;
+    if (r.code === 0 && hex) return { hash: hex };
+    return { hash: null, error: { file: f, stream, layer: copy ? "packets" : "decoded", code: r.code, signal: r.signal ?? null, stderr: r.stderr.trim().split("\n").slice(-3).join(" | ") || r.error?.message || "" } };
   };
-  const [ha, hb] = await Promise.all([h(a), h(b)]);
-  return { a: ha, b: hb, identical: ha !== null && ha === hb };
+  const read = async (f) => {
+    const out = { file: f, streams: {}, errors: [] };
+    let probe;
+    try { probe = await probeMedia(f); out.container = await sha256File(f); }
+    catch (e) { out.errors.push({ file: f, layer: "container", stderr: [e.message, e.details].filter(Boolean).join(" | ") }); return out; }
+    for (const [kind, present, stream] of [["video", probe.video, "v:0"], ["audio", probe.audio, "a:0"]]) {
+      if (!present) { out.streams[kind] = { decoded: null, packets: null, present: false }; continue; }
+      const decoded = await hash(f, stream, false), packets = await hash(f, stream, true);
+      out.streams[kind] = { decoded: decoded.hash, packets: packets.hash, present: true };
+      for (const h of [decoded, packets]) if (h.error) out.errors.push(h.error);
+    }
+    if (!probe.video && !probe.audio) out.errors.push({ file: f, layer: "container", stderr: "sem vídeo nem áudio" });
+    return out;
+  };
+  const [ra, rb] = [await read(a), await read(b)];
+  const errors = [...ra.errors, ...rb.errors];
+  const pair = (x, y) => ({ a: x ?? null, b: y ?? null, identical: errors.length ? null : (x ?? null) === (y ?? null) });
+  const streams = {};
+  for (const k of ["video", "audio"]) {
+    const x = ra.streams[k], y = rb.streams[k];
+    streams[k] = { decoded: pair(x?.decoded, y?.decoded), packets: pair(x?.packets, y?.packets) };
+  }
+  const container = pair(ra.container, rb.container);
+  const identical = errors.length === 0 && streams.video.decoded.identical && streams.audio.decoded.identical;
+  const different = errors.length ? [] : [...["video", "audio"].flatMap((k) => ["decoded", "packets"].filter((l) => !streams[k][l].identical).map((l) => `${k}.${l}`)), ...(container.identical ? [] : ["container"])];
+  return { status: errors.length ? "read-error" : identical ? "identical" : "different", identical, different, streams, container, errors };
 }
 
 /** The untreated source cut exactly like the timeline (mono): the "before" of every audio comparison. */
@@ -281,7 +313,7 @@ export async function qaReel(mp4, o = {}) {
 
   if (o.compareWith) {
     const c = await compareRenders(mp4, o.compareWith);
-    report.add({ id: "determinism", title: "Render reprodutível (hash de quadros/amostras decodificados)", status: c.identical ? "PASS" : c.a && c.b ? "FAIL" : "BLOCKED", details: c.identical ? "idêntico ao segundo render" : "diferente do segundo render", reproduce: c.a && c.b ? null : "Renderize duas vezes a mesma timeline e compare com motion qa reel --compare." });
+    report.add({ id: "determinism", title: "Render reprodutível (hash de quadros/amostras decodificados)", status: c.identical ? "PASS" : c.status === "different" ? "FAIL" : "BLOCKED", details: c.identical ? "idêntico ao segundo render" : c.status === "different" ? `diferente do segundo render: ${c.different.join(", ")}` : `erro de leitura: ${c.errors.map((e) => `${e.layer} ${e.stream ?? ""} ${e.stderr}`).join("; ")}`, reproduce: c.status === "different" ? null : "Renderize duas vezes a mesma timeline e compare com motion qa reel --compare." });
   } else report.add({ id: "determinism", title: "Render reprodutível", status: "NOT_TESTED", required: false, details: "use --compare=<segundo_render.mp4>" });
 
   await addHumanChecks(report, mp4, o.reviewsDir);

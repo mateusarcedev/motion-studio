@@ -557,6 +557,6 @@ export async function planEdit(sourcePath, { analysis = null, transcript = null,
     review, decisions, warnings,
     provenance: { engine: "motion-core/reel", engineVersion: "1.1.1+reel", ffmpeg: tools.version, analysisSchema: analysis.schema, transcriptProvider: transcriptInfo?.provider?.id ?? null },
   };
-  timeline.hash = timelineHash(timeline);
+  timeline.hash = timelineHash(timeline, { file: opt.timelineFile });
   return timeline;
 }
