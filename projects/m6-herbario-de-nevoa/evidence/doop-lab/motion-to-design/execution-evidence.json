@@ -1,0 +1,1143 @@
+{
+  "schemaVersion": "motion-studio-doop-export-execution@1",
+  "recordedAt": "2026-11-26T17:34:47.249Z",
+  "target": {
+    "canvasId": "Gz620okdHY",
+    "url": "https://doop.design/c/Gz620okdHY",
+    "name": "Motion Studio — Integration Lab"
+  },
+  "authorization": {
+    "userAuthorized": true,
+    "scope": "15 new frames, five synthetic PNG uploads, placement, readback, screenshots, comparison, and fixes only on this canvas",
+    "otherCanvasesTouched": false,
+    "confidentialAssetsSent": false,
+    "uploadsOutsidePlan": 0
+  },
+  "plan": {
+    "generatedAt": "2026-11-26T13:39:33.785Z",
+    "canvas": {
+      "id": "Gz620okdHY",
+      "url": "https://doop.design/c/Gz620okdHY",
+      "expectedExistingFrameCount": 6
+    },
+    "status": "DRY_RUN",
+    "executed": false,
+    "validation": {
+      "ok": true,
+      "findings": [],
+      "executed": false
+    },
+    "planHash": "8c4c7ac53a3834e7fbf0136e80e7ee586da03787c88f5c2064e22f0f08491e50"
+  },
+  "preflight": {
+    "targetCanvasMatches": true,
+    "expectedExistingFrameCount": 6,
+    "sourceFileCount": 20,
+    "allSourceHashesAndSizesMatch": true,
+    "sourceFiles": [
+      {
+        "id": "landing",
+        "path": "projects/m6-herbario-de-nevoa/web/index.html",
+        "bytes": 15193,
+        "sha256": "7e456291129c711bfbe4e6847bb2f166554da6c1aac25fbf6b5596bf7f3bd08a",
+        "matched": true
+      },
+      {
+        "id": "08_carousel_01_capa",
+        "path": "projects/m6-herbario-de-nevoa/carousel/01-capa.html",
+        "bytes": 2881,
+        "sha256": "4c0afe315f7687376341ed660e2850e5c672a8bcf0104478e80b71e1de68be6a",
+        "matched": true
+      },
+      {
+        "id": "09_carousel_02_indice",
+        "path": "projects/m6-herbario-de-nevoa/carousel/02-indice.html",
+        "bytes": 2102,
+        "sha256": "37f72eb7caf08fdb695bd507141c974064993f1c6b6252787fd3a6023ea6a7b6",
+        "matched": true
+      },
+      {
+        "id": "10_carousel_03_lunaria",
+        "path": "projects/m6-herbario-de-nevoa/carousel/03-lunaria.html",
+        "bytes": 2644,
+        "sha256": "a636625efa68db9a7028d27db79c2a2f998c5df10996e4a1288f4b53a99673ab",
+        "matched": true
+      },
+      {
+        "id": "11_carousel_04_intervalo",
+        "path": "projects/m6-herbario-de-nevoa/carousel/04-intervalo.html",
+        "bytes": 2154,
+        "sha256": "6223d20c5f4693f754ddd8f1d6b65144a58152da2dfda5427db1fe5f67cd340f",
+        "matched": true
+      },
+      {
+        "id": "12_carousel_05_paisagem",
+        "path": "projects/m6-herbario-de-nevoa/carousel/05-paisagem.html",
+        "bytes": 2913,
+        "sha256": "707f45ac5e249963789f05ef3f1044214d67a3199a484dbc2a6c62879136e29c",
+        "matched": true
+      },
+      {
+        "id": "13_carousel_06_colofao",
+        "path": "projects/m6-herbario-de-nevoa/carousel/06-colofao.html",
+        "bytes": 2332,
+        "sha256": "cbe127a5b57bfae15b5a517eba49360e64328912e2d24a1635e337559ca4d155",
+        "matched": true
+      },
+      {
+        "id": "story_vertical",
+        "path": "projects/m6-herbario-de-nevoa/story/story.html",
+        "bytes": 7792,
+        "sha256": "cef4af8740c7716a43f41d5b597b218aed4be61a93fc064110946c34f4f3c876",
+        "matched": true
+      },
+      {
+        "id": "video_frame_0000",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/video-frame-0000.html",
+        "bytes": 988,
+        "sha256": "cfd71c1b4fc9004d78543cb8d5c52d1499d54e81dc92515bfdcb397bc7690610",
+        "matched": true
+      },
+      {
+        "id": "video_frame_0060",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/video-frame-0060.html",
+        "bytes": 997,
+        "sha256": "756a4e95ef917cbff9b685dfb836ba2e03f77541acc54bbebdff25bc91350e86",
+        "matched": true
+      },
+      {
+        "id": "video_frame_0120",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/video-frame-0120.html",
+        "bytes": 991,
+        "sha256": "f97a3803d2c23f13ba8c5fd3a8e5bb58040550efe5df42c117d19c063ed01431",
+        "matched": true
+      },
+      {
+        "id": "video_frame_0180",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/video-frame-0180.html",
+        "bytes": 989,
+        "sha256": "512338f89f4c9c54fe5e3201e6b9c1fda14836a70b6a420828c3b7c63fef56c0",
+        "matched": true
+      },
+      {
+        "id": "video_frame_0239",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/video-frame-0239.html",
+        "bytes": 978,
+        "sha256": "7db5aa7a488c22d0ba23e14377e4f39dac23ac455db8e56f9016abdb99f45607",
+        "matched": true
+      },
+      {
+        "id": "storyboard",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/storyboard.html",
+        "bytes": 4453,
+        "sha256": "01b7cd1424753e3ea38a579d6771c3279f9b5fd56676a0ebb7bd7a2aac1c85c3",
+        "matched": true
+      },
+      {
+        "id": "svg_elements",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/svg-elements.html",
+        "bytes": 3276,
+        "sha256": "be393f2ae21185a6948e615f43b9a49a46f5daf65aee60d79de0bfab41aa14e5",
+        "matched": true
+      },
+      {
+        "id": "promo_frame_0000",
+        "path": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0000.png",
+        "bytes": 5928,
+        "sha256": "cd5c75383092b1a76739c41a169733f9e7b22e0f6c924eeaa10dc26d699238a4",
+        "matched": true
+      },
+      {
+        "id": "promo_frame_0060",
+        "path": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0060.png",
+        "bytes": 55828,
+        "sha256": "da1c8c0ffc3112ce84f178c9486307da737a5c602ad48943ca60c30729f60dd7",
+        "matched": true
+      },
+      {
+        "id": "promo_frame_0120",
+        "path": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0120.png",
+        "bytes": 72429,
+        "sha256": "64e3acf9f00d12288d118d736c94855427065107ade9cc487234d2e1d996e081",
+        "matched": true
+      },
+      {
+        "id": "promo_frame_0180",
+        "path": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0180.png",
+        "bytes": 65256,
+        "sha256": "ef32a418c2d560b5769fd7d36987f6ab340ff7bfc300e852e8e15d7e8fb4c5de",
+        "matched": true
+      },
+      {
+        "id": "promo_frame_0239",
+        "path": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0239.png",
+        "bytes": 55731,
+        "sha256": "fdb98b18a027c06e0d6ce51afe5f1a529daf46caeef4b4a4f8f69f5a644756eb",
+        "matched": true
+      }
+    ],
+    "ambiguousWritesRetried": 0
+  },
+  "operations": [
+    {
+      "id": "op-001-cf8b083b",
+      "kind": "upload_asset",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "source": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0120.png",
+      "fileName": "0120.png",
+      "bytes": 72429,
+      "sha256": "64e3acf9f00d12288d118d736c94855427065107ade9cc487234d2e1d996e081",
+      "publicUrl": "https://doop.design/a/HL6KJeoXOf.png",
+      "publicDownload": {
+        "httpStatus": 200,
+        "bytes": 72429,
+        "sha256": "64e3acf9f00d12288d118d736c94855427065107ade9cc487234d2e1d996e081",
+        "matched": true
+      }
+    },
+    {
+      "id": "op-002-8129d5f0",
+      "kind": "upload_asset",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "source": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0000.png",
+      "fileName": "0000.png",
+      "bytes": 5928,
+      "sha256": "cd5c75383092b1a76739c41a169733f9e7b22e0f6c924eeaa10dc26d699238a4",
+      "publicUrl": "https://doop.design/a/OQl1QhcmqF.png",
+      "publicDownload": {
+        "httpStatus": 200,
+        "bytes": 5928,
+        "sha256": "cd5c75383092b1a76739c41a169733f9e7b22e0f6c924eeaa10dc26d699238a4",
+        "matched": true
+      }
+    },
+    {
+      "id": "op-003-72aaceaa",
+      "kind": "upload_asset",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "source": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0060.png",
+      "fileName": "0060.png",
+      "bytes": 55828,
+      "sha256": "da1c8c0ffc3112ce84f178c9486307da737a5c602ad48943ca60c30729f60dd7",
+      "publicUrl": "https://doop.design/a/A1KBHbqhFC.png",
+      "publicDownload": {
+        "httpStatus": 200,
+        "bytes": 55828,
+        "sha256": "da1c8c0ffc3112ce84f178c9486307da737a5c602ad48943ca60c30729f60dd7",
+        "matched": true
+      }
+    },
+    {
+      "id": "op-004-a790f1b5",
+      "kind": "upload_asset",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "source": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0180.png",
+      "fileName": "0180.png",
+      "bytes": 65256,
+      "sha256": "ef32a418c2d560b5769fd7d36987f6ab340ff7bfc300e852e8e15d7e8fb4c5de",
+      "publicUrl": "https://doop.design/a/Xji11i75WN.png",
+      "publicDownload": {
+        "httpStatus": 200,
+        "bytes": 65256,
+        "sha256": "ef32a418c2d560b5769fd7d36987f6ab340ff7bfc300e852e8e15d7e8fb4c5de",
+        "matched": true
+      }
+    },
+    {
+      "id": "op-005-5abe8988",
+      "kind": "upload_asset",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "source": "projects/m6-herbario-de-nevoa/out/m6-final/video/frames/0239.png",
+      "fileName": "0239.png",
+      "bytes": 55731,
+      "sha256": "fdb98b18a027c06e0d6ce51afe5f1a529daf46caeef4b4a4f8f69f5a644756eb",
+      "publicUrl": "https://doop.design/a/7Ikh8vlXYr.png",
+      "publicDownload": {
+        "httpStatus": 200,
+        "bytes": 55731,
+        "sha256": "fdb98b18a027c06e0d6ce51afe5f1a529daf46caeef4b4a4f8f69f5a644756eb",
+        "matched": true
+      }
+    },
+    {
+      "id": "op-006-ca4a6e21",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "07-landing-herbario",
+      "frameId": "GVqUTFC_nf",
+      "requestedSize": {
+        "width": 1280,
+        "height": 800
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 880
+      },
+      "currentReadbackSha256": "18c48eb3697dfc4cdbd0a2e0b2b783497de4d0b829bd2a78959c03bf9a35d2bb"
+    },
+    {
+      "id": "op-007-4cd95e47",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "GVqUTFC_nf",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/07-landing-herbario.png",
+        "bytes": 110693,
+        "sha256": "d4faa476410d67f5c515e26e8d86d4941d5ac271c8f859a77591b202762d5188"
+      },
+      "recapturedAfterLayoutFix": true,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-008-02e90954",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "08-carousel-01-capa",
+      "frameId": "c1lRtqBU46",
+      "requestedSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "finalSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "currentReadbackSha256": "4adc4aab38ea505f34188d47d7537e2ae4dafc715e17bf373b52df57b023e318"
+    },
+    {
+      "id": "op-009-0515ae85",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "c1lRtqBU46",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/08-carousel-01-capa.png",
+        "bytes": 81206,
+        "sha256": "cca95a5a656e590743ec2568c366c97503f4bc1ba0284bfd573b86a3e12dc37d"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-010-6bb67eec",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "09-carousel-02-indice",
+      "frameId": "80m1oTxm0u",
+      "requestedSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "finalSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "currentReadbackSha256": "fc4e4c8dbb5d14870d636b6e36ad3360b6b5e12bd0440c841c04d6a18c7e8dd7"
+    },
+    {
+      "id": "op-011-b0b632c9",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "80m1oTxm0u",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/09-carousel-02-indice.png",
+        "bytes": 75073,
+        "sha256": "00954047b783bd06daa5bdc7dc69659f0c0c8f7946f67fea0c55cce70b2cc87e"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-012-a5fc36f0",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "10-carousel-03-lunaria",
+      "frameId": "tRhKr0IyG4",
+      "requestedSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "finalSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "currentReadbackSha256": "ff76daf6263ba1b74429fdd9be52d25b0a715c1e2b4016201c962f5f138bb388"
+    },
+    {
+      "id": "op-013-f490d3d5",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "tRhKr0IyG4",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/10-carousel-03-lunaria.png",
+        "bytes": 74207,
+        "sha256": "0dd4e78cb659c2718d87421316774da882c2e0d3c58106756f21eba078a39d51"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-014-2460d99e",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "11-carousel-04-intervalo",
+      "frameId": "oAGg6mxssj",
+      "requestedSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "finalSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "currentReadbackSha256": "3fe69055d70a2c0cece182baafdaa2ae441171adf555ef2fe05a09e4ae929150"
+    },
+    {
+      "id": "op-015-6f1135f2",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "oAGg6mxssj",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/11-carousel-04-intervalo.png",
+        "bytes": 56156,
+        "sha256": "0215db4f0afd22ecbb6c06be9fb1b9dabeda2fb8d42654721cb07572a894e599"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-016-0a73db6b",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "12-carousel-05-paisagem",
+      "frameId": "gaCSsVCg0-",
+      "requestedSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "finalSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "currentReadbackSha256": "b8e39eaf71513e09101c345a20bdcb22903b248fd0172f20e0773c8a041511a1"
+    },
+    {
+      "id": "op-017-27d2edd2",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "gaCSsVCg0-",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/12-carousel-05-paisagem.png",
+        "bytes": 78498,
+        "sha256": "84b441bf1af6c7ab74dffc8c378cb913d6e5159e3fce1c42ebce8a13d4fbc368"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-018-1094d99d",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "13-carousel-06-colofao",
+      "frameId": "cpXavZ8GVR",
+      "requestedSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "finalSize": {
+        "width": 1080,
+        "height": 1350
+      },
+      "currentReadbackSha256": "293ee0fd9094d34a3d5daea62220acf01026e807f1e12226b4be414b9c8a6db2"
+    },
+    {
+      "id": "op-019-85b11022",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "cpXavZ8GVR",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/13-carousel-06-colofao.png",
+        "bytes": 59427,
+        "sha256": "721c08cb91ba13442cc6e9ba70141dc5e8de3329f24daadba360c9e1bb0704dc"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-020-7a54a2da",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "14-story-vertical",
+      "frameId": "L6G1bw2LOW",
+      "requestedSize": {
+        "width": 720,
+        "height": 1280
+      },
+      "finalSize": {
+        "width": 720,
+        "height": 1280
+      },
+      "currentReadbackSha256": "4a6696504fab8fedb3cc086967cce6446ff151b364e7ba1aa017b9c690e23624"
+    },
+    {
+      "id": "op-021-2c68d1fa",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "L6G1bw2LOW",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/14-story-vertical.png",
+        "bytes": 51338,
+        "sha256": "fb3229a753b9d2b28250275e9d07ce23d123de73da7d0a9e11340b8d1db92e4c"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": true
+    },
+    {
+      "id": "op-022-3cd3d844",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "15-video-00-00.00",
+      "frameId": "Z7Jh-uPtsi",
+      "requestedSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "currentReadbackSha256": "c312ae47f5f1ff45d452223108398d7174dbff94d19158b3fe61faeb8ab21f73"
+    },
+    {
+      "id": "op-023-fd718e5f",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "Z7Jh-uPtsi",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/15-video-00-00.00.png",
+        "bytes": 26657,
+        "sha256": "c3fed015254272dc75b9186f12afc25e46f2d854f853139eb655b394806562df"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-024-81bab5e9",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "16-video-00-02.50",
+      "frameId": "iG6rMeqGql",
+      "requestedSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "currentReadbackSha256": "3adcdedbaeeff93a51eaaef6e7b0dd978b4d4d8bd33c1e5e2736166d85c49fe6"
+    },
+    {
+      "id": "op-025-231f391d",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "iG6rMeqGql",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/16-video-00-02.50.png",
+        "bytes": 82167,
+        "sha256": "6a8d82bed9c85c4502dc62e49be7a670614570b3d4da2bbf6d3493933452c262"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-026-d9cc886b",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "17-video-00-05.00",
+      "frameId": "FIxNa-TTIF",
+      "requestedSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "currentReadbackSha256": "8a0e9e5c6726ff371aaeae6e52a984240d99b60b205f8618ae8f1add83281325"
+    },
+    {
+      "id": "op-027-99a9d6ac",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "FIxNa-TTIF",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/17-video-00-05.00.png",
+        "bytes": 99176,
+        "sha256": "6e2dbd544ac18d0669a4bb62799fb2e8ac073755d42d3be285656f82fe924057"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-028-41bf4f48",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "18-video-00-07.50",
+      "frameId": "hsh1yuut6a",
+      "requestedSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "currentReadbackSha256": "bcc08ea09c8a9ac2670998de41b001b8ebe4b5b30d0844391a93e6da64468ac8"
+    },
+    {
+      "id": "op-029-889edd0d",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "hsh1yuut6a",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/18-video-00-07.50.png",
+        "bytes": 92623,
+        "sha256": "88fe02f882768042953151b5846db7acbfc65fe458458abd78340c4ef46effd1"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-030-9572170d",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "19-video-00-09.96",
+      "frameId": "TBD9crgUbq",
+      "requestedSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "currentReadbackSha256": "00c2e6876ba82723c6102d37f1810acc38139f8c5743d3467f95a68fa2235bb7"
+    },
+    {
+      "id": "op-031-92b3dfb0",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "TBD9crgUbq",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/19-video-00-09.96.png",
+        "bytes": 76852,
+        "sha256": "ba15424ed8ae8ab30986571d4b2067f202abe2e815c4b1c6d742f1f834f4ec50"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-032-9494b9a1",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "20-storyboard-video",
+      "frameId": "k5ZJyK0WBQ",
+      "requestedSize": {
+        "width": 1280,
+        "height": 800
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 800
+      },
+      "currentReadbackSha256": "06b6ea540e2b896c7d13ac4f7504e0ca1a9c9798768bcc53aa0f791e34300c9c"
+    },
+    {
+      "id": "op-033-b74a88a5",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "k5ZJyK0WBQ",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/20-storyboard-video.png",
+        "bytes": 71497,
+        "sha256": "70eb8caaac8180952db61075bde8fcb94e6cd9847a2d1b7c41d992641dda1ab8"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    },
+    {
+      "id": "op-034-0df7efa4",
+      "kind": "create_frame",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameName": "21-svg-compatible-elements",
+      "frameId": "cqsn3ryIEI",
+      "requestedSize": {
+        "width": 1280,
+        "height": 800
+      },
+      "finalSize": {
+        "width": 1280,
+        "height": 800
+      },
+      "currentReadbackSha256": "907a2b7f6d72c8d717af42a4ab1670a696cdbc55cfa180458633a2335993e442"
+    },
+    {
+      "id": "op-035-26083c99",
+      "kind": "get_frame_screenshot",
+      "status": "succeeded",
+      "targetCanvasId": "Gz620okdHY",
+      "frameId": "cqsn3ryIEI",
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/21-svg-compatible-elements.png",
+        "bytes": 71778,
+        "sha256": "52b11e572e73eb462c3bbe4a68155cdd2cf62d1540dc53ef552293061018b1bf"
+      },
+      "recapturedAfterLayoutFix": false,
+      "recapturedAfterStaticPosterFix": false
+    }
+  ],
+  "repairs": [
+    {
+      "kind": "update_frame",
+      "frameId": "GVqUTFC_nf",
+      "field": "height",
+      "from": 800,
+      "to": 880,
+      "reason": "CTA clipped at original 800 px artboard",
+      "status": "succeeded",
+      "readbackVerified": true,
+      "finalScreenshot": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/07-landing-herbario.png",
+      "preCorrectionScreenshot": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/07-landing-herbario-before-fit.png"
+    },
+    {
+      "kind": "edit_frame_html",
+      "frameId": "L6G1bw2LOW",
+      "reason": "Doop static renderer did not run story entrance animation; expose first scene as a static poster",
+      "status": "succeeded",
+      "readbackVerified": true,
+      "finalScreenshot": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/14-story-vertical.png",
+      "limitation": "Poster readback does not validate animation playback."
+    }
+  ],
+  "originalFrames": [
+    {
+      "id": "h9rCOmRg0g",
+      "sha256": "16279350d017f669601c8b399acc0724f8e61aff6ec900fb00fa3158c846b5e3",
+      "unchanged": true
+    },
+    {
+      "id": "CwjMdBJXXs",
+      "sha256": "8b3e737754fbfd1e21369356f1d55f2ea86387dbe56a856ebe4ac9d0eb5c0a4f",
+      "unchanged": true
+    },
+    {
+      "id": "-_E_wx3ROp",
+      "sha256": "4867ab9c9af13187ab38f65f4d08389714a29f8f512af3fccdce81c4c32551b9",
+      "unchanged": true
+    },
+    {
+      "id": "w0A1aPBoAb",
+      "sha256": "43bf8010a11c117a2bf3a43587045876bc012379c250d8dbde7d17f4cfe2bb1b",
+      "unchanged": true
+    },
+    {
+      "id": "Xw8Is9_4vi",
+      "sha256": "0708c6684e4b917bf10137abdbe51eb3311ab703859bb11ace545f5b1448859a",
+      "unchanged": true
+    },
+    {
+      "id": "unjOCGtIza",
+      "sha256": "935288ca5ee106f260304e7f425b2e611ae8c8e3308a766c4f2c07b4fff6f7f1",
+      "unchanged": true
+    }
+  ],
+  "finalCanvasFrameCount": 21,
+  "newFrameCount": 15,
+  "newFrames": [
+    {
+      "name": "07-landing-herbario",
+      "id": "GVqUTFC_nf",
+      "width": 1280,
+      "height": 880,
+      "htmlBytesUtf8": 14867,
+      "htmlSha256": "18c48eb3697dfc4cdbd0a2e0b2b783497de4d0b829bd2a78959c03bf9a35d2bb",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/07-landing-herbario.png",
+        "bytes": 110693,
+        "sha256": "d4faa476410d67f5c515e26e8d86d4941d5ac271c8f859a77591b202762d5188"
+      }
+    },
+    {
+      "name": "08-carousel-01-capa",
+      "id": "c1lRtqBU46",
+      "width": 1080,
+      "height": 1350,
+      "htmlBytesUtf8": 2870,
+      "htmlSha256": "4adc4aab38ea505f34188d47d7537e2ae4dafc715e17bf373b52df57b023e318",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/08-carousel-01-capa.png",
+        "bytes": 81206,
+        "sha256": "cca95a5a656e590743ec2568c366c97503f4bc1ba0284bfd573b86a3e12dc37d"
+      }
+    },
+    {
+      "name": "09-carousel-02-indice",
+      "id": "80m1oTxm0u",
+      "width": 1080,
+      "height": 1350,
+      "htmlBytesUtf8": 2056,
+      "htmlSha256": "fc4e4c8dbb5d14870d636b6e36ad3360b6b5e12bd0440c841c04d6a18c7e8dd7",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/09-carousel-02-indice.png",
+        "bytes": 75073,
+        "sha256": "00954047b783bd06daa5bdc7dc69659f0c0c8f7946f67fea0c55cce70b2cc87e"
+      }
+    },
+    {
+      "name": "10-carousel-03-lunaria",
+      "id": "tRhKr0IyG4",
+      "width": 1080,
+      "height": 1350,
+      "htmlBytesUtf8": 2683,
+      "htmlSha256": "ff76daf6263ba1b74429fdd9be52d25b0a715c1e2b4016201c962f5f138bb388",
+      "planSha256Match": null,
+      "planSha256MatchReason": "No byte-equality claim: the prior Doop readback was serialized differently from the source HTML, and the latest readback includes a later user-authored edit. The original source hash was verified during preflight; structural/visual evidence is recorded separately.",
+      "priorReadbackBeforeUserEdit": {
+        "htmlSha256": "bc669f039ec3dc01691eb7a33c0b5bd09e21498a3cc9f907dfda59ce88ff7f51",
+        "bytes": 2633
+      },
+      "latestUserEdit": {
+        "author": "Mateus Silva Andrade Arce",
+        "updatedAt": "2026-11-26T17:13:08.653Z",
+        "previousVersion": {
+          "author": "Motion Studio",
+          "savedAt": "2026-11-26T16:51:04.749Z",
+          "htmlBytes": 2619
+        },
+        "preserved": true
+      },
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/10-carousel-03-lunaria.png",
+        "bytes": 74207,
+        "sha256": "0dd4e78cb659c2718d87421316774da882c2e0d3c58106756f21eba078a39d51"
+      }
+    },
+    {
+      "name": "11-carousel-04-intervalo",
+      "id": "oAGg6mxssj",
+      "width": 1080,
+      "height": 1350,
+      "htmlBytesUtf8": 2108,
+      "htmlSha256": "3fe69055d70a2c0cece182baafdaa2ae441171adf555ef2fe05a09e4ae929150",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/11-carousel-04-intervalo.png",
+        "bytes": 56156,
+        "sha256": "0215db4f0afd22ecbb6c06be9fb1b9dabeda2fb8d42654721cb07572a894e599"
+      }
+    },
+    {
+      "name": "12-carousel-05-paisagem",
+      "id": "gaCSsVCg0-",
+      "width": 1080,
+      "height": 1350,
+      "htmlBytesUtf8": 2902,
+      "htmlSha256": "b8e39eaf71513e09101c345a20bdcb22903b248fd0172f20e0773c8a041511a1",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/12-carousel-05-paisagem.png",
+        "bytes": 78498,
+        "sha256": "84b441bf1af6c7ab74dffc8c378cb913d6e5159e3fce1c42ebce8a13d4fbc368"
+      }
+    },
+    {
+      "name": "13-carousel-06-colofao",
+      "id": "cpXavZ8GVR",
+      "width": 1080,
+      "height": 1350,
+      "htmlBytesUtf8": 2286,
+      "htmlSha256": "293ee0fd9094d34a3d5daea62220acf01026e807f1e12226b4be414b9c8a6db2",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/13-carousel-06-colofao.png",
+        "bytes": 59427,
+        "sha256": "721c08cb91ba13442cc6e9ba70141dc5e8de3329f24daadba360c9e1bb0704dc"
+      }
+    },
+    {
+      "name": "14-story-vertical",
+      "id": "L6G1bw2LOW",
+      "width": 720,
+      "height": 1280,
+      "htmlBytesUtf8": 7360,
+      "htmlSha256": "4a6696504fab8fedb3cc086967cce6446ff151b364e7ba1aa017b9c690e23624",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/14-story-vertical.png",
+        "bytes": 51338,
+        "sha256": "fb3229a753b9d2b28250275e9d07ce23d123de73da7d0a9e11340b8d1db92e4c"
+      }
+    },
+    {
+      "name": "15-video-00-00.00",
+      "id": "Z7Jh-uPtsi",
+      "width": 1280,
+      "height": 720,
+      "htmlBytesUtf8": 954,
+      "htmlSha256": "c312ae47f5f1ff45d452223108398d7174dbff94d19158b3fe61faeb8ab21f73",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/15-video-00-00.00.png",
+        "bytes": 26657,
+        "sha256": "c3fed015254272dc75b9186f12afc25e46f2d854f853139eb655b394806562df"
+      }
+    },
+    {
+      "name": "16-video-00-02.50",
+      "id": "iG6rMeqGql",
+      "width": 1280,
+      "height": 720,
+      "htmlBytesUtf8": 963,
+      "htmlSha256": "3adcdedbaeeff93a51eaaef6e7b0dd978b4d4d8bd33c1e5e2736166d85c49fe6",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/16-video-00-02.50.png",
+        "bytes": 82167,
+        "sha256": "6a8d82bed9c85c4502dc62e49be7a670614570b3d4da2bbf6d3493933452c262"
+      }
+    },
+    {
+      "name": "17-video-00-05.00",
+      "id": "FIxNa-TTIF",
+      "width": 1280,
+      "height": 720,
+      "htmlBytesUtf8": 957,
+      "htmlSha256": "8a0e9e5c6726ff371aaeae6e52a984240d99b60b205f8618ae8f1add83281325",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/17-video-00-05.00.png",
+        "bytes": 99176,
+        "sha256": "6e2dbd544ac18d0669a4bb62799fb2e8ac073755d42d3be285656f82fe924057"
+      }
+    },
+    {
+      "name": "18-video-00-07.50",
+      "id": "hsh1yuut6a",
+      "width": 1280,
+      "height": 720,
+      "htmlBytesUtf8": 955,
+      "htmlSha256": "bcc08ea09c8a9ac2670998de41b001b8ebe4b5b30d0844391a93e6da64468ac8",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/18-video-00-07.50.png",
+        "bytes": 92623,
+        "sha256": "88fe02f882768042953151b5846db7acbfc65fe458458abd78340c4ef46effd1"
+      }
+    },
+    {
+      "name": "19-video-00-09.96",
+      "id": "TBD9crgUbq",
+      "width": 1280,
+      "height": 720,
+      "htmlBytesUtf8": 944,
+      "htmlSha256": "00c2e6876ba82723c6102d37f1810acc38139f8c5743d3467f95a68fa2235bb7",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/19-video-00-09.96.png",
+        "bytes": 76852,
+        "sha256": "ba15424ed8ae8ab30986571d4b2067f202abe2e815c4b1c6d742f1f834f4ec50"
+      }
+    },
+    {
+      "name": "20-storyboard-video",
+      "id": "k5ZJyK0WBQ",
+      "width": 1280,
+      "height": 800,
+      "htmlBytesUtf8": 4623,
+      "htmlSha256": "06b6ea540e2b896c7d13ac4f7504e0ca1a9c9798768bcc53aa0f791e34300c9c",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/20-storyboard-video.png",
+        "bytes": 71497,
+        "sha256": "70eb8caaac8180952db61075bde8fcb94e6cd9847a2d1b7c41d992641dda1ab8"
+      }
+    },
+    {
+      "name": "21-svg-compatible-elements",
+      "id": "cqsn3ryIEI",
+      "width": 1280,
+      "height": 800,
+      "htmlBytesUtf8": 3342,
+      "htmlSha256": "907a2b7f6d72c8d717af42a4ab1670a696cdbc55cfa180458633a2335993e442",
+      "planSha256Match": true,
+      "screenshot": {
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/21-svg-compatible-elements.png",
+        "bytes": 71778,
+        "sha256": "52b11e572e73eb462c3bbe4a68155cdd2cf62d1540dc53ef552293061018b1bf"
+      }
+    }
+  ],
+  "screenshots": {
+    "count": 17,
+    "files": [
+      {
+        "name": "07-landing-herbario-before-fit.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/07-landing-herbario-before-fit.png",
+        "bytes": 109952,
+        "sha256": "73a3b74ae57a134e7e4c606d2181fa45da373bf260553bfa68a4100a01c1face"
+      },
+      {
+        "name": "07-landing-herbario.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/07-landing-herbario.png",
+        "bytes": 110693,
+        "sha256": "d4faa476410d67f5c515e26e8d86d4941d5ac271c8f859a77591b202762d5188"
+      },
+      {
+        "name": "08-carousel-01-capa.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/08-carousel-01-capa.png",
+        "bytes": 81206,
+        "sha256": "cca95a5a656e590743ec2568c366c97503f4bc1ba0284bfd573b86a3e12dc37d"
+      },
+      {
+        "name": "09-carousel-02-indice.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/09-carousel-02-indice.png",
+        "bytes": 75073,
+        "sha256": "00954047b783bd06daa5bdc7dc69659f0c0c8f7946f67fea0c55cce70b2cc87e"
+      },
+      {
+        "name": "10-carousel-03-lunaria-after-user-edit.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/10-carousel-03-lunaria-after-user-edit.png",
+        "bytes": 74207,
+        "sha256": "0dd4e78cb659c2718d87421316774da882c2e0d3c58106756f21eba078a39d51"
+      },
+      {
+        "name": "10-carousel-03-lunaria.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/10-carousel-03-lunaria.png",
+        "bytes": 74207,
+        "sha256": "0dd4e78cb659c2718d87421316774da882c2e0d3c58106756f21eba078a39d51"
+      },
+      {
+        "name": "11-carousel-04-intervalo.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/11-carousel-04-intervalo.png",
+        "bytes": 56156,
+        "sha256": "0215db4f0afd22ecbb6c06be9fb1b9dabeda2fb8d42654721cb07572a894e599"
+      },
+      {
+        "name": "12-carousel-05-paisagem.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/12-carousel-05-paisagem.png",
+        "bytes": 78498,
+        "sha256": "84b441bf1af6c7ab74dffc8c378cb913d6e5159e3fce1c42ebce8a13d4fbc368"
+      },
+      {
+        "name": "13-carousel-06-colofao.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/13-carousel-06-colofao.png",
+        "bytes": 59427,
+        "sha256": "721c08cb91ba13442cc6e9ba70141dc5e8de3329f24daadba360c9e1bb0704dc"
+      },
+      {
+        "name": "14-story-vertical.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/14-story-vertical.png",
+        "bytes": 51338,
+        "sha256": "fb3229a753b9d2b28250275e9d07ce23d123de73da7d0a9e11340b8d1db92e4c"
+      },
+      {
+        "name": "15-video-00-00.00.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/15-video-00-00.00.png",
+        "bytes": 26657,
+        "sha256": "c3fed015254272dc75b9186f12afc25e46f2d854f853139eb655b394806562df"
+      },
+      {
+        "name": "16-video-00-02.50.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/16-video-00-02.50.png",
+        "bytes": 82167,
+        "sha256": "6a8d82bed9c85c4502dc62e49be7a670614570b3d4da2bbf6d3493933452c262"
+      },
+      {
+        "name": "17-video-00-05.00.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/17-video-00-05.00.png",
+        "bytes": 99176,
+        "sha256": "6e2dbd544ac18d0669a4bb62799fb2e8ac073755d42d3be285656f82fe924057"
+      },
+      {
+        "name": "18-video-00-07.50.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/18-video-00-07.50.png",
+        "bytes": 92623,
+        "sha256": "88fe02f882768042953151b5846db7acbfc65fe458458abd78340c4ef46effd1"
+      },
+      {
+        "name": "19-video-00-09.96.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/19-video-00-09.96.png",
+        "bytes": 76852,
+        "sha256": "ba15424ed8ae8ab30986571d4b2067f202abe2e815c4b1c6d742f1f834f4ec50"
+      },
+      {
+        "name": "20-storyboard-video.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/20-storyboard-video.png",
+        "bytes": 71497,
+        "sha256": "70eb8caaac8180952db61075bde8fcb94e6cd9847a2d1b7c41d992641dda1ab8"
+      },
+      {
+        "name": "21-svg-compatible-elements.png",
+        "path": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/21-svg-compatible-elements.png",
+        "bytes": 71778,
+        "sha256": "52b11e572e73eb462c3bbe4a68155cdd2cf62d1540dc53ef552293061018b1bf"
+      }
+    ],
+    "postUserEditFrame": "10-carousel-03-lunaria",
+    "postUserEditScreenshot": "projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/screenshots/10-carousel-03-lunaria-after-user-edit.png",
+    "postUserEditScreenshotSha256": "0dd4e78cb659c2718d87421316774da882c2e0d3c58106756f21eba078a39d51",
+    "samePixelsAsEarlierCapture": true
+  },
+  "comparison": {
+    "structural": "21/21 frames reread. All six originals match baseline. 14 new frames match the export plan; the remaining new frame has a later user-authored edit and was preserved.",
+    "visual": "Landing, six slides, story poster, five video stills, storyboard, and SVG screenshots reviewed. No SSIM metric claimed.",
+    "tokens": "Local CSS tokens remain embedded; Doop global token API unavailable.",
+    "responsiveness": "Landing passed five local viewports before export; Doop output remains a fixed artboard and was not re-tested as responsive.",
+    "editability": "HTML/CSS/text/inline SVG remain editable where represented; five video stills are raster references; video timeline is not a native editable object.",
+    "animation": "Story is represented as a static poster in Doop; exported screenshots do not prove animation playback."
+  },
+  "externalLimitations": [
+    "global Doop tokens unavailable",
+    "global component library unavailable",
+    "<doop-use> expansion unavailable",
+    "font upload unavailable",
+    "atomic CAS unavailable"
+  ]
+}
