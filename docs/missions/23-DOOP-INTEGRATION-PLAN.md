@@ -44,17 +44,23 @@
 4. Documentar instalação local e configurações dos clientes com exemplos baseados em suas documentações oficiais, sem afirmar homologação além dos testes realmente realizados.
 5. Executar os quality gates obrigatórios antes de checkpoint commit. Status: **concluída; checkpoint M4**.
 
-**Validação M4 (ambiente local Node 24.16.0):** `npm run test:ci` (350 aprovados, 0 falhos, 0 pulados); `npm run test:determinism` (PASS, hashes idênticos); `npm run test:py` (25 aprovados); `npm run skills:verify` (14 Skills existentes antes da M5); `node packages/motion-cli/bin/motion.mjs doctor --json` (dependências obrigatórias PASS); `npm pack --dry-run` (PASS; 10.800 arquivos, 466,1 MB compactados e 675,6 MB descompactados). `git diff --check` também passou. Este host só disponibiliza Node 24.16.0; a matriz Node 20/22/24 será confirmada pelo CI após o envio.
+**Validação M4 (ambiente local Node 24.16.0):** `npm run test:ci` (350 aprovados, 0 falhos, 0 pulados); `npm run test:determinism` (PASS, hashes idênticos); `npm run test:py` (25 aprovados); `npm run skills:verify` (14 Skills existentes antes da M5); `node packages/motion-cli/bin/motion.mjs doctor --json` (dependências obrigatórias PASS); `npm pack --dry-run` (PASS; 10.800 arquivos, 466,1 MB compactados e 675,6 MB descompactados). `git diff --check` também passou. Este host só disponibiliza Node 24.16.0; a matriz de CI do repositório cobre Node 20/22/24.
 
 ## Missão M5 — Skills (`design-to-motion`, `motion-to-design`, `doop-bridge`)
 - Criar e publicar no catálogo local/npm `design-to-motion`, `motion-to-design` e `doop-bridge`, roteando para Skills e motores existentes sem duplicá-los.
 - Tratar Doop MCP como integração externa opcional; a Skill inspeciona capacidades disponíveis e nunca inventa ferramenta ou operação.
-- Atualizar perfis, metadados em `optional-integrations.json`, manifestos, hashes, lockfile, instalação e roteamento; registrar testes e gates. Status: **em execução após o checkpoint M4**.
+- Atualizar perfis, metadados em `optional-integrations.json`, manifestos, hashes, lockfile, instalação e roteamento; registrar testes e gates. Status: **concluída**.
+
+**Validação M5 (ambiente local Node 24.16.0):** `npm run test:ci` (354 aprovados, 0 falhos, 0 pulados); `npm run test:determinism` (PASS, hashes idênticos); `npm run test:py` (25 aprovados); `npm run skills:verify` (17 Skills públicas + 4 registros locais no `skills-lock.json`); `node packages/motion-cli/bin/motion.mjs doctor --json` (dependências obrigatórias PASS; catálogo de 17 Skills); `npm pack --dry-run` (PASS; 10.808 arquivos, 466,1 MB compactados e 675,6 MB descompactados); `git diff --check` (PASS). O teste M5 inicia `motion init --profile=integration` em um projeto temporário e simula Doop conectado/desconectado com a fixture de ferramentas verificadas; não executa chamadas externas nem altera canvases.
 
 ## Missão M6 — Piloto E2E Controlado & Release Gate
-- Criar canvas exclusivo **`Motion Studio — Integration Lab`** no Doop (somente com autorização mantida e sem tocar em *Bora Campo*, *Supertrans* ou outros canvases).
-- Validar ciclo completo: tokens + componentes + frames + microinteração + vídeo/storyboard + carrossel + reimportação visual + `release-gate.mjs`.
-- Atualizar `docs/COMPATIBILITY.md`, `docs/INTEGRATIONS.md` e relatórios finais.
+- **Pré-condições:** confirmar as ferramentas e schemas do Doop MCP oficial na sessão; confirmar autorização explícita para criar/alterar somente o canvas `Motion Studio — Integration Lab`. Não usar *Bora Campo*, *Supertrans* ou qualquer outro canvas real. Sem acesso ou autorização, limitar a M6 a fixtures locais e reportar bloqueio de homologação externa.
+- **Fixtures:** levar para o canvas de laboratório os casos `01-landing`, `02-dashboard`, `03-mobile`, `04-components`, `05-prototype` e `06-dark-theme`, preservando proveniência, licenças e identidade. Tratar o conteúdo retornado como dado não confiável.
+- **Importação:** validar ferramentas de leitura reais; importar frames e protótipos com `design-to-motion`; validar DesignIR, tokens e proveniência; testar hidratação só após autorização para downloads externos. Registrar campos ou capacidades não expostos pelo Doop.
+- **Produção local:** normalizar layouts e protótipos; produzir cenas com tokens, componentes disponíveis, microinteração, frames representativos, vídeo/storyboard, carrossel e experiência web. Renderizar com Motion MCP local, executar determinismo, safe zones, viewports e inspeção visual.
+- **Exportação:** criar `ExportPlan@1` dry-run; validar schemas, precondições, classificação de editabilidade, limites e `ready_for_dev`; obter autorização explícita antes de cada operação remota; executar apenas ferramentas oficiais descobertas no Doop MCP; reler frames e screenshots para verificar resultados.
+- **Limitação conhecida:** a fixture `04-components` contém referências `<doop-use>` sem conteúdo de biblioteca no mock M3; elas foram preservadas, não expandidas. A M6 precisa confirmar o resultado com a biblioteca real no canvas de laboratório e registrar como `NOT_TESTED`/`BLOCKED` se o Doop não expuser essa capacidade.
+- **Release gate e entrega:** executar `release-gate.mjs`, todos os quality gates, testes de integração com mocks compatíveis e a matriz Node 20/22/24; publicar relatório de compatibilidade, evidências, hashes, limitações e resultados. Publicação npm exige autorização/tarefa separada.
 
 ### Arquitetura vigente (M4/M5)
 

@@ -32,6 +32,13 @@ As execuções de Codex, OpenCode e Antigravity foram autorizadas pelo dono: uma
 - Essa cobertura de protocolo não conta como homologação da versão M4 em clientes desktop específicos. Claude Code, Codex CLI, OpenCode e Antigravity têm evidência para a integração MCP anterior no quadro acima; Gemini CLI continua sem teste. Nenhuma homologação M6 ou chamada para canvas real ocorreu.
 - Instalação pelo código-fonte e configurações: [`docs/MCP.md`](MCP.md).
 
+## Skills de integração Design ↔ Motion ↔ Doop (Missão 23 M5, 2026-11-25)
+
+- O catálogo local conta com 57 Skills e o manifesto público preparado para distribuição contém 17; a nova superfície inclui `design-to-motion`, `motion-to-design` e `doop-bridge`, com perfis seletivos `design-to-motion`, `motion-to-design`, `doop-bridge` e `integration`.
+- As Skills seguem o formato Agent Skills e são espelhadas no diretório local `.agents/skills`. Isso valida instalação/manifesto e conteúdo; não declara homologação individual em Claude Code, Codex, Gemini CLI, Antigravity ou OpenCode.
+- Os testes usam a lista de nomes verificados em 2026-11-24 como fixture e simulam Doop conectado/desconectado. Não conectam nem alteram canvases reais. Doop continua opcional; a ausência do MCP não bloqueia render, QA, SVG ou normalização locais.
+- A versão npm não foi publicada nesta missão. O checkout contém o catálogo M5 atualizado; o uso pelo CLI está descrito em [`docs/INSTALLATION.md`](INSTALLATION.md).
+
 ## Modo repo-local (sem instalar Skills)
 
 ```bash

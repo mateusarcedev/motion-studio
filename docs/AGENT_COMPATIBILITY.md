@@ -46,6 +46,10 @@ safe zone são medidas pela CLI. Qualquer cliente com terminal ou MCP stdio usa 
 
 O protocolo foi exercitado com o cliente MCP oficial JS por stdio em processo real. Essa validação automatizada comprova handshake, descoberta, chamadas, estrutura de erros e a nova superfície local; ela não substitui a execução dentro de cada cliente. Claude Code, Codex CLI, OpenCode e Antigravity permanecem com a evidência da versão anterior indicada acima. Gemini CLI e a superfície v2 nesses aplicativos ainda não foram homologados. Consulte [`docs/MCP.md`](MCP.md) para configurações documentadas.
 
+## Skills de integração (Missão 23 M5)
+
+`design-to-motion`, `motion-to-design` e `doop-bridge` estão no manifesto público do pacote de Skills, no perfil seletivo e no espelho `.agents/skills` do repositório. O formato segue Agent Skills. Instalação e hash foram exercitados pelo harness local; isso não comprova descoberta ou execução em cada aplicativo. A matriz de clientes permanece a da tabela acima; não se declara homologação nova para M5.
+
 ---
 
 ## Como Adicionar Suporte a um Novo Agente

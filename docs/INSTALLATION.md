@@ -25,12 +25,22 @@ Esse é o fluxo oficial. Você não precisa conhecer os pacotes internos (`@tech
 1. Verifica o catálogo de Skills (sha256 de cada `SKILL.md` contra `public-skills.json`). Falha explicitamente se faltar alguma Skill.
 2. Detecta o gerenciador de pacotes (`packageManager` do package.json → lockfile → npm).
 3. Instala **CLI, Core e Skills** como `devDependencies` exatas, sem scripts de terceiros (`--ignore-scripts`), nunca globalmente.
-4. Copia as **14 Skills oficiais** para `.agents/skills/` e, para Claude Code, cria links relativos em `.claude/skills/`.
+4. Copia as Skills públicas do pacote resolvido para `.agents/skills/` e, para Claude Code, cria links relativos em `.claude/skills/` (17 no catálogo deste checkout; o npm 1.1.1 ainda contém 14).
 5. Cria `motion.config.json` e `motion/` (brand, projects, out, gallery).
 6. Grava `.motion/install.json` (versões, hashes, status) e verifica a integridade.
 7. Roda o diagnóstico dos motores e imprime o relatório.
 
 As outras Skills do repositório de desenvolvimento **não** são redistribuíveis e não estão no pacote npm. Integrações externas (ex.: `aula-interativa`) continuam opcionais e são instaladas manualmente, respeitando a licença de cada uma (`npx motion list`).
+
+O catálogo deste checkout contém 17 Skills públicas. A M4/M5 não publica uma versão npm nova; enquanto o registro ainda servir a versão 1.1.1 anterior, instale as Skills diretamente a partir do clone:
+
+```bash
+git clone https://github.com/mateusarcedev/motion-studio.git
+cd /CAMINHO/DO/PROJETO-CONSUMIDOR
+node --input-type=module -e 'import { installSkills } from "/CAMINHO/motion-studio/packages/motion-skills/index.js"; await installSkills({ targetDir: process.cwd(), profile: "integration", agents: ["agents", "claude"] });'
+```
+
+Substitua os dois caminhos. O perfil `integration` instala as Skills públicas relevantes no projeto consumidor; não instala nem conecta o Doop MCP. Para executar o Motion MCP pelo clone, instale suas dependências com `npm ci` no checkout e configure o comando descrito em [MCP.md](MCP.md).
 
 ### Opções
 
@@ -38,7 +48,7 @@ As outras Skills do repositório de desenvolvimento **não** são redistribuíve
 |---|---|
 | `--brand=<nome>` | Nome da marca (padrão: nome da pasta) |
 | `--agents=claude,codex,gemini,opencode,copilot` | Agentes explícitos (padrão: detecção) |
-| `--profile=<perfil>` | Subconjunto das Skills públicas (padrão: `all` = 11) |
+| `--profile=<perfil>` | Subconjunto das Skills públicas: `core`, `web`, `motion`, `social`, `3d`, `blender`, `interactive`, `design-to-motion`, `motion-to-design`, `doop-bridge`, `integration` ou `all` (o `all` do checkout contém 17) |
 | `--with-package-json` | Em pasta sem `package.json`, cria um mínimo e instala tudo |
 | `--skip-install` | Não instala dependências; usa os arquivos do pacote em execução |
 | `--force` | Substitui configuração/Skills divergentes, com backup em `.motion/backups` |

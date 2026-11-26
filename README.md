@@ -9,7 +9,7 @@
 [![Playwright QA](https://img.shields.io/badge/QA-Playwright%205--Viewport-emerald.svg)](https://playwright.dev/)
 [![Engine: CFR 30fps](https://img.shields.io/badge/Video-CFR%2030FPS%20Deterministic-purple.svg)](docs/PRODUCTION_GUIDE.md)
 
-*54 local Agent Skills · 14 public Skills · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
+*57 local Agent Skills · 17 public Skills in the M5 catalog · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
 
 🌐 Site: [motion.mateusarce.dev](https://motion.mateusarce.dev) · source: [mateusarcedev/motion-landing](https://github.com/mateusarcedev/motion-landing)
 
@@ -116,7 +116,7 @@ Instale o MOTION em qualquer projeto consumidor existente (Next.js, Vite, React,
 npx @technomanceer/motion-studio init
 ```
 
-Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **14 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
+Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as Skills públicas do pacote, integra aos agentes detectados, cria `motion.config.json` e roda o diagnóstico dos motores. Este checkout já contém as 17 Skills públicas da M5; a missão não publica uma nova versão npm, então use o CLI do código-fonte conforme [docs/INSTALLATION.md](docs/INSTALLATION.md) até o próximo release.
 
 Para conectar um cliente MCP local, veja [docs/MCP.md](docs/MCP.md). O servidor é iniciado pelo cliente via `stdio` e não expõe endpoint remoto.
 
@@ -166,7 +166,7 @@ Uso: motion <comando> [opções]
 Comandos:
   init                     Inicializa o estúdio no projeto atual
     --brand=<nome>         Define o nome da marca (padrão: nome da pasta)
-    --profile=<nome>       Perfil de skills: core, web, motion, social, 3d, blender, all
+    --profile=<nome>       Perfil: core, web, motion, social, 3d, blender, interactive, design-to-motion, motion-to-design, doop-bridge, integration, all
     --skills-dir=<pasta>   Skills nesta pasta do projeto (não toca em pastas de agente)
     --no-skills            Não instala Skills
     --force                Sobrescreve configuração existente
@@ -203,7 +203,7 @@ Comandos:
 
 ## 🎯 Skill Distribution & Selective Profiles / Perfis de Skills
 
-O monorepo mantém 54 pastas de Skills; o pacote npm distribui somente as 14 autorizadas no `public-skills.json`. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote público. Sem `--profile`, o padrão `all` instala as 14 Skills públicas.
+O monorepo mantém 57 pastas de Skills; o manifesto do pacote neste checkout autoriza 17 para distribuição. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote resolvido. O npm 1.1.1 ainda publicado contém 14 até um próximo release. Sem `--profile`, o padrão `all` instala todas as Skills públicas da versão instalada.
 
 | Perfil | Skills Instaladas | Foco |
 |---|---|---|
@@ -214,11 +214,16 @@ O monorepo mantém 54 pastas de Skills; o pacote npm distribui somente as 14 aut
 | **`3d`** | 5 públicas: `studio-director`, `motion-director`, `web-director`, `3d-scene-director`, `anatomy` | Cenas 3D procedurais WebGL e anatomia visual. |
 | **`blender`** | As mesmas 5 Skills públicas de `3d` | Pipelines com Blender opcional. |
 | **`interactive`** | 4 públicas: `studio-director`, `motion-director`, `web-director`, `explainer-motion` | Experiências e conteúdo explicativo interativo. |
-| **`all`** *(padrão)* | Todas as 14 Skills públicas | Instalação completa do catálogo autorizado para distribuição. |
+| **`design-to-motion`** | 2 públicas: `studio-director`, `design-to-motion` | Importação e produção local a partir de designs existentes. |
+| **`motion-to-design`** | 2 públicas: `studio-director`, `motion-to-design` | Pacotes de exportação para editores de design. |
+| **`doop-bridge`** | 4 públicas: `studio-director` e as três Skills de integração | Coordenação opcional com o MCP oficial do Doop. |
+| **`integration`** | 6 públicas: `studio-director`, `motion-director`, `web-director` e as três Skills de integração | Fluxo completo de integração Design ↔ Motion ↔ Doop opcional. |
+| **`all`** *(padrão)* | Todas as 17 Skills públicas | Instalação completa do catálogo autorizado para distribuição. |
 
 Para selecionar o perfil na inicialização:
 ```bash
 npx motion init --profile=social
+npx motion init --profile=integration
 ```
 
 ---

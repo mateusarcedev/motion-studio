@@ -121,3 +121,11 @@ Saída de verificação:
   [PASS] ui-humanizer: instalada
 ```
 *(Caso não estejam instaladas localmente, o comando exibirá `[INFO]` com a instrução exata para adição via `npx skills add`).*
+
+## 5. Motion MCP × Doop MCP oficial (Missão 23)
+
+O servidor `motion mcp` é um processo local por `stdio` e chama os motores do Motion Core. Doop mantém seu próprio MCP oficial; `doop-bridge` coordena ambos por meio do agente e não instala um cliente, inventa ferramentas ou cria um proxy.
+
+As Skills `design-to-motion` e `motion-to-design` fazem parte do manifesto público local do pacote. O metadata `optional-integrations.json` registra `doop-mcp` como servidor externo opcional, sem `installCommand`: o agente precisa descobrir as ferramentas e schemas que o cliente Doop expõe na sessão atual.
+
+Para configurar o servidor local e acompanhar a matriz honesta de homologação, consulte [`MCP.md`](MCP.md) e [`COMPATIBILITY.md`](COMPATIBILITY.md). A falta do Doop MCP não bloqueia operações locais de Motion.

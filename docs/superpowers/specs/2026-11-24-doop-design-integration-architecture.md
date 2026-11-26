@@ -1,45 +1,27 @@
 # Arquitetura Desacoplada, Evolução de Skills, Motion MCP & ADRs
 
-> **Status:** Decisões arquiteturais definitivas aprovadas em 2026-11-24.
+> **Status:** Decisões históricas e vigentes. O diagrama e o ADR-007 refletem a arquitetura em vigor desde 2026-11-25; ADRs supersedidos permanecem somente como registro histórico.
 
 ---
 
-## 1. Arquitetura Desacoplada (`EditorAdapter` + `MotionDesignIR@1`)
+## 1. Arquitetura Vigente (`stdio` local + coordenação pelo agente)
 
 O `motion-core` não importa nem depende do Doop. Toda troca de dados passa por contratos neutros em `packages/motion-core/bridge/`:
 
 ```mermaid
 flowchart LR
-    subgraph Editors["Editores Visuais"]
-        DOOP["Doop Design (MCP OAuth)"]
-        FUTURE["Figma / Pencil / Paper (futuros)"]
+    AGENT["Agente + Skills\ndesign-to-motion / motion-to-design / doop-bridge"]
+    DOOP["Doop MCP oficial\n(opcional, ferramentas descobertas em sessão)"]
+    STDIO["motion mcp\nstdio local"]
+    subgraph MotionCore["Motion Core (sem MCP, LLM ou provedor de IA)"]
+        SEC["Validação de entradas\nSSRF · path · HTML/CSS/SVG · prompt injection"]
+        IR["DesignIR · Tokens · Proveniência · Planos de exportação"]
+        ENGINES["Render · QA · SVG · normalização"]
+        ARTIFACTS["Artefatos locais + hashes"]
     end
-
-    subgraph Bridge["packages/motion-core/bridge/"]
-        ADAPTER["EditorAdapter Interface + Registry"]
-        SEC["Untrusted Input Guard (SSRF, Traversal, XSS, Prompt Injection)"]
-        IR["MotionDesignIR@1 + DesignTokenBundle@1 + AssetProvenanceManifest@1"]
-    end
-
-    subgraph MotionCore["MOTION Studio Core (100% Determinístico, sem LLM)"]
-        BRAND["creative-core/brands/<slug>/tokens.json"]
-        ENGINES["frame.js / svg-motion.js / lottie-motion.js / components"]
-        RENDER["Playwright (render_static / render_frames) + FFmpeg"]
-        QA["verifyDeterminism / qaSafeZones / qaViewports / delivery.py"]
-    end
-
-    subgraph MCP["packages/motion-cli/lib/mcp.mjs (Servidor Único)"]
-        STDIO["stdio (padrão local)"]
-        HTTP["Streamable HTTP + OAuth 2.1 / Secure Tunnel (fase 2)"]
-    end
-
-    DOOP <--> ADAPTER
-    FUTURE -.-> ADAPTER
-    ADAPTER --> SEC --> IR
-    IR --> BRAND
-    IR --> ENGINES --> RENDER --> QA
-    STDIO <--> MotionCore
-    HTTP <--> MotionCore
+    AGENT <--> DOOP
+    AGENT <--> STDIO
+    STDIO <--> SEC --> IR --> ENGINES --> ARTIFACTS
 ```
 
 ---
@@ -92,6 +74,7 @@ Baseado nas especificações oficiais (`modelcontextprotocol.io`, `developers.op
 - O Motion MCP não incorpora, substitui nem faz proxy do Doop MCP. O agente inspeciona as ferramentas Doop disponíveis e usa cada servidor diretamente. Ferramentas Bridge locais devolvem contratos, planos e payloads com `executed: false` quando a execução depende do Doop.
 - Streamable HTTP, OAuth 2.1, Secure MCP Tunnel, hospedagem remota, multiusuário e execução remota não fazem parte do roadmap vigente. As propostas ADR-004 (fase HTTP) e ADR-005 permanecem registradas somente como histórico de decisões superadas.
 - Isolamento por workspace, validação de entrada hostil, limites locais de execução/concorrência, cancelamento suportado pelo motor e hash de artefatos são aplicados independentemente do transporte local.
+- M5 distribui `design-to-motion` e `motion-to-design` como Skills first-party e cataloga `doop-bridge` como integração opcional; o perfil `integration` seleciona as três sem criar dependência do Doop.
 
 ---
 
@@ -105,5 +88,5 @@ doop-bridge (optional-integrations.json)
       ├──► design-to-motion (@technomanceer/motion-studio-skills)
       │        └── reutiliza animate / emil-design-eng / explainer-motion / prototype / web-director
       └──► motion-to-design (@technomanceer/motion-studio-skills)
-               └── devolve stills, storyboards, tokens e SVGs via EditorAdapter
+               └── prepara stills, storyboards, tokens, SVGs e payloads `executed: false`
 ```

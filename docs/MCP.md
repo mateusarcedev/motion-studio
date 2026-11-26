@@ -18,6 +18,8 @@ O processo MCP deve ser iniciado pelo cliente configurado abaixo; não execute o
 
 Quando uma versão atualizada do pacote estiver disponível, o executável instalado poderá ser iniciado como `motion mcp --workspace=/caminho/do/projeto`; o comando e opções são os mesmos. Esta missão não publica pacotes npm.
 
+As Skills M5 `design-to-motion`, `motion-to-design` e `doop-bridge` podem ser instaladas do checkout no projeto consumidor com `installSkills()`; use o perfil `integration` ou `doop-bridge`. O exemplo e as limitações de distribuição estão em [`INSTALLATION.md`](INSTALLATION.md). A instalação da Skill `doop-bridge` não configura nem instala o servidor Doop.
+
 ## Configuração de clientes
 
 Substitua `/CAMINHO/motion-studio` e `/CAMINHO/projeto` pelos caminhos absolutos da máquina. As configurações abaixo seguem os formatos documentados pelos respectivos clientes; os testes desta missão usam o cliente MCP oficial JS em subprocesso. Isso **não** equivale à homologação de cada aplicativo.
