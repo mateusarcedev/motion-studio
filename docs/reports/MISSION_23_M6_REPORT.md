@@ -159,10 +159,10 @@ Consulta ao registry em 2026-11-26 confirmou `1.1.1` como versão publicada de c
 | `node packages/motion-cli/bin/motion.mjs doctor --json` | PASS — Node 24.16, Python, FFmpeg, Chromium e dependências obrigatórias; opcionais ausentes aparecem como `INFO`. |
 | `npm pack --dry-run` | Pacote raiz privado: 10.890 arquivos, ~469,4 MB compactados e ~679,8 MB descompactados. Quatro pacotes públicos auditados individualmente; tamanhos antes/depois e conteúdo estão acima. |
 | Release gate `scripts/release-gate.mjs` | `R4–R14` PASS; R2 foi omitido para não repetir `test:ci` e aparece `NOT_TESTED` no relatório. A instalação limpa (R6) passou. Node 20/22 ausentes localmente (R15 `NOT_TESTED`), login npm ausente (R16 `BLOCKED`) e 1.1.1 já publicada (R17 `FAIL`). R12/R13 não tiveram falhas, mas reportaram warnings de loudness e repetição no fixture de teste. Nenhum pacote foi publicado. Detalhes em [`MISSION_23_M6_RELEASE_GATE.md`](MISSION_23_M6_RELEASE_GATE.md). |
-| Node.js | Somente 24.16.0 está instalado localmente. Node 20/22 estão ausentes; os três majors precisam ser confirmados no CI pós-push. |
-| CI remoto | CI do commit desta continuação será confirmado após o push; o CI aprovado anterior cobriu Node 20/22/24 e determinismo em quatro jobs. |
+| Node.js | Somente 24.16.0 está instalado localmente. Node 20/22 foram confirmados no CI remoto desta continuação. |
+| CI remoto | PASS no commit `58c21a1a01c65cb4dcae67cdca22099332c97dcf`: Node 20/22/24 e determinismo; 4/4 jobs. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45853277921). |
 
-As suítes MCP/Bridge e de distribuição estão incluídas em `test:ci`; o gate de instalação limpa também verifica os tarballs. O cliente MCP de referência executou 30 ferramentas/schemas no piloto. `git diff --check` passou nesta continuação. O CI remoto desta continuação será registrado após o push.
+As suítes MCP/Bridge e de distribuição estão incluídas em `test:ci`; o gate de instalação limpa também verifica os tarballs. O cliente MCP de referência executou 30 ferramentas/schemas no piloto. `git diff --check` passou antes dos commits.
 
 ## Recomendação de release
 
