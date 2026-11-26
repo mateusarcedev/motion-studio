@@ -120,6 +120,8 @@ Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI
 
 Para conectar um cliente MCP local, veja [docs/MCP.md](docs/MCP.md). O servidor é iniciado pelo cliente via `stdio` e não expõe endpoint remoto.
 
+O piloto com OpenDesign 0.27.2 funcionou parcialmente pelo OpenCode configurado no projeto local; integração nativa pelo painel do OpenDesign não foi homologada. Consulte o [guia e a matriz Doop × OpenDesign](docs/integrations/OPENDESIGN.md) e o [relatório M6](docs/reports/MISSION_23_M6_REPORT.md).
+
 > [!NOTE]
 > **Versão estável publicada `1.1.1`.** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.
 

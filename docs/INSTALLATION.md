@@ -72,11 +72,14 @@ Caminhos confirmados nas documentações oficiais de cada agente:
 | Google Antigravity | `.agents/skills` (testado) | `.agents/skills` |
 | Gemini CLI (não testado) | `.gemini/skills` ou alias `.agents/skills` | `.agents/skills` |
 | OpenCode | `.opencode/skills`, `.claude/skills`, `.agents/skills` | `.agents/skills` |
+| OpenDesign via OpenCode | usa a descoberta `.agents/skills` do OpenCode | `.agents/skills` no projeto OpenDesign; integração parcial |
 | GitHub Copilot | `.github/skills`, `.claude/skills`, `.agents/skills` | `.agents/skills` |
 
 Sem agente detectado, o `init` instala o layout universal (`.agents/skills` + `.claude/skills`). Nada é escrito em `AGENTS.md`, `CLAUDE.md` ou configs dos agentes. Veja o que foi testado de fato em [docs/reports/INSTALLER_COMPATIBILITY_REPORT.md](reports/INSTALLER_COMPATIBILITY_REPORT.md).
 
 > Skills com `disable-model-invocation: true` (hoje: `thermo-nuclear-code-quality-review`) são de invocação manual; OpenCode e Antigravity não as expõem ao modelo, por design.
+
+OpenDesign 0.27.2 foi testado com Skills no projeto local e com OpenCode como agente subjacente. Isso não comprova descoberta pelo painel/loop nativo do OpenDesign. Veja [o relatório do piloto](integrations/OPENDESIGN.md) e a [matriz](COMPATIBILITY.md).
 
 ## 4. Segurança e idempotência
 

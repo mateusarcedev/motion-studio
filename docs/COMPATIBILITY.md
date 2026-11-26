@@ -3,19 +3,20 @@
 Fonte única desde a Missão 21.1. Só conta o que foi executado; descoberta de Skills não implica execução.
 O histórico de instalação e descoberta continua em `AGENT_COMPATIBILITY.md`.
 
-## M6 — estado atual da homologação (2026-11-26; parcial)
+## M6 — estado atual da homologação (2026-11-26; parcial por round-trip externo pendente)
 
 | Cliente ou superfície | Estado | Evidência e limites |
 |---|---|---|
 | Claude Code 2.1.332 | **Homologado — smoke MCP** | Config temporária isolada, inicialização, descoberta de 30 ferramentas, `render_static` real, erro de traversal, PNG com SHA-256 validado e encerramento `0`. A chamada validou uma ferramenta representativa, não todos os 30 handlers. |
 | Codex CLI 0.172.0 | **Homologado — smoke MCP** | Workspace temporário e `--approve-for-me`; descoberta, render instalado, arquivo íntegro, rejeição de traversal e encerramento `0`. A política padrão `never` impediu a primeira chamada; a configuração pessoal não foi alterada. |
 | Google Antigravity CLI (`agy`) 1.5.16 | **Homologado — smoke MCP** | `.agents/mcp_config.json` temporário; chamada real, artefato com o mesmo SHA-256, traversal rejeitado e encerramento `0`. `agy mcp list` exibe só servidores globais, apesar de a execução do workspace descobrir o MCP. |
-| OpenCode 2.2.5 | **Parcialmente homologado** | Conexão, descoberta, render e erro de traversal passaram. A sessão usou um serviço `opencode serve --service` preexistente; o processo filho MCP continuou sob esse serviço após o comando, então encerramento isolado não foi provado. O modo `--standalone` não carregou a configuração MCP do smoke. |
+| OpenCode 2.2.5 | **Parcialmente homologado** | Conexão, descoberta, render e erro de traversal passaram. No piloto OpenDesign, a config MCP no projeto também conectou e um agente OpenCode produziu um PNG via Motion MCP. O serviço `opencode serve --service` preexistente impediu provar encerramento isolado no smoke inicial. |
 | Gemini CLI | **Indisponível** | Executável não instalado no ambiente; sem alteração ou instalação de configuração pessoal. |
 | Cliente MCP oficial JS, subprocesso stdio | **Homologado como cliente de referência** | Handshake, descoberta/schema das 30 ferramentas, chamadas reais de render/QA/SVG/Bridge, erros, cancelamento, integridade, isolamento e encerramento em `tests/mcp_server.test.mjs`. Este estado não substitui homologação completa por cliente. |
-| Doop MCP oficial | **Parcial — somente disponibilidade/schema** | Conexão real e descoberta de ferramentas. A listagem não continha o canvas `Motion Studio — Integration Lab`; nenhum canvas ou recurso externo foi lido ou escrito. Sem ferramentas públicas de biblioteca de componentes ou leitura/escrita global de tokens. |
+| Doop MCP oficial | **Parcial — leitura de laboratório e Design-to-Motion** | Canvas autorizado `Gz620okdHY` e os seis frames foram relidos. Seis importações, normalizações e renders locais passaram; o protótipo confirmou cinco rotas. Um plano Motion-to-Design com 15 frames e 5 uploads foi validado em dry-run; nenhuma escrita nova ou upload ocorreu. |
+| OpenDesign 0.27.2 | **Parcial — agente subjacente** | Projeto local isolado e 16 Skills instaladas; nove Skills solicitadas foram carregadas pelo OpenCode. Motion MCP v2 foi configurado no projeto e o CLI OpenCode 2.2.5 produziu um PNG real. Nove previews, SVG e 5/5 viewports passaram. O painel do app não encaminhou servidores MCP no teste; o próprio MCP do OpenDesign estático no pacote, mas handshake não foi validado. Sem importação nativa de design ou produção completa pelo agente do app. |
 
-Os smoke tests dos quatro clientes usaram uma página local sintética em `/tmp/m6-client-smoke`. Os quatro PNGs têm `9.374` bytes e SHA-256 `4f0b481e6f7a6d65a8e0686fb466377af6d249d84f53876efc5d6aec9e45a350`. Cada cliente verificou descoberta, chamada real, parâmetro inseguro, resposta de erro, retorno do artefato e isolamento do workspace; limites de encerramento do OpenCode estão descritos na tabela. Gemini CLI e edição Doop seguem pendentes.
+Os smoke tests dos quatro clientes usaram uma página local sintética em `/tmp/m6-client-smoke`. Os quatro PNGs têm `9.374` bytes e SHA-256 `4f0b481e6f7a6d65a8e0686fb466377af6d249d84f53876efc5d6aec9e45a350`. Cada cliente verificou descoberta, chamada real, parâmetro inseguro, resposta de erro, retorno do artefato e isolamento do workspace. O handoff e limitações entre OpenDesign e OpenCode estão em [`integrations/OPENDESIGN.md`](integrations/OPENDESIGN.md). Gemini CLI segue indisponível; a escrita Doop está planejada, mas aguarda autorização.
 
 O relatório persistente, os logs, a matriz npm e os caminhos de evidência estão em [`reports/MISSION_23_M6_REPORT.md`](reports/MISSION_23_M6_REPORT.md).
 

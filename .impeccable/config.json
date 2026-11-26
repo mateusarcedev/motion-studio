@@ -43,6 +43,15 @@
         ],
         "createdAt": "2026-11-26T05:27:01.098Z",
         "reason": "Agent: the M6 storyboard specifies this clay leaf slide and its short editorial text; Floresce no intervalo is the intended frame label, not generic UI scaffolding."
+      },
+      {
+        "rule": "numbered-section-labels",
+        "value": "*",
+        "files": [
+          "projects/m6-herbario-de-nevoa/web/index.html"
+        ],
+        "createdAt": "2026-11-26T15:27:15.617Z",
+        "reason": "Agent: STYLE.md defines Ubuntu indexes and tabular catalog numbers for the fictional field notebook; these labels identify the two intentional sections."
       }
     ]
   }

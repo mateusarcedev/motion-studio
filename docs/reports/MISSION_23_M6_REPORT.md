@@ -1,10 +1,10 @@
 # Missão 23 — M6: homologação E2E e release gate
 
-**Data:** 2026-11-26 · **Estado:** parcial · **Referência inicial:** `main` em `0a2ed3a5a4d407b38d3914b5cf139a43be7eab50` · **Runtime local:** Node 24.16.0, Python 3.14.5, FFmpeg 8.0.1.
+**Data:** 2026-11-26 · **Estado:** parcial enquanto o dry-run Motion-to-Design Doop aguarda autorização · **Referência da M6 original:** `0a2ed3a5a4d407b38d3914b5cf139a43be7eab50` · **Continuação local:** `main` em `6fa4240` · **Runtime local:** Node 24.16.0, Python 3.14.5, FFmpeg 8.0.1.
 
 ## Resultado
 
-A homologação local está concluída: campanha fictícia original produzida pelo fluxo criativo existente, execução pelo Motion MCP stdio, QA visual, instalação limpa dos quatro tarballs, testes MCP com cliente oficial e correções de segurança. Em 2026-11-26, com autorização limitada, foi criado o canvas `Motion Studio — Integration Lab` e nele foram criados somente os seis frames sintéticos descritos abaixo. A M6 permanece **parcial**: não houve autorização para exportar ao editor, e a biblioteca global de tokens/componentes não está exposta pelo Doop MCP conectado. Nenhum outro canvas foi aberto ou alterado.
+A homologação local está concluída para as capacidades do Motion Studio: campanha fictícia M6, Motion MCP stdio, QA, instalação limpa, testes MCP e correções de segurança. Com autorização limitada, foi criado o canvas `Motion Studio — Integration Lab` e exatamente seis frames sintéticos; eles foram relidos e nenhum outro canvas foi aberto ou alterado. Um plano adicional Motion-to-Design agora está validado em dry-run, mas a escrita nova aguarda autorização. O piloto OpenDesign 0.27.2 está concluído parcialmente por meio do agente OpenCode; o handoff nativo do app não foi homologado.
 
 M1–M5 permanecem concluídas conforme seus relatórios. A M3 registra CI remoto aprovado. M6 não altera versão npm nem publica pacotes.
 
@@ -66,6 +66,20 @@ Na importação local, o sanitizador removeu os scripts inline de `01-landing` e
 
 Não foram executados exports para o Doop: eles ficaram explicitamente fora da autorização recebida. O relatório anterior de dry-run continua sendo apenas plano local; nenhuma operação externa foi simulada como sucesso.
 
+## Plano Motion-to-Design para o laboratório Doop
+
+O cliente MCP local chamou `bridge_export_plan`, `bridge_export_validate` e `bridge_doop_payload` contra o documento autorizado `Gz620okdHY`; nenhuma dessas chamadas invocou o Doop MCP para escrita. O plano versionado está em [`export-plan.dry-run.json`](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-to-design/export-plan.dry-run.json), SHA-256 `8c4c7ac53a3834e7fbf0136e80e7ee586da03787c88f5c2064e22f0f08491e50`.
+
+| Operação planejada | Quantidade | Conteúdo |
+|---|---:|---|
+| `create_frame` | 15 | Landing editável, seis páginas de carrossel, story vertical, cinco stills de vídeo, storyboard e showcase SVG |
+| `upload_asset` | 5 | PNGs representativos do vídeo, até 72.429 bytes cada; o Doop retornaria URLs públicas permanentes |
+| `get_frame_screenshot` | 15 | Screenshot de verificação após cada novo frame |
+
+Validação `ok:true`, nenhum finding, nenhum bloqueio; `status: DRY_RUN`, `executed:false`. O plano proíbe atualizações de frames existentes, mutações de tokens/componentes e upload público sem autorização. Os seis frames existentes são preservados. O Doop MCP não oferece CAS atômico, portanto uma releitura anterior à escrita detecta algumas mudanças concorrentes, mas não garante atomicidade. Nenhum upload de fonte é planejado.
+
+O usuário ainda precisa autorizar explicitamente esses 15 frames e cinco uploads públicos antes de qualquer chamada externa. Após autorização, a execução precisa reler os seis frames originais e os 15 novos, capturar screenshots e validar estrutura/fidelidade. Até lá, o round-trip externo segue `NOT_TESTED`.
+
 ## Produções criativas locais
 
 A campanha original **Herbário de Névoa** é fictícia e não utiliza assets externos. O projeto, briefing, tokens, storyboard e fontes HTML estão em [`projects/m6-herbario-de-nevoa/`](../../projects/m6-herbario-de-nevoa/). O roteiro de execução pelo cliente MCP oficial está em [`produce.mjs`](../../projects/m6-herbario-de-nevoa/produce.mjs). Foram usadas as Skills `design-to-motion`, `web-director`, `cinematic-product-director`, `carousel-studio`, `story-studio`, `motion-to-design` e `doop-bridge`.
@@ -81,6 +95,33 @@ Safe zones são heurísticas configuradas no estúdio e servem de prévia; não 
 
 A crítica visual identificou corpo pequeno no carrossel e contraste no story. O texto dos slides 2 e 5 foi ampliado e o acento do story escurecido; as renderizações e os contact sheets finais foram refeitos e revistos. As saídas completas e as sequências de frames estão em `projects/m6-herbario-de-nevoa/out/m6-final/` e são ignoradas pelo Git para manter os tarballs enxutos. Fontes e evidências JSON permanecem versionadas.
 
+## Piloto OpenDesign 0.27.2
+
+O aplicativo instalado foi auditado no commit `d9691d7a8ba21ab57c52916dcf07ea87598e04fc`. Ele é Electron desktop e contém daemon CLI local, operações de projeto/arquivo/artefato e um MCP stdio próprio. O bundle usa OpenCode 1.19.6; no WSL, OpenCode 2.2.5 estava disponível. Nenhuma configuração pessoal do OpenDesign ou de agentes foi modificada.
+
+Foi criado o projeto local **Motion Studio — Integration Lab**, ID `04691291-53a3-44d0-b4ce-5d1cb1bb091e`, no perfil já instalado. As 16 Skills públicas do perfil foram instaladas; as onze Skills pedidas estão presentes e nove relevantes foram carregadas pelo OpenCode. Uma configuração `opencode.json` dentro apenas do projeto apontou Node, Motion MCP `stdio` e workspace explicitamente limitado. O OpenDesign painel não encaminhou MCP externo na execução observada; o MCP próprio do app não completou handshake deste ambiente WSL/Windows. Portanto a validação MCP é indireta, pelo agente OpenCode.
+
+A pasta `design-output/production/` no projeto local tem landing, dashboard, interface mobile, seis slides, story, storyboard, cinco frames representativos, dois MP4s, tokens, SVG e cartão HTML. São 41 arquivos/1.927.522 bytes; manifesto SHA-256 `f7c5b091025079f49037a1cecabf5b2c6b3ad65ebecfe7318414216e50e9aa5b`. Motion MCP descobriu 30 ferramentas/schemas, renderizou nove previews, validou o SVG e executou QA responsivo 5/5 sem issues. Screenshots e hashes estão em [`motion-mcp-results.json`](../../projects/m6-herbario-de-nevoa/evidence/opendesign/motion-mcp-results.json); instruções/matriz estão em [`OPENDESIGN.md`](../integrations/OPENDESIGN.md), e o relatório detalhado em [`OPENDESIGN_INTEGRATION_PILOT.md`](OPENDESIGN_INTEGRATION_PILOT.md).
+
+O OpenCode direto produziu um smoke PNG via `render_static` (37.814 bytes, SHA-256 `91e3a1dc5a3dd193bd04a6fb4f54bebfb8489f585805c49446ef92b0650788ef`). A execução posterior para vídeo vertical leu as Skills e chamou o servidor, mas parou no limite gratuito `429 FreeUsageLimitError`. A primeira execução do painel também falhou antes de criar saídas. Os MP4s no projeto foram reutilizados da campanha M6; não são resultado de uma execução completa do agente OpenDesign.
+
+HTML/CSS/JSON/SVG estão editáveis como texto no workspace; não houve importação ou releitura pelo MCP nativo do OpenDesign, nem prova de camadas/componentes nativos. O cartão não é um componente nativo e os vídeos não são timelines editáveis. `bridge_import_design` chama o adapter de Doop e exige frame JSON Doop; `bridge_normalize_design` aceita DesignIR validado, mas não há extractor OpenDesign→DesignIR suportado. Renderizamos os arquivos diretamente sem relabelar a proveniência; nenhum adapter OpenDesign foi implementado. O gap e o formato estão na [matriz](../integrations/OPENDESIGN.md) e no [roadmap do Universal Design Bridge](../roadmap/UNIVERSAL_DESIGN_BRIDGE.md).
+
+## Roteamento de QA por composição
+
+`resolveQualityRouting` inclui no relatório as ferramentas MCP registradas, verificações do Motion Core, ferramentas condicionais e revisão manual em campos separados. Não anuncia `qa_frames` nem `qa_media` como ferramentas MCP inexistentes. O roteamento é guia de execução do agente/CLI; não substitui os gates indicados.
+
+| Composição | Ferramentas MCP | Core | Revisão humana / condição |
+|---|---|---|---|
+| Website responsivo | `render_static`, `qa_viewports` | — | hierarquia, resposta e acessibilidade de movimento; `render_frames` + `qa_determinism` se houver animação |
+| Artboard fixo | `render_static` | — | composição à dimensão declarada; sem QA responsivo |
+| Carrossel | `render_carousel`, `qa_safe_zones` | `qaFrames` | continuidade narrativa; frames/determinismo se slides animarem |
+| Story | `render_frames`, `qa_determinism`, `qa_safe_zones` | `qaFrames` | arco e legibilidade dentro dos overlays |
+| Vídeo | `render_frames`, `qa_determinism`, `render_video` | `qaFrames`, `qaMedia` | ritmo/transições/tipografia; safe zones só para entrega social/vertical |
+| Composição animada | `render_frames`, `qa_determinism` | `qaFrames` | intenção/continuidade; safe zones para entrega social |
+
+O runtime `qa_viewports` serve HTML do próprio workspace através do servidor local seguro e mapeia imports bare do Motion Core sem rede externa. A regressão passa nos cinco viewports; o teste responsivo não foi enfraquecido. `qaFrames` e `qaMedia` são funções do Core, não nomes de ferramentas MCP.
+
 ## Segurança
 
 O Codex Security concluiu uma análise estática direcionada no commit de referência, scan `5f83b734-750a-4aad-9adc-36121bacb26b`. Foram registrados dois achados médios no estado anterior à M6, ambos corrigidos no working tree e cobertos por regressões:
@@ -92,16 +133,16 @@ O relatório gerado pelo scan está em [`MISSION_23_M6_SECURITY_SCAN.md`](MISSIO
 
 ## Auditoria dos pacotes npm
 
-O `npm pack --dry-run` do diretório raiz resulta em `motion-studio-monorepo@1.1.1`, marcado `private: true`: **468.105.563 bytes compactados, 677.961.764 bytes descompactados, 10.832 arquivos**. Os 466,1 MB reportados na M5 pertenciam a esse monorepo privado; não são os tamanhos dos pacotes públicos.
+O `npm pack --dry-run` do diretório raiz resulta em `motion-studio-monorepo@1.1.1`, marcado `private: true`: **cerca de 469,4 MB compactados, 679,8 MB descompactados, 10.890 arquivos**. Os 466,1 MB reportados na M5 pertenciam a esse monorepo privado; não são os tamanhos dos pacotes públicos. As alterações desta continuação não adicionaram arquivos de produção grandes aos tarballs públicos.
 
 | Pacote público | M5 — compactado / descompactado / arquivos | M6 após auditoria — compactado / descompactado / arquivos | Diferença observada |
 |---|---:|---:|---:|
 | `@technomanceer/motion-cli` | 61.660 / 203.744 / 26 | 62.566 / 206.947 / 26 | +906 / +3.203 / 0 |
-| `@technomanceer/motion-core` | 783.164 / 2.781.435 / 105 | 783.819 / 2.783.835 / 105 | +655 / +2.400 / 0 |
+| `@technomanceer/motion-core` | 783.164 / 2.781.435 / 105 | 785.422 / 2.789.158 / 106 | +2.258 / +7.723 / +1 |
 | `@technomanceer/motion-studio-skills` | 14.248.382 / 27.870.491 / 208 | 14.065.752 / 27.680.507 / 194 | −182.630 / −189.984 / −14 |
 | `@technomanceer/motion-studio` | 5.330 / 14.186 / 4 | 5.330 / 14.186 / 4 | 0 / 0 / 0 |
 
-Os aumentos pequenos de CLI/Core são código e testes de runtime adicionados pela M6. A redução das Skills removeu `.github` e fixtures/pastas de teste que não são referenciadas pelo manifesto/Skills em runtime; exemplos, scripts e ativos das Skills necessários ao uso permanecem. Os quatro pacotes usam inclusão explícita; o scan do conteúdo e a instalação dos tarballs passaram. O script reproduzível é [`scripts/m6_distribution_smoke.mjs`](../../scripts/m6_distribution_smoke.mjs).
+Os aumentos pequenos de CLI/Core são código de runtime da M6, incluindo renderização, QA e Design Bridge. A redução das Skills removeu `.github` e fixtures/pastas de teste que não são referenciadas pelo manifesto/Skills em runtime; exemplos, scripts e ativos das Skills necessários ao uso permanecem. Os quatro pacotes usam inclusão explícita; o scan do conteúdo e a instalação dos tarballs passaram. O script reproduzível é [`scripts/m6_distribution_smoke.mjs`](../../scripts/m6_distribution_smoke.mjs).
 
 Instalação limpa em `/tmp/motion-m6-distribution-hYufo9`: os quatro tarballs 1.1.1 foram instalados sem scripts de terceiros. O instalador copiou as seis Skills de `integration` e validou os 17 hashes do manifesto. `motion doctor` passou nos requisitos obrigatórios e integridade; MCP instalado encontrou 30 ferramentas; `render_static` criou PNG válido, SHA-256 `3816f0af9bf59f92b92a70d44d1b7c47001a510d3c1788da94f4470639dd1177`; render CLI e MCP produziram o mesmo hash; traversal foi rejeitado.
 
@@ -111,17 +152,17 @@ Consulta ao registry em 2026-11-26 confirmou `1.1.1` como versão publicada de c
 
 | Gate | Resultado M6 |
 |---|---|
-| `npm run test:ci` | PASS — 361 testes, 0 falhas, 0 pulados, 0 cancelados. |
+| `npm run test:ci` | PASS — 364 testes, 0 falhas, 0 pulados, 0 cancelados. |
 | `npm run test:determinism` | PASS — workspaces independentes; timeline, segmentos, captions, voz, streams decodificados e MP4 idênticos. |
-| `npm run test:py` | PASS — 25 testes, 108,1 s, sem skips. |
+| `npm run test:py` | PASS — 25 testes, 123,6 s, sem skips. |
 | `npm run skills:verify` | PASS — 17 Skills públicas, 4 registros locais no lock e hashes/licenças íntegros. |
 | `node packages/motion-cli/bin/motion.mjs doctor --json` | PASS — Node 24.16, Python, FFmpeg, Chromium e dependências obrigatórias; opcionais ausentes aparecem como `INFO`. |
-| `npm pack --dry-run` | Raiz privada: 10.871 arquivos, cerca de 469,3 MB compactados e 679,6 MB descompactados; inclui as 33 evidências do piloto Doop. Pacotes públicos e instalação limpa descritos acima. |
-| Release gate `scripts/release-gate.mjs` | O gate de publicação 1.1.1 terminou `FAIL`: R1–R14 passaram (R2: 361/361); R15 `NOT_TESTED` localmente para Node 20/22; R16 `BLOCKED` por ausência de login npm; R17 `FAIL` porque os quatro pacotes 1.1.1 já existem no registry. Nenhum pacote foi publicado nem tentativa de publicação feita. Relatório detalhado em [`MISSION_23_M6_RELEASE_GATE.md`](MISSION_23_M6_RELEASE_GATE.md). |
+| `npm pack --dry-run` | Pacote raiz privado: 10.890 arquivos, ~469,4 MB compactados e ~679,8 MB descompactados. Quatro pacotes públicos auditados individualmente; tamanhos antes/depois e conteúdo estão acima. |
+| Release gate `scripts/release-gate.mjs` | `R4–R14` PASS; R2 foi omitido para não repetir `test:ci` e aparece `NOT_TESTED` no relatório. A instalação limpa (R6) passou. Node 20/22 ausentes localmente (R15 `NOT_TESTED`), login npm ausente (R16 `BLOCKED`) e 1.1.1 já publicada (R17 `FAIL`). R12/R13 não tiveram falhas, mas reportaram warnings de loudness e repetição no fixture de teste. Nenhum pacote foi publicado. Detalhes em [`MISSION_23_M6_RELEASE_GATE.md`](MISSION_23_M6_RELEASE_GATE.md). |
 | Node.js | Somente 24.16.0 está instalado localmente. Node 20/22 estão ausentes; os três majors precisam ser confirmados no CI pós-push. |
-| CI remoto | PASS em `c0e2ec0ee719fab1ed340601344891e7dea8e8a5`: testes Node 20/22/24 e determinismo, quatro jobs aprovados. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45757036913). |
+| CI remoto | CI do commit desta continuação será confirmado após o push; o CI aprovado anterior cobriu Node 20/22/24 e determinismo em quatro jobs. |
 
-As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test tests/mcp_server.test.mjs tests/mcp_resource_limits.test.mjs tests/delivery_integrity.test.mjs` — 29 testes, 0 falhas. A repetição final do script de distribuição após as correções também passou; os tarballs e os testes de instalação correspondem às métricas na tabela. O teste de produção via cliente MCP oficial completou chamadas reais de render, QA, SVG e Bridge. O `git diff --check` passou antes dos commits. O commit documental `19658db241aa0b17de46cfba42333afb0bdfb918` passou no CI com os quatro jobs; [execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45758023543).
+As suítes MCP/Bridge e de distribuição estão incluídas em `test:ci`; o gate de instalação limpa também verifica os tarballs. O cliente MCP de referência executou 30 ferramentas/schemas no piloto. `git diff --check` passou nesta continuação. O CI remoto desta continuação será registrado após o push.
 
 ## Recomendação de release
 
@@ -132,8 +173,9 @@ As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test 
 ## Trabalho restante para fechar M6
 
 1. A homologação autorizada do laboratório foi executada: canvas criado e exatamente seis frames sintéticos escritos, lidos de volta e capturados. O usuário autorizou apenas esse laboratório e esses frames; exports e alterações em outros canvases não estão autorizados.
-2. A importação, validação DesignIR, normalização e render local passaram em 6/6 frames; a landing responsiva passou em 5/5 viewports no target `web-director`. O teste sobre o target fixo `frame` falhou nos viewports menores e permanece documentado como limitação, não como aprovação.
+2. A importação, validação DesignIR, normalização e render local passaram em 6/6 frames; a landing responsiva passou em 5/5 viewports no target `web-director`. O target fixo `frame` não é responsivo; o roteador agora reserva a verificação de overflow aos websites responsivos e mantém artboards fixos na dimensão declarada.
 3. O fluxo de saída Motion-to-Design foi mantido em dry-run. Não realizar escrita no Doop sem nova autorização explícita. A falta de ferramentas Doop para tokens globais e biblioteca/componentes impede homologar esses recursos; `04-components` não demonstrou expansão de `<doop-use>`.
-4. A escrita Motion-to-Design no Doop permanece sem homologação porque não foi autorizada nesta execução; qualquer piloto de exportação exige escopo e autorização separados. Tokens globais e componentes seguem indisponíveis no catálogo MCP observado. M6 permanece parcial.
+4. O piloto OpenDesign é parcial: integração indireta via OpenCode e um smoke real pelo Motion MCP passaram; o painel não demonstrou encaminhamento MCP, o MCP próprio não completou handshake no ambiente WSL/Windows, e a produção de vídeo do agente parou no limite 429 do provedor.
+5. O release gate não certifica publicação da 1.1.1 já publicada nem autenticação npm; nada foi publicado. Node 20 e 22 precisam ser confirmados no CI desta continuação. A M6 permanece **parcial quanto ao round-trip externo Doop e à integração nativa OpenDesign**. Não iniciar nova missão ou publicação automaticamente.
 
 Nenhum passo da M6 avança automaticamente para uma nova missão.
