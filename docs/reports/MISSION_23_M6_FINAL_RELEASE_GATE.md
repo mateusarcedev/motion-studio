@@ -24,3 +24,5 @@ Gerado por `scripts/release-gate.mjs` em 2026-11-26T18:00:19.356Z (Node v24.16.0
 | R17 | Versão ainda não publicada no registro | FAIL | @technomanceer/motion-core@1.1.1 JÁ EXISTE · @technomanceer/motion-studio-skills@1.1.1 JÁ EXISTE · @technomanceer/motion-cli@1.1.1 JÁ EXISTE · @technomanceer/motion-studio@1.1.1 JÁ EXISTE |
 
 **Validação remota posterior:** o CI do commit `5ebbc30fd82bd0a3e22463d2f7a576093d12bc6b` passou em 4/4 jobs, incluindo determinismo e a matriz Node.js 20/22/24. Isso complementa R15: a marca `NOT_TESTED` acima descreve apenas a indisponibilidade local dos runtimes Node 20/22 no release gate. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45873168038).
+
+O CI do commit documental final `a19c9d7767a31d1c4152212bafa9af87d076dc79` também passou em 4/4 jobs após reexecutar o job Node 24, cuja primeira tentativa parou antes dos testes por um HTTP 403 do repositório externo ao instalar Chromium. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45874719534).

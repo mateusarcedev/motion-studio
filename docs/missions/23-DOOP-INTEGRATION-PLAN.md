@@ -71,6 +71,8 @@
 
 **CI final após a execução autorizada Doop e a atualização dos relatórios:** PASS em 4/4 jobs no commit `5ebbc30fd82bd0a3e22463d2f7a576093d12bc6b` — determinismo e testes completos em Node 20, 22 e 24. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45873168038).
 
+**CI do commit documental final:** PASS em 4/4 jobs no commit `a19c9d7767a31d1c4152212bafa9af87d076dc79` — Node 20/22/24 e determinismo. A primeira tentativa do job Node 24 foi interrompida no setup do Chromium por HTTP 403 do repositório Microsoft; após reexecução apenas desse job, o setup e a suíte passaram. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45874719534).
+
 **Pacotes e release:** os tarballs locais 1.1.1 foram instalados em ambiente temporário limpo; nenhum pacote foi publicado e nenhuma versão foi alterada. A recomendação e proposta de changelog v1.2.0 estão em [`docs/reports/RELEASE_NOTES_1.2.0_PROPOSAL.md`](../reports/RELEASE_NOTES_1.2.0_PROPOSAL.md). O round-trip Motion-to-Design foi homologado no canvas e escopo autorizados. Tokens globais, componentes/`<doop-use>`, upload de fontes e CAS atômico continuam indisponíveis; OpenDesign nativo e incidente de determinismo Node 24 permanecem parciais/abertos.
 
 As lacunas gerais de interoperabilidade permanecem documentadas para referência futura em [`docs/roadmap/UNIVERSAL_DESIGN_BRIDGE.md`](../roadmap/UNIVERSAL_DESIGN_BRIDGE.md); esta referência não inicia nova missão.
