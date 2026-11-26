@@ -1,0 +1,166 @@
+{
+  "createdAt": "2026-11-26T14:08:12.016Z",
+  "project": "Motion Studio — Integration Lab",
+  "campaign": "Herbário de Névoa",
+  "workspace": "/mnt/c/Users/marce/AppData/Roaming/Open Design/namespaces/release-stable-win/data/projects/04691291-53a3-44d0-b4ce-5d1cb1bb091e",
+  "motionMcp": {
+    "transport": "stdio",
+    "toolCount": 30,
+    "schemas": "30/30 input and output schemas discovered",
+    "renderStatic": "9/9 PASS",
+    "qaViewports": "5/5 PASS",
+    "svgValidate": "PASS"
+  },
+  "runId": "mcp-20261126140519",
+  "websiteViewports": [
+    {
+      "viewport": "mobile-s",
+      "size": "360x740",
+      "status": "PASS",
+      "issues": [],
+      "overflowX": 0
+    },
+    {
+      "viewport": "mobile",
+      "size": "390x844",
+      "status": "PASS",
+      "issues": [],
+      "overflowX": 0
+    },
+    {
+      "viewport": "tablet",
+      "size": "768x1024",
+      "status": "PASS",
+      "issues": [],
+      "overflowX": 0
+    },
+    {
+      "viewport": "desktop",
+      "size": "1280x800",
+      "status": "PASS",
+      "issues": [],
+      "overflowX": 0
+    },
+    {
+      "viewport": "wide",
+      "size": "1920x1080",
+      "status": "PASS",
+      "issues": [],
+      "overflowX": 0
+    }
+  ],
+  "productionManifest": {
+    "files": 41,
+    "sha256": "f7c5b091025079f49037a1cecabf5b2c6b3ad65ebecfe7318414216e50e9aa5b"
+  },
+  "renderScreenshots": [
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/index.png",
+      "bytes": 58697,
+      "sha256": "833d67c6a02acaee3975ee3737daeab17ad7d9608807d3a8de9c611ddc06eeac"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/website.png",
+      "bytes": 121705,
+      "sha256": "84df88d7533deaaa9bc0f4743192f082d8c1260ef52a7550f96e224f9315b5d5"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/dashboard.png",
+      "bytes": 96171,
+      "sha256": "8358950ba5fbded503f1340d31875af59749b9f27508e3917f764dab6ed894ea"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/mobile.png",
+      "bytes": 49620,
+      "sha256": "49e9afff5b5ba3c1edeffcb39e63d07dfd04f95448782ebfeca6df75c8d4a284"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/carousel-cover.png",
+      "bytes": 81875,
+      "sha256": "a9c004f2d8793465897a16ce4c40ae83164f9b520298c874ddc2a4262180b4fb"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/story.png",
+      "bytes": 5594,
+      "sha256": "1cd25cc2cf64299a37d16d83a2041586494fb3ff996f4c63e7b62f48c75ef49b"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/storyboard.png",
+      "bytes": 78131,
+      "sha256": "40b4f712b1206d1b9f3043624027054f06ff2f2decf50c39cf73934225b338db"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/specimen-component.png",
+      "bytes": 20086,
+      "sha256": "f267a27f5e0d72202d2da44c51d7aa390d8321bd9808e732093d7c8f9fe0837c"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/svg-showcase.png",
+      "bytes": 76309,
+      "sha256": "944c6206ee1eb3b63ef8aac614336e5e6521765233d35a3cca33ede31768725b"
+    }
+  ],
+  "viewportScreenshots": [
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/mobile-s-fold.png",
+      "bytes": 49770,
+      "sha256": "ec923bd53f0117132a491fc737840684e7cb13edc05d7bb4893c9e71476c34ee"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/mobile-s-full.png",
+      "bytes": 176336,
+      "sha256": "ad485afaf05f63b2b86f64c4c5c5e8d843315eb19b8e2aebbfa373f26b96cc9f"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/mobile-fold.png",
+      "bytes": 61558,
+      "sha256": "7278ec015c4bc2265cbfd0f68f4fb470e4c01db7bda08442c659d8fc5aab59f3"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/mobile-full.png",
+      "bytes": 180400,
+      "sha256": "b3b055bf1b56d7708eac71126ba21d8b1a1b27b5e29b9a863bd8243bee9c8fd5"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/tablet-fold.png",
+      "bytes": 87650,
+      "sha256": "a0356beab946fcbdee8cf2054ae4dfcf186ed24c13f87b9bc92688b5f7b1f536"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/tablet-full.png",
+      "bytes": 230924,
+      "sha256": "ce64443c1e743b1622989be5078ad1d8003fef08949c0fd98856a29a3f772013"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/desktop-fold.png",
+      "bytes": 110604,
+      "sha256": "3cee8a02eef72d7cc8b4fad1cfeec008a2dfcea24d7df78114ec1dd6386f1af1"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/desktop-full.png",
+      "bytes": 291307,
+      "sha256": "8de8868f29e78fb5232271cb9e39cfd9f0ae9f96e8079da790d5ea19e13da530"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/wide-fold.png",
+      "bytes": 127475,
+      "sha256": "3113faee571140c23e28337760041d411525db33bf4cde22bff2b12e24889176"
+    },
+    {
+      "path": "design-output/production/qa/mcp-20261126140519/web-viewports/wide-full.png",
+      "bytes": 313511,
+      "sha256": "28a141b72185e3a62a516ff9c8573c8b49ed3e3b42b3d8cb2066ce6f6288521e"
+    }
+  ],
+  "openCodeMcpSmoke": {
+    "path": "design-output/mcp-smoke.png",
+    "bytes": 37814,
+    "sha256": "91e3a1dc5a3dd193bd04a6fb4f54bebfb8489f585805c49446ef92b0650788ef"
+  },
+  "limitations": [
+    "OpenDesign's in-app agent run did not complete: its subprocess exited before artifacts were produced.",
+    "A subsequent OpenCode project-agent run discovered Skills and Motion MCP, then stopped at the configured provider's free usage limit.",
+    "Direct project-scoped OpenCode MCP smoke rendered the PNG above; the in-app OpenDesign agent did not complete the requested video production.",
+    "The project files were rendered locally by Motion MCP; native OpenDesign canvas import or design-layer editability was not verified."
+  ]
+}
