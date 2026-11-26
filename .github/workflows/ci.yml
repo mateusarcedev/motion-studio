@@ -46,7 +46,11 @@ jobs:
       - name: Evidência de paridade CLI × MCP
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with: { name: mcp-parity-node${{ matrix.node }}, path: tests/tmp/mcp-parity, retention-days: 30, if-no-files-found: warn }
+        with:
+          name: "mcp-parity-node${{ matrix.node }}"
+          path: tests/tmp/mcp-parity
+          retention-days: 30
+          if-no-files-found: warn
       - name: Testes Python
         run: npm run test:py
       - name: Catálogo público de Skills
