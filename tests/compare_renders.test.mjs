@@ -38,7 +38,7 @@ test("só o contêiner muda: quadros e amostras continuam idênticos", async () 
 test("arquivo ausente ou truncado é read-error com detalhe, nunca diferença", async () => {
   for (const f of ["missing.mp4", "cut.mp4"]) {
     const c = await R.compareRenders(p("a.mp4"), p(f));
-    assert.equal(c.status, "read-error", f); assert.equal(c.identical, false); assert.deepEqual(c.different, []);
+    assert.equal(c.status, "read-error", f); assert.equal(c.identical, null, "an unreadable stream has no confirmed identity result"); assert.deepEqual(c.different, []);
     assert.ok(c.errors[0].file.endsWith(f)); assert.ok(c.errors[0].stderr);
   }
 });

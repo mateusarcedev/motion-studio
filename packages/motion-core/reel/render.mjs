@@ -109,6 +109,91 @@ async function renderSegment(timeline, seg, idx, { work, mode, srcW, srcH, outW,
   return out;
 }
 
+
+/**
+ * Compose preserved reel intermediates without rerunning source analysis, voice processing,
+ * segment encoding, overlay rendering, or caption generation. Used by renderTimeline and by the
+ * focused determinism replay tool. Output and workDir must be unique per attempt.
+ */
+export async function composeFinalStage(timeline, {
+  output, workDir, mode = "final", segmentFiles, voiceFile = null, layers = [], assFile = null,
+  fontsDir = null, onProgress = null,
+} = {}) {
+  if (!output || !workDir || !Array.isArray(segmentFiles) || !segmentFiles.length) {
+    throw reelError(REEL_ERRORS.INPUT_INVALID, "A composição final exige output, workDir e pelo menos um segmento.");
+  }
+  const work = path.resolve(workDir);
+  const outFile = path.resolve(output);
+  const fps = timeline.output.fps;
+  const outW = mode === "preview" ? timeline.export.preview.width : timeline.output.width;
+  const outH = mode === "preview" ? timeline.export.preview.height : timeline.output.height;
+  const durationSec = timeline.segments.reduce((n, seg) => n + seg.frames, 0) / fps;
+  await mkdir(work, { recursive: true });
+  await mkdir(path.dirname(outFile), { recursive: true });
+  const list = path.join(work, "segments.txt");
+  await writeFile(list, segmentFiles.map((f) => `file '${path.resolve(f).replace(/'/g, "'\\''")}'`).join("\n") + "\n");
+
+  const startedAt = Date.now();
+  const args = ["-f", "concat", "-safe", "0", "-i", list];
+  let aIdx = null;
+  if (voiceFile) { args.push("-i", path.resolve(voiceFile)); aIdx = 1; }
+  const firstOverlayInput = voiceFile ? 2 : 1;
+  const graph = [];
+  let cur = "[0:v]";
+  graph.push(`${cur}setpts=PTS-STARTPTS[b0]`);
+  cur = "[b0]";
+  layers.forEach((layer, i) => {
+    const dur = round(layer.end - layer.start, 6);
+    args.push("-loop", "1", "-framerate", String(fps), "-t", String(round(dur + 2 / fps, 6)), "-i", path.resolve(layer.png));
+    const fi = layer.crossfade ? 0.15 : layer.enter ? 0.3 : 0;
+    const fo = layer.exit && layer.end < durationSec - 1 / fps ? 0.2 : 0;
+    const chain = [`[${firstOverlayInput + i}:v]format=rgba`];
+    if (outW !== timeline.output.width) chain.push(`scale=${outW}:${outH}`);
+    if (fi) chain.push(`fade=t=in:st=0:d=${fi}:alpha=1`);
+    if (fo) chain.push(`fade=t=out:st=${round(Math.max(0, dur - fo), 6)}:d=${fo}:alpha=1`);
+    chain.push(`setpts=PTS+${round(layer.start, 6)}/TB[o${i}]`);
+    graph.push(chain.join(","));
+    const slide = layer.enter ? Math.round(28 * outH / 1920) : 0;
+    const y = slide ? `'${slide}*(1-${ease.cubicOut(`min(1,max(0,(t-${round(layer.start, 6)})/0.3))`)})'` : "0";
+    graph.push(`${cur}[o${i}]overlay=x=0:y=${y}:eval=frame:eof_action=pass:enable='gte(t,${round(layer.start - 0.25 / fps, 6)})*lt(t,${round(layer.end - 0.25 / fps, 6)})'[b${i + 1}]`);
+    cur = `[b${i + 1}]`;
+  });
+  if (assFile) {
+    const esc = (file) => path.resolve(file).replace(/\\/g, "/").replace(/:/g, "\\:").replace(/'/g, "\\'");
+    graph.push(`${cur}ass='${esc(assFile)}'${fontsDir ? `:fontsdir='${esc(fontsDir)}'` : ""}[vcap]`);
+    cur = "[vcap]";
+  }
+  graph.push(`${cur}format=yuv420p[vout]`);
+  const video = timeline.export.video, audio = timeline.export.audio;
+  const enc = mode === "preview" ? ["-preset", timeline.export.preview.preset, "-crf", String(timeline.export.preview.crf)] : ["-preset", video.preset, "-crf", String(video.crf)];
+  args.push("-progress", "pipe:2", "-filter_complex", graph.join(";"), "-map", "[vout]");
+  if (aIdx !== null) args.push("-map", `${aIdx}:a`, "-c:a", "aac", "-b:a", audio.bitrate, "-ar", String(audio.sampleRate), "-ac", String(audio.channels), "-t", durationSec.toFixed(6));
+  args.push("-frames:v", String(timeline.output.frames), "-r", String(fps), "-fps_mode", "cfr", "-c:v", "libx264", "-profile:v", video.profile, "-pix_fmt", "yuv420p", ...enc, "-g", String(video.gop),
+    "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-threads", "4",
+    "-fflags", "+bitexact", "-flags:v", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", outFile);
+  await ff(args, "composição final", { onProgress });
+
+  let truePeak = null;
+  const warnings = [];
+  if (aIdx !== null) {
+    const ceiling = timeline.export.loudness.truePeakDb, cfg = { ...PRESETS.render.truePeak, ...(timeline.export.truePeak ?? {}) };
+    let tp = (await measureLoudness(outFile)).truePeakDbtp, trim = 0;
+    const attempts = [{ gainDb: 0, truePeakDbtp: tp }];
+    while (tp > ceiling && attempts.length <= cfg.maxReencodes) {
+      trim -= tp - ceiling + cfg.marginDb;
+      const tmpOut = path.join(work, "true-peak.mp4");
+      await ff(["-i", outFile, "-i", path.resolve(voiceFile), "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af", `volume=${trim.toFixed(3)}dB`, "-c:a", "aac", "-b:a", audio.bitrate, "-ar", String(audio.sampleRate), "-ac", String(audio.channels), "-t", durationSec.toFixed(6),
+        "-fflags", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", tmpOut], "recodificação do áudio (true peak)");
+      await rename(tmpOut, outFile);
+      tp = (await measureLoudness(outFile)).truePeakDbtp;
+      attempts.push({ gainDb: round(trim, 3), truePeakDbtp: tp });
+    }
+    truePeak = { ceilingDbtp: ceiling, attempts, ok: tp <= ceiling };
+    if (tp > ceiling) warnings.push(`True peak ${tp} dBTP acima do teto ${ceiling} após ${attempts.length - 1} recodificações: o QA reprova.`);
+  }
+  return { output: outFile, sha256: await sha256File(outFile), truePeak, warnings, composeSec: round((Date.now() - startedAt) / 1000, 2) };
+}
+
 /**
  * Renders the timeline. mode "final" (full resolution) or "preview" (half resolution).
  * Returns a render report (JSON) with every output path, hashes and timings.
@@ -179,9 +264,6 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
     return f;
   });
   report.timings.segmentsSec = round((Date.now() - t1) / 1000, 2);
-  const list = path.join(work, "segments.txt");
-  await writeFile(list, segFiles.map((f) => `file '${f.replace(/'/g, "'\\''")}'`).join("\n") + "\n");
-
   // 3) overlays
   let layers = [];
   if (!skipOverlays && timeline.overlays?.length) {
@@ -214,66 +296,17 @@ export async function renderTimeline(timelineIn, { output, mode = "final", workD
   // 5) compose
   await stage("compose", 0, 1);
   const t2 = Date.now();
-  const args = ["-f", "concat", "-safe", "0", "-i", list];
-  let aIdx = null;
-  if (voice) { args.push("-i", voiceWav); aIdx = 1; }
-  const firstOverlayInput = voice ? 2 : 1;
-  const graph = [];
-  let cur = "[0:v]";
-  graph.push(`${cur}setpts=PTS-STARTPTS[b0]`);
-  cur = "[b0]";
-  layers.forEach((l, i) => {
-    const dur = round(l.end - l.start, 6);
-    // two spare frames: the looped image never runs out before the layer's last frame (enable ends it)
-    args.push("-loop", "1", "-framerate", String(fps), "-t", String(round(dur + 2 / fps, 6)), "-i", l.png);
-    const fi = l.crossfade ? 0.15 : l.enter ? 0.3 : 0, fo = l.exit && l.end < durationSec - 1 / fps ? 0.2 : 0; // a card that closes the film stays solid
-    const chain = [`[${firstOverlayInput + i}:v]format=rgba`];
-    if (outW !== timeline.output.width) chain.push(`scale=${outW}:${outH}`);
-    if (fi) chain.push(`fade=t=in:st=0:d=${fi}:alpha=1`);
-    if (fo) chain.push(`fade=t=out:st=${round(Math.max(0, dur - fo), 6)}:d=${fo}:alpha=1`);
-    chain.push(`setpts=PTS+${round(l.start, 6)}/TB[o${i}]`);
-    graph.push(chain.join(","));
-    const slide = l.enter ? Math.round(28 * outH / 1920) : 0;
-    const y = slide ? `'${slide}*(1-${ease.cubicOut(`min(1,max(0,(t-${round(l.start, 6)})/0.3))`)})'` : "0";
-    graph.push(`${cur}[o${i}]overlay=x=0:y=${y}:eval=frame:eof_action=pass:enable='gte(t,${round(l.start - 0.25 / fps, 6)})*lt(t,${round(l.end - 0.25 / fps, 6)})'[b${i + 1}]`);
-    cur = `[b${i + 1}]`;
-  });
-  if (assFile) {
-    const esc = (p) => p.replace(/\\/g, "/").replace(/:/g, "\\:").replace(/'/g, "\\'");
-    graph.push(`${cur}ass='${esc(assFile)}'${fontsDir ? `:fontsdir='${esc(fontsDir)}'` : ""}[vcap]`);
-    cur = "[vcap]";
-  }
-  graph.push(`${cur}format=yuv420p[vout]`);
-  const v = timeline.export.video, a = timeline.export.audio;
-  const enc = mode === "preview" ? ["-preset", timeline.export.preview.preset, "-crf", String(timeline.export.preview.crf)] : ["-preset", v.preset, "-crf", String(v.crf)];
-  args.push("-progress", "pipe:2", "-filter_complex", graph.join(";"), "-map", "[vout]");
-  if (aIdx !== null) args.push("-map", `${aIdx}:a`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6));
-  args.push("-frames:v", String(timeline.output.frames), "-r", String(fps), "-fps_mode", "cfr", "-c:v", "libx264", "-profile:v", v.profile, "-pix_fmt", "yuv420p", ...enc, "-g", String(v.gop),
-    "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-threads", "4",
-    "-fflags", "+bitexact", "-flags:v", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", stagedOutput);
   const total = timeline.output.frames;
-  await ff(args, "composição final", { onProgress: (s) => { const m = s.match(/frame=\s*(\d+)/g); if (m) { const n = Number(m.at(-1).replace(/\D/g, "")); stage("compose", n, total); } } });
-  // 6) true peak is judged on the delivered AAC: the encoder adds inter-sample overshoot that no
-  // limiter upstream can guarantee. Over the ceiling → less gain, audio re-encoded, video copied.
-  if (aIdx !== null) {
-    const ceiling = timeline.export.loudness.truePeakDb, cfg = { ...PRESETS.render.truePeak, ...(timeline.export.truePeak ?? {}) };
-    let tp = (await measureLoudness(stagedOutput)).truePeakDbtp, trim = 0;
-    const attempts = [{ gainDb: 0, truePeakDbtp: tp }];
-    while (tp > ceiling && attempts.length <= cfg.maxReencodes) {
-      trim -= tp - ceiling + cfg.marginDb;
-      const tmpOut = path.join(work, "true-peak.mp4");
-      await ff(["-i", stagedOutput, "-i", voiceWav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af", `volume=${trim.toFixed(3)}dB`, "-c:a", "aac", "-b:a", a.bitrate, "-ar", String(a.sampleRate), "-ac", String(a.channels), "-t", durationSec.toFixed(6),
-        "-fflags", "+bitexact", "-flags:a", "+bitexact", "-map_metadata", "-1", "-movflags", "+faststart", tmpOut], "recodificação do áudio (true peak)");
-      await rename(tmpOut, stagedOutput);
-      tp = (await measureLoudness(stagedOutput)).truePeakDbtp;
-      attempts.push({ gainDb: round(trim, 3), truePeakDbtp: tp });
-    }
-    report.truePeak = { ceilingDbtp: ceiling, attempts, ok: tp <= ceiling };
-    if (tp > ceiling) report.warnings.push(`True peak ${tp} dBTP acima do teto ${ceiling} após ${attempts.length - 1} recodificações: o QA reprova.`);
-  }
+  const composed = await composeFinalStage(timeline, {
+    output: stagedOutput, workDir: work, mode, segmentFiles: segFiles, voiceFile: voice ? voiceWav : null,
+    layers, assFile, fontsDir,
+    onProgress: (s) => { const m = s.match(/frame=\s*(\d+)/g); if (m) { const n = Number(m.at(-1).replace(/\D/g, "")); stage("compose", n, total); } },
+  });
+  if (composed.truePeak) report.truePeak = composed.truePeak;
+  report.warnings.push(...composed.warnings);
   report.timings.composeSec = round((Date.now() - t2) / 1000, 2);
   report.timings.totalSec = round((Date.now() - t0) / 1000, 2);
-  report.sha256 = await sha256File(stagedOutput);
+  report.sha256 = composed.sha256;
   report.files.video = outFile;
   const timelineCopy = `${base}.timeline.json`;
   const { __file, ...clean } = timeline;

@@ -87,7 +87,7 @@ export async function compareRenders(a, b) {
     streams[k] = { decoded: pair(x?.decoded, y?.decoded), packets: pair(x?.packets, y?.packets) };
   }
   const container = pair(ra.container, rb.container);
-  const identical = errors.length === 0 && streams.video.decoded.identical && streams.audio.decoded.identical;
+  const identical = errors.length ? null : streams.video.decoded.identical && streams.audio.decoded.identical;
   const different = errors.length ? [] : [...["video", "audio"].flatMap((k) => ["decoded", "packets"].filter((l) => !streams[k][l].identical).map((l) => `${k}.${l}`)), ...(container.identical ? [] : ["container"])];
   return { status: errors.length ? "read-error" : identical ? "identical" : "different", identical, different, streams, container, errors };
 }

@@ -13,6 +13,7 @@
     "test:ci": "node scripts/ci-tests.mjs",
     "test:py": "python3 scripts/ci_python_tests.py",
     "test:determinism": "node scripts/ci-determinism.mjs",
+    "test:determinism:replay": "node scripts/replay-determinism.mjs",
     "pack:all": "node scripts/pack-all.mjs",
     "skills:verify": "node scripts/verify-public-skills.mjs",
     "storage:report": "node scripts/storage-retention.mjs",
