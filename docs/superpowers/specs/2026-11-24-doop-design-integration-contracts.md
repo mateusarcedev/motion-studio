@@ -88,7 +88,9 @@ No schema MCP conectado em 2026-11-24, o adapter usa somente `get_canvas`, `get_
 | **Codex CLI & VS Code** | Nativo em `.agents/skills/` + `agents/openai.yaml` | `.agents/skills/` | `stdio` | Requer configurar Doop MCP em `~/.codex/config.toml` |
 | **Claude Code CLI & VS Code** | Junction em `.claude/skills/` | Symlink `.claude/skills/` | `stdio` (já validado) | Requer configurar Doop MCP em `.claude.json` |
 | **OpenCode & Cursor & Copilot** | Junctions nos diretórios globais | `.agents/skills/` (ou link local) | `stdio` | Dependem de configurar Doop MCP em cada cliente |
-| **ChatGPT Web** | Via `Universal Agent Design Protocol` no canvas | Via endpoint remoto quando M4 HTTP estiver ativo | Streamable HTTP + OAuth 2.1 / Secure Tunnel | Sem filesystem ou shell local |
+| **ChatGPT Web** | Sem acesso direto ao catálogo local | Não alcança os motores locais | Sem suporte a Motion MCP stdio | Sem filesystem ou shell local; usar cliente local que inicie processos MCP |
+
+> O servidor Motion vigente é exclusivamente local `stdio`; a antiga alternativa HTTP/OAuth foi arquivada como decisão supersedida em ADR-007. A lista de clientes nesta tabela indica caminhos documentados, não homologação. Consulte [`docs/COMPATIBILITY.md`](../../COMPATIBILITY.md) para evidência de testes por cliente.
 
 ---
 

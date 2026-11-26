@@ -60,12 +60,12 @@ flowchart LR
 ### ADR-003 — Independência de Editor (`MotionDesignIR@1` & `EditorAdapter`)
 - **Decisão:** Doop é o primeiro `EditorAdapter` suportado, jamais uma dependência do `motion-core`. Manter apenas os contratos reais necessários (`MotionDesignIR@1`, `EditorAdapter`, `DesignTokenBundle@1`, `AssetProvenanceManifest@1`), sem abstrações especulativas e sem implementar Figma/Pencil/Paper nesta primeira frente.
 
-### ADR-004 — Evolução Única do Servidor MCP (`packages/motion-cli/lib/mcp.mjs`)
+### ADR-004 — Evolução Única do Servidor MCP (`packages/motion-cli/lib/mcp.mjs`) — proposta histórica supersedida
 - **Decisão:** Não criar um segundo servidor MCP. Evoluir `packages/motion-cli/lib/mcp.mjs` em duas etapas ordenadas:
   1. **Primeiro:** estabilizar contratos, adapters e novas ferramentas locais sobre **`stdio`** (transporte local padrão) com registro único de ferramentas, schemas compartilhados e paridade CLI=MCP.
   2. **Depois (após estabilização):** adicionar transporte opcional **Streamable HTTP** (`--transport=http`) compartilhando exatamente o mesmo registro de ferramentas e schemas, com paridade semântica entre transportes.
 
-### ADR-005 — Segurança, Auth OAuth 2.1 & Secure MCP Tunnel (Transporte Remoto)
+### ADR-005 — Segurança, Auth OAuth 2.1 & Secure MCP Tunnel (Transporte Remoto) — proposta histórica supersedida
 Baseado nas especificações oficiais (`modelcontextprotocol.io`, `developers.openai.com/plugins/build/mcp-server` e `/auth`):
 - **Especificação OAuth 2.1 (MCP Authorization):**
   - Servidor MCP HTTP atua como **OAuth 2.1 Resource Server** validando tokens Bearer (`RFC 6750`), sem emitir tokens diretamente (ou acoplado a Authorization Server dedicado).
@@ -85,6 +85,13 @@ Baseado nas especificações oficiais (`modelcontextprotocol.io`, `developers.op
   - Detecção e isolamento de **prompt injection** em comentários, `alt`, `aria-label` e metadados de frames.
   - Preservação obrigatória de `sha256`, origem e licença (`assessLicense`) em `AssetProvenanceManifest@1`.
   - Execução de renderização apenas em processo isolado (Playwright/Chromium sandboxed e servidor estático local restrito à pasta da produção).
+
+### ADR-007 — Motion MCP estritamente local e coordenação pelo agente (2026-11-25)
+- **Decisão vigente:** o único Motion MCP é um processo local por `stdio`, configurado pelo cliente na máquina do usuário. stdout contém somente mensagens do protocolo MCP; logs e diagnósticos usam stderr.
+- O registro centralizado de ferramentas é uma interface para os motores do Motion Core. Core permanece independente de MCP, SDKs de agente e provedores de IA.
+- O Motion MCP não incorpora, substitui nem faz proxy do Doop MCP. O agente inspeciona as ferramentas Doop disponíveis e usa cada servidor diretamente. Ferramentas Bridge locais devolvem contratos, planos e payloads com `executed: false` quando a execução depende do Doop.
+- Streamable HTTP, OAuth 2.1, Secure MCP Tunnel, hospedagem remota, multiusuário e execução remota não fazem parte do roadmap vigente. As propostas ADR-004 (fase HTTP) e ADR-005 permanecem registradas somente como histórico de decisões superadas.
+- Isolamento por workspace, validação de entrada hostil, limites locais de execução/concorrência, cancelamento suportado pelo motor e hash de artefatos são aplicados independentemente do transporte local.
 
 ---
 

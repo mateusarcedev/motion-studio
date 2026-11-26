@@ -25,6 +25,13 @@ As execuções de Codex, OpenCode e Antigravity foram autorizadas pelo dono: uma
   similares) **não alcançam** esse servidor, nem os arquivos e o FFmpeg locais. Sem suporte.
 - Transcrição usa o ambiente local do faster-whisper; cards exigem Chromium local.
 
+## Motion MCP v2 local (Missão 23 M4, 2026-11-25)
+
+- A superfície v2 segue exclusivamente MCP `stdio`, sem HTTP, OAuth, túnel ou servidor remoto. O cliente deve iniciar o processo na mesma máquina em que estão o workspace, Node, Chromium/Playwright e FFmpeg.
+- `tests/mcp_server.test.mjs` usa o cliente MCP oficial JS em subprocesso real para handshake, descoberta, preservação das 11 ferramentas anteriores, render CLI×MCP com hash de PNG idêntico, isolamento de workspace, bloqueio de symlink, schemas, limite concorrente de saída, artefatos, QA, SVG e planejamento Bridge sem chamada remota.
+- Essa cobertura de protocolo não conta como homologação da versão M4 em clientes desktop específicos. Claude Code, Codex CLI, OpenCode e Antigravity têm evidência para a integração MCP anterior no quadro acima; Gemini CLI continua sem teste. Nenhuma homologação M6 ou chamada para canvas real ocorreu.
+- Instalação pelo código-fonte e configurações: [`docs/MCP.md`](MCP.md).
+
 ## Modo repo-local (sem instalar Skills)
 
 ```bash

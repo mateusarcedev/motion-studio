@@ -44,7 +44,7 @@ Posicionar o **MOTION Studio** como a camada de produção criativa determiníst
 - **RF-02 (Design-to-Motion):** importar frames, componentes e protótipos (`data-doop-*`) como entradas determinísticas para vídeo, UI motion (`frame.js` / `svg-motion.js`), carrosséis, stories, posts e landing pages (`web-director`).
 - **RF-03 (Motion-to-Design):** devolver stills, contact sheets, storyboards, tokens derivados e SVGs sanitizados (`<= 20 KB` ou fila de upload) sem `base64` e preservando `ready_for_dev` e `data-doop-id`.
 - **RF-04 (Skills Modulares):** consolidar UI motion dentro de `design-to-motion` (reaproveitando `animate`, `emil-design-eng`, `explainer-motion`, `prototype`, `web-director`), criar `motion-to-design` no catálogo oficial e manter `doop-bridge` em `optional-integrations.json` sem dependência obrigatória de `doop-designer`.
-- **RF-05 (Motion MCP Server v2):** evoluir `packages/motion-cli/lib/mcp.mjs` (sem duplicar servidor) com `stdio` padrão + Streamable HTTP opcional autenticado após estabilização dos contratos e ferramentas locais.
+- **RF-05 (Motion MCP Server v2 — substituído pela decisão vigente):** evoluir `packages/motion-cli/lib/mcp.mjs` sem duplicar servidor, exclusivamente como processo local `stdio`. A implementação deve expor ferramentas reais do Motion Core e manter as ferramentas anteriores compatíveis. Não inclui HTTP, OAuth, túnel nem hospedagem remota.
 
 ### 2.3. Requisitos Não-Funcionais & Segurança (Conteúdo Não Confiável)
 Todo conteúdo importado de editores ou URLs externas deve ser tratado como **não confiável**:
@@ -54,3 +54,7 @@ Todo conteúdo importado de editores ou URLs externas deve ser tratado como **n�
 - **Prompt Injection:** detecção e isolamento de diretivas suspeitas em comentários HTML, `aria-label`, `alt` e metadados importados, rotulados explicitamente como dados não confiáveis.
 - **Limites & Isolamento:** renderizações em ambiente isolado com limites de tempo/memória/concorrência e preservação integral de proveniência, licença (`assessLicense`) e `sha256` de cada asset.
 - **Independência de Agentes e Assinaturas:** zero exigência de modelo/fornecedor/API key de IA no Motion; cada agente usa sua própria assinatura sem delegação automática a `@doop` ou APIs pagas.
+
+### Aditivo de arquitetura vigente (2026-11-25)
+
+O RF-05 acima registra a formulação histórica e foi substituído: o Motion MCP usa somente `stdio` local. A coordenação entre Motion Studio e Doop é responsabilidade do agente de IA por meio das Skills `design-to-motion`, `motion-to-design` e `doop-bridge`. O servidor Motion prepara e valida dados localmente; somente o MCP oficial do Doop executa operações no editor. Não há proxy, servidor HTTP, autenticação remota ou execução remota no escopo vigente. O agente precisa consultar os schemas reais disponíveis antes de chamar ferramentas Doop; nenhum método externo é presumido.

@@ -74,9 +74,24 @@ function runProcess(cmd, args, options = {}) {
     const proc = spawn(cmd, args, { stdio: ["inherit", "pipe", "pipe"], ...options });
     let stdout = "";
     let stderr = "";
+    let settled = false;
     proc.stdout.on("data", (d) => { stdout += d.toString(); });
     proc.stderr.on("data", (d) => { stderr += d.toString(); });
+    proc.on("error", (error) => {
+      if (settled) return;
+      settled = true;
+      error.stdout = stdout;
+      error.stderr = stderr;
+      if (options.signal?.aborted) error.code = "ABORT_ERR";
+      else {
+        error.details = { causeCode: error.code ?? null };
+        error.code = "MOTION_ENGINE_UNAVAILABLE";
+      }
+      reject(error);
+    });
     proc.on("close", (code) => {
+      if (settled) return;
+      settled = true;
       if (code === 0) resolve({ code, stdout, stderr });
       else {
         const error = new Error(`Command ${cmd} ${args.join(" ")} failed with code ${code}\nStderr: ${stderr}\nStdout: ${stdout}`);
@@ -114,7 +129,7 @@ export async function renderStatic(inputHtml, outputPng, options = {}) {
   if (options.qaContext) args.push(`--qa-context=${options.qaContext}`);
   if (options.transparent) args.push("--transparent");
   if (options.offline) args.push("--offline");
-  return runProcess("node", args);
+  return runProcess("node", args, { signal: options.signal });
 }
 
 export async function renderFrames(inputHtml, outdir, options = {}) {
@@ -136,7 +151,7 @@ export async function renderFrames(inputHtml, outdir, options = {}) {
   if (options.optionalAssets?.length) args.push(`--optional-assets=${[].concat(options.optionalAssets).join(",")}`);
   if (options.allowNoController) args.push("--allow-no-controller");
   if (options.inspectBounds) args.push("--inspect-bounds");
-  return runProcess("node", args);
+  return runProcess("node", args, { signal: options.signal });
 }
 
 export async function assembleVideo(framesDir, outputMp4, options = {}) {
@@ -145,7 +160,7 @@ export async function assembleVideo(framesDir, outputMp4, options = {}) {
   if (options.audio) args.push("--audio", options.audio);
   if (options.crf) args.push("--crf", String(options.crf));
   if (options.format) args.push("--format", options.format);
-  return runProcess("python3", args);
+  return runProcess("python3", args, { signal: options.signal });
 }
 
 export async function validateStatic(pngPath, expectedWxH, scale = 2) {
@@ -203,5 +218,7 @@ export async function qaViewports(url, outdir, options = {}) {
   if (options.wait) args.push(`--wait=${options.wait}`);
   if (options.canvas) args.push(`--canvas=${options.canvas}`);
   if (options.ignore) args.push(`--ignore=${options.ignore}`);
-  return runProcess("node", args);
+  if (options.offline) args.push("--offline");
+  if (options.workspaceRoot) args.push(`--workspace-root=${options.workspaceRoot}`);
+  return runProcess("node", args, { signal: options.signal });
 }

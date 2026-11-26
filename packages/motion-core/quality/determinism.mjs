@@ -117,6 +117,7 @@ export async function verifyDeterminism(inputHtml, options = {}) {
     scale: Number(options.scale || 1), seed: options.seed ?? 1,
     sampleFrames: samples.map((sample) => sample.frame), transparent: options.transparent === true,
     offline: options.offline === true,
+    signal: options.signal,
   };
   const renderedA = parseRendererResult(await core.renderFrames(source, runA, renderOptions));
   const renderedB = parseRendererResult(await core.renderFrames(source, runB, renderOptions));

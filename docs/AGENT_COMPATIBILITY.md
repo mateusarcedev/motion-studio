@@ -42,6 +42,10 @@ O MOTION Studio adota a especificação aberta **Agent Skills** (`SKILL.md`). Os
 O motor não depende de visão do agente: transcrição, medição de áudio, sincronia de legenda e
 safe zone são medidas pela CLI. Qualquer cliente com terminal ou MCP stdio usa o mesmo pipeline.
 
+## Nova superfície Motion MCP (Missão 23 M4)
+
+O protocolo foi exercitado com o cliente MCP oficial JS por stdio em processo real. Essa validação automatizada comprova handshake, descoberta, chamadas, estrutura de erros e a nova superfície local; ela não substitui a execução dentro de cada cliente. Claude Code, Codex CLI, OpenCode e Antigravity permanecem com a evidência da versão anterior indicada acima. Gemini CLI e a superfície v2 nesses aplicativos ainda não foram homologados. Consulte [`docs/MCP.md`](MCP.md) para configurações documentadas.
+
 ---
 
 ## Como Adicionar Suporte a um Novo Agente

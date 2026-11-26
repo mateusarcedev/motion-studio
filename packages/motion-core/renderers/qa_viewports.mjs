@@ -9,8 +9,9 @@
  * Writes <outdir>/report.json and report.md. Exit code 1 if any check fails.
  */
 import { launchBrowser } from "../lib/browser.mjs"
-import { mkdir, writeFile, stat } from "node:fs/promises"
+import { mkdir, writeFile, stat, realpath } from "node:fs/promises"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 export const VIEWPORTS = [
   { name: "mobile-s", width: 360, height: 740, touch: true },
@@ -31,6 +32,8 @@ if (!url || !outdir) {
 const targetUrl = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")
   ? url
   : `file://${path.resolve(url)}`
+const offline = args.includes("--offline")
+const workspaceRoot = await realpath(opt["workspace-root"] ? path.resolve(opt["workspace-root"]) : process.cwd())
 
 const waitMs = Number(opt.wait ?? 4000)
 const canvasSel = opt.canvas ?? "canvas"
@@ -87,6 +90,23 @@ for (const vp of VIEWPORTS) {
     viewport: { width: vp.width, height: vp.height },
     hasTouch: vp.touch, isMobile: vp.touch, deviceScaleFactor: 1,
   })
+  if (offline) {
+    const targetOrigin = new URL(targetUrl).origin
+    await ctx.route("**/*", async (route) => {
+      const value = route.request().url()
+      try {
+        const resource = new URL(value)
+        if (["data:", "blob:", "about:"].includes(resource.protocol)) return route.continue()
+        if (resource.protocol === "file:") {
+          const candidate = await realpath(fileURLToPath(resource))
+          const relative = path.relative(workspaceRoot, candidate)
+          return relative === "" || (!relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative)) ? route.continue() : route.abort("blockedbyclient")
+        }
+        if (resource.origin === targetOrigin && ["localhost", "127.0.0.1", "[::1]"].includes(resource.hostname)) return route.continue()
+      } catch {}
+      return route.abort("blockedbyclient")
+    })
+  }
   const page = await ctx.newPage()
   const errors = [], failed = []
   page.on("console", (m) => { if (m.type() === "error" && !/status of (4|5)\d\d/.test(m.text())) errors.push(m.text()) })

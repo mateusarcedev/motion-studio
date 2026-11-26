@@ -83,6 +83,7 @@ Carrossel editorial com roteiro, tipografia calibrada, legendas e pacote ZIP de 
 - **🧊 3D Procedural (`3d-scene-director`)**: Modelagem procedural Three.js, pipeline de assets GLB otimizados e integração de ferramentas externas (Blender opcional).
 - **🧩 Assets Visuais & SVG**: Resolver por intenção para ícones e ilustrações, com estilo consistente e origem/licença registradas; ferramentas para validar, sanitizar, otimizar e animar SVGs de forma determinística.
 - **✅ QA & Integridade de Entrega**: Relatórios de qualidade para projetos e mídia, contratos de entrega, manifesto SHA-256 e verificação do conteúdo real do ZIP antes de concluir a exportação.
+- **🔌 Motion MCP local**: Agentes compatíveis com MCP stdio podem chamar os motores locais de render, QA, SVG e Design Bridge com isolamento por workspace. Veja [docs/MCP.md](docs/MCP.md).
 - **🔒 Isolamento de Marcas & Memória Visual**: Cada projeto consumidor possui seus próprios tokens (`tokens.json`), tom de voz (`PROFILE.md`) e galeria local isolada.
 
 Determinismo de vídeo: **idêntico na mesma máquina; visualmente igual entre máquinas**. Veja [docs/DETERMINISM.md](docs/DETERMINISM.md).
@@ -116,6 +117,8 @@ npx @technomanceer/motion-studio init
 ```
 
 Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as **14 Skills oficiais**, integra aos agentes detectados (Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot), cria `motion.config.json` e roda o diagnóstico dos motores. É idempotente e não sobrescreve nada seu. Detalhes, opções e solução de problemas: [docs/INSTALLATION.md](docs/INSTALLATION.md).
+
+Para conectar um cliente MCP local, veja [docs/MCP.md](docs/MCP.md). O servidor é iniciado pelo cliente via `stdio` e não expõe endpoint remoto.
 
 > [!NOTE]
 > **Versão estável publicada `1.1.1`.** O nome `motion-studio` (sem escopo) pertence a outro projeto; por isso o instalador é `@technomanceer/motion-studio`. Os quatro pacotes (`motion-core`, `motion-studio-skills`, `motion-cli`, `motion-studio`) usam versões exatas e iguais.

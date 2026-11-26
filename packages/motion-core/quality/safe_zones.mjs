@@ -173,7 +173,7 @@ export async function qaSafeZones(inputHtml, options = {}) {
   const core = await import("../index.js");
   const renderer = parseRenderResult(await core.renderFrames(source, framesDir, {
     frames: totalFrames, fps, width, height, scale: Number(options.scale || 1), seed: options.seed ?? 1,
-    sampleFrames: frames, inspectBounds: true,
+    sampleFrames: frames, inspectBounds: true, signal: options.signal, offline: true,
   }));
   const reports = [];
   for (const sample of samples) {
@@ -190,7 +190,7 @@ export async function qaSafeZones(inputHtml, options = {}) {
     const previewHtml = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background-color:#49515d;background-image:linear-gradient(45deg,#707985 25%,transparent 25%),linear-gradient(-45deg,#707985 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#707985 75%),linear-gradient(-45deg,transparent 75%,#707985 75%);background-size:32px 32px;background-position:0 0,0 16px,16px -16px,-16px 0}main{position:relative;width:${width}px;height:${height}px}img,svg{position:absolute;inset:0;width:${width}px;height:${height}px}svg{pointer-events:none}</style></head><body><main><img src="data:image/png;base64,${frameBase64}"/>${overlaySvg}</main></body></html>`;
     const htmlPath = path.join(runRoot, `${filename}-safe-zone-preview.html`);
     await writeFile(htmlPath, previewHtml);
-    await core.renderStatic(htmlPath, previewPath, { width, height, scale: 1 });
+    await core.renderStatic(htmlPath, previewPath, { width, height, scale: 1, signal: options.signal, offline: true });
     reports.push({ ...analysis, time: sample.time, frame: sample.frame, framePath, boundsPath, overlayPath, previewPath, elementCount: bounds.elements.length });
   }
   const passed = reports.every((report) => report.passed);

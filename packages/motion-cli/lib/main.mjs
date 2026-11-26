@@ -89,7 +89,7 @@ export async function main(rawArgs = process.argv.slice(2), { bin = "motion" } =
     edit <sub> ...           Smart Reel Editor & Voice Studio (motion edit --help)
       analyze · transcribe · import-srt · plan · validate · audio · captions · preview · render · progress · presets
     stt doctor|providers|setup   Speech-to-Text local (faster-whisper em venv isolado)
-    mcp                      Servidor MCP local (stdio) com as operações de edição
+    mcp [--workspace=<dir>]  Servidor MCP local (stdio): render, QA, SVG, Design Bridge e edição
 
     components list          Lista componentes reutilizáveis e seus schemas
     components render <id> --config=<json> --output=<mp4|webm>

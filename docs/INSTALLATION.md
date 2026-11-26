@@ -98,6 +98,10 @@ Mostra os motores e, se o projeto foi instalado pelo `init`, revalida Skills e l
 | Doctor: `MOTION_BROWSER_VERSION_MISMATCH` | Há Chromium, mas de outra revisão que a do Playwright instalado (acontece quando o projeto resolve um `playwright-core` mais novo) | `npx playwright install chromium` na pasta do projeto |
 | Agente não vê as Skills | Sessão aberta antes da instalação | Reinicie o agente na raiz do projeto |
 
+## MCP local
+
+Para conectar Claude Code, Codex, Gemini CLI, Google Antigravity, OpenCode ou outro cliente compatível, configure o processo local `motion mcp` por `stdio`. O guia [MCP.md](MCP.md) contém configurações, inventário, exemplos e troubleshooting. A M4/M5 não foi publicada no npm; até existir uma versão atualizada, inicie o servidor pelo checkout do código-fonte.
+
 ## 7. Atualização
 
 ```bash

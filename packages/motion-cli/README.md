@@ -43,7 +43,12 @@ motion qa http://localhost:3000 ./qa-report
 # Exportação com manifesto SHA-256 e ZIP
 motion export ./meu-projeto entrega.zip --gallery
 motion qa delivery --project ./meu-projeto --zip entrega.zip
+
+# Servidor MCP local por stdio (iniciado pelo agente/cliente configurado)
+motion mcp --workspace=/caminho/do/projeto --max-concurrency=2
 ```
+
+O MCP expõe os motores locais do Core sem abrir portas de rede. Configuração por cliente, inventário completo, limites, privacidade e troubleshooting: [`docs/MCP.md`](../../docs/MCP.md).
 
 The complete contracts, presets, limitations, and validation workflow live in [`docs/REUSABLE_MOTION_COMPONENTS.md`](../../docs/REUSABLE_MOTION_COMPONENTS.md).
 
