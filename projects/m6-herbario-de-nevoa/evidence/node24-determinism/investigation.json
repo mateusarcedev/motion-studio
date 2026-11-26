@@ -1,6 +1,6 @@
 {
   "schemaVersion": "motion-studio-node24-determinism-investigation@1",
-  "recordedAt": "2026-11-26T17:35:45.945Z",
+  "recordedAt": "2026-11-26T18:50:00Z",
   "status": "INTERMITTENT_INCIDENT_UNRESOLVED",
   "historicalRemoteIncident": {
     "workflowRunId": 45854878392,
@@ -326,6 +326,138 @@
     "containerMetadataAloneDoesNotExplainHistoricalDifference": true,
     "localAttemptsRepeatedSequentiallyInDistinctWorkspaces": true,
     "codeChangeMade": false,
-    "rootCause": "Not reproduced. Local Node 24.16.0 + FFmpeg 8.0.1-3ubuntu2 + Chromium 156.0.8078.4 produced identical decoded video, encoded packets, audio and container on two CLI×MCP parity attempts. The historical CI environment differs (Node 24.22.3 and FFmpeg 6.1.1); this is insufficient to attribute cause. No determinism test was weakened."
+    "rootCause": "Unresolved. In CI run 45877470125, the first Node 22.23.5 / FFmpeg 6.1.1 attempt had identical segments, overlay, captions, and voice assets, but the final encoded output differed in decoded video, video packets, and container. Decoded audio and audio packets were identical. Frames 74, 77, 78, and 79 differed slightly (PSNR 107.04, 106.07, 104.03, and 104.03 dB). Re-running only the failed determinism job passed. This confirms intermittency and narrows the observed divergence to final composition/encoding, but does not identify root cause. Historical Node 24.22.3 / FFmpeg 6.1.1 incident remains distinct; local Node 24.16.0 / FFmpeg 8.0.1 parity attempts passed. No test criteria were weakened.",
+    "node22CiReproductionConfirmed": true,
+    "latestCiFinalStageDiff": true,
+    "latestCiAudioIdentical": true,
+    "latestCiDecodedVideoDiff": true,
+    "latestCiPreFinalStagesIdentical": true,
+    "latestCiFailedJobRerunPassed": true
+  },
+  "observedCiRun": {
+    "runId": 45877470125,
+    "commit": "0525b3fbc04b2bd490ff40a84c37b471be2a86ec",
+    "url": "https://github.com/mateusarcedev/motion-studio/actions/runs/45877470125",
+    "reportPath": "projects/m6-herbario-de-nevoa/evidence/node24-determinism/ci-run-45877470125-node22-report.json",
+    "firstAttempt": {
+      "outcome": "FAIL",
+      "job": "Determinismo (mesma máquina)",
+      "runtime": "v22.23.5",
+      "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+      "chromium": "156.0.8078.4",
+      "cpu": "AMD EPYC 9V45 96-Core Processor",
+      "cpus": 4,
+      "memGb": 16,
+      "firstDiff": "final",
+      "stages": [
+        {
+          "stage": "segment:seg-001.mp4",
+          "identical": true,
+          "sha256A": "e017602e4f7fe4eac10b49cb961b832a3c22697ed036d6a05b91e552a2788c66",
+          "sha256B": "e017602e4f7fe4eac10b49cb961b832a3c22697ed036d6a05b91e552a2788c66"
+        },
+        {
+          "stage": "segment:seg-002.mp4",
+          "identical": true,
+          "sha256A": "0a5e346169b9d2abefc048f7c8f47efa42bb87f9fd76dbf018d091852d1330e9",
+          "sha256B": "0a5e346169b9d2abefc048f7c8f47efa42bb87f9fd76dbf018d091852d1330e9"
+        },
+        {
+          "stage": "segment:seg-003.mp4",
+          "identical": true,
+          "sha256A": "f6a1619591db3b6017a9b0fae5fcf6020c0d5cf5378c5264febdd235c34cb51c",
+          "sha256B": "f6a1619591db3b6017a9b0fae5fcf6020c0d5cf5378c5264febdd235c34cb51c"
+        },
+        {
+          "stage": "card:c1-0-7b931f5b0264d57d.png",
+          "identical": true,
+          "sha256A": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+          "sha256B": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2"
+        },
+        {
+          "stage": "caption:ass",
+          "identical": true,
+          "sha256A": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+          "sha256B": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+        },
+        {
+          "stage": "caption:srt",
+          "identical": true,
+          "sha256A": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+          "sha256B": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb"
+        },
+        {
+          "stage": "caption:words.srt",
+          "identical": true,
+          "sha256A": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+          "sha256B": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806"
+        },
+        {
+          "stage": "caption:json",
+          "identical": true,
+          "sha256A": "2c0f47aeaa4cf4443abc0d411eaff5d5f5c3423a481f1259c065de11403a2334",
+          "sha256B": "2c0f47aeaa4cf4443abc0d411eaff5d5f5c3423a481f1259c065de11403a2334"
+        },
+        {
+          "stage": "voice",
+          "identical": true,
+          "sha256A": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0",
+          "sha256B": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0"
+        },
+        {
+          "stage": "final",
+          "identical": false,
+          "sha256A": "26ea6abdad9845aca1e72e6789610337cdab7f1a9892b73abfb0d269c4df4b47",
+          "sha256B": "f94e961fdd4c635bae464e4b43678e0acb16cd31b3ed3f4b41aa0a112ac16af7"
+        }
+      ],
+      "compare": {
+        "status": "different",
+        "identical": false,
+        "different": [
+          "video.decoded",
+          "video.packets",
+          "container"
+        ],
+        "streams": {
+          "video": {
+            "decoded": {
+              "a": "de25e5d1f7b20d9b41acdf031be49bdfe991ddc9617e2ad7f17c2895ee1af2cf",
+              "b": "80499762ddbb641870eeaac321674d013ca4bfba53422cd91191706c6275298c",
+              "identical": false
+            },
+            "packets": {
+              "a": "6354138a5e1e85d2d7294196fcaaf59d4dae9038f359746f925ec1505fd35ab8",
+              "b": "bfe590be119c9b37b82abbe87e9dff43debcae490d7cd27cce2da49ed3104d17",
+              "identical": false
+            }
+          },
+          "audio": {
+            "decoded": {
+              "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+              "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+              "identical": true
+            },
+            "packets": {
+              "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+              "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+              "identical": true
+            }
+          }
+        },
+        "container": {
+          "a": "26ea6abdad9845aca1e72e6789610337cdab7f1a9892b73abfb0d269c4df4b47",
+          "b": "f94e961fdd4c635bae464e4b43678e0acb16cd31b3ed3f4b41aa0a112ac16af7",
+          "identical": false
+        },
+        "errors": []
+      }
+    },
+    "failedJobRerun": {
+      "outcome": "PASS",
+      "scope": "only the failed determinism job",
+      "workflowConclusion": "success",
+      "interpretation": "Intermittent divergence confirmed; a passing rerun does not resolve its cause."
+    }
   }
 }

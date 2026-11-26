@@ -1,0 +1,238 @@
+{
+  "ok": false,
+  "uniqueWorkspaces": true,
+  "firstDiff": "final",
+  "env": {
+    "wrapper": true,
+    "cpu": "AMD EPYC 9V45 96-Core Processor",
+    "cpus": 4,
+    "flags": "sse sse2 ssse3 fma sse4_1 sse4_2 avx sse4a bmi1 avx2 bmi2 avx512f avx512dq avx512ifma avx512cd avx512bw avx512vl avx_vnni avx512_bf16 avx512vbmi avx512_vbmi2 avx512_vnni avx512_bitalg avx512_vpopcntdq avx512_vp2intersect",
+    "memGb": 16,
+    "node": "v22.23.5",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "chromium": {
+      "version": "156.0.8078.4",
+      "cardFonts": {
+        "c1-0-7b931f5b0264d57d.html": [
+          "DejaVu Sans / DejaVuSans-Bold"
+        ]
+      }
+    },
+    "captionFonts": [
+      "fontselect: (Inter, 700, 0) -> /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf, 0, DejaVuSans-Bold"
+    ],
+    "systemFonts": [
+      "/usr/share/fonts/X11/Type1/c0419bt_.pfb Courier 10 Pitch Regular",
+      "/usr/share/fonts/X11/Type1/c0582bt_.pfb Courier 10 Pitch Italic",
+      "/usr/share/fonts/X11/Type1/c0583bt_.pfb Courier 10 Pitch Bold",
+      "/usr/share/fonts/X11/Type1/c0611bt_.pfb Courier 10 Pitch Bold Italic",
+      "/usr/share/fonts/X11/Type1/c0632bt_.pfb Bitstream Charter Bold",
+      "/usr/share/fonts/X11/Type1/c0633bt_.pfb Bitstream Charter Bold Italic",
+      "/usr/share/fonts/X11/Type1/c0648bt_.pfb Bitstream Charter Regular",
+      "/usr/share/fonts/X11/Type1/c0649bt_.pfb Bitstream Charter Italic",
+      "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf IPAGothic,IPAゴシック Regular",
+      "/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf IPAPGothic,IPA Pゴシック,䥐䅐䝯瑨楣 Regular",
+      "/usr/share/fonts/opentype/tlwg/Loma-Bold.otf Loma Bold",
+      "/usr/share/fonts/opentype/tlwg/Loma-BoldOblique.otf Loma Bold Oblique",
+      "/usr/share/fonts/opentype/tlwg/Loma-Oblique.otf Loma Oblique",
+      "/usr/share/fonts/opentype/tlwg/Loma.otf Loma Regular",
+      "/usr/share/fonts/opentype/unifont/unifont.otf Unifont Regular",
+      "/usr/share/fonts/opentype/unifont/unifont_csur.otf Unifont CSUR Regular",
+      "/usr/share/fonts/opentype/unifont/unifont_jp.otf Unifont-JP Regular",
+      "/usr/share/fonts/opentype/unifont/unifont_jp_sample.otf Unifont Sample Regular",
+      "/usr/share/fonts/opentype/unifont/unifont_sample.otf Unifont Sample Regular",
+      "/usr/share/fonts/opentype/unifont/unifont_upper.otf Unifont Upper Regular",
+      "/usr/share/fonts/opentype/unifont/unifont_upper_sample.otf Unifont Sample Regular",
+      "/usr/share/fonts/truetype/dejavu/DejaVuMathTeXGyre.ttf DejaVu Math TeX Gyre Regular",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf DejaVu Sans Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf DejaVu Sans Bold Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-ExtraLight.ttf DejaVu Sans,DejaVu Sans Light ExtraLight",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf DejaVu Sans Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf DejaVu Sans Book",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf DejaVu Sans,DejaVu Sans Condensed Condensed Bold,Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-BoldOblique.ttf DejaVu Sans,DejaVu Sans Condensed Condensed Bold Oblique,Bold Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Oblique.ttf DejaVu Sans,DejaVu Sans Condensed Condensed Oblique,Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed.ttf DejaVu Sans,DejaVu Sans Condensed Condensed,Book",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf DejaVu Sans Mono Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf DejaVu Sans Mono Bold Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf DejaVu Sans Mono Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf DejaVu Sans Mono Book",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf DejaVu Serif Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf DejaVu Serif Bold Italic",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf DejaVu Serif Italic",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf DejaVu Serif Book",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed-Bold.ttf DejaVu Serif,DejaVu Serif Condensed Condensed Bold,Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed-BoldItalic.ttf DejaVu Serif,DejaVu Serif Condensed Condensed Bold Italic,Bold Italic",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed-Italic.ttf DejaVu Serif,DejaVu Serif Condensed Condensed Italic,Italic",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed.ttf DejaVu Serif,DejaVu Serif Condensed Condensed,Book",
+      "/usr/share/fonts/truetype/fonts-japanese-gothic.ttf IPAGothic,IPAゴシック Regular",
+      "/usr/share/fonts/truetype/freefont/FreeMono.ttf FreeMono Regular,нормален,normal,obyčejné,Standard,µεσαία,Normaali,Normál,Normale,Standaard,Normalny,Обычный,Normálne,menengah,прямій,navadno,vidējs,normalusis,thường,Arrunta,सामान्य",
+      "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf FreeMono Bold,получерен,negreta,tučné,fed,Fett,Έντονα,Negrita,Lihavoitu,Gras,Félkövér,Grassetto,Vet,Halvfet,Pogrubiony,Negrito,gros,Полужирный,Fet,Kalın,huruf tebal,жирний,polkrepko,treknraksts,pusjuodis,đậm,Lodia,धृष्ट",
+      "/usr/share/fonts/truetype/freefont/FreeMonoBoldOblique.ttf FreeMono Bold Oblique,получерен наклонен,Negreta cursiva,tučné kurzíva,fed kursiv,Fett-Kursiv,Έντονα Πλάγια,Negrita Cursiva,Lihavoitu Kursivoi,Gras Italique,Félkövér dőlt,Grassetto Corsivo,Vet Cursief,Halvfet Kursiv,Pogrubiona kursywa,Negrito Itálico,gros oblic,Полужирный Курсив,Tučná kurzíva,Fet Kursiv,Kalın İtalik,huruf tebal miring,жирний похилий,polkrepko ležeče,treknais slīpraksts,pusjuodis pasvirasis,Lodi etzana,धृष्ट-तिरछा",
+      "/usr/share/fonts/truetype/freefont/FreeMonoOblique.ttf FreeMono Oblique,наклонен,cursiva,kurzíva,kursiv,Πλάγια,Kursivoitu,Italique,Dőlt,Corsivo,Cursief,Kursywa,Itálico,oblic,Курсив,İtalik,huruf miring,похилий,ležeče,slīpraksts,pasvirasis,nghiêng,Etzana,तिरछा",
+      "/usr/share/fonts/truetype/freefont/FreeSans.ttf FreeSans Regular,нормален,Normal,obyčejné,Mittel,µεσαία,Normaali,Normál,Medio,Gemiddeld,Odmiana Zwykła,Обычный,Normálne,menengah,прямій,Navadno,vidējs,normalusis,vừa,Arrunta,सामान्य,সাধারণ,സാധാരണ,साधारण",
+      "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf FreeSans Bold,получерен,negreta,tučné,fed,Fett,Έντονα,Negrita,Lihavoitu,Gras,Félkövér,Grassetto,Vet,Halvfet,Pogrubiony,Negrito,gros,Полужирный,Fet,Kalın,huruf tebal,жирний,Krepko,treknraksts,pusjuodis,đậm,Lodia,धृष्ट,സ്പഷ്ട,ठळक,बाक्लो",
+      "/usr/share/fonts/truetype/freefont/FreeSansBoldOblique.ttf FreeSans Bold Oblique,получерен наклонен,negreta cursiva,tučné kurzíva,fed kursiv,Fett-Kursiv,Έντονη Πλάγια,Negrita Cursiva,Lihavoitu Kursivoi,Gras Italique,Félkövér dőlt,Grassetto Corsivo,Vet Cursief,Halvfet Kursiv,Pogrubiona kursywa,Negrito Itálico,gros oblic,Полужирный Курсив,Tučná kurzíva,Fet Kursiv,Kalın İtalik,huruf tebal miring,жирний похилий,polkrepko ležeče,treknais slīpraksts,pusjuodis pasvirasis,nghiêng đậm,Lodi etzana,धृष्ट-तिरछा",
+      "/usr/share/fonts/truetype/freefont/FreeSansOblique.ttf FreeSans Oblique,наклонен,cursiva,kurzíva,kursiv,Πλάγια,Kursivoitu,Italique,Dőlt,Corsivo,Cursief,kursywa,Itálico,oblic,Курсив,İtalik,huruf miring,похилий,Ležeče,slīpraksts,pasvirasis,nghiêng,Etzana,तिरछा,বাঁকা",
+      "/usr/share/fonts/truetype/freefont/FreeSerif.ttf FreeSerif Regular,нормален,normal,obyčejné,Mittel,µεσαία,Normaali,Normál,Normale,Gemiddeld,odmiana zwykła,Обычный,Normálne,ปกติ,menengah,прямій,Navadno,vidējs,normalusis,عادی,vừa,Arrunta,सामान्य,সাধারণ,ସାମାନ୍ଯ,സാധാരണ,ނުވަތަ މެދު,ਸਾਧਾਰਨ,साधारण",
+      "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf FreeSerif Bold,получерен,negreta,tučné,fed,Fett,Negrita,Lihavoitu,Gras,Félkövér,Grassetto,Vet,Halvfet,Pogrubiony,Negrito,gros,Полужирный,Fet,ตัวหนา,Kalın,huruf tebal,жирний,Polkrepko,treknraksts,pusjuodis,ضخیم,đậm,Lodia,धृष्ट,ମୋଟା,സ്പഷ്ട,ठळक,ފަވާފައ,ਮੋੱਟਾ,बाक्लो",
+      "/usr/share/fonts/truetype/freefont/FreeSerifBoldItalic.ttf FreeSerif Bold Italic,получерен курсивен,negreta itàlica,tučné kurzíva,fed kursiv,Fett-Kursiv,Negrita Cursiva,Lihavoitu Kursivoi,Gras Italique,Félkövér dőlt,Grassetto Corsivo,Vet Cursief,Halvfet Kursiv,Pogrubiona kursywa,Negrito Itálico,gros cursiv,Полужирный Курсив,Tučná kurzíva,Fet Kursiv,ตัวเอียงหนา,Kalın İtalik,huruf tebal kursif,жирний курсив,Polkrepko Pežeče,treknais kursīvs,pusjuodis kursyvas,nghiêng đậm,Lodi etzana,धृष्ट-तिरछा",
+      "/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf FreeSerif Italic,курсивен,itàlica,kurzíva,kursiv,Λειψίας,Cursiva,Kursivoitu,Italique,Dőlt,Corsivo,Cursief,kursywa,Itálico,cursiv,Курсив,ตัวเอียง,İtalik,kursif,Ležeče,kursīvs,kursivas,nghiêng,Etzana,तिरछा,তির্যক",
+      "/usr/share/fonts/truetype/lato/Lato-Black.ttf Lato,Lato Black Black,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-BlackItalic.ttf Lato,Lato Black Black Italic,Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Bold.ttf Lato Bold",
+      "/usr/share/fonts/truetype/lato/Lato-BoldItalic.ttf Lato Bold Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Hairline.ttf Lato,Lato Hairline Hairline,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-HairlineItalic.ttf Lato,Lato Hairline Hairline Italic,Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Heavy.ttf Lato,Lato Heavy Heavy,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-HeavyItalic.ttf Lato,Lato Heavy Heavy Italic,Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Italic.ttf Lato Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Light.ttf Lato,Lato Light Light,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-LightItalic.ttf Lato,Lato Light Light Italic,Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Medium.ttf Lato,Lato Medium Medium,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-MediumItalic.ttf Lato,Lato Medium Medium Italic,Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Regular.ttf Lato Regular",
+      "/usr/share/fonts/truetype/lato/Lato-Semibold.ttf Lato,Lato Semibold Semibold,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-SemiboldItalic.ttf Lato,Lato Semibold Semibold Italic,Italic",
+      "/usr/share/fonts/truetype/lato/Lato-Thin.ttf Lato,Lato Thin Thin,Regular",
+      "/usr/share/fonts/truetype/lato/Lato-ThinItalic.ttf Lato,Lato Thin Thin Italic,Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf Liberation Mono Bold",
+      "/usr/share/fonts/truetype/liberation/LiberationMono-BoldItalic.ttf Liberation Mono Bold Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationMono-Italic.ttf Liberation Mono Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf Liberation Mono Regular",
+      "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf Liberation Sans Bold",
+      "/usr/share/fonts/truetype/liberation/LiberationSans-BoldItalic.ttf Liberation Sans Bold Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf Liberation Sans Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf Liberation Sans Regular",
+      "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf Liberation Serif Bold",
+      "/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf Liberation Serif Bold Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf Liberation Serif Italic",
+      "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf Liberation Serif Regular",
+      "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf Noto Color Emoji Regular",
+      "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc WenQuanYi Zen Hei Mono,文泉驛等寬正黑,文泉驿等宽正黑 Regular",
+      "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc WenQuanYi Zen Hei Sharp,文泉驛點陣正黑,文泉驿点阵正黑 Regular",
+      "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc WenQuanYi Zen Hei,文泉驛正黑,文泉驿正黑 Regular"
+    ]
+  },
+  "stages": [
+    {
+      "stage": "segment:seg-001.mp4",
+      "a": "e017602e4f7fe4eac10b49cb961b832a3c22697ed036d6a05b91e552a2788c66",
+      "b": "e017602e4f7fe4eac10b49cb961b832a3c22697ed036d6a05b91e552a2788c66",
+      "identical": true
+    },
+    {
+      "stage": "segment:seg-002.mp4",
+      "a": "0a5e346169b9d2abefc048f7c8f47efa42bb87f9fd76dbf018d091852d1330e9",
+      "b": "0a5e346169b9d2abefc048f7c8f47efa42bb87f9fd76dbf018d091852d1330e9",
+      "identical": true
+    },
+    {
+      "stage": "segment:seg-003.mp4",
+      "a": "f6a1619591db3b6017a9b0fae5fcf6020c0d5cf5378c5264febdd235c34cb51c",
+      "b": "f6a1619591db3b6017a9b0fae5fcf6020c0d5cf5378c5264febdd235c34cb51c",
+      "identical": true
+    },
+    {
+      "stage": "card:c1-0-7b931f5b0264d57d.png",
+      "a": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+      "b": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+      "identical": true
+    },
+    {
+      "stage": "caption:ass",
+      "a": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+      "b": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+      "identical": true
+    },
+    {
+      "stage": "caption:srt",
+      "a": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+      "b": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+      "identical": true
+    },
+    {
+      "stage": "caption:words.srt",
+      "a": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+      "b": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+      "identical": true
+    },
+    {
+      "stage": "caption:json",
+      "a": "2c0f47aeaa4cf4443abc0d411eaff5d5f5c3423a481f1259c065de11403a2334",
+      "b": "2c0f47aeaa4cf4443abc0d411eaff5d5f5c3423a481f1259c065de11403a2334",
+      "identical": true
+    },
+    {
+      "stage": "voice",
+      "a": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0",
+      "b": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0",
+      "identical": true
+    },
+    {
+      "stage": "final",
+      "a": "26ea6abdad9845aca1e72e6789610337cdab7f1a9892b73abfb0d269c4df4b47",
+      "b": "f94e961fdd4c635bae464e4b43678e0acb16cd31b3ed3f4b41aa0a112ac16af7",
+      "identical": false,
+      "frames": {
+        "total": [
+          183,
+          183
+        ],
+        "differing": [
+          74,
+          77,
+          78,
+          79
+        ],
+        "psnrDb": {
+          "74": 107.04,
+          "77": 106.07,
+          "78": 104.03,
+          "79": 104.03
+        }
+      }
+    }
+  ],
+  "compare": {
+    "status": "different",
+    "identical": false,
+    "different": [
+      "video.decoded",
+      "video.packets",
+      "container"
+    ],
+    "streams": {
+      "video": {
+        "decoded": {
+          "a": "de25e5d1f7b20d9b41acdf031be49bdfe991ddc9617e2ad7f17c2895ee1af2cf",
+          "b": "80499762ddbb641870eeaac321674d013ca4bfba53422cd91191706c6275298c",
+          "identical": false
+        },
+        "packets": {
+          "a": "6354138a5e1e85d2d7294196fcaaf59d4dae9038f359746f925ec1505fd35ab8",
+          "b": "bfe590be119c9b37b82abbe87e9dff43debcae490d7cd27cce2da49ed3104d17",
+          "identical": false
+        }
+      },
+      "audio": {
+        "decoded": {
+          "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "identical": true
+        },
+        "packets": {
+          "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "identical": true
+        }
+      }
+    },
+    "container": {
+      "a": "26ea6abdad9845aca1e72e6789610337cdab7f1a9892b73abfb0d269c4df4b47",
+      "b": "f94e961fdd4c635bae464e4b43678e0acb16cd31b3ed3f4b41aa0a112ac16af7",
+      "identical": false
+    },
+    "errors": []
+  }
+}

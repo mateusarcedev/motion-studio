@@ -23,7 +23,7 @@
 - Motion MCP exige processo local `stdio`; não há endpoint HTTP, proxy Doop ou serviço remoto.
 - Doop é opcional. O round-trip de HTML/PNG foi homologado com autorização no canvas `Motion Studio — Integration Lab`; tokens globais, biblioteca global, expansão de `<doop-use>`, upload de fontes e CAS atômico não estão disponíveis no MCP verificado.
 - O MCP Doop conectado não expõe operações para criar tokens ou componentes nem para expandir `<doop-use>`; vídeos e 3D são exportados como referência, não como objetos nativos editáveis.
-- OpenDesign 0.27.2: Motion MCP via OpenCode CLI do projeto foi testado parcialmente; o MCP próprio/painel não completou handshake nesta rota WSL↔Windows. Produção por agente chegou ao limite HTTP 429. A causa do incidente intermitente de determinismo Node 24 observado no CI continua sob investigação; aprovações locais repetidas não resolvem essa causa.
+- OpenDesign 0.27.2: Motion MCP via OpenCode CLI do projeto foi testado parcialmente; o MCP próprio/painel não completou handshake nesta rota WSL↔Windows. Produção por agente chegou ao limite HTTP 429. O CI registrou divergência real no vídeo final em uma tentativa Node 22.23.5/FFmpeg 6.1.1, com retry aprovado, além do incidente histórico Node 24; a causa raiz de determinismo segue sob investigação, e a aprovação do retry não comprova resolução.
 - Pacotes anteriores não recebem atualização automática; o consumidor atualiza o conjunto CLI/Core/Skills/installer como uma versão compatível.
 
 ## Matriz de compatibilidade proposta
@@ -53,4 +53,4 @@ Os arquivos foram empacotados/instalados localmente; isso não altera a versão 
 - [ ] Publicar `motion-core` e `motion-studio-skills` antes de `motion-cli`; publicar `motion-studio` por último, depois de verificar as dependências exatas. Não publicar uma camada se qualquer tarball dependente ainda não existe.
 - [ ] Aplicar tag `latest` apenas após validação do conjunto completo; monitorar CI e smoke de instalação pós-publicação.
 
-**Decisão recomendada:** as mudanças aditivas justificam uma minor `1.2.0`. O round-trip Doop do escopo autorizado está documentado; o Doop global/componentes/CAS e a integração OpenDesign nativa permanecem limitações declaradas. O CI final passou na matriz Node 20/22/24 e no job de determinismo; o incidente histórico Node 24 continua como risco não resolvido, sem causa raiz reproduzida. Esta proposta não altera versões nem autoriza publicação.
+**Decisão recomendada:** as mudanças aditivas justificam uma minor `1.2.0`. O round-trip Doop do escopo autorizado está documentado; o Doop global/componentes/CAS e a integração OpenDesign nativa permanecem limitações declaradas. O CI final concluiu com sucesso na matriz Node 20/22/24 e no job de determinismo após retry, mas a tentativa inicial reproduziu diferenças de vídeo no estágio final em Node 22; o incidente Node 22/24 continua como risco não resolvido, sem causa raiz. Esta proposta não altera versões nem autoriza publicação.
