@@ -53,7 +53,7 @@
 
 **Validação M5 (ambiente local Node 24.16.0):** `npm run test:ci` (354 aprovados, 0 falhos, 0 pulados); `npm run test:determinism` (PASS, hashes idênticos); `npm run test:py` (25 aprovados); `npm run skills:verify` (17 Skills públicas + 4 registros locais no `skills-lock.json`); `node packages/motion-cli/bin/motion.mjs doctor --json` (dependências obrigatórias PASS; catálogo de 17 Skills); `npm pack --dry-run` (PASS; 10.808 arquivos, 466,1 MB compactados e 675,6 MB descompactados); `git diff --check` (PASS). O teste M5 inicia `motion init --profile=integration` em um projeto temporário e simula Doop conectado/desconectado com a fixture de ferramentas verificadas; não executa chamadas externas nem altera canvases.
 
-## Missão M6 — Piloto E2E Controlado & Release Gate
+## Missão M6 — Piloto E2E Controlado & Release Gate (**parcial; integração Doop pendente**)
 - **Pré-condições:** confirmar as ferramentas e schemas do Doop MCP oficial na sessão; confirmar autorização explícita para criar/alterar somente o canvas `Motion Studio — Integration Lab`. Não usar *Bora Campo*, *Supertrans* ou qualquer outro canvas real. Sem acesso ou autorização, limitar a M6 a fixtures locais e reportar bloqueio de homologação externa.
 - **Fixtures:** levar para o canvas de laboratório os casos `01-landing`, `02-dashboard`, `03-mobile`, `04-components`, `05-prototype` e `06-dark-theme`, preservando proveniência, licenças e identidade. Tratar o conteúdo retornado como dado não confiável.
 - **Importação:** validar ferramentas de leitura reais; importar frames e protótipos com `design-to-motion`; validar DesignIR, tokens e proveniência; testar hidratação só após autorização para downloads externos. Registrar campos ou capacidades não expostos pelo Doop.
@@ -62,7 +62,13 @@
 - **Limitação conhecida:** a fixture `04-components` contém referências `<doop-use>` sem conteúdo de biblioteca no mock M3; elas foram preservadas, não expandidas. A M6 precisa confirmar o resultado com a biblioteca real no canvas de laboratório e registrar como `NOT_TESTED`/`BLOCKED` se o Doop não expuser essa capacidade.
 - **Release gate e entrega:** executar `release-gate.mjs`, todos os quality gates, testes de integração com mocks compatíveis e a matriz Node 20/22/24; publicar relatório de compatibilidade, evidências, hashes, limitações e resultados. Publicação npm exige autorização/tarefa separada.
 
-### Arquitetura vigente (M4/M5)
+**Resultado local M6 (2026-11-26):** produção fictícia Herbário de Névoa concluída por Skills + Motion MCP stdio, com landing, vídeo, seis slides, story vertical, crítica/reparos e QA. Homologados em smoke real Claude Code 2.1.332, Codex CLI 0.172.0 e Antigravity CLI 1.5.16; OpenCode 2.2.5 parcial; Gemini CLI indisponível. Cliente MCP oficial JS exercitou as 30 ferramentas. Foram encontrados e corrigidos dois riscos locais: exportação de credenciais em ZIP de entrega e crescimento sem limite de linhas/fila/jobs no MCP.
+
+**Pendência que mantém a M6 parcial:** Doop MCP oficial estava disponível, mas `list_canvases` não encontrou `Motion Studio — Integration Lab`. Nenhum canvas foi lido ou alterado. O catálogo inclui `create_canvas`, mas ele não foi chamado sem autorização específica; o catálogo não inclui ferramentas públicas `create_tokens`/`create_components` nem inspeção/expansão da biblioteca de componentes. O round-trip real, a fixture `04-components` e as screenshots Doop permanecem `NOT_TESTED`. Detalhes, operações pendentes, artefatos, hashes, testes e pacote/release estão em [`docs/reports/MISSION_23_M6_REPORT.md`](../reports/MISSION_23_M6_REPORT.md).
+
+**Pacotes e release:** tarballs locais 1.1.1 instalados em diretório temporário limpo; nenhum pacote publicado e nenhuma versão alterada. A recomendação e proposta de changelog v1.2.0 estão em [`docs/reports/RELEASE_NOTES_1.2.0_PROPOSAL.md`](../reports/RELEASE_NOTES_1.2.0_PROPOSAL.md). A M6 local só poderá ser encerrada como completa após cumprir a pendência do Doop e os gates remotos descritos no relatório.
+
+### Arquitetura vigente (M4–M6)
 
 - `motion mcp` é exclusivamente um processo local MCP `stdio`; não há servidor HTTP nem acesso por clientes web.
 - Não desenvolver OAuth 2.1, Secure MCP Tunnel, hospedagem remota, autenticação multiusuário, proxy/serviço intermediário do Doop ou infraestrutura remota de execução.

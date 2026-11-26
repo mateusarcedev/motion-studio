@@ -103,3 +103,9 @@ Todos os três entregáveis devem consumir as mesmas variáveis CSS para garanti
 Descubra componentes com `motion components list`, forneça um JSON de parâmetros e renderize MP4 ou WebM transparente sem editar o gerador. Use `motion transition list` para escolher uma transição FFmpeg entre cenas, `motion qa determinism` para comparar duas sessões independentes e `motion qa safe-zones` para revisar elementos importantes ao longo do tempo. Os overlays de safe zone são evidência de QA e não entram no render final.
 
 Leia [`REUSABLE_MOTION_COMPONENTS.md`](REUSABLE_MOTION_COMPONENTS.md) para formatos, limites, campos de geometria, presets editáveis e exemplos completos.
+
+## 6. Piloto E2E M6 — campanha Herbário de Névoa
+
+A campanha fictícia em [`projects/m6-herbario-de-nevoa/`](../projects/m6-herbario-de-nevoa/) documenta o ciclo briefing → direção de arte → storyboard → produção → crítica visual → reparos → QA. Ela inclui uma landing responsiva com microinterações, um vídeo 16:9 animado, um story 9:16 animado e seis slides de carrossel. O script [`produce.mjs`](../projects/m6-herbario-de-nevoa/produce.mjs) usa o cliente MCP oficial JS contra o Motion MCP local por stdio.
+
+Os contact sheets finais estão em [`reports/assets/mission-23-m6/`](reports/assets/mission-23-m6/). O relatório [`reports/MISSION_23_M6_REPORT.md`](reports/MISSION_23_M6_REPORT.md) registra dimensões, hashes, QA e os limites dos overlays de safe zones. Renderizações completas e sequências de frames ficam em `projects/m6-herbario-de-nevoa/out/m6-final/`, ignoradas pelo Git para não inflar o pacote. O Doop MCP não expôs o canvas de laboratório, portanto nenhuma tela da campanha foi escrita em editor externo.

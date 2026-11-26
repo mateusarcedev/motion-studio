@@ -129,3 +129,9 @@ O servidor `motion mcp` é um processo local por `stdio` e chama os motores do M
 As Skills `design-to-motion` e `motion-to-design` fazem parte do manifesto público local do pacote. O metadata `optional-integrations.json` registra `doop-mcp` como servidor externo opcional, sem `installCommand`: o agente precisa descobrir as ferramentas e schemas que o cliente Doop expõe na sessão atual.
 
 Para configurar o servidor local e acompanhar a matriz honesta de homologação, consulte [`MCP.md`](MCP.md) e [`COMPATIBILITY.md`](COMPATIBILITY.md). A falta do Doop MCP não bloqueia operações locais de Motion.
+
+### Resultado do piloto M6
+
+A integração oficial Doop estava acessível para descoberta de ferramentas, mas `list_canvases` não encontrou o canvas permitido `Motion Studio — Integration Lab`. O catálogo inclui `create_canvas`, mas requer autorização antes de invocá-lo; não há ferramenta pública `create_tokens`/`create_components` nem de inspeção/expansão da biblioteca de componentes. Nenhum canvas foi lido ou alterado. O round-trip externo e o teste real de `<doop-use>` permanecem `NOT_TESTED`.
+
+O fluxo local foi produzido e inspecionado com a campanha fictícia **Herbário de Névoa** por Motion MCP stdio. As evidências de render, QA, compatibilidade de exportação e limites estão em [`reports/MISSION_23_M6_REPORT.md`](reports/MISSION_23_M6_REPORT.md). Para concluir o piloto externo, ainda é necessária autorização explícita para chamar `create_canvas` com o nome `Motion Studio — Integration Lab` e, depois, para criar os frames sintéticos e executar o round-trip nesse canvas.

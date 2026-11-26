@@ -42,6 +42,8 @@ node --input-type=module -e 'import { installSkills } from "/CAMINHO/motion-stud
 
 Substitua os dois caminhos. O perfil `integration` instala as Skills públicas relevantes no projeto consumidor; não instala nem conecta o Doop MCP. Para executar o Motion MCP pelo clone, instale suas dependências com `npm ci` no checkout e configure o comando descrito em [MCP.md](MCP.md).
 
+Na M6, os quatro tarballs do checkout foram instalados em um diretório temporário limpo. `motion-studio init --profile=integration` copiou seis Skills e conferiu os hashes públicos; `motion doctor`, CLI, MCP stdio, render real, paridade CLI×MCP e rejeição de traversal passaram. Os pacotes continuam na versão `1.1.1`; esse teste local não publicou nem atualizou o registro npm. O relatório inclui os tamanhos individuais e o script reproduzível [`scripts/m6_distribution_smoke.mjs`](../scripts/m6_distribution_smoke.mjs).
+
 ### Opções
 
 | Flag | Efeito |

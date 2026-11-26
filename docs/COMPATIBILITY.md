@@ -3,6 +3,22 @@
 Fonte única desde a Missão 21.1. Só conta o que foi executado; descoberta de Skills não implica execução.
 O histórico de instalação e descoberta continua em `AGENT_COMPATIBILITY.md`.
 
+## M6 — estado atual da homologação (2026-11-26; parcial)
+
+| Cliente ou superfície | Estado | Evidência e limites |
+|---|---|---|
+| Claude Code 2.1.332 | **Homologado — smoke MCP** | Config temporária isolada, inicialização, descoberta de 30 ferramentas, `render_static` real, erro de traversal, PNG com SHA-256 validado e encerramento `0`. A chamada validou uma ferramenta representativa, não todos os 30 handlers. |
+| Codex CLI 0.172.0 | **Homologado — smoke MCP** | Workspace temporário e `--approve-for-me`; descoberta, render instalado, arquivo íntegro, rejeição de traversal e encerramento `0`. A política padrão `never` impediu a primeira chamada; a configuração pessoal não foi alterada. |
+| Google Antigravity CLI (`agy`) 1.5.16 | **Homologado — smoke MCP** | `.agents/mcp_config.json` temporário; chamada real, artefato com o mesmo SHA-256, traversal rejeitado e encerramento `0`. `agy mcp list` exibe só servidores globais, apesar de a execução do workspace descobrir o MCP. |
+| OpenCode 2.2.5 | **Parcialmente homologado** | Conexão, descoberta, render e erro de traversal passaram. A sessão usou um serviço `opencode serve --service` preexistente; o processo filho MCP continuou sob esse serviço após o comando, então encerramento isolado não foi provado. O modo `--standalone` não carregou a configuração MCP do smoke. |
+| Gemini CLI | **Indisponível** | Executável não instalado no ambiente; sem alteração ou instalação de configuração pessoal. |
+| Cliente MCP oficial JS, subprocesso stdio | **Homologado como cliente de referência** | Handshake, descoberta/schema das 30 ferramentas, chamadas reais de render/QA/SVG/Bridge, erros, cancelamento, integridade, isolamento e encerramento em `tests/mcp_server.test.mjs`. Este estado não substitui homologação completa por cliente. |
+| Doop MCP oficial | **Parcial — somente disponibilidade/schema** | Conexão real e descoberta de ferramentas. A listagem não continha o canvas `Motion Studio — Integration Lab`; nenhum canvas ou recurso externo foi lido ou escrito. Sem ferramentas públicas de biblioteca de componentes ou leitura/escrita global de tokens. |
+
+Os smoke tests dos quatro clientes usaram uma página local sintética em `/tmp/m6-client-smoke`. Os quatro PNGs têm `9.374` bytes e SHA-256 `4f0b481e6f7a6d65a8e0686fb466377af6d249d84f53876efc5d6aec9e45a350`. Cada cliente verificou descoberta, chamada real, parâmetro inseguro, resposta de erro, retorno do artefato e isolamento do workspace; limites de encerramento do OpenCode estão descritos na tabela. Gemini CLI e edição Doop seguem pendentes.
+
+O relatório persistente, os logs, a matriz npm e os caminhos de evidência estão em [`reports/MISSION_23_M6_REPORT.md`](reports/MISSION_23_M6_REPORT.md).
+
 ## Fluxo `analyze → plan → preview → render → qa reel` (fixture sintética, 2026-11-23)
 
 | Cliente | Versão | CLI | MCP `motion mcp` (stdio) | Evidência |
@@ -29,7 +45,7 @@ As execuções de Codex, OpenCode e Antigravity foram autorizadas pelo dono: uma
 
 - A superfície v2 segue exclusivamente MCP `stdio`, sem HTTP, OAuth, túnel ou servidor remoto. O cliente deve iniciar o processo na mesma máquina em que estão o workspace, Node, Chromium/Playwright e FFmpeg.
 - `tests/mcp_server.test.mjs` usa o cliente MCP oficial JS em subprocesso real para handshake, descoberta, preservação das 11 ferramentas anteriores, render CLI×MCP com hash de PNG idêntico, isolamento de workspace, bloqueio de symlink, schemas, limite concorrente de saída, artefatos, QA, SVG e planejamento Bridge sem chamada remota.
-- Essa cobertura de protocolo não conta como homologação da versão M4 em clientes desktop específicos. Claude Code, Codex CLI, OpenCode e Antigravity têm evidência para a integração MCP anterior no quadro acima; Gemini CLI continua sem teste. Nenhuma homologação M6 ou chamada para canvas real ocorreu.
+- A cobertura de protocolo da M4 foi ampliada pelos smoke tests M6 acima. Não houve leitura ou escrita de canvas real. A homologação externa Doop continua pendente por ausência do canvas de laboratório.
 - Instalação pelo código-fonte e configurações: [`docs/MCP.md`](MCP.md).
 
 ## Skills de integração Design ↔ Motion ↔ Doop (Missão 23 M5, 2026-11-25)
