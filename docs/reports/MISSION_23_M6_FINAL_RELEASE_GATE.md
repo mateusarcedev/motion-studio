@@ -22,3 +22,5 @@ Gerado por `scripts/release-gate.mjs` em 2026-11-26T18:00:19.356Z (Node v24.16.0
 | R15 | Compatibilidade com Node.js 20, 22 e 24 | NOT_TESTED | v24.16.0: PASS (152 testes, 0 falhas) · faltam Node 20, 22; engines >=20 |
 | R16 | Autenticação npm | BLOCKED | npm login necessário |
 | R17 | Versão ainda não publicada no registro | FAIL | @technomanceer/motion-core@1.1.1 JÁ EXISTE · @technomanceer/motion-studio-skills@1.1.1 JÁ EXISTE · @technomanceer/motion-cli@1.1.1 JÁ EXISTE · @technomanceer/motion-studio@1.1.1 JÁ EXISTE |
+
+**Validação remota posterior:** o CI do commit `5ebbc30fd82bd0a3e22463d2f7a576093d12bc6b` passou em 4/4 jobs, incluindo determinismo e a matriz Node.js 20/22/24. Isso complementa R15: a marca `NOT_TESTED` acima descreve apenas a indisponibilidade local dos runtimes Node 20/22 no release gate. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45873168038).

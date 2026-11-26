@@ -174,8 +174,8 @@ Consulta ao registry em 2026-11-26 confirmou `1.1.1` como versão publicada de c
 | `node packages/motion-cli/bin/motion.mjs doctor --json` | PASS — Node 24.16, Python, FFmpeg, Chromium e dependências obrigatórias; opcionais ausentes aparecem como `INFO`. |
 | `npm pack --dry-run` | Pacote raiz privado: 10.912 arquivos, 470,6 MB compactados e 681,1 MB descompactados. Quatro pacotes públicos auditados individualmente; tamanhos por pacote e conteúdo estão acima. |
 | Release gate `scripts/release-gate.mjs` | R1 e R3–R14 PASS; R2 está como `NOT_TESTED` dentro do relatório por `--skip-tests`, mas a `test:ci` separada passou com 364/364. R6 instalação limpa passou. R15 ficou `NOT_TESTED` para Node 20/22 locais (Node 24: 152/152); R16 `BLOCKED` porque `npm whoami` requer login; R17 `FAIL` porque as quatro versões 1.1.1 já estão publicadas. R12/R13 tiveram warnings de áudio/repetição no fixture do gate, sem checks `FAIL`. Ver [relatório do release gate final](MISSION_23_M6_FINAL_RELEASE_GATE.md). |
-| Node.js local | Somente 24.16.0 está instalado. Matriz Node 20/22/24 requer confirmação no CI remoto do commit final. |
-| CI remoto | O CI do commit final desta continuação será anotado após o push. As execuções anteriores não substituem essa validação. |
+| Node.js local | Somente 24.16.0 está instalado. A matriz remota validou Node 20/22/24. |
+| CI remoto | PASS — 4/4 jobs: determinismo e testes completos em Node 20, 22 e 24 no commit `5ebbc30`. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45873168038). |
 
 As suítes MCP/Bridge e de distribuição estão incluídas em `test:ci`; o gate de instalação limpa também verifica os tarballs. O cliente MCP de referência executou 30 ferramentas/schemas no piloto. `git diff --check` passou antes dos commits.
 
@@ -191,7 +191,7 @@ As suítes MCP/Bridge e de distribuição estão incluídas em `test:ci`; o gate
 - **OpenDesign:** a instalação 0.27.2 documenta um adaptador com injeção MCP, mas a execução nesta máquina não acessou o daemon Windows do WSL (`UtilAcceptVsock: accept4 failed 110`); o processo encerrou em `clean_shutdown`, sem listener 7456–7460. O painel observado não encaminhou servidor Motion. Status parcial/não homologado, não uma incompatibilidade geral da versão.
 - **Vídeo pelo agente OpenDesign:** bloqueado pelo `429 FreeUsageLimitError` do provedor configurado. Nenhuma troca de provedor ou tentativa de contorno foi feita; nenhum MP4 anterior foi contado como saída nova.
 - **Node 24 determinismo:** o CI histórico registrou divergência nos hashes de vídeo decodificado/pacotes, com áudio decodificado e pacotes idênticos. Logo a diferença não foi apenas metadado de contêiner. Duas execuções locais sequenciais do teste de paridade no Node 24.16.0, FFmpeg 8.0.1-3ubuntu2 e Chromium 156.0.8078.4 passaram com hashes idênticos. O ambiente histórico de CI usou Node 24.22.3 e FFmpeg 6.1.1; sem reprodução nesse ambiente não há causa raiz confirmada. O incidente permanece aberto, sem alterar código ou critério do teste. Evidências em [`node24-determinism/`](../../projects/m6-herbario-de-nevoa/evidence/node24-determinism/).
-- **Release:** todos os quality gates desta continuação e CI final devem ser registrados abaixo; os pacotes continuam em 1.1.1, nenhuma versão foi alterada e nenhum pacote npm foi publicado.
+- **Release:** quality gates locais e CI remoto foram registrados; os pacotes continuam em 1.1.1, nenhuma versão foi alterada e nenhum pacote npm foi publicado. O release gate não autoriza publicação: exige login npm e as versões 1.1.1 já existem no registry.
 
 As capacidades locais e o round-trip Doop efetivamente homologados ficam concluídos. O estado geral da M6 permanece **parcialmente homologado** pelas duas lacunas OpenDesign (handoff nativo/execução de vídeo) e pelo incidente intermitente Node 24 sem causa raiz. Essas pendências estão registradas para reabertura pontual, sem manter o uso local ou Doop bloqueados.
 
