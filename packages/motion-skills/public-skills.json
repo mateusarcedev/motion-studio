@@ -80,6 +80,40 @@
       "treeSha256": "dfc14be584ee96c90b857126b98a3ffc7acbcf6e5223d5cbc0b672335062fc1c"
     },
     {
+      "name": "design-to-motion",
+      "path": "skills/design-to-motion/SKILL.md",
+      "version": "snapshot-3e68d3570ad0",
+      "source": {
+        "type": "first-party",
+        "repository": "https://github.com/mateusarcedev/motion-studio",
+        "path": "packages/motion-skills/skills/design-to-motion/SKILL.md",
+        "revision": "ae3cf222688749c1dcd4c0e5b3d39db3d50b90b9"
+      },
+      "license": {
+        "spdx": "Apache-2.0",
+        "file": "LICENSE"
+      },
+      "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
+      "sha256": "3e68d3570ad0e5f4024a8ac5ff0539743ea552d4680b32a9a9aa78e68aafc9b9"
+    },
+    {
+      "name": "doop-bridge",
+      "path": "skills/doop-bridge/SKILL.md",
+      "version": "snapshot-b83159b3c967",
+      "source": {
+        "type": "first-party",
+        "repository": "https://github.com/mateusarcedev/motion-studio",
+        "path": "packages/motion-skills/skills/doop-bridge/SKILL.md",
+        "revision": "ae3cf222688749c1dcd4c0e5b3d39db3d50b90b9"
+      },
+      "license": {
+        "spdx": "Apache-2.0",
+        "file": "LICENSE"
+      },
+      "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
+      "sha256": "b83159b3c9676f8a61d1078373639aae7fc6a7607cfbfe725fc61a23570e92d2"
+    },
+    {
       "name": "explainer-motion",
       "path": "skills/explainer-motion/SKILL.md",
       "version": "snapshot-064965f97d40",
@@ -129,6 +163,23 @@
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
       "sha256": "1bf463b3ff986ee816aeb97981755fdfa5a747f71a84a70016e75810338509a7"
+    },
+    {
+      "name": "motion-to-design",
+      "path": "skills/motion-to-design/SKILL.md",
+      "version": "snapshot-ffe642b624b8",
+      "source": {
+        "type": "first-party",
+        "repository": "https://github.com/mateusarcedev/motion-studio",
+        "path": "packages/motion-skills/skills/motion-to-design/SKILL.md",
+        "revision": "ae3cf222688749c1dcd4c0e5b3d39db3d50b90b9"
+      },
+      "license": {
+        "spdx": "Apache-2.0",
+        "file": "LICENSE"
+      },
+      "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
+      "sha256": "ffe642b624b8791c7079d418bc93a5c01ec3ac1d8f39ea76094b198b9c1e3d70"
     },
     {
       "name": "reel-editor",
@@ -184,19 +235,19 @@
     {
       "name": "studio-director",
       "path": "skills/studio-director/SKILL.md",
-      "version": "snapshot-452d18dbaa60",
+      "version": "snapshot-9fca9b52492b",
       "source": {
         "type": "first-party",
         "repository": "https://github.com/mateusarcedev/motion-studio",
         "path": "packages/motion-skills/skills/studio-director/SKILL.md",
-        "revision": "2f6b698145a9a7d2574654851f8dfb9190fcda92"
+        "revision": "ae3cf222688749c1dcd4c0e5b3d39db3d50b90b9"
       },
       "license": {
         "spdx": "Apache-2.0",
         "file": "LICENSE"
       },
       "attribution": "Mateus Arce, as recorded in the MOTION Studio repository history.",
-      "sha256": "452d18dbaa608a366bc9e11f445f2a52d24b89ea1924831d80e37827af3487ce"
+      "sha256": "9fca9b52492b1a0628bc36aa08c16f6c89e35b8bcb71ec43a551f7588ca5c6fb"
     },
     {
       "name": "thermo-nuclear-code-quality-review",

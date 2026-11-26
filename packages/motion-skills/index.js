@@ -21,6 +21,28 @@ export const SKILL_PROFILES = {
     "design",
     "design-system",
   ],
+  "design-to-motion": [
+    "studio-director",
+    "design-to-motion",
+  ],
+  "motion-to-design": [
+    "studio-director",
+    "motion-to-design",
+  ],
+  "doop-bridge": [
+    "studio-director",
+    "design-to-motion",
+    "motion-to-design",
+    "doop-bridge",
+  ],
+  integration: [
+    "studio-director",
+    "motion-director",
+    "web-director",
+    "design-to-motion",
+    "motion-to-design",
+    "doop-bridge",
+  ],
   web: [
     "studio-director",
     "motion-director",

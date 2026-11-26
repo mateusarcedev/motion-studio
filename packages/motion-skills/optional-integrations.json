@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "policy": "Metadata only. These integrations are not included in the public Skills package; installation is fetched directly from each upstream source and remains subject to its current terms.",
+  "policy": "Metadata only. Community Skills are fetched directly from their upstream sources and remain subject to current terms. Optional MCP servers are not installed or redistributed here; the agent discovers their live tools and schemas at runtime.",
   "integrations": [
     {
       "name": "aula-interativa",
@@ -53,6 +53,19 @@
       "sourceVersion": "unversioned; resolve the current upstream revision at install time",
       "license": "MIT reported in the local audit; recheck upstream LICENSE before installation. No copy is bundled.",
       "installCommand": "npx skills add benjitaylor/skills --skill stageshow"
+    },
+    {
+      "name": "doop-mcp",
+      "title": "Doop MCP oficial (opcional)",
+      "description": "Servidor MCP oficial do editor Doop. Descubra ferramentas, recursos e schemas na sessão atual; nenhuma ferramenta é presumida ou instalada pelo Motion Studio.",
+      "profile": "doop-bridge",
+      "kind": "mcp-server",
+      "repo": "https://doop.design",
+      "skillSubpath": null,
+      "author": "Doop",
+      "authorUrl": "https://doop.design",
+      "sourceVersion": "runtime-discovery",
+      "license": "Serviço e termos oficiais do Doop; nenhum código, dado ou acesso é redistribuído pelo pacote de Skills."
     }
   ]
 }

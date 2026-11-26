@@ -67,6 +67,12 @@
       "skillPath": "skills/engineering/codebase-design/SKILL.md",
       "computedHash": "b2888e4f4e8c0af3bfd557575a64b905c44e6248c3101d72077816882b3a92b9"
     },
+    "design-to-motion": {
+      "source": "mateusarcedev/motion-studio",
+      "sourceType": "local",
+      "skillPath": "packages/motion-skills/skills/design-to-motion/SKILL.md",
+      "computedHash": "3e68d3570ad0e5f4024a8ac5ff0539743ea552d4680b32a9a9aa78e68aafc9b9"
+    },
     "diagnosing-bugs": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -84,6 +90,12 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/domain-modeling/SKILL.md",
       "computedHash": "b3eb40152b81f0c98fd2095a023c019452dbdce56f7540cc67fece2972db8369"
+    },
+    "doop-bridge": {
+      "source": "mateusarcedev/motion-studio",
+      "sourceType": "local",
+      "skillPath": "packages/motion-skills/skills/doop-bridge/SKILL.md",
+      "computedHash": "b83159b3c9676f8a61d1078373639aae7fc6a7607cfbfe725fc61a23570e92d2"
     },
     "emil-design-eng": {
       "source": "emilkowalski/skills",
@@ -192,6 +204,12 @@
       "sourceType": "github",
       "skillPath": "skills/misc/migrate-to-shoehorn/SKILL.md",
       "computedHash": "6397731ced114f3657aa88b55ed13d1344a56d77ca449c568e3200c21740fa99"
+    },
+    "motion-to-design": {
+      "source": "mateusarcedev/motion-studio",
+      "sourceType": "local",
+      "skillPath": "packages/motion-skills/skills/motion-to-design/SKILL.md",
+      "computedHash": "ffe642b624b8791c7079d418bc93a5c01ec3ac1d8f39ea76094b198b9c1e3d70"
     },
     "pr": {
       "source": "mattpocock/skills",
@@ -324,6 +342,12 @@
       "sourceType": "github",
       "skillPath": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
       "computedHash": "61508216ede38d8cfa712879197a76f75f4896615dbf7abc3f62571f8f5923cc"
+    },
+    "studio-director": {
+      "source": "mateusarcedev/motion-studio",
+      "sourceType": "local",
+      "skillPath": "packages/motion-skills/skills/studio-director/SKILL.md",
+      "computedHash": "9fca9b52492b1a0628bc36aa08c16f6c89e35b8bcb71ec43a551f7588ca5c6fb"
     },
     "tdd": {
       "source": "mattpocock/skills",

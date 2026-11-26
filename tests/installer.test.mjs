@@ -30,20 +30,20 @@ async function quiet(fn) {
 }
 const run = (dir, opts = {}) => quiet(() => runBootstrap({ ...base, cwd: dir, ...opts }));
 
-test("empty directory → standalone: 14 public skills, no package.json/node_modules created", async () => {
+test("empty directory → standalone: 17 public skills, no package.json/node_modules created", async () => {
   const dir = await tmp();
   try {
     const r = await run(dir);
     assert.equal(r.ok, true, JSON.stringify(r.error));
     assert.equal(r.mode, "standalone");
-    assert.equal(PUBLIC.length, 14);
+    assert.equal(PUBLIC.length, 17);
     assert.deepEqual((await readdir(path.join(dir, ".agents", "skills"))).sort(), PUBLIC);
     assert.ok(!(await exists(path.join(dir, "package.json"))));
     assert.ok(!(await exists(path.join(dir, "node_modules"))));
     assert.ok(await exists(path.join(dir, "motion.config.json")));
     const m = await readManifest(dir);
     assert.equal(m.status, "complete");
-    assert.equal(Object.keys(m.skills).length, 14);
+    assert.equal(Object.keys(m.skills).length, 17);
     // universal install also links Claude Code when nothing is detected
     assert.deepEqual((await readdir(path.join(dir, ".claude", "skills"))).sort(), PUBLIC);
     assert.ok(!(await exists(path.join(dir, ".opencode"))), "no duplicate .opencode copy");
@@ -96,7 +96,7 @@ test("conflict: user's own skill is preserved; --force replaces with backup", as
     assert.equal(r.skills.find((s) => s.name === "studio-director").status, "conflict");
     assert.ok(r.warnings.some((w) => w.includes("studio-director")));
     assert.match(await readFile(path.join(mine, "SKILL.md"), "utf8"), /CUSTOM/);
-    assert.equal(r.skills.filter((s) => s.status === "installed").length, 13);
+    assert.equal(r.skills.filter((s) => s.status === "installed").length, 16);
 
     const f = await run(dir, { force: true });
     assert.equal(f.skills.find((s) => s.name === "studio-director").status, "replaced");
@@ -327,7 +327,7 @@ test("CLI binaries: motion init and motion-studio init share one implementation"
       assert.equal(r.status, 0, r.stderr);
       const report = JSON.parse(r.stdout);
       assert.equal(report.ok, true);
-      assert.equal(report.skills.length, 14);
+      assert.equal(report.skills.length, 17);
       assert.equal(spawnSync(process.execPath, [bin, "--version"], { encoding: "utf8" }).status, 0);
     } finally {
       await rm(dir, { recursive: true, force: true });

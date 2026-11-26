@@ -9,6 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packageDir = path.join(root, "packages", "motion-skills");
 const pkg = JSON.parse(await readFile(path.join(packageDir, "package.json"), "utf8"));
 const manifest = JSON.parse(await readFile(path.join(packageDir, "public-skills.json"), "utf8"));
+const lock = JSON.parse(await readFile(path.join(root, "skills-lock.json"), "utf8"));
 
 assert.equal(pkg.name, "@technomanceer/motion-studio-skills");
 assert.equal(pkg.version, "1.1.1");
@@ -38,4 +39,15 @@ for (const skill of manifest.skills) {
   assert.ok(skill.version.endsWith(skill.sha256.slice(0, 12)), `version must identify the content snapshot for ${skill.name}`);
 }
 
-console.log(`Verified ${manifest.skills.length} public Skills, source records, license files, and content hashes.`);
+let localLockCount = 0;
+for (const [name, entry] of Object.entries(lock.skills ?? {})) {
+  if (entry.sourceType !== "local") continue;
+  const localSkillPath = path.resolve(root, entry.skillPath);
+  assert.ok(localSkillPath.startsWith(`${root}${path.sep}`), `local lock path escapes repository for ${name}`);
+  assert.equal(path.basename(localSkillPath), "SKILL.md", `invalid local lock target for ${name}`);
+  const digest = createHash("sha256").update(await readFile(localSkillPath)).digest("hex");
+  assert.equal(digest, entry.computedHash, `stale local skills-lock.json hash for ${name}`);
+  localLockCount++;
+}
+
+console.log(`Verified ${manifest.skills.length} public Skills, ${localLockCount} local lock records, source records, licenses, and content hashes.`);

@@ -25,7 +25,7 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
   test("1. Descoberta de Skills", async () => {
     const skills = await listSkills();
     const localSkills = await listLocalSkills();
-    assert.equal(skills.length, 14, `Esperado o catálogo público de 14 skills, encontrado ${skills.length}`);
+    assert.equal(skills.length, 17, `Esperado o catálogo público de 17 skills, encontrado ${skills.length}`);
     assert.ok(localSkills.length >= 50, `Esperado preservar ao menos 50 skills locais, encontrado ${localSkills.length}`);
     const names = skills.map((s) => s.name);
     assert.ok(names.includes("studio-director"), "studio-director ausente");
@@ -36,6 +36,7 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     assert.ok(names.includes("3d-scene-director"), "3d-scene-director ausente");
     assert.ok(names.includes("reel-editor"), "reel-editor ausente");
     assert.ok(names.includes("voice-studio"), "voice-studio ausente");
+    for (const name of ["design-to-motion", "motion-to-design", "doop-bridge"]) assert.ok(names.includes(name), `${name} ausente`);
   });
 
   test("2. CLI Doctor (Diagnóstico de Dependências)", () => {
@@ -216,6 +217,8 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     assert.ok("aula-interativa" in EXTERNAL_INTEGRATIONS, "aula-interativa ausente em EXTERNAL_INTEGRATIONS");
     assert.ok("motion-designer" in EXTERNAL_INTEGRATIONS, "motion-designer ausente em EXTERNAL_INTEGRATIONS");
     assert.ok("ui-humanizer" in EXTERNAL_INTEGRATIONS, "ui-humanizer ausente em EXTERNAL_INTEGRATIONS");
+    assert.equal(EXTERNAL_INTEGRATIONS["doop-mcp"].kind, "mcp-server");
+    assert.equal(EXTERNAL_INTEGRATIONS["doop-mcp"].installCommand, undefined);
 
     assert.equal(
       EXTERNAL_INTEGRATIONS["aula-interativa"].commitSha,
@@ -226,6 +229,8 @@ describe("MOTION Studio — Suite de QA e Regressão", () => {
     // Validação de visualização na CLI
     const outList = execSync("node packages/motion-cli/bin/motion.mjs list", { encoding: "utf-8" });
     assert.ok(outList.includes("aula-interativa"), "CLI list deve listar aula-interativa");
+    assert.ok(outList.includes("doop-mcp"), "CLI list deve listar Doop como MCP opcional");
+    assert.ok(outList.includes("descoberta em tempo de execução"), "CLI deve explicar a descoberta dinâmica do Doop MCP");
     assert.ok(outList.includes("interactive"), "CLI list deve listar perfil interactive");
 
     // Validação do scaffold 'lesson' na CLI

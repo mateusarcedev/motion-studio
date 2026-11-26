@@ -4,7 +4,7 @@ O pacote é heterogêneo. `package.json` e este arquivo descrevem o escopo de ca
 
 ## Conteúdo MOTION Studio
 
-As dez Skills próprias listadas em `public-skills.json` são atribuídas a Mateus Arce e distribuídas sob Apache-2.0, conforme o arquivo `LICENSE` incluído. O manifesto fixa o snapshot exato de cada `SKILL.md` por SHA-256.
+As Skills próprias listadas em `public-skills.json` são atribuídas a Mateus Arce e distribuídas sob Apache-2.0, conforme o arquivo `LICENSE` incluído. O manifesto fixa o snapshot exato de cada `SKILL.md` por SHA-256.
 
 ## Conteúdo upstream
 
@@ -14,4 +14,4 @@ O manifesto público lista apenas esse conteúdo. As demais pastas mantidas no c
 
 ## Integrações externas
 
-`optional-integrations.json` contém metadados e comandos para buscar integrações nas fontes originais. Os arquivos dessas integrações não são incluídos no pacote. O usuário deve respeitar a licença e os termos atuais da fonte.
+`optional-integrations.json` contém metadados e comandos para buscar Skills da comunidade nas fontes originais. Os arquivos dessas integrações não são incluídos no pacote. A entrada `doop-mcp` é apenas uma referência ao servidor oficial opcional: não tem comando de instalação e exige descoberta de ferramentas/schemas em tempo de execução.

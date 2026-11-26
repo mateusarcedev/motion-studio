@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "source": "M3 Doop MCP schema verification recorded in packages/motion-core/bridge/adapters/doop.mjs",
+  "verifiedOn": "2026-11-24",
+  "tools": [
+    "get_canvas",
+    "get_frame",
+    "create_frame",
+    "set_frame_html",
+    "append_frame_html",
+    "edit_frame_html",
+    "upload_asset",
+    "get_frame_screenshot",
+    "get_prototype",
+    "save_decision"
+  ]
+}

@@ -95,8 +95,15 @@ export async function runList() {
     console.log("O perfil 'all' instala todas as Skills presentes no pacote público autorizado.\n");
 
     const integrations = Object.values(skillsCatalog.EXTERNAL_INTEGRATIONS ?? {});
-    if (integrations.length) console.log("### Integrações externas (metadados; instaladas diretamente da origem)\n");
+    if (integrations.length) console.log("### Integrações externas opcionais (metadados)\n");
     for (const ci of integrations) {
+      if (ci.kind === "mcp-server") {
+        console.log(`- **\`${ci.name}\`** — OPCIONAL (servidor MCP externo; descoberta em tempo de execução)`);
+        console.log(`  - *Origem:* ${ci.repo}`);
+        console.log(`  - *Especialidade:* ${ci.description} (perfil: \`${ci.profile}\`)`);
+        console.log(`  - *Acesso/licença:* ${ci.license}\n`);
+        continue;
+      }
       let isInstalled = false;
       for (const p of [
         path.join(process.cwd(), ".agents", "skills", ci.name),
