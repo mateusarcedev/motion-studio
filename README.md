@@ -9,7 +9,7 @@
 [![Playwright QA](https://img.shields.io/badge/QA-Playwright%205--Viewport-emerald.svg)](https://playwright.dev/)
 [![Engine: CFR 30fps](https://img.shields.io/badge/Video-CFR%2030FPS%20Deterministic-purple.svg)](docs/PRODUCTION_GUIDE.md)
 
-*57 local Agent Skills · 17 public Skills in the M5 catalog · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
+*57 local Agent Skills · 17 public Skills in this checkout · local Motion MCP over stdio · Claude Code · Codex · Google Antigravity · OpenCode · Playwright Multi-Viewport QA · Deterministic CFR Render Engine*
 
 🌐 Site: [motion.mateusarce.dev](https://motion.mateusarce.dev) · source: [mateusarcedev/motion-landing](https://github.com/mateusarcedev/motion-landing)
 
@@ -116,7 +116,7 @@ Instale o MOTION em qualquer projeto consumidor existente (Next.js, Vite, React,
 npx @technomanceer/motion-studio init
 ```
 
-Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as Skills públicas do pacote, integra aos agentes detectados, cria `motion.config.json` e roda o diagnóstico dos motores. Este checkout já contém as 17 Skills públicas da M5; a missão não publica uma nova versão npm, então use o CLI do código-fonte conforme [docs/INSTALLATION.md](docs/INSTALLATION.md) até o próximo release.
+Na raiz do seu projeto. O instalador instala **localmente** (nunca global) o CLI, o Core e as Skills públicas do pacote, integra aos agentes detectados, cria `motion.config.json` e roda o diagnóstico dos motores. Este checkout contém 17 Skills públicas e os tarballs passaram pela instalação limpa da M6, mas nenhuma versão nova foi publicada. O npm continua em 1.1.1 com 14 Skills públicas. Para usar a superfície M4–M6 antes do próximo release, instale e execute o CLI do código-fonte conforme [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
 Para conectar um cliente MCP local, veja [docs/MCP.md](docs/MCP.md). O servidor é iniciado pelo cliente via `stdio` e não expõe endpoint remoto.
 
@@ -203,7 +203,7 @@ Comandos:
 
 ## 🎯 Skill Distribution & Selective Profiles / Perfis de Skills
 
-O monorepo mantém 57 pastas de Skills; o manifesto do pacote neste checkout autoriza 17 para distribuição. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote resolvido. O npm 1.1.1 ainda publicado contém 14 até um próximo release. Sem `--profile`, o padrão `all` instala todas as Skills públicas da versão instalada.
+O monorepo mantém 57 pastas de Skills; o manifesto deste checkout autoriza 17 para distribuição. Os perfis abaixo selecionam Skills do catálogo local, e o instalador copia apenas a interseção com o pacote resolvido. A versão npm 1.1.1 ainda publicada contém 14. Sem `--profile`, o padrão `all` instala todas as Skills públicas da versão instalada.
 
 | Perfil | Skills Instaladas | Foco |
 |---|---|---|
@@ -249,7 +249,7 @@ O ecossistema é modularizado em três pacotes distribuíveis independentes:
 ```
 @motion-studio/
 ├── packages/motion-core           # Motores de render, QA Playwright, FFmpeg CFR, validadores
-├── packages/motion-skills         # Catálogo local de 54 Skills; pacote público com 14 autorizadas
+├── packages/motion-skills         # Catálogo local de 57 Skills; pacote do checkout com 17 autorizadas
 └── packages/motion-cli            # Binário 'motion', subcomandos e scaffolds funcionais
 ```
 

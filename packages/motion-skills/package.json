@@ -17,6 +17,8 @@
     "README.md",
     "skills/3d-scene-director/**",
     "skills/anatomy/**",
+    "!skills/anatomy/.github/**",
+    "!skills/anatomy/tests/**",
     "skills/carousel-studio/**",
     "skills/cinematic-product-director/**",
     "skills/design-to-motion/**",
