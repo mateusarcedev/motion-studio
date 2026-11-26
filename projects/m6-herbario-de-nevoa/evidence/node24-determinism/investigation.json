@@ -1,0 +1,331 @@
+{
+  "schemaVersion": "motion-studio-node24-determinism-investigation@1",
+  "recordedAt": "2026-11-26T17:35:45.945Z",
+  "status": "INTERMITTENT_INCIDENT_UNRESOLVED",
+  "historicalRemoteIncident": {
+    "workflowRunId": 45854878392,
+    "commit": "52244da",
+    "attempt1": {
+      "status": "failed",
+      "node": "24.22.3",
+      "ffmpeg": "6.1.1-3ubuntu5",
+      "streams": {
+        "video": {
+          "decodedHashA": "3f488e55…",
+          "decodedHashB": "583ba61e…",
+          "packetHashA": "9f54c69…",
+          "packetHashB": "254e396…"
+        },
+        "audio": {
+          "decodedIdentical": true,
+          "packetIdentical": true
+        },
+        "container": {
+          "sha256A": "280f334…",
+          "sha256B": "97b607…"
+        }
+      },
+      "fullAttempt1LogAvailable": false
+    },
+    "rerun": {
+      "status": "success",
+      "nodeMatrixJobsCompleted": 3,
+      "source": "GitHub Actions run page"
+    }
+  },
+  "localReproductions": [
+    {
+      "attempt": 1,
+      "utc": "2026-11-26T17:14:17.499Z",
+      "node": "v24.16.0",
+      "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+      "cpus": 4,
+      "ffmpeg": "ffmpeg version 8.0.1-3ubuntu2 Copyright (c) 2000-2025 the FFmpeg developers",
+      "chromium": "156.0.8078.4",
+      "compare": {
+        "status": "identical",
+        "identical": true,
+        "different": [],
+        "streams": {
+          "video": {
+            "decoded": {
+              "a": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+              "b": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+              "identical": true
+            },
+            "packets": {
+              "a": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+              "b": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+              "identical": true
+            }
+          },
+          "audio": {
+            "decoded": {
+              "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+              "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+              "identical": true
+            },
+            "packets": {
+              "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+              "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+              "identical": true
+            }
+          }
+        },
+        "container": {
+          "a": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+          "b": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+          "identical": true
+        },
+        "errors": []
+      },
+      "stages": {
+        "cli/reel.mp4": {
+          "bytes": 8178426,
+          "sha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3"
+        },
+        "mcp/reel.mp4": {
+          "bytes": 8178426,
+          "sha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3"
+        },
+        "cli/reel.voice.wav": {
+          "bytes": 1756902,
+          "sha256": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727"
+        },
+        "mcp/reel.voice.wav": {
+          "bytes": 1756902,
+          "sha256": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727"
+        },
+        "cli/preview.mp4": {
+          "bytes": 473818,
+          "sha256": "f5592663b0e40bb066371b56ef00e7bc9b1e7766863e34fd6606ac673b0f340e"
+        },
+        "mcp/preview.mp4": {
+          "bytes": 473818,
+          "sha256": "f5592663b0e40bb066371b56ef00e7bc9b1e7766863e34fd6606ac673b0f340e"
+        },
+        "cli/reel.captions.ass": {
+          "bytes": 2350,
+          "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+        },
+        "mcp/reel.captions.ass": {
+          "bytes": 2350,
+          "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+        }
+      }
+    },
+    {
+      "attempt": 2,
+      "utc": "2026-11-26T17:15:36.232Z",
+      "node": "v24.16.0",
+      "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+      "cpus": 4,
+      "ffmpeg": "ffmpeg version 8.0.1-3ubuntu2 Copyright (c) 2000-2025 the FFmpeg developers",
+      "chromium": "156.0.8078.4",
+      "compare": {
+        "status": "identical",
+        "identical": true,
+        "different": [],
+        "streams": {
+          "video": {
+            "decoded": {
+              "a": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+              "b": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+              "identical": true
+            },
+            "packets": {
+              "a": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+              "b": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+              "identical": true
+            }
+          },
+          "audio": {
+            "decoded": {
+              "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+              "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+              "identical": true
+            },
+            "packets": {
+              "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+              "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+              "identical": true
+            }
+          }
+        },
+        "container": {
+          "a": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+          "b": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+          "identical": true
+        },
+        "errors": []
+      },
+      "stages": {
+        "cli/reel.mp4": {
+          "bytes": 8178426,
+          "sha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3"
+        },
+        "mcp/reel.mp4": {
+          "bytes": 8178426,
+          "sha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3"
+        },
+        "cli/reel.voice.wav": {
+          "bytes": 1756902,
+          "sha256": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727"
+        },
+        "mcp/reel.voice.wav": {
+          "bytes": 1756902,
+          "sha256": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727"
+        },
+        "cli/preview.mp4": {
+          "bytes": 473818,
+          "sha256": "f5592663b0e40bb066371b56ef00e7bc9b1e7766863e34fd6606ac673b0f340e"
+        },
+        "mcp/preview.mp4": {
+          "bytes": 473818,
+          "sha256": "f5592663b0e40bb066371b56ef00e7bc9b1e7766863e34fd6606ac673b0f340e"
+        },
+        "cli/reel.captions.ass": {
+          "bytes": 2350,
+          "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+        },
+        "mcp/reel.captions.ass": {
+          "bytes": 2350,
+          "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+        }
+      }
+    }
+  ],
+  "ciDeterminismGate": {
+    "path": "projects/m6-herbario-de-nevoa/evidence/node24-determinism/ci-determinism-report.json",
+    "ok": true,
+    "uniqueWorkspaces": true,
+    "firstDiff": null,
+    "environment": {
+      "node": "v24.16.0",
+      "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+      "cpus": 4,
+      "ffmpeg": "ffmpeg version 8.0.1-3ubuntu2 Copyright (c) 2000-2025 the FFmpeg developers",
+      "chromium": {
+        "version": "156.0.8078.4",
+        "cardFonts": {
+          "c1-0-7b931f5b0264d57d.html": [
+            "DejaVu Sans / DejaVuSans-Bold"
+          ]
+        }
+      }
+    },
+    "stages": [
+      {
+        "stage": "segment:seg-001.mp4",
+        "a": "13bf6aa9734c806b36105e6f419f26c4121ebf2d873b6574edb78f46c26bcda6",
+        "b": "13bf6aa9734c806b36105e6f419f26c4121ebf2d873b6574edb78f46c26bcda6",
+        "identical": true
+      },
+      {
+        "stage": "segment:seg-002.mp4",
+        "a": "e1bd47bdf5b027865034fb3b254cd9c159d0685afffa31bfdaadbe5a6f088284",
+        "b": "e1bd47bdf5b027865034fb3b254cd9c159d0685afffa31bfdaadbe5a6f088284",
+        "identical": true
+      },
+      {
+        "stage": "segment:seg-003.mp4",
+        "a": "fd0a4eee826c243d64c9e8991ad81a863005a4bc757f55213805370d16b5cb86",
+        "b": "fd0a4eee826c243d64c9e8991ad81a863005a4bc757f55213805370d16b5cb86",
+        "identical": true
+      },
+      {
+        "stage": "card:c1-0-7b931f5b0264d57d.png",
+        "a": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+        "b": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+        "identical": true
+      },
+      {
+        "stage": "caption:ass",
+        "a": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+        "b": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+        "identical": true
+      },
+      {
+        "stage": "caption:srt",
+        "a": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+        "b": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+        "identical": true
+      },
+      {
+        "stage": "caption:words.srt",
+        "a": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+        "b": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+        "identical": true
+      },
+      {
+        "stage": "caption:json",
+        "a": "72ccefdcf32752e76976eb52bf91e46044e91cdd4cc9ca486914f934e4f85435",
+        "b": "72ccefdcf32752e76976eb52bf91e46044e91cdd4cc9ca486914f934e4f85435",
+        "identical": true
+      },
+      {
+        "stage": "voice",
+        "a": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727",
+        "b": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727",
+        "identical": true
+      },
+      {
+        "stage": "final",
+        "a": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+        "b": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+        "identical": true
+      }
+    ],
+    "compare": {
+      "status": "identical",
+      "identical": true,
+      "different": [],
+      "streams": {
+        "video": {
+          "decoded": {
+            "a": "d9e08f64036ac76cd7bed933d1c59d0607b273fa43d07c342d0e692fed5d91fa",
+            "b": "d9e08f64036ac76cd7bed933d1c59d0607b273fa43d07c342d0e692fed5d91fa",
+            "identical": true
+          },
+          "packets": {
+            "a": "34dc783649aa6a663804664cd44e9ae3008fc10d1f65476a387bd65d83b66571",
+            "b": "34dc783649aa6a663804664cd44e9ae3008fc10d1f65476a387bd65d83b66571",
+            "identical": true
+          }
+        },
+        "audio": {
+          "decoded": {
+            "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+            "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+            "identical": true
+          },
+          "packets": {
+            "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+            "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+            "identical": true
+          }
+        }
+      },
+      "container": {
+        "a": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+        "b": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+        "identical": true
+      },
+      "errors": []
+    }
+  },
+  "preservation": {
+    "originalTestsTmpMcpParityBaseline": "/tmp/m6-node24-mcp-parity-baseline-20261126",
+    "originalRestored": true,
+    "baselineAndRestoredReelSha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+    "run02Artifacts": "/tmp/m6-node24-parity-run-02-artifacts"
+  },
+  "investigation": {
+    "decodedVideoDiffMeansContentDiverged": true,
+    "decodedAudioIdenticalInHistoricalIncident": true,
+    "containerMetadataAloneDoesNotExplainHistoricalDifference": true,
+    "localAttemptsRepeatedSequentiallyInDistinctWorkspaces": true,
+    "codeChangeMade": false,
+    "rootCause": "Not reproduced. Local Node 24.16.0 + FFmpeg 8.0.1-3ubuntu2 + Chromium 156.0.8078.4 produced identical decoded video, encoded packets, audio and container on two CLI×MCP parity attempts. The historical CI environment differs (Node 24.22.3 and FFmpeg 6.1.1); this is insufficient to attribute cause. No determinism test was weakened."
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "attempt": 2,
+  "utc": "2026-11-26T17:15:36.232Z",
+  "node": "v24.16.0",
+  "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+  "cpus": 4,
+  "ffmpeg": "ffmpeg version 8.0.1-3ubuntu2 Copyright (c) 2000-2025 the FFmpeg developers",
+  "chromium": "156.0.8078.4",
+  "compare": {
+    "status": "identical",
+    "identical": true,
+    "different": [],
+    "streams": {
+      "video": {
+        "decoded": {
+          "a": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+          "b": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+          "identical": true
+        },
+        "packets": {
+          "a": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+          "b": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+          "identical": true
+        }
+      },
+      "audio": {
+        "decoded": {
+          "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "identical": true
+        },
+        "packets": {
+          "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "identical": true
+        }
+      }
+    },
+    "container": {
+      "a": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+      "b": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+      "identical": true
+    },
+    "errors": []
+  },
+  "stages": {
+    "cli/reel.mp4": {
+      "bytes": 8178426,
+      "sha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3"
+    },
+    "mcp/reel.mp4": {
+      "bytes": 8178426,
+      "sha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3"
+    },
+    "cli/reel.voice.wav": {
+      "bytes": 1756902,
+      "sha256": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727"
+    },
+    "mcp/reel.voice.wav": {
+      "bytes": 1756902,
+      "sha256": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727"
+    },
+    "cli/preview.mp4": {
+      "bytes": 473818,
+      "sha256": "f5592663b0e40bb066371b56ef00e7bc9b1e7766863e34fd6606ac673b0f340e"
+    },
+    "mcp/preview.mp4": {
+      "bytes": 473818,
+      "sha256": "f5592663b0e40bb066371b56ef00e7bc9b1e7766863e34fd6606ac673b0f340e"
+    },
+    "cli/reel.captions.ass": {
+      "bytes": 2350,
+      "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+    },
+    "mcp/reel.captions.ass": {
+      "bytes": 2350,
+      "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+    }
+  }
+}

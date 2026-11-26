@@ -1,0 +1,216 @@
+{
+  "ok": true,
+  "uniqueWorkspaces": true,
+  "firstDiff": null,
+  "env": {
+    "wrapper": true,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+    "cpus": 4,
+    "flags": "sse sse2 ssse3 fma sse4_1 sse4_2 avx bmi1 avx2 bmi2 avx_vnni",
+    "memGb": 6,
+    "node": "v24.16.0",
+    "ffmpeg": "ffmpeg version 8.0.1-3ubuntu2 Copyright (c) 2000-2025 the FFmpeg developers",
+    "chromium": {
+      "version": "156.0.8078.4",
+      "cardFonts": {
+        "c1-0-7b931f5b0264d57d.html": [
+          "DejaVu Sans / DejaVuSans-Bold"
+        ]
+      }
+    },
+    "captionFonts": [
+      "fontselect: (Inter, 700, 0) -> /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf, 0, DejaVuSans-Bold"
+    ],
+    "systemFonts": [
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf DejaVu Sans Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf DejaVu Sans Book",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf DejaVu Sans Mono Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf DejaVu Sans Mono Bold Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf DejaVu Sans Mono Oblique",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf DejaVu Sans Mono Book",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf DejaVu Serif Bold",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf DejaVu Serif Book",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu ",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Condensed Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Condensed Extra Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Condensed Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Condensed Light Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Condensed Medium Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Condensed Thin Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Extra Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Light Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Medium Italic",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf Ubuntu Thin Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono-Italic[wght].ttf Ubuntu Mono ",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono-Italic[wght].ttf Ubuntu Mono Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono-Italic[wght].ttf Ubuntu Mono Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono-Italic[wght].ttf Ubuntu Mono Medium Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono[wght].ttf Ubuntu Mono ",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono[wght].ttf Ubuntu Mono Bold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono[wght].ttf Ubuntu Mono Medium",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuMono[wght].ttf Ubuntu Mono Regular",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans ",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed ExtraBold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed ExtraLight Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed Light Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed Medium Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed SemiBold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Condensed Thin Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans ExtraBold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans ExtraLight Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Light Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Medium Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans SemiBold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans-Italic[wdth,wght].ttf Ubuntu Sans Thin Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono-Italic[wght].ttf Ubuntu Sans Mono ",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono-Italic[wght].ttf Ubuntu Sans Mono Bold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono-Italic[wght].ttf Ubuntu Sans Mono Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono-Italic[wght].ttf Ubuntu Sans Mono Medium Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono-Italic[wght].ttf Ubuntu Sans Mono SemiBold Italic",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono ",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono Bold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono ExtraLight",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono Light",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono Medium",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono Regular",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono SemiBold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSansMono[wght].ttf Ubuntu Sans Mono Thin",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans ",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Bold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed Bold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed ExtraBold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed ExtraLight",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed Light",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed Medium",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed Regular",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed SemiBold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Condensed Thin",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans ExtraBold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans ExtraLight",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Light",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Medium",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Regular",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans SemiBold",
+      "/usr/share/fonts/truetype/ubuntu/UbuntuSans[wdth,wght].ttf Ubuntu Sans Thin",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu ",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Bold",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Condensed",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Condensed Bold",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Condensed Extra Bold",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Condensed Light",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Condensed Medium",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Condensed Thin",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Extra Bold",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Light",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Medium",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Regular",
+      "/usr/share/fonts/truetype/ubuntu/Ubuntu[wdth,wght].ttf Ubuntu Thin"
+    ]
+  },
+  "stages": [
+    {
+      "stage": "segment:seg-001.mp4",
+      "a": "13bf6aa9734c806b36105e6f419f26c4121ebf2d873b6574edb78f46c26bcda6",
+      "b": "13bf6aa9734c806b36105e6f419f26c4121ebf2d873b6574edb78f46c26bcda6",
+      "identical": true
+    },
+    {
+      "stage": "segment:seg-002.mp4",
+      "a": "e1bd47bdf5b027865034fb3b254cd9c159d0685afffa31bfdaadbe5a6f088284",
+      "b": "e1bd47bdf5b027865034fb3b254cd9c159d0685afffa31bfdaadbe5a6f088284",
+      "identical": true
+    },
+    {
+      "stage": "segment:seg-003.mp4",
+      "a": "fd0a4eee826c243d64c9e8991ad81a863005a4bc757f55213805370d16b5cb86",
+      "b": "fd0a4eee826c243d64c9e8991ad81a863005a4bc757f55213805370d16b5cb86",
+      "identical": true
+    },
+    {
+      "stage": "card:c1-0-7b931f5b0264d57d.png",
+      "a": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+      "b": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2",
+      "identical": true
+    },
+    {
+      "stage": "caption:ass",
+      "a": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+      "b": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+      "identical": true
+    },
+    {
+      "stage": "caption:srt",
+      "a": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+      "b": "d451039daea94f379f9e1030bf994f631f1732a318a007185e1a0561d7f532eb",
+      "identical": true
+    },
+    {
+      "stage": "caption:words.srt",
+      "a": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+      "b": "5f96d6468e25a7acdf59efc6a0d229ff1931693289157b15536d642a2d0c5806",
+      "identical": true
+    },
+    {
+      "stage": "caption:json",
+      "a": "72ccefdcf32752e76976eb52bf91e46044e91cdd4cc9ca486914f934e4f85435",
+      "b": "72ccefdcf32752e76976eb52bf91e46044e91cdd4cc9ca486914f934e4f85435",
+      "identical": true
+    },
+    {
+      "stage": "voice",
+      "a": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727",
+      "b": "0faebf96a8966d7db69d07cd55d22d2c083cbe85fd1af47c73b7e5fb163d1727",
+      "identical": true
+    },
+    {
+      "stage": "final",
+      "a": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+      "b": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+      "identical": true
+    }
+  ],
+  "compare": {
+    "status": "identical",
+    "identical": true,
+    "different": [],
+    "streams": {
+      "video": {
+        "decoded": {
+          "a": "d9e08f64036ac76cd7bed933d1c59d0607b273fa43d07c342d0e692fed5d91fa",
+          "b": "d9e08f64036ac76cd7bed933d1c59d0607b273fa43d07c342d0e692fed5d91fa",
+          "identical": true
+        },
+        "packets": {
+          "a": "34dc783649aa6a663804664cd44e9ae3008fc10d1f65476a387bd65d83b66571",
+          "b": "34dc783649aa6a663804664cd44e9ae3008fc10d1f65476a387bd65d83b66571",
+          "identical": true
+        }
+      },
+      "audio": {
+        "decoded": {
+          "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "identical": true
+        },
+        "packets": {
+          "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "identical": true
+        }
+      }
+    },
+    "container": {
+      "a": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+      "b": "38d79d78bbcc5ceb2200dc51e34bff37f2a9b20ef0d2f074779a2bd93a97054d",
+      "identical": true
+    },
+    "errors": []
+  }
+}
