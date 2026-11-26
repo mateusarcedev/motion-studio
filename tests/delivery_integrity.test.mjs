@@ -115,6 +115,34 @@ test("legacy extension filters cannot hide produced media from an auto-generated
   assert.equal(JSON.parse(await readFile(path.join(dir, "assets.manifest.json"), "utf8")).validation.status, "FAIL");
 });
 
+test("auto-generated delivery excludes credential-like files and fails closed with a specific finding", async (t) => {
+  const dir = await mkdtemp(path.join(tmpRoot, "sensitive-auto-")); t.after(async () => rm(dir, { recursive: true, force: true }));
+  await mkdir(path.join(dir, "out/final"), { recursive: true });
+  await mkdir(path.join(dir, "config"), { recursive: true });
+  await writeFile(path.join(dir, "out/final/card.png"), tinyPng());
+  await writeFile(path.join(dir, "config/service-account.json"), JSON.stringify({ private_key: "fixture-only" }));
+  const zip = path.join(tmpRoot, "sensitive-auto.zip"), out = await exportProject(dir, zip);
+  assert.equal(out.status, 2, allOutput(out));
+  const contract = JSON.parse(await readFile(path.join(dir, "delivery.contract.json"), "utf8"));
+  assert.deepEqual(contract.artifacts.map((item) => item.path), ["out/final/card.png"]);
+  assert.ok(contract.filteredOut.includes("config/service-account.json"));
+  const manifest = JSON.parse(await readFile(path.join(dir, "assets.manifest.json"), "utf8"));
+  assert.ok(manifest.validation.findings.some((item) => item.id === "delivery.sensitive_file"));
+  assert.ok(!manifest.files.some((item) => item.path === "config/service-account.json"));
+  await assert.rejects(stat(zip));
+});
+
+test("an explicit delivery contract cannot package credential-like files", async (t) => {
+  const dir = await fixture(t, {
+    files: { "credentials/service-account.json": JSON.stringify({ private_key: "fixture-only" }) },
+    artifacts: [{ path: "credentials/service-account.json", role: "support", required: true }],
+  });
+  const zip = path.join(tmpRoot, "sensitive-explicit.zip"), out = await exportProject(dir, zip);
+  assert.equal(out.status, 2, allOutput(out));
+  assert.match(allOutput(out), /delivery\.sensitive_file/);
+  await assert.rejects(stat(zip));
+});
+
 test("missing optional artifact is allowed and omitted from the manifest/ZIP", async (t) => {
   const dir = await fixture(t, { files: { "out/final/card.png": tinyPng() }, producedRoots: ["out/final"], artifacts: [imageArtifact(), imageArtifact("out/final/optional.png", false)] });
   const zip = path.join(tmpRoot, "optional.zip"), out = await exportProject(dir, zip);

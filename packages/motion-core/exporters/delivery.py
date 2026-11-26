@@ -28,6 +28,28 @@ CONTRACT_NAME = "delivery.contract.json"
 SKIP_DIRS = {".git", "node_modules", ".cache", ".motion"}
 SUPPORTED = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".mp4", ".webm", ".mov", ".wav", ".mp3", ".ogg", ".html", ".htm", ".css", ".js", ".mjs", ".json", ".md", ".txt", ".pdf", ".woff", ".woff2", ".ttf", ".otf", ".py", ".tsx", ".ts", ".jsx", ".xml", ".srt", ".vtt", ".ass"}
 MIME_OVERRIDES = {".ass": "text/x-ssa", ".js": "text/javascript", ".mjs": "text/javascript", ".md": "text/markdown", ".woff": "font/woff", ".woff2": "font/woff2", ".ttf": "font/ttf", ".otf": "font/otf"}
+SENSITIVE_EXPORT_DIRS = {".aws", ".azure", ".credentials", ".secrets", ".ssh", "credentials", "secrets", "private-keys"}
+SENSITIVE_EXPORT_BASENAMES = {
+    ".netrc", ".npmrc", ".pypirc", "auth.json", "credentials", "credential", "credentials.json", "credential.json",
+    "secret", "secrets", "secret.json", "secrets.json", "client_secret.json", "client-secret.json",
+    "service-account.json", "service_account.json", "private-key.json", "private_key.json", "token.json",
+    "oauth-token.json", "oauth_token.json", "access-token.json", "access_token.json", "refresh-token.json", "refresh_token.json",
+    "api-key.json", "api_key.json", "apikey.json", "id_rsa", "id_ed25519", "id_ecdsa", "id_dsa", "authorized_keys",
+}
+SENSITIVE_EXPORT_NAME_PART = re.compile(r"(?:^|[._-])(?:secret|secrets|credential|credentials|client[-_]?secret|service[-_]?account|private[-_]?key|api[-_]?key|access[-_]?token|refresh[-_]?token|oauth[-_]?token)(?:$|[._-])", re.IGNORECASE)
+
+
+def is_sensitive_export_path(rel):
+    """Keep likely credentials out of both inferred and explicitly declared deliveries."""
+    if not isinstance(rel, str) or not safe_relative(rel):
+        return False
+    parts = [part.casefold() for part in PurePosixPath(rel).parts]
+    basename = parts[-1]
+    if basename == ".env" or basename.startswith(".env."):
+        return True
+    if any(part in SENSITIVE_EXPORT_DIRS for part in parts[:-1]):
+        return True
+    return basename in SENSITIVE_EXPORT_BASENAMES or bool(SENSITIVE_EXPORT_NAME_PART.search(basename))
 
 
 def sha256_file(path):
@@ -291,10 +313,14 @@ def load_contract(root, extensions=None):
             continue
         if any(x in SKIP_DIRS for x in p.parts) or p.suffix.lower() == ".zip":
             continue
-        if extensions and p.suffix.lower().lstrip(".") not in extensions:
-            filtered_out.append(p.relative_to(root).as_posix())
+        rel = p.relative_to(root).as_posix()
+        if is_sensitive_export_path(rel):
+            filtered_out.append(rel)
             continue
-        files.append({"path": p.relative_to(root).as_posix(), "role": "deliverable", "required": True})
+        if extensions and p.suffix.lower().lstrip(".") not in extensions:
+            filtered_out.append(rel)
+            continue
+        files.append({"path": rel, "role": "deliverable", "required": True})
     obj = {"schemaVersion": SCHEMA_VERSION, "project": root.name, "generated": True, "producedRoots": [], "artifacts": files, "filteredOut": filtered_out}
     return obj, (json.dumps(obj, ensure_ascii=False, indent=2) + "\n").encode()
 
@@ -302,7 +328,10 @@ def load_contract(root, extensions=None):
 def inspect_contract(root, contract):
     findings, records = [], []
     for omitted in contract.get("filteredOut", []):
-        findings.append({"id": "produced.omitted", "status": "FAIL", "path": omitted, "details": "arquivo compatível foi removido pelo filtro legado; declare a entrega explicitamente no contrato"})
+        if is_sensitive_export_path(omitted):
+            findings.append({"id": "delivery.sensitive_file", "status": "FAIL", "path": omitted, "details": "arquivo com aparência de credencial removido da entrega; retire-o do projeto antes de exportar"})
+        else:
+            findings.append({"id": "produced.omitted", "status": "FAIL", "path": omitted, "details": "arquivo compatível foi removido pelo filtro legado; declare a entrega explicitamente no contrato"})
     artifacts = contract.get("artifacts", [])
     seen, folded = set(), set()
     valid_specs = []
@@ -310,6 +339,9 @@ def inspect_contract(root, contract):
         rel = item.get("path") if isinstance(item, dict) else None
         if not safe_relative(rel):
             findings.append({"id": "contract.path", "status": "FAIL", "path": rel, "details": "caminho absoluto, vazio ou traversal"})
+            continue
+        if is_sensitive_export_path(rel):
+            findings.append({"id": "delivery.sensitive_file", "status": "FAIL", "path": rel, "details": "contrato não pode incluir arquivos com aparência de credencial"})
             continue
         if rel in seen or rel.casefold() in folded:
             findings.append({"id": "contract.duplicate", "status": "FAIL", "path": rel, "details": "caminho duplicado"})
@@ -354,7 +386,10 @@ def inspect_contract(root, contract):
         if not actual:
             findings.append({"id": "producedRoot.empty", "status": "FAIL", "path": root_rel, "details": "diretório de saída não contém arquivos"})
         for omitted in sorted(actual - seen):
-            findings.append({"id": "produced.omitted", "status": "FAIL", "path": omitted, "details": "arquivo produzido não foi declarado no contrato"})
+            if is_sensitive_export_path(omitted):
+                findings.append({"id": "delivery.sensitive_file", "status": "FAIL", "path": omitted, "details": "arquivo com aparência de credencial não pode ser incluído em uma raiz produzida"})
+            else:
+                findings.append({"id": "produced.omitted", "status": "FAIL", "path": omitted, "details": "arquivo produzido não foi declarado no contrato"})
     for font in contract.get("fonts", []):
         rel = font.get("path") if isinstance(font, dict) else None
         if not isinstance(font, dict):
