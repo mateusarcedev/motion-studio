@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": "frame",
+  "engine": "design-system/frame.js",
+  "source": {
+    "editor": "doop",
+    "workspaceId": null,
+    "documentId": "Gz620okdHY",
+    "pageId": "Gz620okdHY:page1",
+    "frameId": "-_E_wx3ROp",
+    "frameName": "03-mobile",
+    "revision": "2026-11-26T11:47:21.730Z",
+    "approvalStatus": "draft",
+    "capturedAt": null
+  },
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "theme": "default",
+    "deviceScaleFactor": 1
+  },
+  "irHash": "c07541d3dcfd097a0f2ee69895dcb2aef54718f460fdca81b7cde761fc3273d7",
+  "preserved": [
+    {
+      "kind": "viewport",
+      "width": 390,
+      "height": 844,
+      "theme": "default",
+      "deviceScaleFactor": 1
+    },
+    {
+      "kind": "hierarchy-and-markup",
+      "sourceFrameId": "-_E_wx3ROp"
+    }
+  ],
+  "converted": [],
+  "removedForSecurity": [
+    {
+      "severity": "blocked",
+      "code": "SCRIPT_STRIPPED",
+      "message": "Elemento <script> removido de HTML importado",
+      "detail": null,
+      "phase": "import"
+    }
+  ],
+  "incompatible": [
+    {
+      "kind": "css-transitions",
+      "count": 4,
+      "policy": "stripped-for-deterministic-render",
+      "note": "Transições CSS baseadas em interação/relógio removidas para garantir determinismo frame-a-frame."
+    }
+  ],
+  "missingAssets": [],
+  "fallbacksApplied": [],
+  "diagnostics": [],
+  "stats": {
+    "preservedCount": 2,
+    "convertedCount": 0,
+    "removedForSecurityCount": 1,
+    "incompatibleCount": 1,
+    "missingAssetsCount": 0,
+    "fallbacksAppliedCount": 0
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": "frame",
+  "engine": "design-system/frame.js",
+  "source": {
+    "editor": "doop",
+    "workspaceId": null,
+    "documentId": "Gz620okdHY",
+    "pageId": "Gz620okdHY:page1",
+    "frameId": "Xw8Is9_4vi",
+    "frameName": "05-prototype",
+    "revision": "2026-11-26T11:50:30.340Z",
+    "approvalStatus": "draft",
+    "capturedAt": null
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "theme": "default",
+    "deviceScaleFactor": 1
+  },
+  "irHash": "5a73b70411734bfbcc7de5885db100293494cf9d1a9f9c97567bbf814c728b41",
+  "preserved": [
+    {
+      "kind": "viewport",
+      "width": 1280,
+      "height": 800,
+      "theme": "default",
+      "deviceScaleFactor": 1
+    },
+    {
+      "kind": "hierarchy-and-markup",
+      "sourceFrameId": "Xw8Is9_4vi"
+    },
+    {
+      "kind": "prototype-flows-metadata",
+      "count": 5
+    }
+  ],
+  "converted": [],
+  "removedForSecurity": [],
+  "incompatible": [
+    {
+      "kind": "css-transitions",
+      "count": 1,
+      "policy": "stripped-for-deterministic-render",
+      "note": "Transições CSS baseadas em interação/relógio removidas para garantir determinismo frame-a-frame."
+    }
+  ],
+  "missingAssets": [],
+  "fallbacksApplied": [],
+  "diagnostics": [],
+  "stats": {
+    "preservedCount": 3,
+    "convertedCount": 0,
+    "removedForSecurityCount": 0,
+    "incompatibleCount": 1,
+    "missingAssetsCount": 0,
+    "fallbacksAppliedCount": 0
+  }
+}

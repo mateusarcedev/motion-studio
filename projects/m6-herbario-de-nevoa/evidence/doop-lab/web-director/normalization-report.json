@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": "web-director",
+  "engine": "renderers/qa_viewports.mjs",
+  "source": {
+    "editor": "doop",
+    "workspaceId": null,
+    "documentId": "Gz620okdHY",
+    "pageId": "Gz620okdHY:page1",
+    "frameId": "h9rCOmRg0g",
+    "frameName": "01-landing",
+    "revision": "2026-11-26T11:45:20.219Z",
+    "approvalStatus": "draft",
+    "capturedAt": null
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "theme": "default",
+    "deviceScaleFactor": 1
+  },
+  "irHash": "d4922d1074a5eeb2ee3da12ab992796c17ddffa5ac8e575e1df4e43870ac3973",
+  "preserved": [
+    {
+      "kind": "viewport",
+      "width": 1280,
+      "height": 800,
+      "theme": "default",
+      "deviceScaleFactor": 1
+    },
+    {
+      "kind": "hierarchy-and-markup",
+      "sourceFrameId": "h9rCOmRg0g"
+    },
+    {
+      "kind": "design-tokens",
+      "brandSlug": "herbario-de-nevoa",
+      "themes": []
+    }
+  ],
+  "converted": [],
+  "removedForSecurity": [
+    {
+      "severity": "blocked",
+      "code": "SCRIPT_STRIPPED",
+      "message": "Elemento <script> removido de HTML importado",
+      "detail": null,
+      "phase": "import"
+    }
+  ],
+  "incompatible": [],
+  "missingAssets": [],
+  "fallbacksApplied": [],
+  "diagnostics": [],
+  "stats": {
+    "preservedCount": 3,
+    "convertedCount": 0,
+    "removedForSecurityCount": 1,
+    "incompatibleCount": 0,
+    "missingAssetsCount": 0,
+    "fallbacksAppliedCount": 0
+  }
+}

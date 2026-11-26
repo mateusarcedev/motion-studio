@@ -1,0 +1,12 @@
+:root {
+  --paper: #eae6da;
+  --paper-light: #f4f0e6;
+  --ink: #26352e;
+  --moss: #56694f;
+  --clay: #91503d;
+  --berry: #754652;
+  --line: #c7c1b1;
+  --serif: Georgia,'DejaVu Serif',serif;
+  --sans: Ubuntu,'DejaVu Sans',sans-serif;
+  --mono: 'Ubuntu Mono','DejaVu Sans Mono',monospace;
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR" data-doop-theme="default">
+<head>
+<meta charset="utf-8" />
+<style data-motion-reset>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;width:1280px;height:800px;overflow:hidden}[data-motion-stage]{width:100%;height:100%;position:relative;}</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>02 — Índice do caderno</title><style>:root{--paper:#eae6da;--light:#f4f0e6;--ink:#26352e;--moss:#56694f;--clay:#91503d;--berry:#754652;--line:#c7c1b1;--serif:Georgia,'DejaVu Serif',serif;--sans:Ubuntu,'DejaVu Sans',sans-serif;--mono:'Ubuntu Mono','DejaVu Sans Mono',monospace}*{margin:0;box-sizing:border-box}body{height:800px;background:var(--paper);color:var(--ink);font-family:var(--sans);display:grid;grid-template-columns:240px 1fr}aside{padding:34px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:44px}.brand{font:19px var(--serif)}.brand em{color:var(--berry)}.kicker{font:11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--clay)}.nav{display:grid;gap:8px}.nav a{padding:13px 14px;color:#536058;text-decoration:none;font-size:14px;border-radius:2px}.nav a.active{background:var(--ink);color:var(--light)}.side-note{margin-top:auto;border-top:1px solid var(--line);padding-top:16px;font:13px/1.55 var(--serif);color:#536058}main{padding:42px 52px 36px;display:flex;flex-direction:column;gap:27px;min-width:0}.top{display:flex;justify-content:space-between;align-items:center}.top small{font:11px var(--mono);letter-spacing:.1em;color:#536058}.title{display:flex;align-items:end;justify-content:space-between;gap:20px}.title h1{font:48px/.98 var(--serif);letter-spacing:-.04em;max-width:600px}.title p{font:14px/1.5 var(--serif);max-width:290px;color:#536058}.stats{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--line)}.stat{padding:14px 18px;border-right:1px solid var(--line);display:flex;align-items:baseline;gap:12px}.stat:last-child{border:0}.stat b{font:27px var(--serif);font-weight:400}.stat span{font:11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#536058}.section{display:flex;align-items:center;justify-content:space-between}.section h2{font:22px var(--serif)}.section span{font:11px var(--mono);color:var(--clay)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;min-height:280px}.card{background:var(--light);border:1px solid var(--line);display:grid;grid-template-rows:145px 1fr;min-width:0}.art{display:grid;place-items:center;background:#dedbce;border-bottom:1px solid var(--line);position:relative}.art svg{width:120px;height:120px}.idx{position:absolute;left:14px;top:13px;font:10px var(--mono);letter-spacing:.1em}.copy{padding:15px 17px;display:flex;flex-direction:column;gap:7px}.copy h3{font:22px var(--serif);font-weight:400}.copy p{font:12px/1.45 var(--serif);color:#536058}.tag{margin-top:auto;font:10px var(--mono);letter-spacing:.08em;color:var(--berry);text-transform:uppercase}.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:13px;font:10px var(--mono);letter-spacing:.08em;color:#536058}</style>
+<script type="module">
+import createMotionDriver from "@technomanceer/motion-core/frame";
+import { createSvgMotion } from "@technomanceer/motion-core/svg-motion";
+const SVG_CONTROLLERS = [];
+for (const svg of document.querySelectorAll("svg[data-motion-svg]")) {
+  const paths = svg.querySelectorAll("[data-motion-path]");
+  const layers = svg.querySelectorAll("[data-layer]");
+  const steps = [];
+  if (paths.length) steps.push({ target: "[data-motion-path]", effect: "draw", start: 0, duration: 1.5, stagger: 0.08, easing: "outCubic" });
+  if (layers.length) steps.push({ target: "[data-layer]", effect: "fade", start: 0.1, duration: 0.9, stagger: 0.05, from: 0, to: 1 });
+  if (steps.length) SVG_CONTROLLERS.push(createSvgMotion(svg, steps));
+}
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  const root = document.querySelector("[data-motion-stage]") || document.body;
+  const w = d.window(0, 0.8);
+  const p = d.ease.outCubic(w.progress);
+  if (root) root.style.opacity = String((0.92 + 0.08 * p).toFixed(4));
+  for (const ctrl of SVG_CONTROLLERS) ctrl.seek(M);
+};
+if (!window.__MOTION_DRIVEN__) {
+  window.__onFrame__({ frame: 0, time: 0, fps: 30, totalFrames: 120, seed: 1 });
+}
+</script>
+</head>
+<body>
+<div data-motion-stage data-motion-target="frame"><aside><div class="brand">Herbário <em>de Névoa</em></div><div><p class="kicker">Caderno de campo</p><nav class="nav"><a class="active" href="#catalogo">01&nbsp; Espécies</a><a href="#nota">02&nbsp; Anotações</a><a href="#atlas">03&nbsp; Atlas</a></nav></div><p class="side-note">Um arquivo para observar aquilo que só existe quando alguém imagina.</p></aside><main id="catalogo"><div class="top"><span class="kicker">Atlas · edição de estudo</span><small>COLEÇÃO 01 &nbsp; / &nbsp; 2026</small></div><div class="title"><h1>O que floresce<br>no intervalo.</h1><p>Três espécies inventadas, reunidas num caderno sem mapa e sem coordenadas reais.</p></div><div class="stats"><div class="stat"><b>03</b><span>espécies fictícias</span></div><div class="stat"><b>06</b><span>lâminas ilustradas</span></div><div class="stat"><b>01</b><span>mundo imaginário</span></div></div><div class="section"><h2>Folhas do caderno</h2><span>ÍNDICE MANUAL &nbsp; ↗</span></div><div class="cards">
+<article class="card"><div class="art"><span class="idx">FIG. 01</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" aria-label="Flor fictícia" data-motion-svg="svg-1"><path d="M60 64C32 62 29 42 42 36c10-5 17 4 18 18 3-26 21-28 27-17 6 11-7 23-22 28 24-11 37 3 28 14-8 10-22 5-31-8 11 22-3 35-14 27-10-8-5-22 8-31-21 12-33-1-25-12 6-9 18-9 29-1Z" fill="#754652" stroke="#26352e" stroke-width="2" /><path d="M60 64v43m0-18c-17-3-25-12-30-24m30 31c16-7 24-16 29-27" fill="none" stroke="#56694f" stroke-width="3" stroke-linecap="round" /></svg></div><div class="copy"><h3>Lunária cinza</h3><p>Uma flor que se abre entre duas lembranças.</p><span class="tag">espécie imaginária</span></div></article>
+<article class="card"><div class="art" style="background:#e2d7c8"><span class="idx">FIG. 02</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" aria-label="Folha fictícia" data-motion-svg="svg-2"><path d="M25 95C25 48 52 20 99 19c0 43-25 76-74 76Z" fill="#9b9d7b" stroke="#26352e" stroke-width="2" /><path d="M29 91 86 31m-39 41 1-20m17 1 17-1" fill="none" stroke="#56694f" stroke-width="2" /></svg></div><div class="copy"><h3>Fio de bruma</h3><p>Um caule fino, desenhado como uma linha a lápis.</p><span class="tag">espécie imaginária</span></div></article>
+<article class="card"><div class="art" style="background:#d8ded2"><span class="idx">FIG. 03</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" aria-label="Semente fictícia" data-motion-svg="svg-3"><path d="M60 19c22 20 26 42 0 82-26-40-22-62 0-82Z" fill="#b07c61" stroke="#26352e" stroke-width="2" /><path d="M60 34v54m0-26c-12-10-19-10-25-9m25 20c10-10 17-12 24-12" fill="none" stroke="#56694f" stroke-width="2" /></svg></div><div class="copy"><h3>Semente do avesso</h3><p>Guarda por dentro a paisagem que ainda não nasceu.</p><span class="tag">espécie imaginária</span></div></article></div><footer class="foot"><span>ESPÉCIES FICTÍCIAS · PROJETO DE HOMOLOGAÇÃO</span><span>HERBÁRIO DE NÉVOA &nbsp; — &nbsp; 02</span></footer></main></div>
+</body>
+</html>

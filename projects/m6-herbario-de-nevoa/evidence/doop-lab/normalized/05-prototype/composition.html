@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR" data-doop-theme="default">
+<head>
+<meta charset="utf-8" />
+<style data-motion-reset>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;width:1280px;height:800px;overflow:hidden}[data-motion-stage]{width:100%;height:100%;position:relative;}</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>05 — Protótipo explorável</title><style>:root{--paper:#eae6da;--light:#f4f0e6;--ink:#26352e;--moss:#56694f;--clay:#91503d;--berry:#754652;--line:#c7c1b1;--serif:Georgia,'DejaVu Serif',serif;--sans:Ubuntu,'DejaVu Sans',sans-serif;--mono:'Ubuntu Mono','DejaVu Sans Mono',monospace}*{margin:0;box-sizing:border-box}body{height:800px;background:var(--paper);color:var(--ink);font-family:var(--sans);padding:34px 54px;display:flex;flex-direction:column;gap:25px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:16px}.brand{font:18px var(--serif)}.brand em{color:var(--berry)}.kicker{font:10px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--clay)}.layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center;flex:1}.intro h1{font:58px/.98 var(--serif);letter-spacing:-.045em;font-weight:400;margin:14px 0 20px}.intro p{font:16px/1.6 var(--serif);color:#536058;max-width:410px}.flower{margin-top:34px;width:100%;height:270px;display:grid;place-items:center;position:relative}.flower:before,.flower:after{content:"";position:absolute;border:1px solid var(--line);border-radius:50%;width:245px;height:245px}.flower:after{width:188px;height:188px;transform:rotate(24deg)}.flower svg{width:185px;position:relative;z-index:1}.steps{border-top:1px solid var(--line)}.linkrow{color:inherit;text-decoration:none}.step{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:17px;padding:15px 3px;border-bottom:1px solid var(--line)}.step .num{font:11px var(--mono);color:var(--clay)}.step h2{font:21px var(--serif);font-weight:400}.step p{font:12px/1.4 var(--serif);color:#536058;margin-top:3px}.link{font:11px var(--mono);letter-spacing:.06em;color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:11px 14px;min-width:126px;text-align:center}.link:hover{background:var(--ink);color:var(--light)}footer{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:13px;font:10px var(--mono);letter-spacing:.08em;color:#536058}</style>
+<script type="module">
+import createMotionDriver from "@technomanceer/motion-core/frame";
+import { createSvgMotion } from "@technomanceer/motion-core/svg-motion";
+const SVG_CONTROLLERS = [];
+for (const svg of document.querySelectorAll("svg[data-motion-svg]")) {
+  const paths = svg.querySelectorAll("[data-motion-path]");
+  const layers = svg.querySelectorAll("[data-layer]");
+  const steps = [];
+  if (paths.length) steps.push({ target: "[data-motion-path]", effect: "draw", start: 0, duration: 1.5, stagger: 0.08, easing: "outCubic" });
+  if (layers.length) steps.push({ target: "[data-layer]", effect: "fade", start: 0.1, duration: 0.9, stagger: 0.05, from: 0, to: 1 });
+  if (steps.length) SVG_CONTROLLERS.push(createSvgMotion(svg, steps));
+}
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  const root = document.querySelector("[data-motion-stage]") || document.body;
+  const w = d.window(0, 0.8);
+  const p = d.ease.outCubic(w.progress);
+  if (root) root.style.opacity = String((0.92 + 0.08 * p).toFixed(4));
+  for (const ctrl of SVG_CONTROLLERS) ctrl.seek(M);
+};
+if (!window.__MOTION_DRIVEN__) {
+  window.__onFrame__({ frame: 0, time: 0, fps: 30, totalFrames: 120, seed: 1 });
+}
+</script>
+</head>
+<body>
+<div data-motion-stage data-motion-target="frame"><header class="top"><span class="brand">Herbário <em>de Névoa</em></span><span class="kicker">05 · fluxo de protótipo</span></header><main class="layout"><section class="intro"><p class="kicker">Uma visita pelo caderno</p><h1>Folheie o<br>impossível.</h1><p>Escolha uma página para observar como o mesmo atlas se transforma. Cada ligação abaixo é uma transição de protótipo real no Doop MCP.</p><div class="flower" aria-label="Desenho original da Lunária cinza"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" data-motion-svg="svg-1"><path d="M100 130C55 117 50 82 70 69c15-10 29 3 31 25 5-39 34-42 43-24 8 18-12 34-35 42 37-17 57 5 44 22-12 16-34 7-47-12 16 33-5 54-21 42-15-12-8-34 12-47-32 18-50-2-38-18 9-14 28-13 45 2Z" fill="#754652" stroke="#26352e" stroke-width="2" /><circle cx="100" cy="130" r="12" fill="#d2b17b" /><path d="M100 143v101m0-53c-21-6-34-20-43-39m43 57c19-9 32-23 40-42" fill="none" stroke="#56694f" stroke-width="4" stroke-linecap="round" /></svg></div></section><nav class="steps" aria-label="Destinos do protótipo">
+<a class="step linkrow" href="#landing" data-doop-on="click" data-doop-action="navigate:h9rCOmRg0g"><span class="num">01</span><div><h2>Abertura do atlas</h2><p>Composição editorial para desktop.</p></div><span class="link">Abrir capa&nbsp; ↗</span></a>
+<a class="step linkrow" href="#dashboard" data-doop-on="click" data-doop-action="navigate:CwjMdBJXXs"><span class="num">02</span><div><h2>Índice do caderno</h2><p>Espécies fictícias em um painel de leitura.</p></div><span class="link">Ver índice&nbsp; ↗</span></a>
+<a class="step linkrow" href="#mobile" data-doop-on="click" data-doop-action="navigate:-_E_wx3ROp"><span class="num">03</span><div><h2>Margem estreita</h2><p>Recomposição vertical para celular.</p></div><span class="link">Ver mobile&nbsp; ↗</span></a>
+<a class="step linkrow" href="#components" data-doop-on="click" data-doop-action="navigate:w0A1aPBoAb"><span class="num">04</span><div><h2>Peças do herbário</h2><p>Referência preservada; biblioteca não expandida.</p></div><span class="link">Ver padrões&nbsp; ↗</span></a>
+<a class="step linkrow" href="#dark" data-doop-on="click" data-doop-action="navigate:unjOCGtIza"><span class="num">06</span><div><h2>Vigília noturna</h2><p>Variação escura da mesma identidade.</p></div><span class="link">Abrir noite&nbsp; ↗</span></a>
+</nav></main><footer><span>ESPÉCIES FICTÍCIAS · PROJETO DE HOMOLOGAÇÃO</span><span>ESCOLHA UM DESTINO PARA CONTINUAR</span></footer></div>
+</body>
+</html>

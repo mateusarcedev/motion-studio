@@ -4,7 +4,7 @@
 
 ## Resultado
 
-A homologação local está concluída: campanha fictícia original produzida pelo fluxo criativo existente, execução pelo Motion MCP stdio, QA visual, instalação limpa dos quatro tarballs, testes MCP com cliente oficial e correções de segurança. A M6 permanece **parcial** porque o Doop MCP não listou o canvas permitido `Motion Studio — Integration Lab`. Não houve leitura nem escrita em canvases externos. A autorização específica para criar/popular o laboratório ainda não foi concedida.
+A homologação local está concluída: campanha fictícia original produzida pelo fluxo criativo existente, execução pelo Motion MCP stdio, QA visual, instalação limpa dos quatro tarballs, testes MCP com cliente oficial e correções de segurança. Em 2026-11-26, com autorização limitada, foi criado o canvas `Motion Studio — Integration Lab` e nele foram criados somente os seis frames sintéticos descritos abaixo. A M6 permanece **parcial**: não houve autorização para exportar ao editor, e a biblioteca global de tokens/componentes não está exposta pelo Doop MCP conectado. Nenhum outro canvas foi aberto ou alterado.
 
 M1–M5 permanecem concluídas conforme seus relatórios. A M3 registra CI remoto aprovado. M6 não altera versão npm nem publica pacotes.
 
@@ -45,17 +45,26 @@ Os quatro PNGs de smoke, um por cliente, têm SHA-256 `4f0b481e6f7a6d65a8e0686fb
 
 ## Doop MCP oficial e limites de componentes
 
-O Doop MCP oficial estava disponível. `list_canvases` não encontrou `Motion Studio — Integration Lab`; canvases de outros projetos não foram abertos nem modificados. O catálogo oferece `create_canvas`, `create_frame`, `get_canvas`, `get_frame`, `get_frame_screenshot`, `get_prototype`, operações de HTML e `upload_asset`. `create_canvas` não foi chamado sem autorização específica.
+O Doop MCP oficial estava disponível. `list_canvases` confirmou que o laboratório ainda não existia; não foram abertos canvases de outros projetos. Após a autorização limitada do usuário, foi criado o canvas [Motion Studio — Integration Lab](https://doop.design/c/Gz620okdHY). Foram feitas apenas as operações neste canvas: criação dos seis frames, pequenos ajustes visuais/ligação de protótipo nesses mesmos frames, releitura dos seis frames, leitura do protótipo e screenshots. Não houve upload de assets, alterações globais de tokens/componentes, exportação ou operação em outro canvas.
 
-O guia do Doop menciona operações `create_tokens` e `create_components`, mas esses nomes não existem no catálogo MCP conectado. Também não há ferramenta de inspeção/expansão de uma biblioteca de componentes. Por isso:
+| Frame | ID Doop | Tamanho | Screenshot Doop persistido e SHA-256 |
+|---|---|---:|---|
+| `01-landing` | `h9rCOmRg0g` | 1280×800 | [PNG](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/01-landing.png) · `c31f7926a097fbbb175cfe07c9f2d4aef7c3a6d4e6b55e8595c86161a6746d56` |
+| `02-dashboard` | `CwjMdBJXXs` | 1280×800 | [PNG](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/02-dashboard.png) · `fa56a6c9c8d3314deec521afef57c39865d06000a7e11f042affdb2cfd0c44fa` |
+| `03-mobile` | `-_E_wx3ROp` | 390×844 | [PNG](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/03-mobile.png) · `03a8223aa8500f9260f8162ed511e69d2d5f1772644b2a01ebc4e4cd79f412b8` |
+| `04-components` | `w0A1aPBoAb` | 1280×800 | [PNG](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/04-components.png) · `5957b3b2089214bdf1baa57faa36beb4283f9de53ea7a316246c42cbe47cfb7b` |
+| `05-prototype` | `Xw8Is9_4vi` | 1280×800 | [PNG](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/05-prototype.png) · `c2a64a7d62d870b994da5c4d68f58fc5f5c81b47e1ff771eca7caa4766afc7d3` |
+| `06-dark-theme` | `unjOCGtIza` | 1280×800 | [PNG](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/06-dark-theme.png) · `77c5b0777b8500cacbbb3a5d98c9dad971e277a21f98969aca534fbfe3382138` |
 
-- O fluxo externo de importação, leitura de screenshots, exportação e releitura continua `NOT_TESTED`.
-- A fixture `04-components` preserva `<doop-use>`, mas não comprova resolução, aparência ou reutilização do componente real.
-- Fidelidade visual e fidelidade estrutural do canvas Doop, editabilidade de componentes e preservação de tokens globais permanecem sem medida.
-- Não foi calculado SSIM contra Doop. SSIM de fixtures anteriores não comprova aparência, editabilidade ou componentes que não foram renderizados.
-- O dry-run local classificou HTML sanitizado como editável, PNG com licença desconhecida como bloqueado, e vídeo como poster/storyboard referencial. JavaScript, vídeo e 3D não são declarados como elementos nativos editáveis.
+O readback dos seis frames e `get_prototype` está em [`doop-frames-readback.json`](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/doop-frames-readback.json). `get_prototype` confirmou cinco ações `click → navigate` de `05-prototype`, com todos os cinco destinos existentes. O Motion MCP stdio importou os seis frames: **6/6 DesignIR válidos**, **6/6 normalizações para frame** e **6/6 renders estáticos PASS**. Os renders persistidos e seus hashes estão em [`motion-rendered/`](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-rendered/) e no resumo [`local-bridge-results.json`](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/local-bridge-results.json). O target `web-director` também normalizou a landing page e passou `qa_viewports` nos cinco tamanhos: 360×740, 390×844, 768×1024, 1280×800 e 1920×1080. A captura Motion correspondente é [01-landing-web.png](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/motion-rendered/01-landing-web.png), SHA-256 `fcb3e06fd99cc9531e0461bb295b89c77f3380ad1eea472cd8975259e6971b64`.
 
-O dry-run sintético de Motion-to-Design retornou `executed: false`; nenhuma operação externa foi simulada como sucesso.
+O primeiro `qa_viewports` foi executado sobre o target `frame`, que mantém o artboard fixo em 1280×800; a verificação multiviewport falhou com overflow nos viewports menores e erro do import bare `@technomanceer/motion-core/frame` fora do runtime de animação. Esse resultado não foi tratado como aprovação responsiva. A landing foi verificada separadamente pelo target responsivo `web-director`, que passou nos cinco viewports. As screenshots Doop foram comparadas visualmente com os renders locais; não foi calculado SSIM.
+
+O `get_canvas` não expôs tokens globais nem uma biblioteca de componentes, e o catálogo MCP atual não oferece operações de leitura/escrita para esses recursos. `bridge_import_tokens` extraiu e validou **10 tokens locais** do `:root` de `01-landing`; isso não comprova nem altera tokens globais do editor. A criação de `04-components` retornou `COMPONENT: no component “Specimen Card”`; a instância `<doop-use>` não aparece no `get_frame` posterior. O frame conserva uma representação textual do contrato, mas não demonstra expansão, aparência ou reutilização de componente real.
+
+Na importação local, o sanitizador removeu os scripts inline de `01-landing` e `03-mobile` (`SCRIPT_STRIPPED`); quatro transições CSS também foram removidas para render determinístico. Não havia URLs de assets externos. O storyboard local derivado dos fluxos observados está em [`doop-lab-prototype-storyboard.md`](../../projects/m6-herbario-de-nevoa/evidence/doop-lab/doop-lab-prototype-storyboard.md), SHA-256 `80e8a98f00e86e8402e87a703777ca06df2e1b5f49db6f0ae7770aba73fb9e7e`. A ausência de resolução real de componentes, tokens globais e comportamento JavaScript limita a fidelidade funcional; as classificações de editabilidade não devem ser estendidas a esses recursos.
+
+Não foram executados exports para o Doop: eles ficaram explicitamente fora da autorização recebida. O relatório anterior de dry-run continua sendo apenas plano local; nenhuma operação externa foi simulada como sucesso.
 
 ## Produções criativas locais
 
@@ -107,7 +116,7 @@ Consulta ao registry em 2026-11-26 confirmou `1.1.1` como versão publicada de c
 | `npm run test:py` | PASS — 25 testes, 108,1 s, sem skips. |
 | `npm run skills:verify` | PASS — 17 Skills públicas, 4 registros locais no lock e hashes/licenças íntegros. |
 | `node packages/motion-cli/bin/motion.mjs doctor --json` | PASS — Node 24.16, Python, FFmpeg, Chromium e dependências obrigatórias; opcionais ausentes aparecem como `INFO`. |
-| `npm pack --dry-run` | Raiz privada: 10.837 arquivos, 468.122.610 bytes compactados, 678.013.298 descompactados. Pacotes públicos e instalação limpa descritos acima. |
+| `npm pack --dry-run` | Raiz privada: 10.871 arquivos, cerca de 469,3 MB compactados e 679,6 MB descompactados; inclui as 33 evidências do piloto Doop. Pacotes públicos e instalação limpa descritos acima. |
 | Release gate `scripts/release-gate.mjs` | O gate de publicação 1.1.1 terminou `FAIL`: R1–R14 passaram (R2: 361/361); R15 `NOT_TESTED` localmente para Node 20/22; R16 `BLOCKED` por ausência de login npm; R17 `FAIL` porque os quatro pacotes 1.1.1 já existem no registry. Nenhum pacote foi publicado nem tentativa de publicação feita. Relatório detalhado em [`MISSION_23_M6_RELEASE_GATE.md`](MISSION_23_M6_RELEASE_GATE.md). |
 | Node.js | Somente 24.16.0 está instalado localmente. Node 20/22 estão ausentes; os três majors precisam ser confirmados no CI pós-push. |
 | CI remoto | PASS em `c0e2ec0ee719fab1ed340601344891e7dea8e8a5`: testes Node 20/22/24 e determinismo, quatro jobs aprovados. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45757036913). |
@@ -118,14 +127,13 @@ As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test 
 
 `v1.2.0` é uma versão minor coerente com a adição compatível de ferramentas MCP locais, três Skills de integração, perfis de instalação, proteções de recursos e empacotamento revisado. Os quatro `package.json` permanecem em `1.1.1`; os tarballs acima são validação local e não publicação. A proposta, checklist, compatibilidade e ordem de atualização estão em [`RELEASE_NOTES_1.2.0_PROPOSAL.md`](RELEASE_NOTES_1.2.0_PROPOSAL.md).
 
-**Recomendação:** manter a versão como proposta até o CI Node 20/22/24 passar e o piloto Doop ser concluído, ou a próxima release declarar explicitamente o Doop externo como não homologado. Não publicar nesta missão.
+**Recomendação:** manter a versão como proposta. O piloto Doop agora comprova criação do laboratório autorizado, leitura, importação e transformação local; não comprova exportação ao editor, que ficou fora da autorização recebida. Antes da release, confirmar CI Node 20/22/24 no commit final e declarar claramente que a escrita Motion-to-Design no Doop continua sem homologação. Não alterar versão nem publicar nesta missão.
 
 ## Trabalho restante para fechar M6
 
-1. Autorizar explicitamente a chamada oficial `create_canvas` com o nome **Motion Studio — Integration Lab**. Nenhuma criação externa ocorreu.
-2. Criar nesse canvas apenas os seis frames sintéticos previstos: `01-landing`, `02-dashboard`, `03-mobile`, `04-components`, `05-prototype` e `06-dark-theme`.
-3. Ler os frames/protótipo e screenshots com as ferramentas Doop atualmente disponíveis; importar, validar e produzir através do Motion MCP; registrar perdas estruturais/visuais e a ausência de APIs globais de tokens/componentes.
-4. Rodar `motion-to-design` para gerar e validar um dry-run. Apresentar o plano exato e pedir autorização separada antes de qualquer escrita de exportação no Doop.
-5. Reler as telas alteradas, comparar screenshots e hashes, reexecutar gates afetados, registrar resultados e atualizar M6 para completa apenas se a homologação externa terminar.
+1. A homologação autorizada do laboratório foi executada: canvas criado e exatamente seis frames sintéticos escritos, lidos de volta e capturados. O usuário autorizou apenas esse laboratório e esses frames; exports e alterações em outros canvases não estão autorizados.
+2. A importação, validação DesignIR, normalização e render local passaram em 6/6 frames; a landing responsiva passou em 5/5 viewports no target `web-director`. O teste sobre o target fixo `frame` falhou nos viewports menores e permanece documentado como limitação, não como aprovação.
+3. O fluxo de saída Motion-to-Design foi mantido em dry-run. Não realizar escrita no Doop sem nova autorização explícita. A falta de ferramentas Doop para tokens globais e biblioteca/componentes impede homologar esses recursos; `04-components` não demonstrou expansão de `<doop-use>`.
+4. A escrita Motion-to-Design no Doop permanece sem homologação porque não foi autorizada nesta execução; qualquer piloto de exportação exige escopo e autorização separados. Tokens globais e componentes seguem indisponíveis no catálogo MCP observado. M6 permanece parcial.
 
 Nenhum passo da M6 avança automaticamente para uma nova missão.

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR" data-doop-theme="default">
+<head>
+<meta charset="utf-8" />
+<style data-motion-reset>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;width:1280px;height:800px;overflow:hidden}[data-motion-stage]{width:100%;height:100%;position:relative;}</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>06 — Vigília noturna</title><style>:root{--night:#26352e;--night-deep:#1d2924;--paper:#eae6da;--light:#f4f0e6;--moss:#a4b294;--clay:#d19a7d;--berry:#b78089;--line:#66766b;--serif:Georgia,'DejaVu Serif',serif;--sans:Ubuntu,'DejaVu Sans',sans-serif;--mono:'Ubuntu Mono','DejaVu Sans Mono',monospace}*{margin:0;box-sizing:border-box}body{height:800px;background:var(--night);color:var(--light);font-family:var(--sans);display:flex;flex-direction:column}.head{height:76px;padding:0 78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{font:18px var(--serif);color:var(--light)}.brand em{color:var(--clay)}.kicker{font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--clay)}main{flex:1;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px;padding:40px 78px 30px}.copy{max-width:520px}.copy h1{font:clamp(58px,7vw,94px)/.98 var(--serif);letter-spacing:-.06em;font-weight:400;margin:22px 0 27px;color:var(--paper)}.copy h1 em{color:var(--moss);font-weight:400}.copy p{font:19px/1.55 var(--serif);color:#d0d6ca;max-width:410px}.note{margin-top:30px;border-top:1px solid var(--line);padding-top:15px;font:10px var(--mono);letter-spacing:.1em;color:#c4cbbd}.figure{height:520px;display:grid;place-items:center;position:relative}.figure:before,.figure:after{content:"";position:absolute;border:1px solid var(--line);border-radius:50%;width:420px;height:420px}.figure:after{width:335px;height:335px;transform:rotate(28deg);border-color:#56675d}.figure svg{width:330px;position:relative;z-index:1}.caption{position:absolute;bottom:18px;right:36px;font:10px var(--mono);letter-spacing:.1em;color:#c4cbbd}.foot{margin:0 78px 24px;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:14px;font:10px var(--mono);letter-spacing:.1em;color:#c4cbbd}</style>
+<script type="module">
+import createMotionDriver from "@technomanceer/motion-core/frame";
+import { createSvgMotion } from "@technomanceer/motion-core/svg-motion";
+const SVG_CONTROLLERS = [];
+for (const svg of document.querySelectorAll("svg[data-motion-svg]")) {
+  const paths = svg.querySelectorAll("[data-motion-path]");
+  const layers = svg.querySelectorAll("[data-layer]");
+  const steps = [];
+  if (paths.length) steps.push({ target: "[data-motion-path]", effect: "draw", start: 0, duration: 1.5, stagger: 0.08, easing: "outCubic" });
+  if (layers.length) steps.push({ target: "[data-layer]", effect: "fade", start: 0.1, duration: 0.9, stagger: 0.05, from: 0, to: 1 });
+  if (steps.length) SVG_CONTROLLERS.push(createSvgMotion(svg, steps));
+}
+window.__onFrame__ = (M) => {
+  const d = createMotionDriver(M);
+  const root = document.querySelector("[data-motion-stage]") || document.body;
+  const w = d.window(0, 0.8);
+  const p = d.ease.outCubic(w.progress);
+  if (root) root.style.opacity = String((0.92 + 0.08 * p).toFixed(4));
+  for (const ctrl of SVG_CONTROLLERS) ctrl.seek(M);
+};
+if (!window.__MOTION_DRIVEN__) {
+  window.__onFrame__({ frame: 0, time: 0, fps: 30, totalFrames: 120, seed: 1 });
+}
+</script>
+</head>
+<body>
+<div data-motion-stage data-motion-target="frame"><header class="head"><span class="brand">Herbário <em>de Névoa</em></span><span class="kicker">06 · variação de tema</span></header><main><section class="copy"><p class="kicker">Quando o caderno fecha</p><h1>Um atlas<br>para o que<br><em>não existe.</em></h1><p>A Lunária cinza floresce no intervalo entre a última luz e uma memória inventada.</p><div class="note">ESPÉCIES FICTÍCIAS · PROJETO DE HOMOLOGAÇÃO MOTION STUDIO</div></section><figure class="figure" aria-label="Ilustração original de uma flor imaginária"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 420" role="img" aria-label="Flor da Lunária cinza" data-motion-svg="svg-1"><path d="M170 205c-54-10-68-53-41-73 21-15 42 4 44 34 6-53 45-57 57-32 11 24-16 47-47 57 51-22 78 7 60 30-16 21-46 9-64-16 22 45-7 74-28 57-20-16-11-46 16-64-44 25-68-2-52-24 12-19 38-18 61 1Z" fill="#b78089" stroke="#d7b5ac" stroke-width="2.5" /><circle cx="171" cy="205" r="17" fill="#d6b47a" /><path d="M170 221v157m0-82c-28-8-45-27-58-53m58 79c25-12 43-31 54-57" fill="none" stroke="#a4b294" stroke-width="5" stroke-linecap="round" /><path d="M112 296c-35-40-63-48-80-36 4 38 38 57 80 36Zm58 38c30-42 59-57 81-50-5 38-37 61-81 50Z" fill="#829177" stroke="#c4cbbd" stroke-width="2" /></svg><figcaption class="caption">FIG. 06 · LUNÁRIA · NOITE IMAGINADA</figcaption></figure></main><footer class="foot"><span>HERBÁRIO DE NÉVOA &nbsp;—&nbsp; 2026</span><span>EDIÇÃO ESCURA</span></footer></div>
+</body>
+</html>

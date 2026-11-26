@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": "frame",
+  "engine": "design-system/frame.js",
+  "source": {
+    "editor": "doop",
+    "workspaceId": null,
+    "documentId": "Gz620okdHY",
+    "pageId": "Gz620okdHY:page1",
+    "frameId": "unjOCGtIza",
+    "frameName": "06-dark-theme",
+    "revision": "2026-11-26T11:50:04.974Z",
+    "approvalStatus": "draft",
+    "capturedAt": null
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "theme": "default",
+    "deviceScaleFactor": 1
+  },
+  "irHash": "d7fce1e23e1b945ee6da77f0f53cc3f7a1f302fe6e102f12ca28754fd6bde1ef",
+  "preserved": [
+    {
+      "kind": "viewport",
+      "width": 1280,
+      "height": 800,
+      "theme": "default",
+      "deviceScaleFactor": 1
+    },
+    {
+      "kind": "hierarchy-and-markup",
+      "sourceFrameId": "unjOCGtIza"
+    }
+  ],
+  "converted": [],
+  "removedForSecurity": [],
+  "incompatible": [],
+  "missingAssets": [],
+  "fallbacksApplied": [],
+  "diagnostics": [],
+  "stats": {
+    "preservedCount": 2,
+    "convertedCount": 0,
+    "removedForSecurityCount": 0,
+    "incompatibleCount": 0,
+    "missingAssetsCount": 0,
+    "fallbacksAppliedCount": 0
+  }
+}
