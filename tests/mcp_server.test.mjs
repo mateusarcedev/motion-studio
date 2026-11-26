@@ -230,4 +230,3 @@ test("render, QA, carousel, video, SVG and Bridge tools report real output integ
     await client.close();
   }
 });
-
