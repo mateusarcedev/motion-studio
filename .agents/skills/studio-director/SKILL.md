@@ -132,6 +132,8 @@ Evitar questionários exaustivos com 10 perguntas mecânicas. Perguntar apenas o
 | **Edição de vídeo gravado (talking-head, entrevista, tutorial, podcast, Reels de celular)** | Edição real · cortes · legendas · voz | **`reel-editor`** | **`voice-studio`** · `motion edit` · STT local |
 | **Lançamento de app/feature, teaser, filme de produto, logo em 3D** | Filme de produto (`ui-launch` / `cinema-3d`) | **`cinematic-product-director`** | `3d-scene-director` · `motion-director` |
 | **Short narrado a partir de texto, história ou versículo** | Short ilustrado | **`shorts-director`** | TTS · legendas |
+| **Design existente → produção Motion local** | Fidelidade de layout, tokens e estados | **`design-to-motion`** | `doop-bridge` (se Doop MCP estiver conectado) · Skills de formato · Motion MCP |
+| **Produção Motion → editor de design** | Pacote editável + frames representativos | **`motion-to-design`** | `doop-bridge` (planejamento e ferramenta oficial, se disponível) · Motion MCP |
 
 **Precedência:** carrossel, stories, post e site ficam nos estúdios próprios, mesmo quando o assunto é lançamento;
 depois vem gravação existente (`reel-editor`), short narrado (`shorts-director`) e só então filme de produto
@@ -141,6 +143,14 @@ depois vem gravação existente (`reel-editor`), short narrado (`shorts-director
 cortar pausas, legendar, melhorar o áudio ou "transformar em Reels", encaminhe ao **`reel-editor`**
 (e ao **`voice-studio`** se o pedido for só áudio). Não recrie a cena em código nem escreva FFmpeg
 à mão: o motor `motion edit` faz análise, transcrição local, cortes, legendas, render e QA.
+
+**Design e editor externo.** Para importar frames, tokens ou protótipos existentes e produzir localmente,
+encaminhe a **`design-to-motion`**. Para preparar frames, carrosséis, storyboards, SVGs, assets,
+tokens ou HTML editável para outro editor, encaminhe a **`motion-to-design`**. Use **`doop-bridge`**
+para descobrir e coordenar o Doop MCP oficial quando ele estiver disponível. Doop é opcional; o
+Motion MCP funciona localmente por `stdio`, e o agente nunca presume métodos que não encontrou.
+Planos do Motion não publicam alterações. Escritas externas passam pelo MCP oficial do editor e
+exigem autorização explícita, salvo quando o pedido atual já a concede.
 
 ---
 

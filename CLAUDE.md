@@ -56,6 +56,10 @@ campaign art**, through the same departments, independent critic and repair poli
 
 - **Routing:** `studio-director` is the front door; it dispatches to **motion-director**
   (video — v1 pipeline untouched) or **carousel-studio / story-studio / feed-studio** (static).
+  For existing design frames/tokens/prototypes use `design-to-motion`; for Motion exports to a
+  design editor use `motion-to-design`; coordinate the optional official Doop MCP through
+  `doop-bridge`. The Motion MCP stays local over `stdio`; without Doop, independent Motion work
+  continues normally.
 - **Agent-agnostic engines:** renderer (`creative-core/renderers/render_static.mjs`, Playwright +
   Chromium), validator (`validate_static.py`), exporter (`zip_export.py`) and gallery
   (`build_gallery.py`) run via CLI and belong to no agent.
