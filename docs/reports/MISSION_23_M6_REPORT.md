@@ -110,9 +110,9 @@ Consulta ao registry em 2026-11-26 confirmou `1.1.1` como versão publicada de c
 | `npm pack --dry-run` | Raiz privada: 10.837 arquivos, 468.122.610 bytes compactados, 678.013.298 descompactados. Pacotes públicos e instalação limpa descritos acima. |
 | Release gate `scripts/release-gate.mjs` | O gate de publicação 1.1.1 terminou `FAIL`: R1–R14 passaram (R2: 361/361); R15 `NOT_TESTED` localmente para Node 20/22; R16 `BLOCKED` por ausência de login npm; R17 `FAIL` porque os quatro pacotes 1.1.1 já existem no registry. Nenhum pacote foi publicado nem tentativa de publicação feita. Relatório detalhado em [`MISSION_23_M6_RELEASE_GATE.md`](MISSION_23_M6_RELEASE_GATE.md). |
 | Node.js | Somente 24.16.0 está instalado localmente. Node 20/22 estão ausentes; os três majors precisam ser confirmados no CI pós-push. |
-| CI remoto | A executar após o push autorizado nesta missão. |
+| CI remoto | PASS em `c0e2ec0ee719fab1ed340601344891e7dea8e8a5`: testes Node 20/22/24 e determinismo, quatro jobs aprovados. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45757036913). |
 
-As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test tests/mcp_server.test.mjs tests/mcp_resource_limits.test.mjs tests/delivery_integrity.test.mjs` — 29 testes, 0 falhas. A repetição final do script de distribuição após as correções também passou; os tarballs e os testes de instalação correspondem às métricas na tabela. O teste de produção via cliente MCP oficial completou chamadas reais de render, QA, SVG e Bridge. O `git diff --check` passou antes dos commits; o resultado de CI remoto será acrescentado após o push.
+As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test tests/mcp_server.test.mjs tests/mcp_resource_limits.test.mjs tests/delivery_integrity.test.mjs` — 29 testes, 0 falhas. A repetição final do script de distribuição após as correções também passou; os tarballs e os testes de instalação correspondem às métricas na tabela. O teste de produção via cliente MCP oficial completou chamadas reais de render, QA, SVG e Bridge. O `git diff --check` passou antes dos commits. A mesma matriz será verificada novamente após o commit documental deste relatório.
 
 ## Recomendação de release
 

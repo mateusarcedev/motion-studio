@@ -66,7 +66,9 @@
 
 **Pendência que mantém a M6 parcial:** Doop MCP oficial estava disponível, mas `list_canvases` não encontrou `Motion Studio — Integration Lab`. Nenhum canvas foi lido ou alterado. O catálogo inclui `create_canvas`, mas ele não foi chamado sem autorização específica; o catálogo não inclui ferramentas públicas `create_tokens`/`create_components` nem inspeção/expansão da biblioteca de componentes. O round-trip real, a fixture `04-components` e as screenshots Doop permanecem `NOT_TESTED`. Detalhes, operações pendentes, artefatos, hashes, testes e pacote/release estão em [`docs/reports/MISSION_23_M6_REPORT.md`](../reports/MISSION_23_M6_REPORT.md).
 
-**Pacotes e release:** tarballs locais 1.1.1 instalados em diretório temporário limpo; nenhum pacote publicado e nenhuma versão alterada. A recomendação e proposta de changelog v1.2.0 estão em [`docs/reports/RELEASE_NOTES_1.2.0_PROPOSAL.md`](../reports/RELEASE_NOTES_1.2.0_PROPOSAL.md). A M6 local só poderá ser encerrada como completa após cumprir a pendência do Doop e os gates remotos descritos no relatório.
+**Gates remotos M6:** CI PASS no commit `c0e2ec0ee719fab1ed340601344891e7dea8e8a5` — testes Node 20/22/24 e determinismo, 4/4 jobs. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45757036913). Localmente: 361 testes JavaScript, 25 Python, determinismo, Skills, Doctor e instalação limpa PASS. O release gate de publicação fica `FAIL` porque 1.1.1 já existe no registry; publicação foi omitida.
+
+**Pacotes e release:** tarballs locais 1.1.1 instalados em diretório temporário limpo; nenhum pacote publicado e nenhuma versão alterada. A recomendação e proposta de changelog v1.2.0 estão em [`docs/reports/RELEASE_NOTES_1.2.0_PROPOSAL.md`](../reports/RELEASE_NOTES_1.2.0_PROPOSAL.md). A M6 permanece parcial até cumprir a pendência do Doop, embora os gates remotos já tenham passado.
 
 ### Arquitetura vigente (M4–M6)
 
