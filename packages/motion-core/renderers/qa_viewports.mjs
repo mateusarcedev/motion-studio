@@ -9,9 +9,10 @@
  * Writes <outdir>/report.json and report.md. Exit code 1 if any check fails.
  */
 import { launchBrowser } from "../lib/browser.mjs"
-import { mkdir, writeFile, stat, realpath } from "node:fs/promises"
+import { mkdir, writeFile, lstat, realpath } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { createStaticServer } from "../lib/static-server.mjs"
 
 export const VIEWPORTS = [
   { name: "mobile-s", width: 360, height: 740, touch: true },
@@ -29,11 +30,28 @@ if (!url || !outdir) {
   console.error("usage: qa_viewports.mjs <url> <outdir> [--wait=ms] [--canvas=selector]")
   process.exit(2)
 }
-const targetUrl = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")
+let targetUrl = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")
   ? url
   : `file://${path.resolve(url)}`
 const offline = args.includes("--offline")
 const workspaceRoot = await realpath(opt["workspace-root"] ? path.resolve(opt["workspace-root"]) : process.cwd())
+let staticServer = null
+if (!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) {
+  const sourcePath = url.startsWith("file:") ? fileURLToPath(new URL(url)) : path.resolve(url)
+  const sourceStat = await lstat(sourcePath)
+  if (!sourceStat.isFile() || sourceStat.isSymbolicLink()) {
+    throw new Error("QA multi-viewport exige um arquivo HTML regular; symlinks não são aceitos.")
+  }
+  const sourceRealPath = await realpath(sourcePath)
+  const sourceRelative = path.relative(workspaceRoot, sourceRealPath)
+  const sourceWithinWorkspace = sourceRelative === "" || (!sourceRelative.startsWith(".." + path.sep) && sourceRelative !== ".." && !path.isAbsolute(sourceRelative))
+  if (offline && !sourceWithinWorkspace) {
+    throw new Error("QA offline bloqueou o HTML que está fora do workspace autorizado.")
+  }
+  staticServer = createStaticServer(sourcePath)
+  const port = await staticServer.listen()
+  targetUrl = "http://127.0.0.1:" + port + "/"
+}
 
 const waitMs = Number(opt.wait ?? 4000)
 const canvasSel = opt.canvas ?? "canvas"
@@ -79,12 +97,14 @@ let browser
 try {
   ;({ browser } = await launchBrowser({ args: ["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] }))
 } catch (error) {
+  staticServer?.close()
   console.error(`❌ [${error.code ?? "MOTION_UNEXPECTED"}] ${error.message}${error.hint ? `\n   → ${error.hint}` : ""}`)
   process.exit(error.exitCode ?? 1)
 }
-await mkdir(outdir, { recursive: true })
 const results = []
 
+try {
+await mkdir(outdir, { recursive: true })
 for (const vp of VIEWPORTS) {
   const ctx = await browser.newContext({
     viewport: { width: vp.width, height: vp.height },
@@ -139,7 +159,10 @@ for (const vp of VIEWPORTS) {
   results.push({ viewport: vp.name, size: `${vp.width}x${vp.height}`, ok: issues.length === 0, issues, metrics: m })
   await ctx.close()
 }
-await browser.close()
+} finally {
+  try { await browser.close() }
+  finally { staticServer?.close() }
+}
 
 await writeFile(path.join(outdir, "report.json"), JSON.stringify({ url, results }, null, 2))
 const md = ["# QA multi-viewport", "", `URL: ${url}`, "", "| viewport | size | result | issues |", "|---|---|---|---|",

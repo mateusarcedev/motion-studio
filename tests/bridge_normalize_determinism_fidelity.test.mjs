@@ -118,22 +118,42 @@ test("normalize: converts across frame, svg-motion, carousel, story, and web-dir
   assert.ok(!frameOut.html.includes("@keyframes"));
   assert.ok(frameOut.report.converted.some((c) => c.kind === "css-keyframes-to-frame-js"));
   assert.ok(frameOut.report.preserved.some((p) => p.kind === "design-tokens"));
+  assert.equal(frameOut.report.qualityRouting.category, "animated-composition");
 
   // SVG-motion target wires createSvgMotion
   const svgOut = await B.normalizeDesignToMotion(landingIr, { target: "svg-motion", tokenBundle });
   assert.ok(svgOut.html.includes("@technomanceer/motion-core/svg-motion"));
   assert.ok(svgOut.html.includes("createSvgMotion"));
+  assert.equal(svgOut.report.qualityRouting.category, "animated-composition");
 
   // Carousel & Story targets apply presets + safe zones cleanly
   const carouselOut = await B.normalizeDesignToMotion([landingIr], { target: "carousel", preset: "feed-vertical", tokenBundle });
   assert.equal(carouselOut.width, 1080);
   assert.equal(carouselOut.height, 1350);
   assert.ok(carouselOut.html.includes("padding:4% 6% 4% 6%"));
+  assert.equal(carouselOut.report.qualityRouting.category, "carousel");
 
   const storyOut = await B.normalizeDesignToMotion(landingIr, { target: "story", tokenBundle });
   assert.equal(storyOut.width, 1080);
   assert.equal(storyOut.height, 1920);
   assert.ok(storyOut.html.includes("padding:22% 7% 16% 7%"));
+  assert.equal(storyOut.report.qualityRouting.category, "story");
+
+  const webOut = await B.normalizeDesignToMotion(landingIr, { target: "web-director", tokenBundle });
+  assert.equal(webOut.report.qualityRouting.category, "responsive-website");
+  assert.ok(webOut.report.qualityRouting.tools.includes("qa_viewports"));
+  assert.ok(!webOut.report.qualityRouting.tools.includes("render_carousel"));
+  const videoOut = await B.normalizeDesignToMotion(landingIr, { target: "video", tokenBundle });
+  assert.equal(videoOut.report.qualityRouting.category, "video");
+  assert.ok(videoOut.report.qualityRouting.tools.includes("render_video"));
+  assert.ok(!videoOut.report.qualityRouting.tools.includes("qa_media"));
+  assert.ok(videoOut.report.qualityRouting.coreChecks.includes("qaMedia"));
+  assert.ok(!videoOut.report.qualityRouting.tools.includes("qa_media"));
+
+  const fixedIr = adapter.importFrame({ id: "fixed-artboard", canvasId: "cnv_m2_lab", name: "Fixed", width: 800, height: 600, html: "<main>Fixed composition</main>" }, { documentId: "cnv_m2_lab" });
+  const fixedOut = await B.normalizeDesignToMotion(fixedIr, { target: "frame", tokenBundle });
+  assert.equal(fixedOut.report.qualityRouting.category, "fixed-artboard");
+  assert.ok(!fixedOut.report.qualityRouting.tools.includes("qa_viewports"));
 
   // Adversarial IR strips unsafe items, keeps missing external refs localized/flagged, never reintroduces security threats
   const advOut = await B.normalizeDesignToMotion(advIr, { target: "frame", tokenBundle });

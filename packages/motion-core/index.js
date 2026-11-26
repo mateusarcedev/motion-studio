@@ -42,6 +42,7 @@ export { QA_STATUS, combineStatuses, createQaReport } from "./quality/qa-status.
 export { qaMedia } from "./quality/media_qa.mjs";
 export { qaFrames } from "./quality/frame_qa.mjs";
 export { qaProject } from "./quality/qa_project.mjs";
+export { resolveQualityRouting, QA_COMPOSITION_CATEGORIES } from "./quality/qa-routing.mjs";
 export * as svgMotion from "./design-system/svg-motion.js";
 export { listMotionComponents, getMotionComponent, validateComponentConfig, generateComponentHtml, componentSize } from "./components/index.js";
 export { previewMotionComponent, renderMotionComponent, renderComposition } from "./components/render.js";

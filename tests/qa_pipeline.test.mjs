@@ -178,6 +178,17 @@ describe("Riscos visuais no DOM (--qa-visual)", () => {
 });
 
 describe("Regressões da homologação 1.1.0 (showcase)", { skip: !have && "NOT_TESTED: ffmpeg indisponível" }, () => {
+  test("qa_viewports resolve imports do Motion Core no servidor local e mantém modo offline", async (t) => {
+    const dir = path.join(tmp, "motion-importmap"); await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, "index.html"), '<!doctype html><html><head><meta name="viewport" content="width=device-width"><script type="module">import * as Motion from "@technomanceer/motion-core/frame"; window.__motionResolved = typeof Motion.createMotionDriver === "function";</script></head><body style="margin:0;background:#24342d;color:#fff"><main>Motion runtime</main></body></html>');
+    const r = spawnSync(process.execPath, [path.join(root, "packages/motion-core/renderers/qa_viewports.mjs"), path.join(dir, "index.html"), path.join(dir, "out"), "--wait=0", "--offline", `--workspace-root=${root}`], { encoding: "utf8" });
+    if (/BROWSER/.test(r.stderr)) return t.skip("NOT_TESTED: Chromium indisponível");
+    assert.equal(r.status, 0, r.stderr || r.stdout);
+    const report = JSON.parse(await readFile(path.join(dir, "out", "report.json"), "utf8"));
+    assert.equal(report.results.length, 5);
+    assert.ok(report.results.every((viewport) => viewport.ok), JSON.stringify(report.results));
+  });
+
   test("marca escura intencional (fundo #0A0E14) NÃO é 'trecho preto'; preto real continua detectado", async () => {
     const dir = path.join(tmp, "dark-brand"); await mkdir(dir, { recursive: true });
     ff(["-f", "lavfi", "-i", "color=c=0x0A0E14:size=320x180:rate=30:duration=2", "-c:v", "libx264", "-pix_fmt", "yuv420p", path.join(dir, "ink.mp4")]);

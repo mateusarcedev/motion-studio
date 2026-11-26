@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 import { ERROR_CODES, MotionError } from "../lib/errors.mjs";
 import { validateDesignIR, validateTokenBundle, SCHEMA_VERSION } from "./contracts.mjs";
 import { assertSafeProjectPath, scanUntrustedHtml, tokenizeHtml } from "./security.mjs";
+import { resolveQualityRouting } from "../quality/qa-routing.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PRESETS = JSON.parse(readFileSync(path.join(__dirname, "../presets.json"), "utf8"));
@@ -443,6 +444,11 @@ function normalizeSingleIR(irInput, options = {}) {
   const report = {
     schemaVersion: SCHEMA_VERSION,
     target,
+    qualityRouting: resolveQualityRouting({
+      target,
+      sourceTarget: rawTarget,
+      animated: scanned.keyframes.length > 0 || scanned.animations.length > 0 || svgTargets.length > 0,
+    }),
     engine: target === "frame" ? "design-system/frame.js"
       : target === "svg-motion" ? "design-system/svg-motion.js"
       : target === "carousel" ? "renderers/render_static.mjs"
