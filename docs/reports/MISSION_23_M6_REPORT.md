@@ -112,7 +112,7 @@ Consulta ao registry em 2026-11-26 confirmou `1.1.1` como versão publicada de c
 | Node.js | Somente 24.16.0 está instalado localmente. Node 20/22 estão ausentes; os três majors precisam ser confirmados no CI pós-push. |
 | CI remoto | PASS em `c0e2ec0ee719fab1ed340601344891e7dea8e8a5`: testes Node 20/22/24 e determinismo, quatro jobs aprovados. [Execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45757036913). |
 
-As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test tests/mcp_server.test.mjs tests/mcp_resource_limits.test.mjs tests/delivery_integrity.test.mjs` — 29 testes, 0 falhas. A repetição final do script de distribuição após as correções também passou; os tarballs e os testes de instalação correspondem às métricas na tabela. O teste de produção via cliente MCP oficial completou chamadas reais de render, QA, SVG e Bridge. O `git diff --check` passou antes dos commits. A mesma matriz será verificada novamente após o commit documental deste relatório.
+As suítes MCP e entrega executadas diretamente nesta M6 passaram: `node --test tests/mcp_server.test.mjs tests/mcp_resource_limits.test.mjs tests/delivery_integrity.test.mjs` — 29 testes, 0 falhas. A repetição final do script de distribuição após as correções também passou; os tarballs e os testes de instalação correspondem às métricas na tabela. O teste de produção via cliente MCP oficial completou chamadas reais de render, QA, SVG e Bridge. O `git diff --check` passou antes dos commits. O commit documental `19658db241aa0b17de46cfba42333afb0bdfb918` passou no CI com os quatro jobs; [execução GitHub Actions](https://github.com/mateusarcedev/motion-studio/actions/runs/45758023543).
 
 ## Recomendação de release
 
