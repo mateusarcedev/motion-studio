@@ -75,6 +75,7 @@ Baseado nas especificações oficiais (`modelcontextprotocol.io`, `developers.op
 - Streamable HTTP, OAuth 2.1, Secure MCP Tunnel, hospedagem remota, multiusuário e execução remota não fazem parte do roadmap vigente. As propostas ADR-004 (fase HTTP) e ADR-005 permanecem registradas somente como histórico de decisões superadas.
 - Isolamento por workspace, validação de entrada hostil, limites locais de execução/concorrência, cancelamento suportado pelo motor e hash de artefatos são aplicados independentemente do transporte local.
 - M5 distribui `design-to-motion` e `motion-to-design` como Skills first-party e cataloga `doop-bridge` como integração opcional; o perfil `integration` seleciona as três sem criar dependência do Doop.
+- M6 limita cada linha stdio a 20 MiB, pedidos pendentes a 64, a fila de operações a 32 e o histórico de jobs a 128. A produção local foi homologada por cliente MCP de referência e por smoke tests de clientes disponíveis; a integração Doop externa permanece pendente quando o laboratório autorizado não está presente.
 
 ---
 

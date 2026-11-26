@@ -14,7 +14,7 @@ node packages/motion-cli/bin/motion.mjs doctor --json
 node packages/motion-cli/bin/motion.mjs mcp --workspace=/caminho/absoluto/do/projeto --max-concurrency=2
 ```
 
-O processo MCP deve ser iniciado pelo cliente configurado abaixo; não execute o último comando em um terminal separado. `--workspace` limita leituras e gravações ao projeto selecionado. As saídas precisam apontar para caminhos ainda inexistentes. `--max-concurrency` aceita 1–4 operações locais simultâneas (padrão 2); `--max-execution-ms` define o limite por chamada síncrona de ferramenta (padrão 600.000 ms, mínimo 1.000 ms, máximo 3.600.000 ms). Node.js 20+ é obrigatório; renderização exige Chromium instalado via Playwright, e montagem de vídeo exige FFmpeg. Consulte [`docs/INSTALLATION.md`](INSTALLATION.md).
+O processo MCP deve ser iniciado pelo cliente configurado abaixo; não execute o último comando em um terminal separado. `--workspace` limita leituras e gravações ao projeto selecionado. As saídas precisam apontar para caminhos ainda inexistentes. `--max-concurrency` aceita 1–4 operações locais simultâneas (padrão 2); `--max-execution-ms` define o limite por chamada síncrona de ferramenta (padrão 600.000 ms, mínimo 1.000 ms, máximo 3.600.000 ms). O stdio rejeita linhas acima de 20 MiB, limita 64 pedidos pendentes, 32 operações aguardando vaga e 128 jobs retidos; o histórico remove jobs concluídos mais antigos. Node.js 20+ é obrigatório; renderização exige Chromium instalado via Playwright, e montagem de vídeo exige FFmpeg. Consulte [`docs/INSTALLATION.md`](INSTALLATION.md).
 
 Quando uma versão atualizada do pacote estiver disponível, o executável instalado poderá ser iniciado como `motion mcp --workspace=/caminho/do/projeto`; o comando e opções são os mesmos. Esta missão não publica pacotes npm.
 
@@ -181,6 +181,8 @@ Todas as respostas incluem `structuredContent`; erros têm `status: "FAIL"` e `{
 
 ## Estado de homologação
 
-A integração do MCP anterior (`stdio`) foi exercitada em Claude Code, Codex CLI, OpenCode e Antigravity, conforme os registros de [`docs/COMPATIBILITY.md`](COMPATIBILITY.md). Nesta missão, a nova superfície foi exercitada com o cliente MCP oficial JS em subprocesso. Nenhum dos clientes de desktop/CLI foi declarado homologado para a nova versão até que sua conexão seja reexecutada. Gemini CLI segue sem homologação. Clientes exclusivamente web não conseguem iniciar esse processo local.
+Na M6, Claude Code 2.1.332, Codex CLI 0.172.0 e Antigravity CLI 1.5.16 passaram por smoke tests reais com conexão stdio, descoberta, render, validação de entrada insegura, retorno do PNG e encerramento. OpenCode 2.2.5 passou chamadas reais, mas o serviço MCP filho permaneceu sob um daemon preexistente e seu encerramento não foi isolado. Gemini CLI não estava instalado. A matriz detalhada e o hash de artefatos estão em [`COMPATIBILITY.md`](COMPATIBILITY.md).
+
+O cliente MCP oficial JS também exercitou a superfície de 30 ferramentas e as 11 ferramentas preservadas em subprocesso real. A integração Doop só foi descoberta: o canvas permitido `Motion Studio — Integration Lab` não existia e nenhum canvas foi alterado. Clientes exclusivamente web não conseguem iniciar este processo local.
 
 Configurações e comandos mudam ao longo do tempo. Consulte os guias oficiais antes de atualizar sua instalação: [Claude Code](https://code.claude.com/docs/en/mcp), [Codex](https://developers.openai.com/codex/mcp), [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/tools/mcp-server.md), [Antigravity](https://antigravity.google/docs/mcp), [OpenCode](https://opencode.ai/docs/mcp-servers/) e [cliente MCP TypeScript](https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/get-started/first-client.md).

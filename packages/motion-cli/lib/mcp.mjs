@@ -1,12 +1,21 @@
 /** Local Motion MCP server. stdio is the sole MCP transport; stdout is protocol-only. */
-import { createInterface } from "node:readline";
 import { realpath } from "node:fs/promises";
 import path from "node:path";
+import { Buffer } from "node:buffer";
 import { VERSION } from "./version.mjs";
 import { createMcpRuntime, invokeTool, TOOLS } from "./mcp-tools.mjs";
 
 export const PROTOCOL_VERSION = "2025-06-18";
+export const MAX_MCP_LINE_BYTES = 20 * 1024 * 1024;
+export const MAX_MCP_OUTSTANDING_REQUESTS = 64;
 export { TOOLS };
+
+export function overCapacityResponse(pendingCount, id) {
+  if (pendingCount < MAX_MCP_OUTSTANDING_REQUESTS) return null;
+  return id === undefined || id === null
+    ? { drop: true, response: null }
+    : { drop: true, response: { jsonrpc: "2.0", id, error: { code: -32001, message: `Too many outstanding MCP requests (limit ${MAX_MCP_OUTSTANDING_REQUESTS})` } } };
+}
 
 const defaultRuntime = createMcpRuntime();
 
@@ -65,6 +74,52 @@ function writeProtocol(message) {
   if (message) process.stdout.write(`${JSON.stringify(message)}\n`);
 }
 
+/** Read bounded UTF-8 JSON-RPC lines without allowing readline to buffer an unlimited line. */
+export async function* readProtocolLines(input, maxBytes = MAX_MCP_LINE_BYTES) {
+  let chunks = [];
+  let bytes = 0;
+  let discarding = false;
+  const finishLine = () => {
+    if (discarding) {
+      discarding = false;
+      chunks = [];
+      bytes = 0;
+      return { tooLarge: true };
+    }
+    const line = Buffer.concat(chunks, bytes).toString("utf8");
+    chunks = [];
+    bytes = 0;
+    return { line };
+  };
+  for await (const rawChunk of input) {
+    const chunk = Buffer.isBuffer(rawChunk) ? rawChunk : Buffer.from(rawChunk);
+    let start = 0;
+    while (start < chunk.length) {
+      const newline = chunk.indexOf(0x0a, start);
+      const end = newline < 0 ? chunk.length : newline;
+      const part = chunk.subarray(start, end);
+      if (!discarding) {
+        if (bytes + part.length > maxBytes) {
+          chunks = [];
+          bytes = 0;
+          discarding = newline < 0;
+          if (newline >= 0) yield { tooLarge: true };
+        } else {
+          if (part.length) chunks.push(part);
+          bytes += part.length;
+          if (newline >= 0) yield finishLine();
+        }
+      } else if (newline >= 0) {
+        yield finishLine();
+      }
+      if (newline < 0) break;
+      start = newline + 1;
+    }
+  }
+  if (discarding) yield finishLine();
+  else if (bytes > 0 || chunks.length > 0) yield finishLine();
+}
+
 export async function runMcpServer(options = {}) {
   const workspaceRoot = await realpath(path.resolve(options.workspace ?? process.cwd()));
   const runtime = createMcpRuntime({
@@ -76,11 +131,15 @@ export async function runMcpServer(options = {}) {
   // Third-party/core diagnostics must never corrupt the line-oriented protocol stream.
   console.log = (...values) => process.stderr.write(`${values.map(String).join(" ")}\n`);
   process.stderr.write(`motion mcp v${VERSION} pronto (stdio; workspace=${workspaceRoot}; concorrência=${runtime.maxConcurrency}; timeout=${runtime.maxExecutionMs}ms)\n`);
-  const rl = createInterface({ input: process.stdin, crlfDelay: Infinity });
   const pending = new Set();
   const requestControllers = new Map();
   try {
-    for await (const line of rl) {
+    for await (const item of readProtocolLines(process.stdin)) {
+      if (item.tooLarge) {
+        writeProtocol({ jsonrpc: "2.0", id: null, error: { code: -32600, message: `Request line exceeds ${MAX_MCP_LINE_BYTES} bytes` } });
+        continue;
+      }
+      const line = item.line.replace(/\r$/, "");
       if (!line.trim()) continue;
       let msg;
       try { msg = JSON.parse(line); }
@@ -92,6 +151,11 @@ export async function runMcpServer(options = {}) {
         const id = msg.params?.requestId;
         requestControllers.get(id)?.abort(Object.assign(new Error("Cancelado pelo cliente MCP."), { code: "MOTION_CANCELLED" }));
         await handleMessage(msg, runtime);
+        continue;
+      }
+      const capacity = overCapacityResponse(pending.size, msg.id);
+      if (capacity?.drop) {
+        writeProtocol(capacity.response);
         continue;
       }
       const controller = msg.id === undefined || msg.id === null ? null : new AbortController();

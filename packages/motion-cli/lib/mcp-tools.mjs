@@ -85,6 +85,8 @@ export function createMcpRuntime({ workspaceRoot = process.cwd(), maxConcurrency
     workspaceRoot: path.resolve(workspaceRoot),
     maxConcurrency: Math.max(1, Math.min(4, Number(maxConcurrency) || 2)),
     maxExecutionMs: Math.max(1_000, Math.min(3_600_000, Number(maxExecutionMs) || 600_000)),
+    maxQueuedOperations: 32,
+    maxRetainedJobs: 128,
     outputReservations: new Set(),
     active: 0,
     waiters: [],
@@ -199,9 +201,12 @@ async function artifactIntegrity(filePath, displayPath = filePath) {
     : { path: displayPath, kind: "file", ...records[0] };
 }
 
-async function runLimited(ctx, fn, signal) {
+export async function runLimited(ctx, fn, signal) {
   if (signal?.aborted) throw Object.assign(new Error("Execução cancelada antes de iniciar."), { code: "MOTION_CANCELLED" });
   if (ctx.active >= ctx.maxConcurrency) {
+    if (ctx.waiters.length >= ctx.maxQueuedOperations) {
+      throw Object.assign(new Error(`Fila local cheia (limite ${ctx.maxQueuedOperations}).`), { code: "MOTION_QUEUE_FULL" });
+    }
     await new Promise((resolve, reject) => {
       const waiter = { resolve, reject, signal, abort: null };
       waiter.abort = () => {
@@ -232,8 +237,23 @@ async function runLimited(ctx, fn, signal) {
   }
 }
 
-function startJob(kind, fn, meta, ctx) {
+function pruneCompletedJobs(state) {
+  while (state.jobs.size >= state.maxRetainedJobs) {
+    const completed = [...state.jobs].find(([, job]) => job.status !== "running");
+    if (!completed) break;
+    state.jobs.delete(completed[0]);
+  }
+  if (state.jobs.size >= state.maxRetainedJobs) {
+    throw Object.assign(new Error(`Histórico de jobs cheio (limite ${state.maxRetainedJobs}).`), { code: "MOTION_JOB_HISTORY_FULL" });
+  }
+}
+
+export function startJob(kind, fn, meta, ctx) {
   const state = ctx.runtime ?? ctx;
+  if (state.active >= state.maxConcurrency && state.waiters.length >= state.maxQueuedOperations) {
+    throw Object.assign(new Error(`Fila local cheia (limite ${state.maxQueuedOperations}).`), { code: "MOTION_QUEUE_FULL" });
+  }
+  pruneCompletedJobs(state);
   const id = `${kind}-${++state.jobSeq}`;
   const job = { id, kind, status: "running", startedAt: Date.now(), meta, result: null, error: null, reservedOutputs: [...(ctx.reservedOutputs ?? [])] };
   if (job.reservedOutputs.length) ctx.keepOutputReservations = true;

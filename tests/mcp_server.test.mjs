@@ -4,11 +4,13 @@ import { createHash } from "node:crypto";
 import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
+import { Readable } from "node:stream";
 import os from "node:os";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { fileURLToPath } from "node:url";
+import { MAX_MCP_LINE_BYTES, readProtocolLines } from "../packages/motion-cli/lib/mcp.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CLI = path.join(root, "packages/motion-cli/bin/motion.mjs");
@@ -46,6 +48,13 @@ function structured(result) {
   assert.equal(result.isError, false, JSON.stringify(result));
   return result.structuredContent;
 }
+
+test("MCP stdio line reader bounds oversized requests and resumes at the next protocol line", async () => {
+  const input = Readable.from([Buffer.from("12345"), Buffer.from("6\nping\nlast")]);
+  const lines = [];
+  for await (const item of readProtocolLines(input, 5)) lines.push(item);
+  assert.deepEqual(lines, [{ tooLarge: true }, { line: "ping" }, { line: "last" }]);
+});
 
 test("official MCP stdio client initializes, discovers the preserved 11 tools, and shuts down", async () => {
   const { client } = await connect();
@@ -87,6 +96,35 @@ test("stdio keeps protocol messages on stdout and writes startup diagnostics to 
   assert.equal(lines.length, 1, "exactly one protocol response belongs on stdout");
   assert.equal(JSON.parse(lines[0]).result.serverInfo.name, "motion-studio");
   assert.match(stderr, /pronto \(stdio;/);
+});
+
+test("real stdio server rejects a request line above the byte cap and continues serving", async () => {
+  const child = spawn(process.execPath, [CLI, "mcp", `--workspace=${workspace}`], { cwd: workspace, stdio: ["pipe", "pipe", "pipe"] });
+  const lines = (await import("node:readline")).createInterface({ input: child.stdout });
+  const responses = [];
+  const waiters = new Map();
+  lines.on("line", (line) => {
+    const response = JSON.parse(line);
+    responses.push(response);
+    const waiter = waiters.get(response.id);
+    if (waiter) { waiters.delete(response.id); waiter(response); }
+  });
+  const ping = new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("MCP server stopped responding after an oversized line")), 10000);
+    waiters.set(1, (response) => { clearTimeout(timer); resolve(response); });
+  });
+  try {
+    child.stdin.write(`${"x".repeat(MAX_MCP_LINE_BYTES + 1)}\n`);
+    child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" })}\n`);
+    const response = await ping;
+    assert.deepEqual(response.result, {});
+    assert.ok(responses.some((item) => item.error?.code === -32600 && item.error.message.includes(String(MAX_MCP_LINE_BYTES))));
+  } finally {
+    child.stdin.end();
+    const [code] = await once(child, "close");
+    assert.equal(code, 0);
+    lines.close();
+  }
 });
 
 test("notifications/cancelled aborts a running render and returns a structured cancellation error", async () => {
