@@ -287,7 +287,7 @@ const legacyTools = [
   legacyTool("motion_edit_transcribe", "Transcreve localmente com timestamps por palavra; retorna jobId.", S({ input: string("Vídeo local"), output: string("Novo transcript.json"), language: string("Idioma opcional"), model: string("Modelo opcional"), hotwords: string("Termos separados por vírgula") }, ["input", "output"])),
   legacyTool("motion_edit_plan", "Gera timeline editável a partir da mídia, transcrição e decisões do operador.", S({ input: string("Vídeo local"), output: string("Novo edit.json"), transcript: string("Transcrição local"), analysis: string("analysis.json opcional"), config: string("Config local opcional"), brief: string("BRIEF.md opcional"), preset: string("Preset opcional") }, ["input", "output", "transcript"])),
   legacyTool("motion_edit_audio", "Trata áudio localmente e exporta WAV/A-B como job.", S({ input: string("Vídeo/áudio local"), output: string("Novo WAV"), preset: string("Preset de voz"), denoiser: string("Denoiser"), music: string("Trilha local opcional"), abDir: string("Diretório A/B novo opcional") }, ["input", "output"])),
-  legacyTool("motion_edit_render", "Renderiza uma timeline de edição local; retorna jobId.", S({ timeline: string("Timeline local"), output: string("Novo MP4"), mode: { type: "string", enum: ["preview", "final"] }, abDir: string("Diretório A/B opcional") }, ["timeline", "output"])),
+  legacyTool("motion_edit_render", "Renderiza uma timeline local; keepWork preserva intermediários para diagnóstico e usa mais espaço local.", S({ timeline: string("Timeline local"), output: string("Novo MP4"), mode: { type: "string", enum: ["preview", "final"] }, abDir: string("Diretório A/B opcional"), keepWork: bool("Preserva segmentos e intermediários deste render para diagnóstico") }, ["timeline", "output"])),
   legacyTool("motion_job_status", "Consulta progresso e resultado de um job local.", S({ jobId: string("ID retornado ao iniciar job") }, ["jobId"])),
   legacyTool("motion_qa_reel", "Executa QA local do vídeo editado; PASS/WARN/FAIL/BLOCKED/NOT_TESTED.", S({ input: string("MP4 local"), timeline: string("Timeline opcional"), compare: string("Segundo render opcional"), reviews: string("Pasta de reviews opcional") }, ["input"])),
   legacyTool("motion_edit_export", "Empacota projeto local com contrato de entrega e verifica o ZIP.", S({ project: string("Pasta local com delivery.contract.json"), zip: string("Novo ZIP de saída") }, ["project", "zip"])),
@@ -339,7 +339,7 @@ async function callLegacy(name, a, ctx) {
       const timeline = await R.loadTimeline(timelinePath);
       const abDir = a.abDir ? await resolvePath(a.abDir, ctx, { output: true }) : null;
       const job = startJob("render", async () => {
-        const result = await R.renderTimeline(timeline, { output, mode: a.mode === "final" ? "final" : "preview", voiceAbDir: abDir });
+        const result = await R.renderTimeline(timeline, { output, mode: a.mode === "final" ? "final" : "preview", voiceAbDir: abDir, keepWork: Boolean(a.keepWork) });
         return { ...result, artifact: await artifactIntegrity(output, a.output) };
       }, { output }, ctx);
       return { jobId: job.id, status: job.status, progressFile: `${output}.progress.json` };

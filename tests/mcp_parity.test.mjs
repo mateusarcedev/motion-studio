@@ -31,7 +31,7 @@ test("fluxo completo por CLI e por MCP: mesma timeline, mesmos quadros e mesmo v
   cli("edit", "analyze", video, `--output=${dirs.cli}/a.json`);
   cli("edit", "plan", video, `--transcript=${f.transcript}`, `--analysis=${dirs.cli}/a.json`, `--config=${f.config}`, `--brief=${f.brief}`, `--output=${dirs.cli}/edit.json`);
   assert.equal(cli("edit", "preview", `${dirs.cli}/edit.json`, `--output=${dirs.cli}/preview.mp4`).status, 0);
-  assert.equal(cli("edit", "render", `${dirs.cli}/edit.json`, `--output=${dirs.cli}/reel.mp4`).status, 0);
+  assert.equal(cli("edit", "render", `${dirs.cli}/edit.json`, `--output=${dirs.cli}/reel.mp4`, "--keep-work").status, 0);
   const qc = cli("qa", "reel", `${dirs.cli}/reel.mp4`, `--timeline=${dirs.cli}/edit.json`).json;
 
   const child = spawn("node", [CLI, "mcp"], { stdio: ["pipe", "pipe", "ignore"] });
@@ -45,7 +45,7 @@ test("fluxo completo por CLI e por MCP: mesma timeline, mesmos quadros e mesmo v
     await call("motion_edit_analyze", { input: video, output: `${dirs.mcp}/a.json` });
     await call("motion_edit_plan", { input: video, output: `${dirs.mcp}/edit.json`, transcript: f.transcript, analysis: `${dirs.mcp}/a.json`, config: f.config, brief: f.brief });
     await job(await call("motion_edit_render", { timeline: `${dirs.mcp}/edit.json`, output: `${dirs.mcp}/preview.mp4`, mode: "preview" }));
-    await job(await call("motion_edit_render", { timeline: `${dirs.mcp}/edit.json`, output: `${dirs.mcp}/reel.mp4`, mode: "final" }));
+    await job(await call("motion_edit_render", { timeline: `${dirs.mcp}/edit.json`, output: `${dirs.mcp}/reel.mp4`, mode: "final", keepWork: true }));
     const qm = await call("motion_qa_reel", { input: `${dirs.mcp}/reel.mp4`, timeline: `${dirs.mcp}/edit.json` });
     const [tc, tm] = await Promise.all(Object.values(dirs).map(async (d) => JSON.parse(await readFile(`${d}/edit.json`, "utf8"))));
     assert.equal(tm.captions.fontsDir, "../conf/fonts", "o MCP também corrige caminhos do config");

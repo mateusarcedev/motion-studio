@@ -21,12 +21,13 @@ const byId = (r, id) => r.checks.find((c) => c.id === id);
 const FIX = path.join(tmp, "talk.mp4");      // speech-like bursts + 60 Hz hum, 1080×1920
 const SPEECH = path.join(tmp, "speech.mp4");  // real synthetic speech (flite) with a long leading pause
 const BURSTS = [[0.5, 1.7], [2.6, 3.6], [3.8, 5.2]];
+const PLAN_WORDS = [["olá", 0.55, 1.0], ["pessoal", 1.05, 1.65], ["hoje", 2.65, 3.0], ["vamos", 3.05, 3.55], ["falar", 3.85, 4.4], ["disso", 4.5, 5.15]];
 // evaluated at load time: test skip options are computed before before() runs
 const sttReady = Boolean((await R.sttDoctor().catch(() => null))?.providers.find((p) => p.id === "faster-whisper")?.ok);
 
 async function plannedFixtureTimeline() {
   const sha = await R.sha256File(FIX);
-  const words = [["olá", 0.55, 1.0], ["pessoal", 1.05, 1.65], ["hoje", 2.65, 3.0], ["vamos", 3.05, 3.55], ["falar", 3.85, 4.4], ["disso", 4.5, 5.15]].map(([text, start, end], i) => ({ id: `w${i + 1}`, text, start, end, confidence: 0.95, timing: "word" }));
+  const words = PLAN_WORDS.map(([text, start, end], i) => ({ id: `w${i + 1}`, text, start, end, confidence: 0.95, timing: "word" }));
   const transcript = { schema: "motion.transcript", schemaVersion: 1, source: { path: FIX, sha256: sha }, scope: "full-media", provider: { id: "fixture" }, language: "pt", words, segments: [{ start: 0.55, end: 5.15, text: "", wordIds: words.map((w) => w.id) }] };
   return R.planEdit(FIX, { transcript, preset: "talking-head", faceBox: { x: 0.25, y: 0.25, w: 0.5, h: 0.4 } });
 }
@@ -217,7 +218,7 @@ describe("Timeline, cortes e legendas", () => {
     assert.deepEqual(R.validateTimeline(t), []);
     assert.ok(t.removed.some((r) => r.reason === "pause" && r.src[0] >= 1.7 && r.src[1] <= 2.6), JSON.stringify(t.removed));
     assert.ok(!t.removed.some((r) => r.reason === "pause" && r.src[0] > 3.5 && r.src[1] < 3.85), "pausa curta (0,2 s) preservada");
-    for (const w of words) assert.ok(t.segments.some((s) => s.src[0] <= w.start - 0.05 && s.src[1] >= w.end + 0.05), `folga em ${w.text}`);
+    for (const [text, start, end] of PLAN_WORDS) assert.ok(t.segments.some((s) => s.src[0] <= start - 0.05 && s.src[1] >= end + 0.05), `folga em ${text}`);
     assert.equal(t.stats.wordsLostUnexpected, 0);
     assert.ok(t.output.durationSec < 5.5 && Math.abs(t.output.durationSec * 30 - t.output.frames) < 1e-6);
     assert.ok(t.captions.pages.length >= 2, `${t.captions.pages.length} páginas`);
