@@ -10,6 +10,28 @@ O gate de determinismo do CI renderiza duas vezes no mesmo job e compara os resu
 
 Cada invocação usa um diretório de trabalho e caminhos temporários próprios. Etapas aguardam a conclusão da gravação antes de consumir os arquivos; arquivos finais e progresso são publicados por rename atômico depois de completos.
 
+## Repetição focada do estágio final
+
+Para investigar uma divergência que já está localizada na composição final, use intermediários preservados por `renderTimeline({ keepWork: true })` ou pelo artefato de CI `determinism-intermediates`:
+
+```bash
+npm run test:determinism:replay -- \
+  --source=/caminho/para/render-preservado \
+  --runs=4 \
+  --evidence-dir=/caminho/para/evidencias \
+  --expect-difference
+```
+
+O diretório de origem contém `reel.render.json`, `reel.timeline.json` e `reel.work/render-*/`. O replay executa somente a composição final e a medição de true peak; não repete análise de fonte, processamento de voz, codificação de segmentos, renderização Chromium ou pilotos M23. Cada tentativa recebe arquivos de saída e workdir novos. Os hashes de segmentos, overlays, áudio, legendas e fontes são registrados antes e depois para detectar alteração dos insumos. A comparação registra hashes decodificados e de pacotes por stream e o hash do contêiner; o relatório também guarda as linhas de comando FFmpeg e o ambiente local.
+
+Os estados são distintos: `PASS` só é possível se todas as comparações forem legíveis e idênticas; `FAIL_CONFIRMED` requer uma diferença de mídia efetivamente comparada; `INCONCLUSIVE` cobre leitura ou execução incompleta e o caso em que `--expect-difference` não se reproduz. Códigos de saída: 0, 1 e 2, respectivamente. Um resultado inconclusivo ou uma repetição aprovada não encerra incidentes anteriores. Se o replay não encontrar a divergência, preserve-o como evidência de não reprodução naquele ambiente e mantenha o incidente aberto.
+
+## Incidente intermitente preservado
+
+O CI do run [45877470125](https://github.com/mateusarcedev/motion-studio/actions/runs/45877470125) registrou uma divergência no estágio final com Node 22.23.5, FFmpeg 6.1.1-3ubuntu5 e Chromium 156.0.8078.4. Quatro de 183 quadros de vídeo divergiram (74, 77, 78 e 79; PSNR entre 104,03 e 107,04 dB); os intermediários e os streams de áudio permaneceram idênticos. A repetição do job passou, mas a causa raiz não foi determinada. Os registros de incidente continuam em [`MISSION_23_M6_REPORT.md`](reports/MISSION_23_M6_REPORT.md), [`MISSION_23_M6_FINAL_RELEASE_GATE.md`](reports/MISSION_23_M6_FINAL_RELEASE_GATE.md) e no JSON histórico vinculado por esses relatórios.
+
+Em 26/11/2026, o replay focado dos intermediários preservados foi executado duas vezes neste host com Node 24.16.0 e FFmpeg 8.0.1-3ubuntu2. As duas composições foram idênticas em vídeo decodificado/pacotes, áudio decodificado/pacotes e contêiner; `--expect-difference` classificou a ausência de reprodução como `INCONCLUSIVE`. Este host não reproduz o ambiente Node 22/FFmpeg 6/Chromium 156 do incidente. O relatório completo foi preservado em [`final-stage-replay-2026-11-26.json`](reports/assets/mission-24/final-stage-replay-2026-11-26.json). Isso não resolve nem reduz a classificação do incidente histórico.
+
 ## Limite
 
 Não há modo `--strict-determinism` nem promessa de identidade binária entre máquinas. Para validação entre hosts, compare visualmente os quadros e o áudio.

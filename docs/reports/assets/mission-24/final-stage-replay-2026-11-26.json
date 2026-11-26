@@ -1,0 +1,207 @@
+{
+  "schema": "motion.determinism.final-replay",
+  "schemaVersion": 1,
+  "status": "INCONCLUSIVE",
+  "startedAt": "2026-11-26T19:28:13.373Z",
+  "sourceDir": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a",
+  "sourceRunCount": 2,
+  "expectDifference": true,
+  "cachePolicy": {
+    "freshOutputDirectoryPerAttempt": true,
+    "reusedRenderOutputs": false,
+    "sourceInputsHashedBeforeAndAfter": true,
+    "note": "Only preserved intermediate inputs are reused; output files and FFmpeg work dirs are unique."
+  },
+  "evidenceDir": "/tmp/m24-focused-replay/determinism-final-ETodfM",
+  "attempts": [
+    {
+      "index": 1,
+      "status": "COMPLETED",
+      "output": "/tmp/m24-focused-replay/determinism-final-ETodfM/attempt-01/replay.mp4",
+      "sha256": "8571f77d5288dba168bd000656e9bf6c6e6e0b8c2b735eec2a2a97586caca1b2",
+      "truePeak": {
+        "ceilingDbtp": -1.5,
+        "attempts": [
+          {
+            "gainDb": 0,
+            "truePeakDbtp": -3.72
+          }
+        ],
+        "ok": true
+      },
+      "warnings": [],
+      "composeSec": 6.45
+    },
+    {
+      "index": 2,
+      "status": "COMPLETED",
+      "output": "/tmp/m24-focused-replay/determinism-final-ETodfM/attempt-02/replay.mp4",
+      "sha256": "8571f77d5288dba168bd000656e9bf6c6e6e0b8c2b735eec2a2a97586caca1b2",
+      "truePeak": {
+        "ceilingDbtp": -1.5,
+        "attempts": [
+          {
+            "gainDb": 0,
+            "truePeakDbtp": -3.72
+          }
+        ],
+        "ok": true
+      },
+      "warnings": [],
+      "composeSec": 4.62
+    }
+  ],
+  "comparisons": [
+    {
+      "referenceAttempt": 1,
+      "attempt": 2,
+      "status": "identical",
+      "identical": true,
+      "different": [],
+      "streams": {
+        "video": {
+          "decoded": {
+            "a": "102b74ba4fe186781360d4b1731ca73139c37c3b533fd84a218e7860871d4d06",
+            "b": "102b74ba4fe186781360d4b1731ca73139c37c3b533fd84a218e7860871d4d06",
+            "identical": true
+          },
+          "packets": {
+            "a": "3064296d9f89b08dec9f80a7bca612a1b4a81c341c571f84c8184a3bbc172031",
+            "b": "3064296d9f89b08dec9f80a7bca612a1b4a81c341c571f84c8184a3bbc172031",
+            "identical": true
+          }
+        },
+        "audio": {
+          "decoded": {
+            "a": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+            "b": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+            "identical": true
+          },
+          "packets": {
+            "a": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+            "b": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+            "identical": true
+          }
+        }
+      },
+      "container": {
+        "a": "8571f77d5288dba168bd000656e9bf6c6e6e0b8c2b735eec2a2a97586caca1b2",
+        "b": "8571f77d5288dba168bd000656e9bf6c6e6e0b8c2b735eec2a2a97586caca1b2",
+        "identical": true
+      },
+      "errors": []
+    }
+  ],
+  "executionErrors": [],
+  "source": {
+    "renderReport": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.render.json",
+    "timeline": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.timeline.json",
+    "workDir": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF",
+    "originalRenderSha256": "26ea6abdad9845aca1e72e6789610337cdab7f1a9892b73abfb0d269c4df4b47",
+    "sourceFfmpeg": "6.1.1-3ubuntu5",
+    "sourceChromium": null,
+    "inputHashes": [
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.render.json",
+        "bytes": 10044,
+        "sha256": "d3166838a6fdfacbe1da2fafa9f17317db05f2f084da65cdbc7498826ed78c71"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.timeline.json",
+        "bytes": 17608,
+        "sha256": "46e5090b8ef3315851a8bc6aa1639582ac5d9ef1dc0cd016136759f9393960f8"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/seg-001.mp4",
+        "bytes": 2830008,
+        "sha256": "e017602e4f7fe4eac10b49cb961b832a3c22697ed036d6a05b91e552a2788c66"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/seg-002.mp4",
+        "bytes": 7505235,
+        "sha256": "0a5e346169b9d2abefc048f7c8f47efa42bb87f9fd76dbf018d091852d1330e9"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/seg-003.mp4",
+        "bytes": 3489905,
+        "sha256": "f6a1619591db3b6017a9b0fae5fcf6020c0d5cf5378c5264febdd235c34cb51c"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/overlays/c1-0-7b931f5b0264d57d.png",
+        "bytes": 34529,
+        "sha256": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/voice.wav",
+        "bytes": 1756902,
+        "sha256": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/captions.ass",
+        "bytes": 2350,
+        "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+      }
+    ]
+  },
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+    "cpus": 4,
+    "memoryGb": 6,
+    "ffmpeg": "ffmpeg version 8.0.1-3ubuntu2 Copyright (c) 2000-2025 the FFmpeg developers",
+    "chromium": {
+      "used": false,
+      "version": null,
+      "reason": "The final-stage replay consumes preserved overlay PNGs and does not launch Chromium."
+    }
+  },
+  "ffmpegCommands": "/tmp/m24-focused-replay/determinism-final-ETodfM/ffmpeg-commands.log",
+  "inputIntegrity": {
+    "unchanged": true,
+    "afterHashes": [
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.render.json",
+        "sha256": "d3166838a6fdfacbe1da2fafa9f17317db05f2f084da65cdbc7498826ed78c71"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.timeline.json",
+        "sha256": "46e5090b8ef3315851a8bc6aa1639582ac5d9ef1dc0cd016136759f9393960f8"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/seg-001.mp4",
+        "sha256": "e017602e4f7fe4eac10b49cb961b832a3c22697ed036d6a05b91e552a2788c66"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/seg-002.mp4",
+        "sha256": "0a5e346169b9d2abefc048f7c8f47efa42bb87f9fd76dbf018d091852d1330e9"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/seg-003.mp4",
+        "sha256": "f6a1619591db3b6017a9b0fae5fcf6020c0d5cf5378c5264febdd235c34cb51c"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/overlays/c1-0-7b931f5b0264d57d.png",
+        "sha256": "a7f2c7e594165d32b14d70f0f27b123e250ac3a2aab023a54fe8feddb9b65ee2"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/voice.wav",
+        "sha256": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0"
+      },
+      {
+        "path": "/tmp/m6-ci-determinism-0525/ci-determinism-tWbsp0/a/reel.work/render-c91fe7a6-4bec-4e8a-94bd-92d84e420495-jkhdJF/captions.ass",
+        "sha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a"
+      }
+    ]
+  },
+  "classification": {
+    "status": "INCONCLUSIVE",
+    "exitCode": 2,
+    "confirmedDifferences": 0,
+    "inconclusiveComparisons": 0,
+    "reason": "expected-difference-was-not-reproduced"
+  },
+  "finishedAt": "2026-11-26T19:28:28.383Z",
+  "reportPath": "/tmp/m24-focused-replay/determinism-final-ETodfM/report.json"
+}
