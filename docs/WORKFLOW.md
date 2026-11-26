@@ -13,10 +13,17 @@ Estas regras se aplicam a Codex, Claude Code, Antigravity, Gemini CLI e qualquer
 
 ## Qualidade e remoto
 
-- Antes de enviar alterações ao remoto, execute os quality gates do projeto: `npm run test:ci`, `npm run test:determinism`, `npm run test:py`, `npm run skills:verify`, `node packages/motion-cli/bin/motion.mjs doctor --json` e `npm pack --dry-run`.
-- Execute também os gates específicos da mudança: segurança, contratos, Design Bridge, renderização offline e compatibilidade com Node.js 22 e 24 quando disponíveis.
-- Registre com clareza qualquer gate não executado ou bloqueado; nunca reporte uma verificação não executada como aprovada.
-- Envie commits somente da `main` e confirme `main` sincronizada com `origin/main` e o CI concluído.
+A validação deve ser proporcional às superfícies afetadas. Não execute toda a suíte local por rotina antes de cada push: use o GitHub Actions como validação abrangente final e preserve ciclos locais curtos.
+
+- Comece pelos testes mais próximos do código alterado. Para uma mudança isolada, execute a suíte direcionada e os verificadores de formato/tipos/contratos que realmente a cobrem.
+- Use `npm run test:ci` quando a alteração atravessar módulos ou contratos, afetar comportamento geral, dependências, CLI/MCP, segurança, distribuição, ou quando não houver cobertura direcionada suficiente. Não o repita depois de uma alteração exclusivamente documental.
+- Use `npm run test:determinism` para alterações no render/media/QA e investigações explícitas de determinismo; prefira o modo focado/repetido documentado em `docs/DETERMINISM.md` quando o cenário for isolável. Uma reexecução aprovada não apaga evidência de uma divergência anterior.
+- Use `npm run test:py` para código Python ou integração entre os motores Python e JavaScript; `npm run skills:verify` para Skills, catálogos, manifests ou hashes de Skills; `motion doctor --json` para mudanças de ambiente/instalação/dependências; empacotamento e `release-gate` apenas para mudanças de pacote ou preparação de release.
+- Não execute `npm pack --dry-run` na raiz privada do monorepo como verificação de rotina. Empacote apenas os pacotes públicos afetados e somente quando distribuição/manifestos forem parte da mudança.
+- Mudanças em arquivos de produção usam QA apenas dos formatos e artefatos afetados; não refaça campanhas ou pilotos históricos para validar uma mudança sem relação com eles.
+- Para documentação sem código, `git diff --check` e verificadores de Markdown/links aplicáveis são suficientes. A suíte completa não é exigida.
+- Nunca enfraqueça, desabilite ou ignore testes para obter PASS. Registre comandos executados, resultados, cobertura não executada e bloqueios; `NOT_TESTED`, `BLOCKED`, `FAIL` e `INCONCLUSIVE` não equivalem a `PASS`.
+- Antes do push, confirme a revisão do diff e que os testes proporcionais passaram. Envie commits somente da `main`; após o push, confirme `main` sincronizada com `origin/main` e aguarde o CI remoto abrangente. Corrija falhas de CI quando forem regressões; preserve como incidentes separados as falhas intermitentes ou de infraestrutura.
 
 ## Continuidade entre agentes
 
