@@ -1,0 +1,24 @@
+{
+  "schema": "motion.m24.parity-final-replay",
+  "schemaVersion": 1,
+  "environment": {
+    "node": "v24.16.0",
+    "ffmpeg": "8.0.1-3ubuntu2",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+    "visibleCpus": 4,
+    "chromium": "not used by final-stage replay"
+  },
+  "sourceRenders": [
+    { "client": "CLI", "sourceDir": "tests/tmp/mcp-parity/cli", "status": "PASS", "attemptCount": 2, "outputSha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3", "inputIntegrityUnchanged": true },
+    { "client": "MCP", "sourceDir": "tests/tmp/mcp-parity/mcp", "status": "PASS", "attemptCount": 2, "outputSha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3", "inputIntegrityUnchanged": true }
+  ],
+  "comparison": {
+    "videoDecodedSha256": "df6b7afe5b597e9235333603b462898dd1bdd000d03243fc7628206a03f7c890",
+    "videoPacketSha256": "a17e1d3ce96f6449f921f3c33fdc1f3a16504d4a1813035ff9dab0e7ed3a9f46",
+    "audioDecodedSha256": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+    "audioPacketSha256": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+    "containerSha256": "f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3",
+    "status": "identical"
+  },
+  "interpretation": "The preserved Node 24 / FFmpeg 8 CLI and MCP renders each reproduce locally. This does not resolve or explain the separate confirmed Node 22 / FFmpeg 6 CI divergence recorded for run 45884408723."
+}

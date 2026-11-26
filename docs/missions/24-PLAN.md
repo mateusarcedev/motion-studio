@@ -12,6 +12,7 @@ Reduzir o ciclo local de desenvolvimento com uma política permanente de valida�
 - [x] Corrigir comparação de mídia para representar `read-error` como inconclusiva, sem reportar `identical: false` como diferença confirmada.
 - [x] Remover a dependência do teste de render final em um arquivo criado por outro teste, permitindo executá-lo por seleção focada.
 - [x] Preservar os artefatos do job de determinismo com retenção de 30 dias no GitHub Actions.
+- [x] Preservar os renders/workdirs de paridade CLI × MCP quando testes falharem e disponibilizar `keepWork` no MCP de reel render como opção diagnóstica.
 - [x] Reutilizar evidência histórica autorizada; não executar a campanha M23, laboratório Doop, pilotos OpenDesign ou release gate.
 - [ ] Executar CI abrangente remoto na matriz configurada e registrar o resultado após o push.
 
@@ -30,3 +31,5 @@ O replay requer `reel.render.json`, `reel.timeline.json` e `reel.work/render-*/`
 ## Incidente histórico
 
 O incidente Node 22.23.5 / FFmpeg 6.1.1-3ubuntu5 / Chromium 156, incluindo quatro frames finais divergentes com áudio e intermediários iguais, permanece aberto e sem causa raiz. Seu relatório e hashes são referência histórica; uma reexecução aprovada não substitui essa evidência. A missão entrega instrumentos para continuar a investigação de forma independente, sem ampliar seu escopo para uma análise ilimitada da causa.
+
+O CI da M24 também confirmou uma divergência em vídeo no teste CLI × MCP em Node 22 / FFmpeg 6.1.1, com áudio, WAV, preview e legendas idênticos. Como aquela execução ainda não anexava os artefatos da paridade, não há frames ou segmentos preservados. Essa ocorrência é registrada como nova evidência intermitente, sem afirmar causa comum ou resolução; falhas futuras terão os intermediários disponíveis para replay focado.

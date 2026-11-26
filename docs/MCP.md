@@ -141,6 +141,8 @@ O servidor publica 30 ferramentas. As 11 ferramentas de Smart Reel, Voice Studio
 
 Render, QA, leitura de entrada e saída são restritos ao workspace. A hidratação de URL exige `allowRemoteDownloads: true` explícito após revisar proveniência/licença; o hydrator continua aplicando anti-SSRF, MIME, tamanho, hash e sanitização. Não use uma resposta de plano como confirmação de escrita remota.
 
+`motion_edit_render` aceita `keepWork: true` para preservar segmentos e intermediários no workspace para diagnóstico; isso usa mais espaço local. O padrão é não preservar. O teste de paridade CLI × MCP ativa essa opção para que o CI possa anexar evidência do estágio final quando falhar.
+
 ## Exemplos de chamada
 
 Renderizar HTML local para PNG (a saída precisa ainda não existir):

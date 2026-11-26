@@ -20,6 +20,10 @@ O registro de referência é o run [45877470125](https://github.com/mateusarcede
 
 Foi feito um replay focado, e não um novo render de produção, usando os intermediários preservados do incidente. Duas composições foram executadas no host local Node 24.16.0 / FFmpeg 8.0.1-3ubuntu2, CPU Intel i5-1335U, 4 CPUs visíveis e 6 GiB de memória. Os dois MP4s resultaram no SHA-256 `8571f77d5288dba168bd000656e9bf6c6e6e0b8c2b735eec2a2a97586caca1b2`; hashes decodificados e de pacotes de vídeo/áudio e hash do contêiner foram idênticos. Os hashes dos intermediários permaneceram inalterados. Como a divergência esperada não apareceu em FFmpeg 8, o estado foi `INCONCLUSIVE` (código 2), não PASS para o incidente. O replay não iniciou Chromium; essa versão do ambiente histórico continua registrada na evidência M23.
 
+No primeiro CI M24, run [45884408723](https://github.com/mateusarcedev/motion-studio/actions/runs/45884408723), o job de determinismo passou. A suíte Node 20 e 24 falhou por uma variável `words` que ficou fora de escopo ao tornar uma fixture de teste independente; a referência foi corrigida. No Node 22.23.5 / FFmpeg 6.1.1-3ubuntu5, o mesmo defeito de teste ocorreu e o teste CLI × MCP também confirmou diferença nos streams de vídeo e no contêiner, com os dois streams de áudio iguais. Voz WAV, preview e legenda ASS tinham hashes iguais. Este é um novo registro de falha efetivamente reproduzida, não um resultado inconclusivo. Aquele workflow não anexou os MP4s nem os intermediários do job de testes, então não existem índices de frames nem material para replay dessa execução; o Chromium também não foi registrado no job. As evidências de hash e a limitação foram arquivadas em [`ci-run-45884408723-node22-parity.json`](assets/mission-24/ci-run-45884408723-node22-parity.json). O status não foi reduzido por reexecuções locais.
+
+Para futuras falhas, `motion_edit_render` ganhou o parâmetro opcional MCP `keepWork`; o teste de paridade usa-o para ambos os clientes e o job Node anexa `tests/tmp/mcp-parity` por 30 dias em caso de falha. Assim, um diretório `cli` ou `mcp` do artefato pode ser passado diretamente a `test:determinism:replay`.
+
 Relatório completo do replay: [`final-stage-replay-2026-11-26.json`](assets/mission-24/final-stage-replay-2026-11-26.json). Ele registra o ambiente local, os hashes, os comandos, o estado inconclusivo e os caminhos temporários das saídas. Os MP4s temporários não foram adicionados ao repositório.
 
 ## Verificações locais
@@ -30,7 +34,11 @@ Relatório completo do replay: [`final-stage-replay-2026-11-26.json`](assets/mis
 - `node --check scripts/replay-determinism.mjs`: aprovado.
 - `node --check packages/motion-core/reel/render.mjs`: aprovado.
 - Replay focado: duas tentativas concluídas; estado final **INCONCLUSIVE**, como esperado para a divergência histórica não reproduzida no ambiente local.
+- Comparadores e classificação: **9/9 aprovados**, incluindo leitura inválida como `INCONCLUSIVE` e diferenças confirmadas por stream como `FAIL_CONFIRMED`.
 - O teste legado de render final foi refatorado para criar seu próprio timeline sintético em vez de depender de `tests/tmp/reel/edit.json`, que era produzido por outro teste. A seleção direta do teste final passou (**1/1**, incluindo dois renders e QA determinístico). Os testes `SOURCE_CHANGED` e validação CLI também criam o próprio timeline e passaram em seleção separada (**2/2**).
+- `node --test tests/mcp_parity.test.mjs`: **1/1 aprovado** localmente em Node 24, exercitando o novo parâmetro `keepWork` por CLI e MCP.
+- Replay focado duas vezes sobre os diretórios `cli` e `mcp` criados por esse teste: ambos **PASS**, com SHA-256 de saída `f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3`; os relatórios e hashes de stream estão em [`parity-final-replay-node24-2026-11-26.json`](assets/mission-24/parity-final-replay-node24-2026-11-26.json). São resultados no host Node 24 / FFmpeg 8 e não encerram a ocorrência Node 22 / FFmpeg 6.
+- A tentativa inicial de CI M24 falhou: Node 20/24 pela referência de fixture já corrigida; Node 22 também pela divergência CLI × MCP preservada acima. A segunda validação remota está pendente da correção e do ajuste de coleta de artefatos.
 
 Não foram executados localmente `npm run test:ci`, `npm run test:determinism` (pipeline sintético completo), `npm run test:py`, `npm run skills:verify`, `motion doctor --json`, `npm pack` ou release gate. A suíte abrangente e a matriz Node 20/22/24 ficam para GitHub Actions conforme a política aprovada e o pedido desta missão. Não foram repetidas as homologações M23, nem alterados o laboratório Doop, o projeto OpenDesign ou os materiais da campanha.
 
@@ -38,9 +46,11 @@ Não foram executados localmente `npm run test:ci`, `npm run test:determinism` (
 
 1. `910fbbe` — política permanente de validação proporcional.
 2. `05da71c` — replay focado, classificação, comparação triestado e testes direcionados.
-3. Este relatório, o plano M24, a documentação de determinismo e a evidência arquivada ficam em commit documental separado.
+3. `7eadc22` — primeira documentação e evidência; seu CI revelou o erro de fixture e a divergência de paridade M24.
+4. `b99897e` — correção de escopo da fixture, `keepWork` opcional no MCP, workdirs preservados no teste e upload de evidência em falha.
+5. O registro final desta ocorrência e os relatórios/replays são commits documentais separados.
 
-Estado do CI remoto: pendente da execução disparada pelo push final. O CI executará a suíte abrangente e a matriz Node definida no workflow. Nenhuma versão npm foi alterada ou publicada.
+Estado do CI remoto após o primeiro push: **FAIL** em Node 20, 22 e 24; determinismo **PASS**. Node 20/24 falharam por uma referência de fixture corrigida em `b99897e`; Node 22 também teve a divergência confirmada descrita acima. A execução abrangente do commit com as correções está pendente. Nenhuma versão npm foi alterada ou publicada.
 
 ## Pendências e limites
 

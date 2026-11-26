@@ -1,0 +1,64 @@
+{
+  "schema": "motion.m24.ci-parity-failure",
+  "schemaVersion": 1,
+  "runId": 45884408723,
+  "runUrl": "https://github.com/mateusarcedev/motion-studio/actions/runs/45884408723",
+  "headSha": "7eadc227a323ac9b3fed99cb50edd10574c878ed",
+  "jobId": 140131412715,
+  "jobName": "Testes (Node 22)",
+  "jobUrl": "https://github.com/mateusarcedev/motion-studio/actions/runs/45884408723/job/140131412715",
+  "test": "fluxo completo por CLI e por MCP: mesma timeline, mesmos quadros e mesmo veredito de QA",
+  "status": "FAIL_CONFIRMED",
+  "environment": {
+    "node": "v22.23.5",
+    "ffmpeg": "6.1.1-3ubuntu5",
+    "cpu": "AMD EPYC 9V45 96-Core Processor",
+    "visibleCpus": 4,
+    "chromium": {
+      "status": "NOT_RECORDED",
+      "note": "The parity job log did not record browser.version(); do not infer it from the separate determinism job."
+    }
+  },
+  "comparison": {
+    "status": "different",
+    "different": ["video.decoded", "video.packets", "container"],
+    "streams": {
+      "video": {
+        "decoded": {
+          "cli": "3f488e55be49084ddc10977653e4b4f51665393d358bc268121a9344d9313a2e",
+          "mcp": "583ba61ea52105ec30674e07676079092efe99683eb8a0249c1768a002a71dac"
+        },
+        "packets": {
+          "cli": "9f54c69ffc7da9ce19c9f0d6442b150491f629b7e7038437feb142ae5b458a53",
+          "mcp": "254e39693ed8545b0b8934b56edc9c078579bb2108fe9416ffb0f1c65aaa5de7"
+        }
+      },
+      "audio": {
+        "decoded": {
+          "cli": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5",
+          "mcp": "6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5"
+        },
+        "packets": {
+          "cli": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7",
+          "mcp": "7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7"
+        }
+      }
+    },
+    "container": {
+      "cli": "280f3345c8586ba5fcb235c4f812f4bc3aabe5d0369597167d3be49a561694a0",
+      "mcp": "97b607bb476566d4f8b03e26581e28a8977ec9ef984c90856ef11bf10e0d12e0"
+    },
+    "errors": []
+  },
+  "commonStages": {
+    "cliAndMcpVoiceWavSha256": "4a3bcef909b72826a2e7f6b448dde7ea05b6ae4380c92ff55efd415a836301d0",
+    "cliAndMcpPreviewSha256": "5e3e12540632f124725d0060ad32dd9d2fe7b561e8b5360a51ddc84197a0576e",
+    "cliAndMcpCaptionsAssSha256": "543ad567ba1a0c0b5bd1941106d158bf577c9a1a8e648d852f92b4bd6bfc527a",
+    "bothReportsFfmpeg": "6.1.1-3ubuntu5",
+    "truePeak": { "ceilingDbtp": -1.5, "measuredDbtp": -3.72, "ok": true }
+  },
+  "limits": [
+    "This run's failure artifacts were not uploaded, so the MP4s, frame-level differences, render reports, and segment intermediates are unavailable.",
+    "The failure log proves distinct decoded video streams and identical audio streams, but does not locate differing frame numbers or establish a cause."
+  ]
+}
