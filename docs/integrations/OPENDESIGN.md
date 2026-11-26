@@ -2,116 +2,78 @@
 
 ## Escopo e estado
 
-Esta integração é opcional e local. Motion Core permanece independente do OpenDesign. Motion MCP roda por `stdio` e Skills coordenam o agente com os arquivos do projeto.
+A integração é opcional e local. Motion Core permanece independente do OpenDesign; Motion MCP usa exclusivamente `stdio`. O agente pode coordenar o MCP do Motion Studio com o aplicativo/editor, sem proxy remoto.
 
-M6 examinou o OpenDesign instalado em **0.27.2**, release commit [`d9691d7a8ba21ab57c52916dcf07ea87598e04fc`](https://github.com/nexu-io/open-design/tree/d9691d7a8ba21ab57c52916dcf07ea87598e04fc). A aplicação é desktop Electron, guarda projetos no perfil local e distribui um daemon CLI (`daemon-cli.mjs`) com operações de projeto, arquivos, artefatos e MCP `stdio`. O CLI não estava no `PATH` WSL como `od`; foi chamado pelo executável instalado no Windows.
+O OpenDesign instalado foi **0.27.2**, commit [`d9691d7a8ba21ab57c52916dcf07ea87598e04fc`](https://github.com/nexu-io/open-design/tree/d9691d7a8ba21ab57c52916dcf07ea87598e04fc), Electron 41.3.0 com Node 24.15.0. O app fica em `C:\Users\marce\AppData\Local\Programs\Open Design`; o perfil `release-stable-win` fica em `C:\Users\marce\AppData\Roaming\Open Design\namespaces\release-stable-win\data`. O agente empacotado é OpenCode 1.19.6. Um OpenCode 2.2.5 separado está instalado no WSL.
 
-O OpenDesign delega a execução do agente a um adaptador/CLI instalado. O app desta máquina usa OpenCode empacotado 1.19.6; o OpenCode disponível no WSL era 2.2.5. A execução de um agente pelo painel do app terminou com `process_exit` (3221225786) e não produziu artefatos. A execução de projeto OpenCode 2.2.5 leu as Skills e descobriu Motion MCP via a configuração do projeto; depois parou quando o provedor configurado devolveu `429 FreeUsageLimitError`. Um smoke separado do mesmo agente chamou `render_static` pelo Motion MCP e produziu `design-output/mcp-smoke.png` (37.814 bytes, SHA-256 `91e3a1dc5a3dd193bd04a6fb4f54bebfb8489f585805c49446ef92b0650788ef`).
-
-**Estado: parcial.** OpenCode via configuração local de projeto conectou ao Motion MCP. Isso não comprova que o painel/loop de agente do OpenDesign encaminha servidores MCP externos. O próprio MCP do OpenDesign está implementado no pacote instalado, mas seu handshake não foi concluído neste ambiente WSL/Windows; não declaramos integração nativa homologada.
+**Estado: parcialmente homologado, integração nativa não concluída.** O OpenCode 2.2.5, executado diretamente no projeto isolado, conectou ao Motion MCP e gerou um PNG real. Isso demonstra o caminho indireto pelo agente subjacente, não o acesso ao MCP a partir do painel/loop nativo do OpenDesign. O MCP próprio do OpenDesign está documentado e empacotado, mas não completou handshake neste ambiente.
 
 ## Projeto isolado
 
-Foi criado no OpenDesign o projeto local **Motion Studio — Integration Lab**, ID `04691291-53a3-44d0-b4ce-5d1cb1bb091e`, sem editar projetos anteriores. Caminho local:
+O projeto **Motion Studio — Integration Lab**, ID `04691291-53a3-44d0-b4ce-5d1cb1bb091e`, foi criado no perfil existente sem tocar em outros projetos. Não foram alteradas configurações globais/pessoais de OpenDesign, OpenCode ou de outros agentes. O projeto e o inventário de Skills estão detalhados no [relatório do piloto](../reports/OPENDESIGN_INTEGRATION_PILOT.md).
 
-```text
-C:\Users\marce\AppData\Roaming\Open Design\namespaces\release-stable-win\data\projects\04691291-53a3-44d0-b4ce-5d1cb1bb091e
-```
+## Diagnóstico do handshake nativo
 
-O perfil do projeto recebeu 16 Skills públicas. As onze solicitadas estão presentes em `.agents/skills/`; nove relevantes foram carregadas na sessão OpenCode: `studio-director`, `motion-director`, `web-director`, `design-to-motion`, `motion-to-design`, `carousel-studio`, `story-studio`, `shorts-director` e `cinematic-product-director`. `reel-editor` ficou fora porque não havia um reel existente para editar; `3d-scene-director` ficou fora porque a campanha é 2D.
+O CLI fornecido pela instalação em `resources/app/prebundled/daemon/daemon-cli.mjs` documenta `od mcp` como servidor MCP `stdio` que encaminha chamadas para o daemon local OpenDesign, normalmente em `127.0.0.1:7456`. A ajuda do executável instalado foi consultada; não foi usado endpoint privado do Motion Studio nem endpoint HTTP próprio.
 
-Uma configuração **somente neste projeto**, [opencode.json de referência](../../projects/m6-herbario-de-nevoa/evidence/opendesign/opencode.project.example.json), usa o OpenCode v2 `mcp.servers`, `type: local`, Node, `packages/motion-cli/bin/motion.mjs mcp` e `--workspace` apontado à raiz do projeto. Nenhum arquivo global/pessoal foi alterado. O caminho do Node deve corresponder ao runtime do agente no host do usuário.
+Na sessão de diagnóstico:
 
-## Arquivos de produção e verificação
+- O perfil `app-config.json` não continha um registro MCP externo do Motion Studio.
+- O daemon reportou `clean_shutdown` e terminou limpidamente; não havia processo Linux do OpenDesign nem listener local nas portas 7456, 7457 ou 7460.
+- A tentativa de acessar o processo Windows/daemon a partir do WSL falhou na camada de interop (`UtilAcceptVsock: accept4 failed 110`), antes de um handshake MCP válido.
+- O painel executou o agente embutido, mas o processo terminou com `process_exit` / código `3221225786`; o bundle não encaminhou uma lista de servidores MCP (`toolBundle.mcpServers` vazio na execução observada).
+- O `opencode.json` existente no projeto é POSIX/WSL e aponta para Node e caminhos Linux. Ele funciona com o OpenCode CLI do WSL, mas não prova que os caminhos/configurações sejam consumidos pelo agente Windows empacotado.
 
-O projeto reutiliza a campanha fictícia **Herbário de Névoa** da M6, seus tokens, paleta, tipografia, carrossel, story, storyboard, SVGs, MP4s e quadros. Foram acrescentadas variantes locais de dashboard e mobile e um cartão de espécime em HTML. O materializador só grava quando o ID de projeto permitido coincide; ele não envia assets a serviços externos.
+Portanto, a evidência aponta para ausência de daemon acessível entre Windows e WSL e ausência de configuração de servidor no loop do painel observado. Não prova incompatibilidade geral do protocolo: a documentação oficial da versão descreve injeção de MCP externo no adaptador do agente. A integração nativa pode ser tentada novamente quando o daemon Windows estiver acessível e houver um mecanismo suportado para registrar o Motion MCP no agente do painel. Nenhuma configuração pessoal foi alterada para contornar a falha.
 
-`design-output/production/` contém 41 arquivos de produção, 1.927.522 bytes; manifesto SHA-256 `f7c5b091025079f49037a1cecabf5b2c6b3ad65ebecfe7318414216e50e9aa5b`. O cliente MCP oficial de referência descobriu 30 ferramentas e schemas de entrada/saída. Motion MCP renderizou nove previews, validou SVG e passou a landing pelos cinco viewports: 360×740, 390×844, 768×1024, 1280×800 e 1920×1080, sem overflow ou issues. Capturas, hashes e respostas estão em [`motion-mcp-results.json`](../../projects/m6-herbario-de-nevoa/evidence/opendesign/motion-mcp-results.json); o comando reprodutível é [`capture-project-evidence.mjs`](../../projects/m6-herbario-de-nevoa/evidence/opendesign/capture-project-evidence.mjs).
+Uma execução separada do agente no OpenCode 2.2.5 chegou a chamar o Motion MCP, mas a produção solicitada foi interrompida pelo provedor configurado com `429 FreeUsageLimitError`. Não houve troca de provedor nem nova tentativa para contornar o limite. Um smoke independente anterior permanece evidência válida apenas de `render_static`: PNG de 37.814 bytes, SHA-256 `91e3a1dc5a3dd193bd04a6fb4f54bebfb8489f585805c49446ef92b0650788ef`. Não é evidência de um novo vídeo de 15 segundos.
 
-Os arquivos HTML/CSS/JSON/SVG são texto editável no workspace. A captura via Motion MCP demonstra render local; não prova importação para camadas ou componentes nativos do OpenDesign. O HTML de cartão não é uma instância da biblioteca nativa do editor. Não foi executada uma produção completa de vídeo pelo agente do OpenDesign.
+## Motion MCP e Skills
 
-## Configuração por projeto
+No projeto isolado foi preservada a configuração por projeto do OpenCode CLI, com Node, entrypoint `packages/motion-cli/bin/motion.mjs`, comando `mcp`, transporte local `stdio` e `--workspace` delimitado ao projeto. O MCP de referência descobriu 30 ferramentas e executou nove renders, QA nos cinco viewports e validação SVG. O script e as respostas com hashes estão em [`motion-mcp-results.json`](../../projects/m6-herbario-de-nevoa/evidence/opendesign/motion-mcp-results.json).
 
-Na raiz do projeto OpenDesign, configure o OpenCode usado naquele projeto. Exemplo POSIX/WSL:
+O perfil local contém 16 Skills públicas, incluindo as onze pedidas. Nove foram carregadas pelo OpenCode CLI: `studio-director`, `motion-director`, `web-director`, `design-to-motion`, `motion-to-design`, `carousel-studio`, `story-studio`, `shorts-director` e `cinematic-product-director`. `reel-editor` e `3d-scene-director` não foram invocadas por não se aplicarem ao trabalho 2D executado. A descoberta efetiva pelo agente do painel OpenDesign não foi demonstrada. O projeto usa a distribuição e os perfis existentes do Motion Studio; não há cópia específica das Skills para OpenDesign.
 
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "mcp": {
-    "servers": {
-      "motion-studio": {
-        "type": "local",
-        "command": [
-          "/caminho/para/node",
-          "/caminho/para/motion-studio/packages/motion-cli/bin/motion.mjs",
-          "mcp",
-          "--workspace",
-          "/caminho/para/projeto-opendesign"
-        ],
-        "cwd": "/caminho/para/projeto-opendesign",
-        "timeout": 30000
-      }
-    }
-  }
-}
-```
+## Formatos, importação e fidelidade
 
-Verifique pelo agente usado pelo OpenDesign:
+O projeto local contém HTML, CSS, JSON/tokens, SVG, PNGs, MP4s e storyboard da campanha fictícia **Herbário de Névoa**. O inventário e o manifesto estão no [relatório](../reports/OPENDESIGN_INTEGRATION_PILOT.md). Os renders confirmam que o Motion MCP lê esses arquivos do workspace e produz imagens. Não confirmam importação desses arquivos como camadas ou componentes nativos do OpenDesign.
 
-```bash
-opencode mcp list
-opencode run 'Use o Motion MCP para renderizar design-output/production/website/index.html para uma PNG dentro de design-output/production/qa.'
-```
-
-O teste M6 foi **indireto**: OpenCode CLI 2.2.5 executado na pasta do projeto leu a configuração e chamou Motion MCP. A configuração não foi registrada na conta OpenDesign nem em `app-config.json`. O processo do painel usa a versão empacotada 1.19.6 e não compartilhou aquela lista MCP no teste observado.
-
-## Skills
-
-Use o instalador/profile já existente, sem duplicar Skills ou criar forks para OpenDesign:
-
-```bash
-node /caminho/para/motion-studio/packages/motion-cli/bin/motion.mjs init \
-  --brand=herbario-de-nevoa \
-  --profile=integration,motion,social,3d \
-  --agents=opencode \
-  --skip-install
-```
-
-OpenCode procura Skills em `.agents/skills` e `.opencode/skills`. No projeto piloto, `.agents/skills` foi instalado e nove Skills foram efetivamente lidas. As duas Skills condicionais acima não foram invocadas porque o trabalho não editava um reel e não usava 3D. Outros agentes só devem ser marcados compatíveis após teste próprio.
+O `bridge_import_design` atual exige frame JSON Doop e marca a proveniência Doop. `bridge_normalize_design` aceita `MotionDesignIR@1`, mas não existe extractor suportado de um projeto OpenDesign para esse contrato. Não rotulamos arquivos OpenDesign como Doop nem implementamos um adapter específico no piloto. HTML/CSS/JSON/SVG ficam editáveis como texto; vídeo e imagens são referências rasterizadas; semântica nativa de componentes, tokens, protótipos, timeline e reimportação não foi homologada.
 
 ## Matriz Doop × OpenDesign
 
+Estados descrevem as operações efetivamente verificadas nesta instalação. `PARTIAL` não significa compatibilidade integral.
+
 | Capacidade | Doop | OpenDesign |
 |---|---|---|
-| Integração com agentes | PASS — MCP oficial conectado e operações de leitura no laboratório | PARTIAL — agente do app delega para CLI; smoke via OpenCode 2.2.5 funcionou |
-| MCP próprio | PASS — servidor oficial disponível na sessão | PARTIAL — servidor stdio consta no app instalado; handshake local não foi concluído |
-| MCP externo | NOT_TESTED — sem contrato verificado para registrar servidor externo | PARTIAL — configurado e chamado por OpenCode do projeto; painel do app não encaminhou MCP no teste |
-| Skills externas | PARTIAL — fluxo Motion usa Skills e MCPs pelo agente | PASS — 16 Skills instaladas no projeto; nove solicitadas lidas pelo OpenCode |
-| Importação de HTML | PARTIAL — frames podem conter HTML; fluxo novo ficou em dry-run | PARTIAL — arquivo HTML local; importação como design nativo não testada |
-| Exportação de HTML | NOT_AVAILABLE — catálogo atual não fornece exportação HTML | PARTIAL — HTML gravado no projeto; exportação nativa do editor não testada |
-| SVG | PARTIAL — SVG inline/upload disponível; round-trip novo pendente | PARTIAL — SVG local validado pelo Motion MCP; camada nativa não testada |
-| Design tokens | BLOCKED — tokens globais não expostos; CSS local funciona | PARTIAL — JSON/CSS editáveis, sem modelo semântico nativo homologado |
-| Componentes | NOT_AVAILABLE — biblioteca e expansão de `<doop-use>` indisponíveis | PARTIAL — cartão HTML editável; componente nativo não verificado |
-| Protótipos | PASS — cinco ações/destinos do frame de laboratório relidos | NOT_TESTED |
-| Editabilidade | PARTIAL — HTML dos frames editável; round-trip não testado | PARTIAL — texto HTML/CSS/SVG editável; camadas nativas não verificadas |
-| Assets locais | BLOCKED — transferência pública não autorizada neste plano | PASS — assets locais no projeto e renderização local |
-| Design-to-Motion | PASS — seis frames importados/normalizados/renderizados localmente | PARTIAL — HTML/SVG local renderizados; importação Design Bridge não executada |
-| Motion-to-Design | BLOCKED — 15 frames/5 uploads em dry-run aguardam autorização | PARTIAL — arquivos copiados ao projeto; releitura via OpenDesign MCP não validada |
-| Produção usando Motion MCP | PASS — chamadas locais após importação do canvas | PARTIAL — smoke `render_static` por OpenCode passou; produção completa pelo painel falhou |
-| Fidelidade visual | PARTIAL — seis screenshots relidas; sem SSIM de round-trip | PARTIAL — previews revisados; sem comparação de importação nativa |
-| Execução offline | NOT_AVAILABLE — editor/MCP oficial remoto | PARTIAL — Motion MCP e previews locais funcionam sem upload; app/daemon offline não homologado |
+| Integração com agentes | PASS — MCP oficial utilizado no laboratório | PARTIAL — execução direta por OpenCode funcionou; painel não demonstrou handoff |
+| MCP próprio | PASS — MCP oficial conectado | PARTIAL — CLI `stdio` existe, daemon/handshake não ficou acessível pelo WSL |
+| Suporte a MCP externo | NOT_TESTED — sem mecanismo externo verificado nesta sessão | PARTIAL — OpenCode CLI por projeto conectado; injeção no painel não observada |
+| Skills externas | PARTIAL — Skills coordenam o agente, não são mecanismo próprio do editor | PARTIAL — 16 instaladas no projeto e nove lidas pelo OpenCode; painel não verificado |
+| Importação de HTML | PASS — HTML importado em frames Doop | PARTIAL — arquivos locais presentes; importação nativa não testada |
+| Exportação de HTML | NOT_AVAILABLE — sem exportador HTML no catálogo Doop verificado | PARTIAL — arquivos locais criados; exportação pelo editor não testada |
+| SVG | PARTIAL — elementos compatíveis exibidos; round-trip de edição limitado | PARTIAL — SVG local validado/renderizado; camada nativa não verificada |
+| Design tokens | PARTIAL — tokens locais do frame preservados; tokens globais não expostos | PARTIAL — JSON/CSS local disponível; modelo semântico nativo não verificado |
+| Componentes | NOT_AVAILABLE — biblioteca global e expansão de `<doop-use>` indisponíveis | NOT_TESTED — componentes nativos não verificados |
+| Protótipos | PASS — seis frames originais preservados; protótipo original relido | NOT_TESTED |
+| Editabilidade | PARTIAL — markup dos novos frames é HTML; vídeos são imagens de referência | PARTIAL — HTML/CSS/JSON/SVG são texto; camadas nativas não provadas |
+| Assets locais | PASS — cinco PNGs sintéticos planejados, hash verificado e colocados nos frames | PASS — arquivos existentes no workspace local; sem envio externo automático |
+| Design-to-Motion | PASS — seis frames importados/normalizados/renderizados localmente | PARTIAL — renders de arquivos locais; importação Design Bridge não executada |
+| Motion-to-Design | PASS — 15 frames e cinco assets enviados, relidos e capturados no laboratório | PARTIAL — arquivos do projeto existem; reimportação pelo OpenDesign não provada |
+| Produção utilizando Motion MCP | PASS — operações do bridge executadas pelo MCP oficial | PARTIAL — smoke `render_static` pelo OpenCode; produção de 15 s bloqueada por 429 |
+| Fidelidade visual | PARTIAL — screenshots após exportação; revisão visual, sem métrica de round-trip equivalente | PARTIAL — previews locais revisados; sem comparação de importação nativa |
+| Execução offline | NOT_AVAILABLE — serviço/editor remoto | PARTIAL — produção Motion local; app e daemon offline não homologados |
 
-## Limitações Doop que permanecem
+## Limitações externas do Doop
 
-- Tokens globais e biblioteca global de componentes: ausentes no catálogo público visto.
-- `<doop-use>`: referência preservada; expansão da biblioteca não suportada.
-- Upload de fontes: não existe ferramenta pública verificada.
-- CAS atômico: o Doop MCP não fornece controle de revisão compare-and-swap; a ponte só pode reler antes da escrita e detectar conflito antes de tentar.
-- O dry-run não escreve nem reserva nomes. Enviar PNGs com `upload_asset` cria URLs públicas permanentes; isso requer autorização antes da execução.
+- Tokens globais do Doop e biblioteca global de componentes não aparecem nas ferramentas disponíveis.
+- Referências `<doop-use>` não expandiram para instâncias renderizadas nesta versão/conta.
+- Ferramenta pública para upload de fontes não foi encontrada.
+- O MCP não fornece CAS atômico. A releitura detecta alterações observadas antes da escrita, mas não elimina uma corrida posterior.
 
-O Bridge atual importa frames através do adapter específico do Doop (`bridge_import_design` espera frame JSON do Doop e grava `source.editor: "doop"`). Embora `bridge_normalize_design` aceite `MotionDesignIR@1`, não existe extractor suportado do projeto OpenDesign (árvore de HTML/CSS/JSON/SVG e metadados/componentes) para esse contrato. Os arquivos locais foram renderizados diretamente; não foram rotulados como Doop nem importados como DesignIR. Um adapter OpenDesign completo não foi implementado por estar fora do piloto. Esse gap não bloqueia render, QA, SVG ou normalização dos Designs já contratados; consulte o [roadmap do Universal Design Bridge](../roadmap/UNIVERSAL_DESIGN_BRIDGE.md).
+Esses limites não bloqueiam renders, QA, SVG, storyboard nem produção local. Veja as evidências transacionais e os limites de fidelity no [relatório M6](../reports/MISSION_23_M6_REPORT.md).
 
-## Fontes oficiais
+## Referências oficiais
 
 - [OpenDesign agent adapters no commit testado](https://github.com/nexu-io/open-design/blob/d9691d7a8ba21ab57c52916dcf07ea87598e04fc/docs/agent-adapters.md)
 - [OpenDesign Skills protocol no commit testado](https://github.com/nexu-io/open-design/blob/d9691d7a8ba21ab57c52916dcf07ea87598e04fc/docs/skills-protocol.md)
