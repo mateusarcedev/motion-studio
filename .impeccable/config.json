@@ -1,0 +1,49 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "projects/m6-herbario-de-nevoa/carousel/01-capa.html",
+          "projects/m6-herbario-de-nevoa/carousel/02-indice.html",
+          "projects/m6-herbario-de-nevoa/carousel/05-paisagem.html",
+          "projects/m6-herbario-de-nevoa/story/story.html",
+          "projects/m6-herbario-de-nevoa/web/index.html"
+        ],
+        "createdAt": "2026-11-26T05:27:00.957Z",
+        "reason": "Agent: BRIEF.md and STYLE.md define field-notebook paper colors #EAE6DA and #F4F0E6 as the intentional editorial palette for this fictional herbarium."
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "projects/m6-herbario-de-nevoa/carousel/01-capa.html",
+          "projects/m6-herbario-de-nevoa/carousel/03-lunaria.html"
+        ],
+        "createdAt": "2026-11-26T05:27:01.009Z",
+        "reason": "Agent: BRIEF.md frames the work as an editorial imaginary atlas; STYLE.md specifies serif display typography for specimen names, so the italic display is intentional editorial emphasis."
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "projects/m6-herbario-de-nevoa/web/index.html"
+        ],
+        "createdAt": "2026-11-26T05:27:01.049Z",
+        "reason": "Agent: the hook labels this an eyebrow chip, but BRIEF.md requires fictional framing and this is unboxed editorial folio text with a rule, not a pill or SaaS badge."
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          "projects/m6-herbario-de-nevoa/carousel/04-intervalo.html"
+        ],
+        "createdAt": "2026-11-26T05:27:01.098Z",
+        "reason": "Agent: the M6 storyboard specifies this clay leaf slide and its short editorial text; Floresce no intervalo is the intended frame label, not generic UI scaffolding."
+      }
+    ]
+  }
+}
