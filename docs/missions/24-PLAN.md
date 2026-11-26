@@ -14,7 +14,7 @@ Reduzir o ciclo local de desenvolvimento com uma política permanente de valida�
 - [x] Preservar os artefatos do job de determinismo com retenção de 30 dias no GitHub Actions.
 - [x] Preservar os renders/workdirs de paridade CLI × MCP quando testes falharem e disponibilizar `keepWork` no MCP de reel render como opção diagnóstica.
 - [x] Reutilizar evidência histórica autorizada; não executar a campanha M23, laboratório Doop, pilotos OpenDesign ou release gate.
-- [ ] Executar CI abrangente remoto na matriz configurada e registrar o resultado após o push.
+- [x] Executar CI abrangente remoto na matriz configurada e registrar o resultado após o push. Run [45886422855](https://github.com/mateusarcedev/motion-studio/actions/runs/45886422855) aprovado em Node 20/22/24, determinismo, testes Python e Skills; a divergência previamente confirmada continua aberta porque não reapareceu neste run.
 
 ## Interfaces entregues
 

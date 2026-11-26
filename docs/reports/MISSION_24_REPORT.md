@@ -38,7 +38,7 @@ Relatório completo do replay: [`final-stage-replay-2026-11-26.json`](assets/mis
 - O teste legado de render final foi refatorado para criar seu próprio timeline sintético em vez de depender de `tests/tmp/reel/edit.json`, que era produzido por outro teste. A seleção direta do teste final passou (**1/1**, incluindo dois renders e QA determinístico). Os testes `SOURCE_CHANGED` e validação CLI também criam o próprio timeline e passaram em seleção separada (**2/2**).
 - `node --test tests/mcp_parity.test.mjs`: **1/1 aprovado** localmente em Node 24, exercitando o novo parâmetro `keepWork` por CLI e MCP.
 - Replay focado duas vezes sobre os diretórios `cli` e `mcp` criados por esse teste: ambos **PASS**, com SHA-256 de saída `f9f948a476488fdbfbdfb535eb201078b7adf948edd5d6a9099818918f0522e3`; os relatórios e hashes de stream estão em [`parity-final-replay-node24-2026-11-26.json`](assets/mission-24/parity-final-replay-node24-2026-11-26.json). São resultados no host Node 24 / FFmpeg 8 e não encerram a ocorrência Node 22 / FFmpeg 6.
-- A tentativa inicial de CI M24 falhou: Node 20/24 pela referência de fixture já corrigida; Node 22 também pela divergência CLI × MCP preservada acima. A segunda validação remota está pendente da correção e do ajuste de coleta de artefatos.
+- A primeira tentativa de CI M24 falhou: Node 20/24 pela referência de fixture já corrigida; Node 22 também confirmou a divergência CLI × MCP preservada acima. Após corrigir a fixture, adicionar retenção de artefatos e ajustar o YAML do workflow, o run [45886422855](https://github.com/mateusarcedev/motion-studio/actions/runs/45886422855) terminou **success** no commit `138028a`: job de determinismo same-machine aprovado e suíte completa aprovada em Node 20, 22 e 24, incluindo testes Python e catálogo de Skills. A etapa de upload de evidência CLI × MCP foi corretamente pulada porque é condicional a falhas. A aprovação demonstra que o caso não reapareceu nessa execução; não apaga a falha confirmada no run anterior nem resolve sua causa.
 
 Não foram executados localmente `npm run test:ci`, `npm run test:determinism` (pipeline sintético completo), `npm run test:py`, `npm run skills:verify`, `motion doctor --json`, `npm pack` ou release gate. A suíte abrangente e a matriz Node 20/22/24 ficam para GitHub Actions conforme a política aprovada e o pedido desta missão. Não foram repetidas as homologações M23, nem alterados o laboratório Doop, o projeto OpenDesign ou os materiais da campanha.
 
@@ -48,9 +48,11 @@ Não foram executados localmente `npm run test:ci`, `npm run test:determinism` (
 2. `05da71c` — replay focado, classificação, comparação triestado e testes direcionados.
 3. `7eadc22` — primeira documentação e evidência; seu CI revelou o erro de fixture e a divergência de paridade M24.
 4. `b99897e` — correção de escopo da fixture, `keepWork` opcional no MCP, workdirs preservados no teste e upload de evidência em falha.
-5. O registro final desta ocorrência e os relatórios/replays são commits documentais separados.
+5. `c101999` — registro documental da divergência e evidências preservadas.
+6. `138028a` — correção de sintaxe YAML no upload condicional de artefatos do CI.
+7. O relatório final e o plano M24 são atualizados em commit documental separado após a validação remota.
 
-Estado do CI remoto após o primeiro push: **FAIL** em Node 20, 22 e 24; determinismo **PASS**. Node 20/24 falharam por uma referência de fixture corrigida em `b99897e`; Node 22 também teve a divergência confirmada descrita acima. A execução abrangente do commit com as correções está pendente. Nenhuma versão npm foi alterada ou publicada.
+Estado do CI remoto: a primeira execução abrangente falhou conforme registrado acima; a validação final do commit `138028a` passou em todos os jobs e versões Node configuradas (20, 22, 24), incluindo determinismo, suíte JavaScript, testes Python e Skills. A paridade CLI × MCP não gerou novo artefato porque não falhou nessa execução. Nenhuma versão npm foi alterada ou publicada.
 
 ## Pendências e limites
 
@@ -58,3 +60,5 @@ Estado do CI remoto após o primeiro push: **FAIL** em Node 20, 22 e 24; determi
 - Reexecutar o replay com artefatos de uma falha futura sem modificar os critérios de determinismo.
 - O replay atual cobre o estágio final e não reconstrói Chromium, segmentos, voz ou legendas.
 - O fluxo permanece dependente da retenção/obtenção de `determinism-intermediates`; sem os insumos, o resultado é inconclusivo.
+
+O incidente Node 22/FFmpeg 6 continua aberto: existem uma divergência de vídeo reproduzida no CI e uma ocorrência histórica M23, além de execuções aprovadas e de um replay local inconclusivo em Node 24/FFmpeg 8. Não há evidência para atribuir causa comum, e nenhuma aprovação por retry foi tratada como resolução.
