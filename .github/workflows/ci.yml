@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      run_release_gate:
+        description: Run the explicit pre-release gate (builds public package tarballs; never publishes)
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -38,11 +44,13 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Chromium
         run: npx playwright-core install --with-deps chromium
-      - name: Dependências Python
-        run: python3 -m pip install --quiet pillow -r packages/motion-skills/skills/cinematic-product-director/scripts/requirements.txt
-      - name: Suíte completa
+      - name: Dependências Python usadas pela suíte JS e pelos contratos cruzados
+        run: python3 -m pip install --quiet -r scripts/test-requirements.txt
+      - name: Suíte JavaScript do Motion Core
         env: { MOTION_TEST_CONCURRENCY: 1 }
         run: npm run test:ci
+      - name: Contratos Python que dependem da versão Node da matriz
+        run: npm run test:py:matrix
       - name: Evidência de paridade CLI × MCP
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -51,10 +59,81 @@ jobs:
           path: tests/tmp/mcp-parity
           retention-days: 30
           if-no-files-found: warn
-      - name: Testes Python
-        run: npm run test:py
+      - name: Métricas dos testes Node ${{ matrix.node }}
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: "test-metrics-node${{ matrix.node }}"
+          path: tests/tmp/test-report-*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  python:
+    name: Testes Python independentes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 1, persist-credentials: false }
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: "3.12", cache: pip, cache-dependency-path: scripts/test-requirements.txt }
+      - name: Dependências de teste
+        run: python3 -m pip install --quiet -r scripts/test-requirements.txt
+      - name: Suíte Python independente da matriz Node
+        run: python3 scripts/ci_python_tests.py --scope=standalone
+      - name: Métricas dos testes Python
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-metrics-python
+          path: tests/tmp/python-test-metrics-*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  skills:
+    name: Skills, catálogo e testes Node
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 1, persist-credentials: false }
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            packages/motion-skills/skills/video-shotcraft/package-lock.json
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: "3.12" }
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-skills-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg fonts-dejavu-core
+      - run: npm ci --no-audit --no-fund
+      - name: Chromium
+        run: npx playwright-core install --with-deps chromium
+      - name: Dependências isoladas do Vitest
+        run: npm ci --no-audit --no-fund --prefix packages/motion-skills/skills/video-shotcraft
+      - name: Dependências Python das Skills
+        run: python3 -m pip install --quiet -r scripts/test-requirements.txt
+      - name: Cobertura e classificação de todos os testes
+        run: npm run test:catalog:check
+      - name: Testes Node e Vitest das Skills
+        env: { MOTION_TEST_CONCURRENCY: 1 }
+        run: npm run test:skills
       - name: Catálogo público de Skills
         run: npm run skills:verify
+      - name: Métricas das Skills
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-metrics-skills
+          path: tests/tmp/test-report-*.json
+          retention-days: 30
+          if-no-files-found: warn
 
   determinism:
     name: Determinismo (mesma máquina)
@@ -79,3 +158,17 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with: { name: determinism-intermediates, path: tests/tmp/ci-determinism-*, retention-days: 30, if-no-files-found: warn }
+
+  release:
+    name: Release gate (manual)
+    if: github.event_name == 'workflow_dispatch' && inputs.run_release_gate == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 1, persist-credentials: false }
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with: { node-version: 22, cache: npm }
+      - run: npm ci --no-audit --no-fund
+      - name: Gate explícito de pré-release
+        run: npm run test:release
