@@ -89,7 +89,17 @@ test("fluxo completo por CLI e por MCP: mesma timeline, mesmos quadros e mesmo v
     const cmp = await R.compareRenders(`${dirs.cli}/reel.mp4`, `${dirs.mcp}/reel.mp4`);
     // intermediates are deleted after each render: what survives says whether the audio chain or the composition diverged
     const stages = await Promise.all(Object.values(dirs).map(async (d) => { const r = JSON.parse(await readFile(`${d}/reel.render.json`, "utf8")); return { dir: path.basename(d), voiceWav: await R.sha256File(`${d}/reel.voice.wav`), preview: await R.sha256File(`${d}/preview.mp4`), captions: await R.sha256File(`${d}/reel.captions.ass`), latency: r.voice.latency, loudness: r.voice.loudnessPass, truePeak: r.truePeak, ffmpeg: r.ffmpeg }; }));
-    const evidence = JSON.stringify({ cpu: os.cpus()[0]?.model, cpus: os.cpus().length, node: process.version, compare: cmp, stages }, null, 2);
+    const evidence = JSON.stringify({
+      node: process.version,
+      cpu: os.cpus()[0]?.model ?? null,
+      cpus: os.cpus().length,
+      inputSha256: await R.sha256File(video),
+      cliTimelineHash: tc.hash,
+      mcpTimelineHash: tm.hash,
+      compare: cmp,
+      stages,
+    }, null, 2);
+    await writeFile(path.join(tmp, "parity-report.json"), evidence + "\n");
     assert.notEqual(cmp.status, "read-error", `erro de leitura, não diferença de render: ${evidence}`);
     assert.equal(cmp.status, "identical", `streams diferentes (${cmp.different.join(", ")}): ${evidence}`);
     const strip = (r) => r.checks.map((c) => [c.id, c.status]);

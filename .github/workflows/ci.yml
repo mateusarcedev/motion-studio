@@ -61,6 +61,17 @@ jobs:
           path: tests/tmp/mcp-parity
           retention-days: 30
           if-no-files-found: warn
+      - name: Resumo compacto da paridade CLI × MCP
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: "mcp-parity-node${{ matrix.node }}-diagnostics"
+          path: |
+            tests/tmp/mcp-parity/environment.json
+            tests/tmp/mcp-parity/ffmpeg-commands.log
+            tests/tmp/mcp-parity/parity-report.json
+          retention-days: 30
+          if-no-files-found: warn
       - name: Métricas dos testes Node ${{ matrix.node }}
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

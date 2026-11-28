@@ -38,6 +38,7 @@ jobs:
         env:
           REPEAT: ${{ inputs.repeat || '10' }}
           MOTION_MCP_PARITY_CAPTURE_FFMPEG: "1"
+          MOTION_TEST_CONCURRENCY: "1"
         shell: bash
         run: |
           # every round runs, even after a failure; any failure fails the job
@@ -45,14 +46,30 @@ jobs:
           bad=0
           for ((i = 1; i <= REPEAT; i++)); do
             echo "=== rodada $i/$REPEAT"
-            node --test tests/mcp_parity.test.mjs || {
+            if node --test tests/mcp_parity.test.mjs; then
+              status=0
+            else
+              status=$?
               bad=$((bad + 1))
               echo "=== rodada $i FALHOU"
               if [ -d tests/tmp/mcp-parity ]; then cp -a tests/tmp/mcp-parity "tests/tmp/mcp-parity-failure-$i"; fi
-            }
+            fi
+            if [ -d tests/tmp/mcp-parity ]; then cp -a tests/tmp/mcp-parity "tests/tmp/mcp-parity-round-$i"; fi
+            if [ "$status" -ne 0 ]; then echo "=== rodada $i exit $status"; fi
           done
           echo "RESULTADO: $bad falhas em $REPEAT rodadas" | tee -a "$GITHUB_STEP_SUMMARY"
           [ "$bad" -eq 0 ]
+      - name: Diagnósticos compactos de todas as rodadas
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: "mcp-parity-repeat-node${{ inputs.node || '24' }}-diagnostics"
+          path: |
+            tests/tmp/mcp-parity-round-*/environment.json
+            tests/tmp/mcp-parity-round-*/ffmpeg-commands.log
+            tests/tmp/mcp-parity-round-*/parity-report.json
+          retention-days: 30
+          if-no-files-found: warn
       - name: Artefatos de falhas da paridade
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
