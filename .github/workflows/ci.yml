@@ -47,7 +47,9 @@ jobs:
       - name: Dependências Python usadas pela suíte JS e pelos contratos cruzados
         run: python3 -m pip install --quiet -r scripts/test-requirements.txt
       - name: Suíte JavaScript do Motion Core
-        env: { MOTION_TEST_CONCURRENCY: 1 }
+        env:
+          MOTION_TEST_CONCURRENCY: 1
+          MOTION_MCP_PARITY_CAPTURE_FFMPEG: "1"
         run: npm run test:ci
       - name: Contratos Python que dependem da versão Node da matriz
         run: npm run test:py:matrix

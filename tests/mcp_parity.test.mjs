@@ -1,8 +1,8 @@
 /** Mission 21.1 (D) — CLI and MCP stdio run the same analyze → plan → preview → render → QA flow. */
-import { test, before } from "node:test";
+import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { chmod, copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import os from "node:os";
 import path from "node:path";
@@ -14,8 +14,43 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const tmp = path.join(root, "tests", "tmp", "mcp-parity");
 const CLI = path.join(root, "packages/motion-cli/bin/motion.mjs");
 let video, f;
+let originalPath = null;
 before(async () => {
   await rm(tmp, { recursive: true, force: true }); await mkdir(path.join(tmp, "conf", "fonts"), { recursive: true });
+  if (process.env.MOTION_MCP_PARITY_CAPTURE_FFMPEG === "1") {
+    const detected = spawnSync("sh", ["-c", "command -v ffmpeg"], { encoding: "utf8" });
+    assert.equal(detected.status, 0, `ffmpeg lookup failed: ${detected.stderr}`);
+    const realFfmpeg = detected.stdout.trim();
+    const version = spawnSync(realFfmpeg, ["-hide_banner", "-version"], { encoding: "utf8" });
+    assert.equal(version.status, 0, `ffmpeg version probe failed: ${version.stderr}`);
+    const binDir = path.join(tmp, "diagnostics-bin");
+    const commandLog = path.join(tmp, "ffmpeg-commands.log");
+    await mkdir(binDir);
+    const quote = (value) => "'" + value.replace(/'/g, "'\\''") + "'";
+    const wrapper = path.join(binDir, "ffmpeg");
+    await writeFile(wrapper, [
+      "#!/usr/bin/env bash",
+      `{ printf 'pid=%s cwd=%q argv=' "$$" "$PWD"; printf '%q ' "$@"; printf '\\n'; } >> ${quote(commandLog)}`,
+      `exec ${quote(realFfmpeg)} "$@"`,
+      "",
+    ].join("\n"));
+    await chmod(wrapper, 0o755);
+    originalPath = process.env.PATH ?? "";
+    process.env.PATH = binDir + path.delimiter + originalPath;
+    await writeFile(path.join(tmp, "environment.json"), JSON.stringify({
+      node: process.version,
+      v8: process.versions.v8,
+      platform: process.platform,
+      arch: process.arch,
+      osRelease: os.release(),
+      osVersion: os.version(),
+      cpu: os.cpus()[0]?.model ?? null,
+      cpus: os.cpus().length,
+      availableParallelism: os.availableParallelism?.() ?? null,
+      testConcurrency: process.env.MOTION_TEST_CONCURRENCY ?? null,
+      ffmpegVersionOutput: version.stdout.trim(),
+    }, null, 2) + "\n");
+  }
   video = await verticalVideo(tmp, await noisySpeechWav(tmp));
   await copyFile(path.join(root, "projects/reel-ia-programacao/fonts/Inter-700.woff2"), path.join(tmp, "conf", "fonts", "Inter-700.woff2"));
   f = { transcript: path.join(tmp, "t.json"), config: path.join(tmp, "conf", "edit.config.json"), brief: path.join(tmp, "BRIEF.md") };
@@ -23,6 +58,7 @@ before(async () => {
   await writeFile(f.config, JSON.stringify({ faceBox: { x: 0.25, y: 0.25, w: 0.5, h: 0.4 }, captions: { fontsDir: "fonts" } }));
   await writeFile(f.brief, '```json motion-brief\n{"opening":"original","glossary":["Codex"]}\n```\n');
 });
+after(() => { if (originalPath !== null) process.env.PATH = originalPath; });
 
 test("fluxo completo por CLI e por MCP: mesma timeline, mesmos quadros e mesmo veredito de QA", { timeout: 400000 }, async () => {
   const cli = (...a) => { const r = spawnSync("node", [CLI, ...a, "--json"], { encoding: "utf8", maxBuffer: 1 << 26 }); return { status: r.status, json: JSON.parse(r.stdout) }; };
