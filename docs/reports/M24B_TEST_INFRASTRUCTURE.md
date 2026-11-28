@@ -6,6 +6,8 @@ M24B implementa o catálogo, os grupos incrementais, a seleção por impacto, a 
 
 M24A permanece concluída no commit `923b2e0`. A divergência intermitente permanece uma investigação independente, sem reexecuções de homologação da M23 nesta etapa. Além dos dois testes Python bloqueados por fontes ausentes, os runs `46106703492` e `46108296635` observaram a mesma divergência CLI × MCP de vídeo em Node 20, com o run aprovado `46107491931` entre eles. As duas ocorrências e seus artefatos são registrados abaixo; a não reprodução não determina nem resolve a causa.
 
+**Acompanhamento M24C:** o estado parcial acima descreve M24B no encerramento daquela etapa. A M24C recuperou as três fontes a partir do upstream `ui-ux-pro-max`, validou os dois contratos offline, atualizou o catálogo para 126 testes executáveis e manteve Jianying manual. A investigação de paridade continua independente e inconclusiva; veja [`M24C_STABILIZATION.md`](M24C_STABILIZATION.md).
+
 ## Commits M24B
 
 - `f176cff` — catálogo central e seleção incremental.

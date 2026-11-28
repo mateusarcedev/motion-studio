@@ -8,6 +8,8 @@ O incidente intermitente de determinismo continua sendo uma investigação separ
 
 ## Plano e estado
 
+**Acompanhamento posterior:** M24B foi parcialmente concluída no seu ponto de encerramento, com três fontes upstream ausentes e dois testes Python bloqueados. A M24C recuperou essas implementações, reclassificou os testes como executáveis e manteve o teste Jianying manual. Este acompanhamento não altera o estado histórico de M24B; veja [`M24C_STABILIZATION.md`](../reports/M24C_STABILIZATION.md).
+
 - [x] Confirmar main, worktree limpo e referência 923b2e0.
 - [x] Inventariar testes canônicos em tests/, packages/ e scripts/, incluindo runners e cobertura CI/manual.
 - [x] Adicionar detecção de novos testes sem classificação e cobertura vazia.
@@ -20,7 +22,7 @@ O incidente intermitente de determinismo continua sendo uma investigação separ
 - [x] Reservar release gate a acionamento manual; não executar gate nem empacotar a raiz privada nesta missão.
 - [x] Atualizar instruções, matriz de impacto, workflow e documentação de métricas/cache.
 - [x] Fazer commits atômicos em main, enviar, validar o CI remoto para os registros executáveis e registrar suas medições finais; run [46105820880](https://github.com/mateusarcedev/motion-studio/actions/runs/46105820880) aprovado em Node 20/22/24, Python independente e de matriz, Skills, catálogo e determinismo.
-- [ ] Recuperar as três fontes de `ui-ux-pro-max` ausentes e reabilitar os dois testes Python correspondentes. M24B permanece parcial enquanto isso não for feito.
+- [x] Recuperação posterior em M24C: restaurar as três fontes upstream de `ui-ux-pro-max`, reabilitar e executar os dois contratos Python, reclassificá-los no catálogo e manter Jianying como manual. Isso fecha a lacuna de cobertura descoberta em M24B, mas não muda seu estado histórico nem resolve a paridade CLI × MCP; veja [`M24C_STABILIZATION.md`](../reports/M24C_STABILIZATION.md).
 
 ## Seleção e comandos
 

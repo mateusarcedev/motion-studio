@@ -26,17 +26,25 @@ const MANUAL_EXTERNAL = new Map([
 const BLOCKED_TESTS = new Map([
   ["packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py", {
     sources: ["packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-google-fonts.py", "packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-icon-catalog.py"],
-    reason: "The test requires its catalog refresh source scripts. The test remains blocked until those implementations are restored.",
+    reason: "This offline contract test requires both catalog refresh implementations; the catalog blocks it if either source is missing.",
   }],
   ["packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py", {
-    sources: ["packages/motion-skills/skills/ui-ux-pro-max/scripts/evaluate-relevance.py"],
-    reason: "The test requires scripts/evaluate-relevance.py. The test remains blocked until that implementation is restored.",
+    sources: ["packages/motion-skills/skills/ui-ux-pro-max/scripts/evaluate-relevance.py", "packages/motion-skills/skills/ui-ux-pro-max/scripts/relevance_metrics.py"],
+    reason: "This offline contract test requires the evaluator and its metric helpers; the catalog blocks it if either source is missing.",
   }],
 ]);
 // This test names example source paths as selector inputs. They are not imports;
 // only its actual runner entrypoints are execution dependencies.
 const EXPLICIT_DEPENDENCIES = new Map([
   ["tests/test_catalog.test.mjs", ["scripts/run-test-selection.mjs", "scripts/ci_python_tests.py"]],
+  ["packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py", [
+    "packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-google-fonts.py",
+    "packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-icon-catalog.py",
+  ]],
+  ["packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py", [
+    "packages/motion-skills/skills/ui-ux-pro-max/scripts/evaluate-relevance.py",
+    "packages/motion-skills/skills/ui-ux-pro-max/scripts/relevance_metrics.py",
+  ]],
   ["scripts/test-catalog.mjs", []],
 ]);
 const METADATA_OVERRIDES = new Map([

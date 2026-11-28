@@ -2878,10 +2878,12 @@
       ],
       "ci": {
         "job": "python",
-        "status": "blocked",
-        "reason": "The test requires its catalog refresh source scripts. The test remains blocked until those implementations are restored. Missing source: packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-google-fonts.py, packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-icon-catalog.py."
+        "status": "run"
       },
-      "dependencies": [],
+      "dependencies": [
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-google-fonts.py",
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-icon-catalog.py"
+      ],
       "transitiveDependencies": [],
       "externalDependencies": [
         "python:pytest"
@@ -3092,7 +3094,7 @@
         "mcpSubprocess": false,
         "network": false
       },
-      "cost": "low",
+      "cost": "medium",
       "criticality": "standard",
       "groups": [
         "python",
@@ -3102,15 +3104,16 @@
       ],
       "ci": {
         "job": "python",
-        "status": "blocked",
-        "reason": "The test requires scripts/evaluate-relevance.py. The test remains blocked until that implementation is restored. Missing source: packages/motion-skills/skills/ui-ux-pro-max/scripts/evaluate-relevance.py."
+        "status": "run"
       },
       "dependencies": [
-        "packages/motion-skills/skills/ui-ux-pro-max/scripts/design_system.py",
-        "packages/motion-skills/skills/ui-ux-pro-max/scripts/reasoning_contract.py"
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/evaluate-relevance.py",
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/relevance_metrics.py"
       ],
       "transitiveDependencies": [
-        "packages/motion-skills/skills/ui-ux-pro-max/scripts/core.py"
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/core.py",
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/design_system.py",
+        "packages/motion-skills/skills/ui-ux-pro-max/scripts/reasoning_contract.py"
       ],
       "externalDependencies": [
         "python:pytest"

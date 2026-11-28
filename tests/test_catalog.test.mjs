@@ -28,12 +28,13 @@ test("the catalog classifies every canonical test file and gives each an explici
     assert.ok(["run", "manual", "blocked"].includes(entry.ci.status), entry.path);
     if (["manual", "blocked"].includes(entry.ci.status)) assert.ok(entry.ci.reason, entry.path);
   }
-  const blocked = catalog.entries.filter((entry) => entry.ci.status === "blocked");
-  assert.deepEqual(blocked.map((entry) => entry.path).sort(), [
+  const restoredPythonContracts = catalog.entries.filter((entry) => [
     "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py",
     "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py",
-  ]);
-  assert.ok(blocked.every((entry) => /Missing source:/.test(entry.ci.reason)));
+  ].includes(entry.path));
+  assert.deepEqual(restoredPythonContracts.map((entry) => entry.ci.status), ["run", "run"]);
+  assert.ok(restoredPythonContracts.every((entry) => entry.ci.job === "python" && entry.groups.includes("python-standalone")));
+  assert.deepEqual(catalog.entries.filter((entry) => entry.ci.status === "blocked"), []);
   const catalogTest = catalog.entries.find((entry) => entry.path === "tests/test_catalog.test.mjs");
   assert.equal(catalogTest.category, "integration");
   assert.deepEqual(catalogTest.requires, { chromium: false, ffmpeg: false, python: true, mcpSubprocess: false, network: false });
@@ -165,12 +166,18 @@ test("shared impact reports blocked entries separately from runnable selections"
   assert.deepEqual(selection.blocked.map((entry) => entry.path).sort(), catalog.entries.filter((entry) => entry.ci.status === "blocked").map((entry) => entry.path).sort());
 });
 
-test("a direct run request for a blocked Python test explains the missing implementation", () => {
-  const blocked = "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py";
-  const run = spawnSync("python3", ["scripts/ci_python_tests.py", "--path", blocked], { cwd: ROOT, encoding: "utf8" });
-  assert.equal(run.status, 2);
-  assert.match(run.stderr, /Blocked Python tests cannot be executed/);
-  assert.match(run.stderr, /evaluate-relevance\.py/);
+test("restored Python source edits select the matching offline contract tests", async () => {
+  const catalog = await loadCatalog();
+  const cases = [
+    ["packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-google-fonts.py", "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py"],
+    ["packages/motion-skills/skills/ui-ux-pro-max/scripts/refresh-icon-catalog.py", "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py"],
+    ["packages/motion-skills/skills/ui-ux-pro-max/scripts/evaluate-relevance.py", "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py"],
+    ["packages/motion-skills/skills/ui-ux-pro-max/scripts/relevance_metrics.py", "packages/motion-skills/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py"],
+  ];
+  for (const [source, expectedTest] of cases) {
+    const selection = await selectTestsForChanges([{ path: source, status: "modified" }], catalog);
+    assert.ok(selection.selected.some((entry) => entry.path === expectedTest), `${expectedTest} selected for ${source}`);
+  }
 });
 
 test("direct and transitive imports select dependent tests with a reason", async () => {

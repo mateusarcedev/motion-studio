@@ -69,11 +69,11 @@ npm run test:catalog:check
 
 O verificador recompõe a lista a partir do Git e compara o JSON fonte-controlado. Um novo teste não classificado ou sem responsável de cobertura faz o CI falhar. O único arquivo marcado manualmente é o smoke test de Jianying para macOS: ele exige o aplicativo desktop e altera a biblioteca local do usuário, portanto não é seguro para CI sem intervenção.
 
-O catálogo descreve cada arquivo de teste e não troca testes existentes por uma classificação. Há 127 registros: 124 executáveis, um smoke test Jianying explicitamente manual e dois testes Python de `ui-ux-pro-max` marcados `blocked`. Esses dois testes apontam para `refresh-google-fonts.py`, `refresh-icon-catalog.py` e `evaluate-relevance.py`, fontes ausentes do repositório e do histórico disponível; os arquivos de teste foram preservados. A saída do verificador e os relatórios de execução destacam esses bloqueios. Eles não contam como cobertura aprovada e precisam ser desbloqueados restaurando suas implementações. A classificação é reavaliada pela presença dos scripts: ao restaurá-los, o catálogo volta a atribuir os testes ao job Python executável.
+O catálogo descreve cada arquivo de teste e não troca testes existentes por uma classificação. Há 127 registros: 126 executáveis e um smoke test Jianying explicitamente manual. As implementações upstream dos três scripts de `ui-ux-pro-max` foram restauradas e os dois contratos Python passaram a executar offline com fixtures; seus arquivos aparecem no job Python. A classificação continua verificando a presença das fontes e volta a marcá-los como `blocked` se uma implementação necessária desaparecer.
 
-O CI executa todos os 124 registros executáveis: 35 testes JavaScript centrais em cada Node 20/22/24, quatro contratos Python dependentes de Node em cada versão, 71 testes Node das Skills, um arquivo Vitest e 13 arquivos Python independentes. O smoke test Jianying é manual e os dois testes acima permanecem sem execução até que seus scripts-fonte sejam recuperados.
+O CI executa todos os 126 registros executáveis: 35 testes JavaScript centrais em cada Node 20/22/24, quatro contratos Python dependentes de Node em cada versão, 71 testes Node das Skills, um arquivo Vitest e 15 arquivos Python independentes. O smoke test Jianying permanece manual.
 
-Os grupos atuais têm estes tamanhos antes de excluir estados `blocked`: `quick` 4, `unit` 45 (43 executáveis e 2 bloqueados), `integration` 40, `media` 41 e `skills-node` 72. Os grupos se sobrepõem por intenção; não são contagens aditivas.
+Os grupos atuais têm estes tamanhos: `quick` 4, `unit` 45, `integration` 40, `media` 41 e `skills-node` 72. Os grupos se sobrepõem por intenção; não são contagens aditivas.
 
 ## Impacto e exemplos
 
