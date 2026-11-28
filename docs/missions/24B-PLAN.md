@@ -34,6 +34,8 @@ O catálogo contém 127 arquivos: 124 executáveis, um manual e dois testes Pyth
 
 No run 46105820880, cada Node passou 382 testes dos 35 arquivos centrais (0 falhas e dois skips já previstos), e seus quatro contratos Python passaram 61 testes. Python independente passou 184 testes em 13 arquivos; Skills passou 503 casos Node e 23 Vitest, sem skips. O job de determinismo passou. O gate de release permaneceu ignorado por não ter sido acionado manualmente.
 
+No CI do commit documental `90e2812`, run [46106703492](https://github.com/mateusarcedev/motion-studio/actions/runs/46106703492), Node 20 voltou a registrar diferença entre CLI e MCP nos streams de vídeo decodificado, pacotes de vídeo e contêiner; o artefato `mcp-parity-node20` e os hashes estão preservados no [relatório M24B](../reports/M24B_TEST_INFRASTRUCTURE.md#incidente-intermitente-observado-no-ci-do-commit-documental). Node 22/24, Python, Skills/catálogo e o job independente de determinismo passaram. A reexecução não foi tentada e o incidente não é considerado resolvido; este resultado deixa M24B parcial além dos dois arquivos Python ainda bloqueados por fontes ausentes.
+
 ## Estado de cobertura
 
 M24B entrega a infraestrutura incremental, mas fica **parcial** enquanto os dois testes `ui-ux-pro-max` não puderem coletar. Suas fontes esperadas (`refresh-google-fonts.py`, `refresh-icon-catalog.py`, `evaluate-relevance.py`) não constam no código rastreado nem foram localizadas no histórico consultável. Os testes não foram removidos, reescritos ou tratados como aprovados. Restaurar as implementações e então reabilitar seus registros é trabalho pendente; não bloqueia a execução dos demais testes catalogados.

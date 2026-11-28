@@ -4,7 +4,7 @@
 
 M24B implementa o catálogo, os grupos incrementais, a seleção por impacto, a instrumentação e a divisão de jobs de CI. A cobertura permanece **parcial** por dois testes Python existentes cuja implementação sob teste não está no repositório: `test_catalog_refresh.py` requer dois scripts de refresh ausentes e `test_relevance_evaluator.py` requer `evaluate-relevance.py`, também ausente. Os testes foram mantidos e são registrados como `blocked`; seus resultados não contam como PASS. O smoke test Jianying continua manual.
 
-M24A permanece concluída no commit `923b2e0`. A divergência intermitente Node 22/24 permanece uma investigação independente, sem reexecuções de homologação da M23 nesta etapa.
+M24A permanece concluída no commit `923b2e0`. A divergência intermitente permanece uma investigação independente, sem reexecuções de homologação da M23 nesta etapa. Além dos dois testes Python bloqueados por fontes ausentes, o run final na `main` observou uma divergência CLI × MCP de vídeo em Node 20, registrada abaixo; não houve retry nem declaração de resolução.
 
 ## Commits de implementação
 
@@ -111,5 +111,23 @@ O ambiente local possui Chromium pelo cache Playwright e os testes de browser ac
 O primeiro workflow precisou de FFmpeg no job Python independente. A execução inicial das Skills também encontrou que o preload de métricas substituía `child_process.execFile` sem preservar `util.promisify.custom`, que os workers Anatomy não recebiam o `NODE_PATH` da raiz e que três testes React dependiam de `esbuild` sem declarar a dependência de desenvolvimento. A correção instalou FFmpeg no job dedicado, preservou o resultado promisificado e a contagem de processos, forneceu o caminho raiz aos workers e declarou `esbuild`. O teste de regressão do preloader e 33 casos Anatomy direcionados passaram localmente; em CI, os 503 testes Node e 23 Vitest passaram sem falhas ou skips.
 
 **Validação remota final da implementação:** run [46105820880](https://github.com/mateusarcedev/motion-studio/actions/runs/46105820880), commit `70cf12c`: matriz Node 20/22/24, Python, Skills/catálogo e determinismo aprovados. O job Release gate foi ignorado conforme esperado, pois não houve acionamento explícito. Nenhum pacote foi empacotado ou publicado.
+
+### Incidente intermitente observado no CI do commit documental
+
+O run posterior [46106703492](https://github.com/mateusarcedev/motion-studio/actions/runs/46106703492), no commit `90e2812` (documentação), não concluiu integralmente: o único job com falha foi Node 20, em `tests/mcp_parity.test.mjs`, no round-trip CLI × MCP. O teste registrou divergência em `video.decoded`, `video.packets` e `container`; os dois streams de áudio comparados eram idênticos e não houve erros reportados pelo comparador. Evidência registrada no runner: Node `v20.20.2`, CPU Intel Xeon 6975P-C (4 CPUs), FFmpeg `6.1.1-3ubuntu5`.
+
+Hashes observados (`a` = CLI; `b` = MCP):
+
+| Stream | CLI (`a`) | MCP (`b`) | Resultado |
+|---|---|---|---|
+| Vídeo decodificado | `583ba61ea52105ec30674e07676079092efe99683eb8a0249c1768a002a71dac` | `3f488e55be49084ddc10977653e4b4f51665393d358bc268121a9344d9313a2e` | diferente |
+| Pacotes de vídeo | `254e39693ed8545b0b8934b56edc9c078579bb2108fe9416ffb0f1c65aaa5de7` | `9f54c69ffc7da9ce19c9f0d6442b150491f629b7e7038437feb142ae5b458a53` | diferente |
+| Áudio decodificado | `6f3b78d63b9a1d44f33b63c2208ca62b0b1e8bd7651bd847cdad421999d2bbc5` | igual a CLI | idêntico |
+| Pacotes de áudio | `7b49f2181ce8a8cc5854c5cdee44dc45c1673755fcab32ea4cc95f2a7fffc5b7` | igual a CLI | idêntico |
+| Contêiner | `97b607bb476566d4f8b03e26581e28a8977ec9ef984c90856ef11bf10e0d12e0` | `280f3345c8586ba5fcb235c4f812f4bc3aabe5d0369597167d3be49a561694a0` | diferente |
+
+O artefato de falha do workflow foi preservado como [mcp-parity-node20, artifact 15248270932](https://github.com/mateusarcedev/motion-studio/actions/runs/46106703492/artifacts/15248270932), 70.447.044 bytes, SHA-256 `dd39962c911d156a105df25ffedfcc813918c2afdd4e21109a3dbbab8a79651f`, retenção até 2026-12-28. Node 22/24, Python independente, Skills/catálogo e o job separado `test:determinism` passaram nesse run; o job Node 20 encerrou antes do contrato Python da matriz, que já havia passado em todas as versões no run 46105820880.
+
+Esse resultado é divergência confirmada entre os artefatos de vídeo, não apenas diferença de metadados do contêiner. Uma aprovação no run 46105820880 e o PASS do job dedicado de determinismo não apagam a falha. A causa permanece **intermitente e sob investigação independente**; esta missão preserva o artefato e os hashes, não repete o cenário nem declara resolução. Como o último CI não ficou totalmente verde e dois testes Python seguem bloqueados por fontes ausentes, o estado global de M24B permanece **parcial**.
 
 **Pendente:** recuperar as três implementações ausentes para reabilitar dois testes Python e completar a aceitação “nenhum teste existente fora da cobertura de execução”. Até lá, M24B é parcial, mesmo se os jobs para os registros executáveis passarem.
