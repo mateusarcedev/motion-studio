@@ -19,7 +19,7 @@ O incidente intermitente de determinismo continua sendo uma investigação separ
 - [x] Executar testes Node das Skills e Vitest uma vez; verificar catálogo público uma vez.
 - [x] Reservar release gate a acionamento manual; não executar gate nem empacotar a raiz privada nesta missão.
 - [x] Atualizar instruções, matriz de impacto, workflow e documentação de métricas/cache.
-- [ ] Fazer commits atômicos em main, enviar, validar o CI remoto para os registros executáveis e registrar suas medições finais; esses resultados não removem os bloqueios listados abaixo.
+- [x] Fazer commits atômicos em main, enviar, validar o CI remoto para os registros executáveis e registrar suas medições finais; run [46105820880](https://github.com/mateusarcedev/motion-studio/actions/runs/46105820880) aprovado em Node 20/22/24, Python independente e de matriz, Skills, catálogo e determinismo.
 - [ ] Recuperar as três fontes de `ui-ux-pro-max` ausentes e reabilitar os dois testes Python correspondentes. M24B permanece parcial enquanto isso não for feito.
 
 ## Seleção e comandos
@@ -31,6 +31,8 @@ O catálogo parte das convenções de arquivos de teste dentro dos diretórios c
 ## CI
 
 O catálogo contém 127 arquivos: 124 executáveis, um manual e dois testes Python bloqueados porque seus módulos fonte ausentes não existem no repositório/histórico disponível. A matriz Node 20/22/24 executa os 35 testes JS centrais e quatro contratos Python que precisam daquele Node. Um job Python executa os 13 arquivos independentes executáveis uma vez. Um job Node 22 executa os 71 testes Node de Skills, o arquivo Vitest, a verificação do catálogo e a integridade de Skills. O smoke test Jianying permanece manual. Os dois testes bloqueados são destacados no catálogo e nos comandos e não contam como aprovados; essa lacuna impede declarar a cobertura completa. Determinismo continua independente. O job de release só inicia por workflow_dispatch com run_release_gate=true.
+
+No run 46105820880, cada Node passou 382 testes dos 35 arquivos centrais (0 falhas e dois skips já previstos), e seus quatro contratos Python passaram 61 testes. Python independente passou 184 testes em 13 arquivos; Skills passou 503 casos Node e 23 Vitest, sem skips. O job de determinismo passou. O gate de release permaneceu ignorado por não ter sido acionado manualmente.
 
 ## Estado de cobertura
 

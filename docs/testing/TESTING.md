@@ -54,6 +54,7 @@ npm run test:skills
 ```
 
 As dependências Vitest continuam isoladas no pacote de origem e não são adicionadas à raiz do monorepo.
+`esbuild` permanece como dependência de desenvolvimento da raiz porque três testes de browser da Skill Anatomy geram fixtures React temporárias. O runner incremental também fornece a raiz do monorepo em `NODE_PATH` aos workers das Skills para resolver React/ReactDOM durante esse bundle.
 
 ## Catálogo e cobertura
 

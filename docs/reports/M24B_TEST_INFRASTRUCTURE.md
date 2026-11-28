@@ -6,6 +6,15 @@ M24B implementa o catálogo, os grupos incrementais, a seleção por impacto, a 
 
 M24A permanece concluída no commit `923b2e0`. A divergência intermitente Node 22/24 permanece uma investigação independente, sem reexecuções de homologação da M23 nesta etapa.
 
+## Commits de implementação
+
+- `f176cff` — catálogo central e seleção incremental.
+- `a88fb50` — fixtures para o runner de Skills.
+- `8ad242e` — separação dos jobs Python e Skills no CI.
+- `a819148` e `f29e268` — documentação e medições iniciais.
+- `800049a` — FFmpeg no job Python independente.
+- `70cf12c` — preserva a forma de `execFile` promisificado, instala `esbuild` para testes e fornece `NODE_PATH` da raiz aos workers de Skills.
+
 ## Inventário e seleção
 
 O catálogo fonte-controlado tem 127 registros: 124 executáveis, um manual e dois bloqueados. Os testes executáveis distribuem-se em 35 arquivos `node:test` centrais, quatro testes Python na matriz Node, 71 arquivos `node:test` de Skills, um arquivo Vitest e 13 arquivos Python independentes. Os números são arquivos de teste, não quantidade de casos individuais.
@@ -45,14 +54,31 @@ Run [45887866107](https://github.com/mateusarcedev/motion-studio/actions/runs/45
 
 | Seleção | Resultado local medido | Limite/observação |
 |---|---:|---|
-| `test:quick` | total 6,76s (prep 2,64s; execução 4,12s); 4 arquivos, 31 casos | dentro da meta de 30s |
+| `test:quick` | total 7,68s (prep 2,15s; execução 5,53s); 4 arquivos, 31 casos | dentro da meta de 30s |
 | `test:unit` | total 9,53s (prep 1,84s; execução 7,69s); 43 arquivos/399 casos aprovados | dentro da meta de 2min; dois testes são `BLOCKED` e não contam nos 399 |
 | `test:changed --base=923b2e0 --explain --dry-run` para a M24B inteira | 2,57s; selecionou os 124 registros executáveis e listou os dois bloqueados | dry-run; nenhum produto foi aprovado por essa medição |
-| `node --test tests/test_catalog.test.mjs` | 14/14 testes do seletor e do catálogo aprovados | direcionado; inclui staged/unstaged, renomes e referências de catálogo |
+| `node --test tests/test_catalog.test.mjs` | 15/15 testes do seletor, catálogo e preloader aprovados | direcionado; inclui staged/unstaged, renomes, referências e forma promisificada de `execFile` |
+| Anatomy, runner incremental instrumentado | 33/33 casos em seis arquivos, 17,79s; 9 inicializações de Chromium | cobre subprocessos browser, módulos React/esbuild e a captura de saída em Node 24 |
 | `test:changed` para documentação | só verificação documental | não executa testes de produto nem mídia |
 | `test:changed` para lockfile/infra | amplia para a cobertura executável catalogada | intencionalmente acima da meta comum de 2min |
 
-Os relatórios em `tests/tmp/test-report-*.json`, `test-report-command-*.json` e `python-test-metrics-*.json` registram preparação, execução, total, duração por arquivo, subprocessos observáveis, renderizações, Chromium, FFmpeg, ffprobe, Python, MCP, fixtures e RSS/CPU do processo escritor. Os artefatos de CI têm retenção de 30 dias. Os tempos locais não substituem a medição final nos runners Ubuntu; a tabela será complementada com a execução remota da branch main desta mudança.
+Os relatórios em `tests/tmp/test-report-*.json`, `test-report-command-*.json` e `python-test-metrics-*.json` registram preparação, execução, total, duração por arquivo, subprocessos observáveis, renderizações, Chromium, FFmpeg, ffprobe, Python, MCP, fixtures e RSS/CPU do processo escritor. Os artefatos de CI têm retenção de 30 dias. A tabela remota abaixo complementa as medições locais com duração de jobs e arquivos nos runners Ubuntu.
+
+### CI final da implementação
+
+O run [46105820880](https://github.com/mateusarcedev/motion-studio/actions/runs/46105820880), no commit de implementação `70cf12c`, concluiu todos os jobs executáveis em **7min38s**. O run baseline [45887866107](https://github.com/mateusarcedev/motion-studio/actions/runs/45887866107) levou **9min05s**. A parede total caiu 87s (16%), mesmo adicionando a suíte completa de Skills que antes não era executada como testes.
+
+| Job | Antes | M24B | Evidência M24B |
+|---|---:|---:|---|
+| Node 20 | 508s | 432s | suíte principal 358,11s; 382 aprovados, 0 falhas, 2 skips existentes; 35 arquivos |
+| Node 22 | 519s | 441s | suíte principal 368,12s; 382 aprovados, 0 falhas, 2 skips existentes; 35 arquivos |
+| Node 24 | 541s | 455s | suíte principal 365,65s; 382 aprovados, 0 falhas, 2 skips existentes; 35 arquivos |
+| Python independente | repetido na matriz | 149s | 13 arquivos, 184 aprovados em 94,04s; dois bloqueados excluídos explicitamente |
+| Python dependente de Node | incluso na suíte Python repetida | 0,50–0,79s por Node | 4 arquivos/61 aprovados em cada Node 20/22/24 |
+| Skills, catálogo e Node | verificação repetida; testes Node não executados | 255s | 503 aprovados/0 falhas/0 skips em 71 arquivos Node; 23/23 Vitest; catálogo e `skills:verify` aprovados |
+| Determinismo | 94s | 89s | gate aprovado; sem nova evidência sobre a causa raiz intermitente |
+
+O tempo da suíte JavaScript principal variou de 351–356s no baseline para 358–368s no run M24B; portanto, a suíte Node isolada não ficou mais rápida. O ganho veio de retirar aproximadamente 86–87s de Python serializados de cada job da matriz: a suíte Python independente agora roda uma vez, enquanto somente os quatro contratos que precisam da versão Node permanecem na matriz. Somados os contratos, a execução Python observada caiu de 260s de agente no baseline para cerca de 96s. Os jobs independentes de Python, Skills e determinismo rodaram em paralelo à matriz.
 
 ### Redundâncias removidas e cobertura adicionada
 
@@ -72,12 +98,18 @@ O runner Node registra duração por arquivo; o runner Vitest exige correspondê
 
 O workflow separa matriz JS/contratos Python Node, Python independente, Skills/catálogo e determinismo. `contents: read`, política de skips e upload de diagnósticos permanecem. O job opcional de release é manual e não publica.
 
-Medição local mais recente de `test:quick`: total 6,76s, 97 inícios observáveis de processo, 46 saídas de mídia, 49 FFmpeg, 12 ffprobe, 36 Python, 18 preparações de diretórios temporários e RSS máximo de 109.668 KB. Os arquivos mais lentos foram `delivery_integrity.test.mjs` (4,10s) e `compare_renders.test.mjs` (3,19s). `test:unit` executou 29 arquivos Node (178 casos, 1,65s), 13 arquivos Python (198 casos, 5,19s; mais lentos `test_data_contracts.py` 2,41s e `test_core.py` 2,16s) e um arquivo Vitest (23 casos, 0,58s); total 399 casos aprovados em 9,53s end-to-end, com dois testes bloqueados. O contrato Python da matriz executou 4 arquivos/61 casos em 0,26s. Esses contadores incluem atividade indireta via subprocesso e não são profiler de host.
+Medição local mais recente de `test:quick`: total 7,68s, 97 inícios observáveis de processo, 46 saídas de mídia, 49 FFmpeg, 12 ffprobe, 36 Python, 18 preparações de diretórios temporários e RSS máximo de 108.880 KB. Os arquivos mais lentos foram `delivery_integrity.test.mjs` (5,51s) e `compare_renders.test.mjs` (4,26s). `test:unit` executou 29 arquivos Node (178 casos, 1,65s), 13 arquivos Python (198 casos, 5,19s; mais lentos `test_data_contracts.py` 2,41s e `test_core.py` 2,16s) e um arquivo Vitest (23 casos, 0,58s); total 399 casos aprovados em 9,53s end-to-end, com dois testes bloqueados. O contrato Python da matriz executou 4 arquivos/61 casos em 0,26s. O replay direcionado de seis testes Anatomy passou 33 casos em 17,79s, com nove inícios de Chromium. Esses contadores incluem atividade indireta via subprocesso e não são profiler de host.
 
 ## Testes realizados e pendências
 
-Verificações direcionadas executadas durante a implementação: validação de sintaxe dos scripts, compilação Python, 14 testes do catálogo/seletor, quatro arquivos do grupo quick e quatro contratos Python da matriz (61 casos). O grupo unit passou em 29 arquivos Node (178 casos), 13 arquivos Python (198 casos) e um arquivo Vitest (23 casos); os dois testes sem fonte foram destacados como `BLOCKED`. A execução por alteração desde `923b2e0` selecionou os 124 registros executáveis e listou os bloqueios; foi apenas dry-run.
+Verificações direcionadas executadas durante a implementação: validação de sintaxe dos scripts, compilação Python, 15 testes do catálogo/seletor/preloader, quatro arquivos do grupo quick, quatro contratos Python da matriz (61 casos), `test:quick` (31 casos) e seis arquivos Anatomy (33 casos). O grupo unit passou em 29 arquivos Node (178 casos), 13 arquivos Python (198 casos) e um arquivo Vitest (23 casos); os dois testes sem fonte foram destacados como `BLOCKED`. A execução por alteração desde `923b2e0` selecionou os 124 registros executáveis e listou os bloqueios; foi apenas dry-run.
 
-O ambiente local não tem Chromium; `integration` com browser e a suíte de Skills dependente dele serão validados no GitHub Actions. Não executar localmente `test:ci`, `test:skills`, `test:media` ou release gate como bateria completa. O determinismo será executado pelo job remoto independente.
+O ambiente local possui Chromium pelo cache Playwright e os testes de browser acima foram executados pelo runner instrumentado. A suíte completa de Skills, `test:ci`, `test:media` e release gate não foram executados localmente; a cobertura abrangente fica delegada ao GitHub Actions. O determinismo permanece no job remoto independente.
+
+### Diagnóstico das validações remotas
+
+O primeiro workflow precisou de FFmpeg no job Python independente. A execução inicial das Skills também encontrou que o preload de métricas substituía `child_process.execFile` sem preservar `util.promisify.custom`, que os workers Anatomy não recebiam o `NODE_PATH` da raiz e que três testes React dependiam de `esbuild` sem declarar a dependência de desenvolvimento. A correção instalou FFmpeg no job dedicado, preservou o resultado promisificado e a contagem de processos, forneceu o caminho raiz aos workers e declarou `esbuild`. O teste de regressão do preloader e 33 casos Anatomy direcionados passaram localmente; em CI, os 503 testes Node e 23 Vitest passaram sem falhas ou skips.
+
+**Validação remota final da implementação:** run [46105820880](https://github.com/mateusarcedev/motion-studio/actions/runs/46105820880), commit `70cf12c`: matriz Node 20/22/24, Python, Skills/catálogo e determinismo aprovados. O job Release gate foi ignorado conforme esperado, pois não houve acionamento explícito. Nenhum pacote foi empacotado ou publicado.
 
 **Pendente:** recuperar as três implementações ausentes para reabilitar dois testes Python e completar a aceitação “nenhum teste existente fora da cobertura de execução”. Até lá, M24B é parcial, mesmo se os jobs para os registros executáveis passarem.
