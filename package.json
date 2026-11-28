@@ -9,9 +9,20 @@
   ],
   "scripts": {
     "render": "node creative-core/renderers/render_static.mjs",
-    "test": "node --test tests/**/*.test.mjs",
+    "test": "node scripts/ci-tests.mjs",
     "test:ci": "node scripts/ci-tests.mjs",
-    "test:py": "python3 scripts/ci_python_tests.py",
+    "test:quick": "node scripts/run-test-selection.mjs --group=quick",
+    "test:changed": "node scripts/run-test-selection.mjs --changed",
+    "test:unit": "node scripts/run-test-selection.mjs --group=unit",
+    "test:integration": "node scripts/run-test-selection.mjs --group=integration",
+    "test:media": "node scripts/run-test-selection.mjs --group=media",
+    "test:release": "node scripts/release-gate.mjs",
+    "test:catalog:check": "node scripts/test-catalog.mjs --check",
+    "test:catalog:write": "node scripts/test-catalog.mjs --write",
+    "test:skills": "node scripts/run-test-selection.mjs --group=skills-node",
+    "test:py": "python3 scripts/ci_python_tests.py --scope=all",
+    "test:py:standalone": "python3 scripts/ci_python_tests.py --scope=standalone",
+    "test:py:matrix": "python3 scripts/ci_python_tests.py --scope=matrix",
     "test:determinism": "node scripts/ci-determinism.mjs",
     "test:determinism:replay": "node scripts/replay-determinism.mjs",
     "pack:all": "node scripts/pack-all.mjs",
@@ -32,6 +43,7 @@
     "lottie-web": "^5.13.0",
     "lucide-static": "^1.76.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "typescript": "^5.9.3"
   }
 }
