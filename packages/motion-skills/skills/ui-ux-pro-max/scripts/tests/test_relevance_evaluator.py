@@ -2,6 +2,9 @@
 """Unit tests for metric math and relevance fixture validation."""
 
 import importlib.util
+import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -75,6 +78,21 @@ class TestFixtureValidation(unittest.TestCase):
 
 
 class TestThresholdGate(unittest.TestCase):
+    def test_default_cli_uses_the_vendored_layout_and_preserves_approved_metrics_offline(self):
+        result = subprocess.run(
+            [sys.executable, str(MODULE_PATH)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        report = json.loads(result.stdout)
+        baseline = json.loads((ROOT / "scripts/tests/fixtures/relevance-baseline.json").read_text(encoding="utf-8"))
+        for key in ("metrics", "samples", "splits"):
+            self.assertEqual(baseline[key], report[key], key)
+
     def test_runtime_fingerprint_binds_reasoning_contract(self):
         original = evaluator.ROOT, evaluator.RUNTIME_DIR, evaluator.DATA_DIR
         with tempfile.TemporaryDirectory() as tmp:
