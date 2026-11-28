@@ -47,7 +47,7 @@ Run [45887866107](https://github.com/mateusarcedev/motion-studio/actions/runs/45
 |---|---:|---|
 | `test:quick` | total 6,76s (prep 2,64s; execução 4,12s); 4 arquivos, 31 casos | dentro da meta de 30s |
 | `test:unit` | total 9,53s (prep 1,84s; execução 7,69s); 43 arquivos/399 casos aprovados | dentro da meta de 2min; dois testes são `BLOCKED` e não contam nos 399 |
-| `test:changed --base=HEAD~1 --explain --dry-run` no diff da M24B | 2,95s; selecionou os 124 registros executáveis e listou os dois bloqueados | dry-run; nenhum produto foi aprovado por essa medição |
+| `test:changed --base=923b2e0 --explain --dry-run` para a M24B inteira | 2,57s; selecionou os 124 registros executáveis e listou os dois bloqueados | dry-run; nenhum produto foi aprovado por essa medição |
 | `node --test tests/test_catalog.test.mjs` | 14/14 testes do seletor e do catálogo aprovados | direcionado; inclui staged/unstaged, renomes e referências de catálogo |
 | `test:changed` para documentação | só verificação documental | não executa testes de produto nem mídia |
 | `test:changed` para lockfile/infra | amplia para a cobertura executável catalogada | intencionalmente acima da meta comum de 2min |
@@ -76,7 +76,7 @@ Medição local mais recente de `test:quick`: total 6,76s, 97 inícios observáv
 
 ## Testes realizados e pendências
 
-Verificações direcionadas executadas durante a implementação: validação de sintaxe dos scripts, compilação Python, 14 testes do catálogo/seletor, quatro arquivos do grupo quick e quatro contratos Python da matriz (61 casos). O grupo unit passou em 29 arquivos Node (178 casos), 13 arquivos Python (198 casos) e um arquivo Vitest (23 casos); os dois testes sem fonte foram destacados como `BLOCKED`. A execução por alteração desde `HEAD~1` selecionou os 124 registros executáveis e listou os bloqueios; foi apenas dry-run.
+Verificações direcionadas executadas durante a implementação: validação de sintaxe dos scripts, compilação Python, 14 testes do catálogo/seletor, quatro arquivos do grupo quick e quatro contratos Python da matriz (61 casos). O grupo unit passou em 29 arquivos Node (178 casos), 13 arquivos Python (198 casos) e um arquivo Vitest (23 casos); os dois testes sem fonte foram destacados como `BLOCKED`. A execução por alteração desde `923b2e0` selecionou os 124 registros executáveis e listou os bloqueios; foi apenas dry-run.
 
 O ambiente local não tem Chromium; `integration` com browser e a suíte de Skills dependente dele serão validados no GitHub Actions. Não executar localmente `test:ci`, `test:skills`, `test:media` ou release gate como bateria completa. O determinismo será executado pelo job remoto independente.
 
