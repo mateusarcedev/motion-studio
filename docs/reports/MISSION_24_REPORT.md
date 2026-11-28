@@ -1,4 +1,6 @@
-# Relatório — Missão 24
+# Relatório — Missão 24A
+
+Este relatório cobre a etapa M24A concluída em `923b2e0`. O catálogo central, os comandos incrementais, a instrumentação de desempenho e a separação dos jobs do CI pertencem à etapa M24B e são registrados em [M24B_TEST_INFRASTRUCTURE.md](M24B_TEST_INFRASTRUCTURE.md).
 
 **Data:** 26/11/2026  
 **Base:** `89f265b8036482abf6cdcc0d95e31f6e68bd9f92` (`main`, limpa e sincronizada no início)  

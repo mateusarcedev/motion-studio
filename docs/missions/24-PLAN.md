@@ -1,4 +1,6 @@
-# Missão 24 — Validação proporcional e investigação focada
+# Missão 24A — Validação proporcional e investigação focada
+
+Este arquivo registra a etapa M24A, concluída em `923b2e0`. A infraestrutura incremental prevista originalmente na Missão 24 foi separada em [M24B](24B-PLAN.md); M24A não representa a conclusão dos entregáveis de M24B.
 
 ## Objetivo
 
