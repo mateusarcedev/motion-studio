@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 import { ROOT, buildTestCatalog, checkTestCatalog, writeTestCatalog } from "../scripts/test-catalog.mjs";
 import { getChangedFiles, selectTestsForChanges } from "../scripts/lib/test-impact.mjs";
 
@@ -106,6 +108,35 @@ test("group dry-run inspects that group rather than switching to the changed-fil
   assert.match(run.stdout, /Testes selecionados \(\d+\)/);
   assert.doesNotMatch(run.stdout, /Alterações detectadas/);
   assert.match(run.stdout, /DRY_RUN: nenhum comando de validação foi executado/);
+});
+
+test("metrics preload preserves execFile promisified stdout and stderr", async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), "motion-test-metrics-preload-"));
+  const metricsFile = path.join(directory, "metrics.jsonl");
+  const preload = pathToFileURL(path.join(ROOT, "scripts/test-metrics-preload.mjs")).href;
+  const childCode = [
+    'import { execFile } from "node:child_process";',
+    'import { promisify } from "node:util";',
+    'const result = await promisify(execFile)(process.execPath, ["-e", "process.stdout.write(\\"child stdout\\"); process.stderr.write(\\"child stderr\\")"]);',
+    'process.stdout.write(JSON.stringify(result));',
+  ].join("\n");
+  try {
+    const child = spawnSync(process.execPath, ["--input-type=module", "-e", childCode], {
+      cwd: ROOT,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        NODE_OPTIONS: `--import=${preload}`,
+        MOTION_TEST_METRICS_FILE: metricsFile,
+        MOTION_TEST_ROOT: ROOT,
+      },
+    });
+    assert.equal(child.status, 0, child.stderr);
+    assert.deepEqual(JSON.parse(child.stdout), { stdout: "child stdout", stderr: "child stderr" });
+    assert.match(await readFile(metricsFile, "utf8"), /"type":"process-start"/);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });
 
 test("MCP and Design Bridge rules select their contract/security test groups", async () => {

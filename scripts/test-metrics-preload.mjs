@@ -3,6 +3,7 @@ import fs from "node:fs";
 import fsPromises from "node:fs/promises";
 import path from "node:path";
 import { syncBuiltinESMExports } from "node:module";
+import { promisify } from "node:util";
 
 const target = process.env.MOTION_TEST_METRICS_FILE;
 const root = process.env.MOTION_TEST_ROOT ?? process.cwd();
@@ -34,11 +35,23 @@ if (target) {
   for (const name of ["spawn", "spawnSync", "exec", "execSync", "execFile", "execFileSync", "fork"]) {
     const original = childProcess[name];
     if (typeof original !== "function") continue;
-    childProcess[name] = function instrumentedProcess(command, args, ...rest) {
+    const instrumentedProcess = function instrumentedProcess(command, args, ...rest) {
       const parts = commandText(command, args);
       record({ type: "process-start", kind: kindFor(parts), command: path.basename(parts.command.split(/\s+/)[0] ?? "") });
       return original.call(this, command, args, ...rest);
     };
+    const customPromisify = original[promisify.custom];
+    if (typeof customPromisify === "function") {
+      Object.defineProperty(instrumentedProcess, promisify.custom, {
+        configurable: true,
+        value: function instrumentedCustomPromisify(command, args, ...rest) {
+          const parts = commandText(command, args);
+          record({ type: "process-start", kind: kindFor(parts), command: path.basename(parts.command.split(/\s+/)[0] ?? "") });
+          return customPromisify.call(this, command, args, ...rest);
+        },
+      });
+    }
+    childProcess[name] = instrumentedProcess;
   }
   for (const [object, name] of [[fs, "mkdtempSync"], [fsPromises, "mkdtemp"]]) {
     const original = object[name];

@@ -131,8 +131,10 @@ export async function runNodeTestFiles(files, { label = "selected", rejectSkips 
   await rm(metricsFile, { force: true });
 
   const oldNodeOptions = process.env.NODE_OPTIONS;
+  const oldNodePath = process.env.NODE_PATH;
   const preload = pathToFileURL(path.join(ROOT, "scripts/test-metrics-preload.mjs")).href;
   process.env.NODE_OPTIONS = `${oldNodeOptions ? `${oldNodeOptions} ` : ""}--import=${preload}`;
+  process.env.NODE_PATH = [...new Set([ROOT, ...(oldNodePath ?? "").split(path.delimiter).filter(Boolean)])].join(path.delimiter);
   process.env.MOTION_TEST_METRICS_FILE = metricsFile;
   process.env.MOTION_TEST_ROOT = ROOT;
 
@@ -207,6 +209,8 @@ export async function runNodeTestFiles(files, { label = "selected", rejectSkips 
   await rm(metricsFile, { force: true });
   if (oldNodeOptions === undefined) delete process.env.NODE_OPTIONS;
   else process.env.NODE_OPTIONS = oldNodeOptions;
+  if (oldNodePath === undefined) delete process.env.NODE_PATH;
+  else process.env.NODE_PATH = oldNodePath;
   delete process.env.MOTION_TEST_METRICS_FILE;
   delete process.env.MOTION_TEST_ROOT;
 

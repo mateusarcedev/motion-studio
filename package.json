@@ -40,6 +40,7 @@
   "devDependencies": {
     "@modelcontextprotocol/client": "^2.4.0",
     "developer-icons": "^7.1.0",
+    "esbuild": "^0.28.2",
     "lottie-web": "^5.13.0",
     "lucide-static": "^1.76.0",
     "react": "^18.3.1",
