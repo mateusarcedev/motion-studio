@@ -7,7 +7,8 @@ import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const SKILLS = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
-const CLI_MEDIA_USE = resolve(SKILLS, "../packages/cli/src/media-use");
+const HYPERFRAMES = resolve(SKILLS, "hyperframes");
+const MOTION_CLI = resolve(SKILLS, "../../motion-cli");
 
 // Agents install skills by symlinking the skills dir, so each script must still run its CLI.
 test("skill CLIs run when invoked through a symlinked skills dir", () => {
@@ -34,13 +35,13 @@ function skillScripts(dir) {
   });
 }
 
-test("skill scripts detect their CLI entry through lib/main-module.mjs only", () => {
-  const handRolled = [...skillScripts(SKILLS), ...skillScripts(CLI_MEDIA_USE)].filter(
+test("HyperFrames skill and Motion CLI use shared main-module detection", () => {
+  const handRolled = [...skillScripts(HYPERFRAMES), ...skillScripts(MOTION_CLI)].filter(
     (path) =>
       !path.endsWith("main-module.mjs") && readFileSync(path, "utf8").includes("process.argv[1]"),
   );
   assert.deepEqual(
-    handRolled.map((path) => relative(SKILLS, path)),
+    handRolled.map((path) => relative(HYPERFRAMES, path)),
     [],
   );
 });

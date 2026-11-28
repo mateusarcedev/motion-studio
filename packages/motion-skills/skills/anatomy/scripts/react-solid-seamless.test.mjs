@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -11,6 +11,8 @@ const React = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
 const directory = mkdtempSync(join(tmpdir(), "anatomy-react-solid-"));
 try {
+  const rootNodeModules = dirname(dirname(require.resolve("react")));
+  symlinkSync(rootNodeModules, join(directory, "node_modules"), "dir");
   for (const file of ["kit/iso-kit.ts", "kit/react/live.tsx", "kit/react/draw.tsx"]) {
     const output = join(directory, file.replace(/\.tsx?$/, ".js"));
     mkdirSync(dirname(output), { recursive: true });
