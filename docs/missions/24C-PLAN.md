@@ -17,7 +17,8 @@
 - [x] Ampliar a captura de ambiente/argv FFmpeg para futuras falhas sem alterar critérios ou outputs do render.
 - [x] Executar verificações locais proporcionais: testes Python direcionados, catálogo/seletor, integridade de Skills, sintaxe, diff e inspeção de seleção; sem suíte completa local.
 - [x] Avaliar o release gate; não executar: Node 20/22 não estão instalados localmente, `npm whoami` retornou HTTP 401 e o gate modifica tarballs e relatório pré-existentes em `dist/packages`/`docs/reports`.
-- [ ] Executar/acompanhar CI abrangente e replay dirigido pós-push; registrar resultados e commits no relatório.
+- [x] Executar replay focado pós-push em Node 20: três rodadas passaram sem divergência; isso não resolve a causa. O CI abrangente do primeiro push estava em execução e a revisão de retenção compacta ainda aguarda novo CI.
+- [ ] Acompanhar o CI abrangente no HEAD final e registrar runs, artefatos, tempos e commits no relatório.
 - [ ] Confirmar `main` limpa e sincronizada com `origin/main`.
 
 ## Limites preservados

@@ -48,6 +48,8 @@ Hipóteses e evidência disponível:
 
 O teste `tests/mcp_parity.test.mjs` agora pode, quando `MOTION_MCP_PARITY_CAPTURE_FFMPEG=1`, registrar cada chamada FFmpeg, argumentos, diretório atual e ambiente (Node/V8, sistema/CPU, concorrência e saída completa de `ffmpeg -version`). O CI Node configura essa coleta, e publica a pasta diagnóstica em caso de falha. O workflow manual de replay aceita Node 20/22/24, executa todas as rodadas solicitadas sem mascarar falhas e copia os dados de cada rodada malsucedida antes de continuar. A instrumentação melhora o próximo diagnóstico; **não corrige a causa nem enfraquece o teste exato**.
 
+A execução focada [46114263098](https://github.com/mateusarcedev/motion-studio/actions/runs/46114263098) rodou o caso três vezes em Node 20; cada rodada passou 1/1, total 3/3, sem divergência. O runner reportou AMD EPYC 9V74 (quatro CPUs) e FFmpeg 6.1.1-3ubuntu5. Como a versão então publicada do workflow só retinha artefatos quando havia falha, essa execução verde não preservou as linhas FFmpeg; por isso a retenção compacta foi ampliada também aos sucessos no commit posterior de instrumentação.
+
 ### Veredito da paridade
 
 **INCONCLUSIVA / NÃO RESOLVIDA.** Não há causa raiz identificada, patch do renderizador ou teste de regressão associado a uma causa confirmada. Replays estáveis fora do runner problemático e CI verde isolado não cumprem os critérios de resolução. A pendência permanece para investigação focada se uma falha instrumentada registrar a primeira chamada/parâmetro divergente.
@@ -82,7 +84,7 @@ O release gate não foi executado porque seus pré-requisitos locais não estava
 
 ## Commits, CI e riscos
 
-**Commits e CI final:** pendentes antes do push desta estabilização; serão preenchidos após commits atômicos e execução do CI no HEAD final.
+**Commits e CI:** os commits `f4d1a8b`, `adf38e8`, `fbd36f5` e `1b99fe0` foram enviados para `main`. O run abrangente [46114253010](https://github.com/mateusarcedev/motion-studio/actions/runs/46114253010), no SHA `1b99fe0bc3f3a9dc6cd13bf58ae4ff6a3114d3e9`, ainda estava em execução no momento desta versão do relatório; o resultado final do CI e os commits de retenção compacta serão acrescentados após sua conclusão.
 
 Riscos/pedências:
 
